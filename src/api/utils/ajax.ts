@@ -1,7 +1,7 @@
 import axios from 'axios';
-import config from '../../config'
-const { DEV } = config
-export default function ajax(url: string, data: object, method: 'GET'|'POST', headers: any) {
+import config from '../../config';
+const { DEV } = config;
+export default function ajax(url: string, data: object, method: 'GET' | 'POST', headers: any) {
     let promise;
     if (method === 'GET') {
         axios.defaults.headers.get = {
@@ -23,9 +23,9 @@ export default function ajax(url: string, data: object, method: 'GET'|'POST', he
             return res.data;
         })
         .catch(err => {
-            const { response = {} } = err
+            const { response = {} } = err;
             if (response.status === 401) {
-                const { data } = response
+                const { data } = response;
                 if (!DEV) {
                     location.href = data.login_url + '?returnUrl=' + decodeURIComponent(location.href);
                 } else {

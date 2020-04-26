@@ -1,5 +1,6 @@
 import React, { ReactElement } from 'react';
 import { message } from 'antd';
+//@ts-ignore
 import * as queryString from 'query-string';
 import Footer from '../../components/FedFooter';
 import Header from '../../components/FedHeader';

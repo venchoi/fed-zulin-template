@@ -42,8 +42,7 @@ export default class UserInfo extends React.Component<Props> {
                     ? renderNavs.map((item: AppInfo) => (
                           <Menu.Item key="1">
                               <a className="item" href={item.url} rel="noopener noreferrer" key={item.key}>
-                                  //@ts-ignore
-                                  <Icon type={item.key === 'ManagementCenter' ? 'tool' : 'team'} style={iconStyle} />
+                                  {/* <Icon type={item.key === 'ManagementCenter' ? 'tool' : 'team'} style={iconStyle} /> */}
                                   {item.name}
                               </a>
                           </Menu.Item>
@@ -52,8 +51,7 @@ export default class UserInfo extends React.Component<Props> {
                 <Menu.Divider />
                 <Menu.Item key="2">
                     <div className="item logout" onClick={this.loginOut}>
-                        //@ts-ignore
-                        <Icon type="logout" style={iconStyle} />
+                        {/* <Icon type="logout" style={iconStyle} /> */}
                         退出登录
                     </div>
                 </Menu.Item>
@@ -70,8 +68,7 @@ export default class UserInfo extends React.Component<Props> {
             >
                 <div>
                     <FedIcon type="icn_avatar" className="icon-avatar" />
-                    //@ts-ignore
-                    <Icon type="caret-down" style={{ fontSize: '12px', marginLeft: '4px' }} />
+                    {/* <Icon type="caret-down" style={{ fontSize: '12px', marginLeft: '4px' }} /> */}
                 </div>
             </Dropdown>
         );
