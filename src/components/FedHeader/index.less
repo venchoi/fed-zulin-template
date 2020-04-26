@@ -1,0 +1,45 @@
+@import '../../constants';
+
+.fed-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: @bg-white;
+  height: 56px;
+  &-content {
+    display: flex;
+    flex:1;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px 0 24px;
+    height: 100%;
+    box-shadow:0px 1px 5px 0px rgba(148,151,153,0.2);
+    &-left{
+      display: flex;
+      align-items: center;
+      background: rgba(222,238,255,1);
+      border-radius:18px;
+      padding: 0 16px;
+      text-align: center;
+      height: 32px;
+      line-height: 32px;
+      &:hover {
+        cursor: pointer;
+      }
+      .title {
+        color:@color-blue;
+        font-size: @font-size-medium;
+      }
+      .icon-switch {
+        color:@color-blue;
+        margin-left: 8px;
+      }
+    }
+    &-right {
+      position: relative; 
+      display: flex;
+      align-items: center;
+    }
+  }
+
+}

@@ -1,0 +1,27 @@
+.viewport-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    .viewport-menu-inline-space {
+        width: 184px;
+        flex-shrink: 0;
+        transition: all 0.2s ease-in-out;
+    }
+    .viewport-menu-vertical-space {
+        width: 56px;
+        flex-shrink: 0;
+        transition: all 0.2s ease-in-out;
+    }
+    .viewport-right-space {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .header-space {
+        height: 56px;
+        flex-shrink: 0;
+    }
+    .content-space {
+        flex: 1;
+    }
+}
