@@ -15,7 +15,6 @@ export default {
     reducers: {
         // 为了做示例而已,所以写了两个，方便观看演示
         add(state: state, payload: listPayload) {
-            console.log(payload);
             return {
                 ...state,
                 list: payload.data,

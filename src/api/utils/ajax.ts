@@ -1,8 +1,14 @@
 import axios from 'axios';
 import config from '../../config';
+import getApiPath from './getApiPath';
+import getFetchOptions from './getFetchOptions';
+import { message } from 'antd';
 const { DEV } = config;
-export default function ajax(url: string, data: object, method: 'GET' | 'POST', headers: any) {
+export default function ajax(path: string, data: object, method: 'GET' | 'POST') {
     let promise;
+    const fetchOptions = getFetchOptions(getApiPath(path), method);
+    const url = fetchOptions.endpoint;
+    const headers = fetchOptions.headers;
     if (method === 'GET') {
         axios.defaults.headers.get = {
             ...headers,
@@ -43,6 +49,7 @@ export default function ajax(url: string, data: object, method: 'GET' | 'POST', 
             } else {
                 console.log('请求失败了');
                 console.error(err);
+                message.error('网络请求失败');
                 console.log('错误已经捕获');
             }
         });
