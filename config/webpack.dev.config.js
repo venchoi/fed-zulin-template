@@ -1,6 +1,6 @@
 const merge = require('webpack-merge');
 const base_config = require('./webpack.base.config');
-const proxy_config = require('./proxy_config');
+const proxyConfig = require('./proxyConfig');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const webpack = require('webpack');
 const dev_config = {
@@ -17,7 +17,7 @@ const dev_config = {
         historyApiFallback: true,
         proxy: {
             '/api': {
-                target: proxy_config.target,
+                target: proxyConfig.target,
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': '',
