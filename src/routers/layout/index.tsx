@@ -3,8 +3,11 @@ import { message } from 'antd';
 //@ts-ignore
 import * as queryString from 'query-string';
 import { Layout as AntLayout } from 'antd';
+import FedIcon from '../../components/FedIcon';
 import FedHeader from '../../components/FedHeader';
 import FedMenu from '../../components/FedMenu';
+import CollapseItem from './components/CollapseItem';
+import Logo from './components/Logo';
 import { getHomeBaseInfo, mockLogin } from '../../services/app';
 import find from 'lodash/find';
 import config from '../../config';
@@ -23,6 +26,7 @@ interface Props {
     children: ReactElement;
 }
 interface State {
+    collapsed: boolean;
     menuMode: MenuMode;
     appList: AppInfo[];
     user: User;
@@ -36,6 +40,7 @@ class Layout extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
+            collapsed: false,
             menuMode: 'inline',
             appList: [],
             user: {
@@ -66,6 +71,7 @@ class Layout extends React.Component<Props, State> {
         const { children } = this.props;
         const {
             menuMode = 'inline',
+            collapsed,
             logoIcon,
             appList = [],
             workflow,
@@ -76,15 +82,15 @@ class Layout extends React.Component<Props, State> {
         } = this.state;
         const nav = find(appList, ['key', appCode]);
         return (
-            <AntLayout className="main">
-                <Sider>
-                    <FedMenu
-                        logoUrl={logoIcon}
-                        menuList={(nav && nav.children) || []}
-                        workflow={workflow}
-                        menuMode={menuMode}
-                        onMenuModeChange={this.setMenuMode}
-                    />
+            <AntLayout style={{ minHeight: '100vh' }} className="main">
+                <Sider
+                    trigger={<CollapseItem collapsed={collapsed} />}
+                    collapsible
+                    collapsed={collapsed}
+                    onCollapse={this.onCollapse}
+                >
+                    <Logo collapsed={collapsed} logoUrl={logoIcon} />
+                    <FedMenu menuList={(nav && nav.children) || []} workflow={workflow} />
                 </Sider>
                 <AntLayout>
                     <Header>
@@ -124,6 +130,10 @@ class Layout extends React.Component<Props, State> {
 
     setMenuMode = (val: MenuMode) => {
         this.setState({ menuMode: val });
+    };
+
+    onCollapse = (collapsed: boolean) => {
+        this.setState({ collapsed });
     };
 }
 export default Layout;
