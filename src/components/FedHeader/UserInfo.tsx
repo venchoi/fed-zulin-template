@@ -28,7 +28,7 @@ export default class UserInfo extends React.Component<Props> {
             <Menu>
                 <Menu.Item key="0">
                     <div className="user-info">
-                        <FedIcon type="icn_avatar" className="icon-avatar" />
+                        <FedIcon type="icon-icn_avatar" className="icon-avatar" />
                         <div className="info">
                             <div>
                                 <a href={personalCenterUrl}>{user && user.display_name}</a>
