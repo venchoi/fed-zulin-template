@@ -24,7 +24,16 @@ module.exports = {
                                 loader: 'babel-loader',
                                 options: {
                                     //jsx语法
-                                    presets: [['@babel/preset-env', { modules: false }]],
+                                    presets: [
+                                        [
+                                            '@babel/preset-env',
+                                            {
+                                                modules: false,
+                                                useBuiltIns: 'usage',
+                                                corejs: 2, // 这里需要注意：是根据你的版本来写
+                                            },
+                                        ],
+                                    ],
                                     cacheDirectory: true,
                                     plugins: [
                                         '@babel/plugin-transform-runtime',
