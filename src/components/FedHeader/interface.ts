@@ -1,4 +1,4 @@
-import { MouseEventHandler } from 'react'
+import { MouseEventHandler } from 'react';
 
 export interface MapOptions {
     Apartment: string;
@@ -26,7 +26,7 @@ export interface AppInfo {
 export interface User {
     account: string;
     displayName: string;
-    display_name:string;
+    display_name: string;
     key: string;
     org_id: string;
     organ_name: string;
@@ -36,6 +36,7 @@ export interface User {
     user_id: string;
 }
 export interface Props {
+    appCode?: string;
     appList: AppInfo[];
     user: User;
     personalCenterUrl: string;

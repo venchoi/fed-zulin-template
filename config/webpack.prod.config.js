@@ -1,4 +1,5 @@
 const merge = require('webpack-merge');
+const htmlWebpackPlugin = require('html-webpack-plugin');
 const base_config = require('./webpack.base.config');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -7,12 +8,15 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // const WorkboxPlugin = require('workbox-webpack-plugin');
+
+const antOverride = require('../src/vendor/antd');
+
 const prod_config = {
   mode: 'production',
   output: {
     filename: '[name].[contenthash:8].js',
-    path: path.resolve(__dirname, '../dist'),
-    publicPath: './',
+    path: path.resolve(__dirname, '../middleground/assets'),
+    publicPath: '/middleground/assets',
   },
   module: {
     rules: [
@@ -28,13 +32,21 @@ const prod_config = {
           },
           {
             loader: 'less-loader',
-            options: { javascriptEnabled: true },
+            options: {
+              javascriptEnabled: true, 
+              modifyVars: antOverride
+            },
           },
         ],
       },
     ],
   },
   plugins: [
+    new htmlWebpackPlugin({
+        template: path.resolve(__dirname, '../src/index.html'),
+        filename: path.resolve(__dirname, '../middleground/index.html'),
+        favicon: path.resolve(__dirname, '../src/assets/img/favicon.ico'),
+    }),
     new webpack.HashedModuleIdsPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash:8].css',

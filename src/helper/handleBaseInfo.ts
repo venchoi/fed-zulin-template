@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie';
 import { writeCssInStyles } from './cssUtils';
-import { getItem } from './getItem';
+import find from 'lodash/find';
 import removeCahce from './removeCache';
 import { getKey } from '../components/FedMenu/menuRoutes';
 import config from '../config';
@@ -50,7 +50,7 @@ export function handleBaseInfo(payload: any) {
                 }
             }
             if (!functions[k].pushed) {
-                navItem = getItem(appLists, functions[k].app_code || _smpParms || 'Rental', 'key');
+                navItem = find(appLists, ['key', functions[k].app_code || _smpParms || 'Rental']);
                 //设置 appCode  判断当前的地址
                 if (!navItem) {
                     continue;
@@ -61,7 +61,7 @@ export function handleBaseInfo(payload: any) {
                     functions[k].pushed = true;
                     navItem.children.push(functions[k]);
                 } else {
-                    nav = getItem(navItem.children, functions[k].parent_id);
+                    nav = find(navItem.children, ['id', functions[k].parent_id]);
                     if (nav) {
                         functions[k].pushed = true;
                         if (DEV) {
