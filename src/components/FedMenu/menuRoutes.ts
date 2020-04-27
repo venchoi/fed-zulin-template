@@ -44,7 +44,7 @@ export const maps = [
     { reg: '/static/commission.*', key: 'Commission', name: '营业抽成' },
     { reg: '/static/meter.*', key: 'Meter', name: '抄表管理' },
     { reg: '/static/sundry.*', key: 'Sundry', name: '杂项费用' },
-    { reg: '/static/report.*', key: 'Report', name: '统计报表' },
+    { reg: '/middleground/report.*', key: 'Report', name: '统计报表' },
     { reg: '/static/operational.*', key: 'Operational', name: '财务收支' },
     { reg: '/static/finance.*', key: 'Finance', name: '财务收支' },
     { reg: '/static/billing.*', key: 'Bill', name: '账单管理' },
@@ -109,4 +109,3 @@ export function getKey(pathName: any) {
         code,
     };
 }
-
