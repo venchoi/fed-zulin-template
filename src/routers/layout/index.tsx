@@ -18,7 +18,6 @@ import './index.less';
 
 const { Header, Sider, Content, Footer } = AntLayout;
 
-type MenuMode = 'inline' | 'vertical';
 const { DEV } = config;
 interface Props {
     readonly changeShowContent: () => void;
@@ -27,7 +26,6 @@ interface Props {
 }
 interface State {
     collapsed: boolean;
-    menuMode: MenuMode;
     appList: AppInfo[];
     user: User;
     personalCenterUrl: string;
@@ -41,7 +39,6 @@ class Layout extends React.Component<Props, State> {
         super(props);
         this.state = {
             collapsed: false,
-            menuMode: 'inline',
             appList: [],
             user: {
                 account: '',
@@ -69,17 +66,7 @@ class Layout extends React.Component<Props, State> {
 
     public render() {
         const { children } = this.props;
-        const {
-            menuMode = 'inline',
-            collapsed,
-            logoIcon,
-            appList = [],
-            workflow,
-            user,
-            personalCenterUrl,
-            logoutUrl,
-            appCode,
-        } = this.state;
+        const { collapsed, logoIcon, appList = [], workflow, user, personalCenterUrl, logoutUrl, appCode } = this.state;
         const nav = find(appList, ['key', appCode]);
         return (
             <AntLayout style={{ minHeight: '100vh' }} className="main">
@@ -90,7 +77,7 @@ class Layout extends React.Component<Props, State> {
                     onCollapse={this.onCollapse}
                 >
                     <Logo collapsed={collapsed} logoUrl={logoIcon} />
-                    <FedMenu menuList={(nav && nav.children) || []} workflow={workflow} />
+                    <FedMenu collapsed={collapsed} menuList={(nav && nav.children) || []} workflow={workflow} />
                 </Sider>
                 <AntLayout>
                     <Header>
@@ -126,10 +113,6 @@ class Layout extends React.Component<Props, State> {
         } else {
             message.error(res.msg);
         }
-    };
-
-    setMenuMode = (val: MenuMode) => {
-        this.setState({ menuMode: val });
     };
 
     onCollapse = (collapsed: boolean) => {

@@ -9,12 +9,12 @@ import './index.less';
 import {} from '../FedHeader/interface';
 
 interface Props {
+    collapsed: boolean;
     menuList: any[];
     workflow: any;
 }
 
 interface State {
-    mode: 'inline' | 'vertical';
     selectedKey: string;
     inlineOpenKeys: string[];
     verticalOpenKeys: string[];
@@ -38,17 +38,16 @@ export default class Menus extends React.Component<Props, State> {
     }
 
     render() {
-        const { menuList = [], workflow = {} } = this.props;
-        const { mode, selectedKey, inlineOpenKeys, verticalOpenKeys } = this.state;
-        const isInline = mode === 'inline';
+        const { menuList = [], workflow = {}, collapsed } = this.props;
+        const { selectedKey, inlineOpenKeys, verticalOpenKeys } = this.state;
         return (
             <Menu
-                mode={mode}
+                mode={collapsed ? 'vertical' : 'inline'}
                 theme="dark"
                 onClick={this.changeMenuItem}
                 onOpenChange={this.changeSub}
                 selectedKeys={[selectedKey]}
-                openKeys={isInline ? inlineOpenKeys : verticalOpenKeys}
+                openKeys={collapsed ? inlineOpenKeys : verticalOpenKeys}
             >
                 {(menuList || []).map(menuItem => (
                     <SubMenu
@@ -116,8 +115,8 @@ export default class Menus extends React.Component<Props, State> {
 
     // 点击一级菜单的展开样式
     changeSub(openKeys: string[]) {
-        const { mode } = this.state;
-        const obj: any = mode === 'inline' ? { inlineOpenKeys: openKeys } : { verticalOpenKeys: openKeys };
+        const { collapsed } = this.props;
+        const obj: any = collapsed ? { inlineOpenKeys: openKeys } : { verticalOpenKeys: openKeys };
         this.setState(obj);
     }
 }
