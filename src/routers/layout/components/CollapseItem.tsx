@@ -6,6 +6,6 @@ interface Props {
 }
 
 const CollapseItem = ({ collapsed = false }: Props) => {
-    return <FedIcon type={!collapsed ? 'icn_nav_fold' : 'icn_nav_spread'} />;
+    return <FedIcon type={!collapsed ? 'icon-icn_nav_fold' : 'icon-icn_nav_spread'} />;
 };
 export default CollapseItem;

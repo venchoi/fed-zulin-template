@@ -1,4 +1,5 @@
 import React from 'react';
+import { Badge } from 'antd';
 import Menu from 'antd/es/menu';
 import 'antd/es/menu/style/index.css';
 import { Link } from 'dva/router';
@@ -10,9 +11,6 @@ import {} from '../FedHeader/interface';
 interface Props {
     menuList: any[];
     workflow: any;
-    // logoUrl: string;
-    // menuMode: 'inline' | 'vertical';
-    // onMenuModeChange: (val: 'inline' | 'vertical') => void;
 }
 
 interface State {
@@ -31,7 +29,6 @@ export default class Menus extends React.Component<Props, State> {
         this.changeMenuItem = this.changeMenuItem.bind(this);
         this.changeSub = this.changeSub.bind(this);
         this.state = {
-            // mode: props.menuMode || 'inline', // 默认的菜单模式
             selectedKey: defaultSelectedKey || '', // 默认的选中菜单栏
             //@ts-ignore
             inlineOpenKeys: defaultOpenKeys || [],
@@ -58,11 +55,9 @@ export default class Menus extends React.Component<Props, State> {
                         key={menuItem.func_code}
                         title={
                             <span>
-                                <i className={`iconfont ${menuItem.icon}`}>
-                                    {menuItem.func_code === 'Index' && workflow.total_todo ? (
-                                        <span className="red-dot" />
-                                    ) : null}
-                                </i>
+                                <Badge dot={menuItem.func_code === 'Index' && workflow.total_todo} className="anticon">
+                                    <FedIcon type={menuItem.icon} />
+                                </Badge>
                                 <span>{menuItem.func_name}</span>
                             </span>
                         }
