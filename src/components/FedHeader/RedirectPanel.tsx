@@ -18,16 +18,16 @@ export default class RedirectPanel extends Component<Props> {
 
     getIconType = (appName: keyof MapOptions) => {
         const mapObj: MapOptions = {
-            Apartment: 'icn_apartment',
-            AssetCenter: 'icn_asset',
-            ManagementCenter: 'icn_manage',
-            ManagementCenterDisabled: 'icn_manage_disabled',
-            MemberCenter: 'icn_member',
-            OperationCenter: 'icn_operate',
-            OperationCenterDisabled: 'icn_operate_disabled',
-            PropertyBase: 'icn_property',
-            Rental: 'icn_rent',
-            FangYi: 'icn_FangYi',
+            Apartment: 'icon-icn_apartment',
+            AssetCenter: 'icon-icn_asset',
+            ManagementCenter: 'icon-icn_manage',
+            ManagementCenterDisabled: 'icon-icn_manage_disabled',
+            MemberCenter: 'icon-icn_member',
+            OperationCenter: 'icon-icn_operate',
+            OperationCenterDisabled: 'icon-icn_operate_disabled',
+            PropertyBase: 'icon-icn_property',
+            Rental: 'icon-icn_rent',
+            FangYi: 'icon-icn_FangYi',
         };
         return mapObj[appName];
     };

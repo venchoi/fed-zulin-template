@@ -48,7 +48,7 @@ export default class FedHeader extends React.Component<Props, State> {
                 <div className="fed-header-content">
                     <div className="fed-header-content-left" onClick={() => this.onOpenModal(outAppList.length)}>
                         <span className="title">{title}</span>
-                        {outAppList.length > 1 ? <FedIcon type="icn_switch" className="icon-switch" /> : null}
+                        {outAppList.length > 1 ? <FedIcon type="icon-icn_switch" className="icon-switch" /> : null}
                     </div>
                     <div className="fed-header-content-right">
                         {user ? (
