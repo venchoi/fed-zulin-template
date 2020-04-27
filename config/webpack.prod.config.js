@@ -1,4 +1,5 @@
 const merge = require('webpack-merge');
+const htmlWebpackPlugin = require('html-webpack-plugin');
 const base_config = require('./webpack.base.config');
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -41,6 +42,11 @@ const prod_config = {
     ],
   },
   plugins: [
+    new htmlWebpackPlugin({
+        template: path.resolve(__dirname, '../src/index.html'),
+        filename: path.resolve(__dirname, '../middleground/index.html'),
+        favicon: path.resolve(__dirname, '../src/assets/img/favicon.ico'),
+    }),
     new webpack.HashedModuleIdsPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash:8].css',
