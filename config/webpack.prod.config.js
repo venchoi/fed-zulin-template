@@ -7,6 +7,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // const WorkboxPlugin = require('workbox-webpack-plugin');
+
+const antOverride = require('../src/vendor/antd');
+
 const prod_config = {
   mode: 'production',
   output: {
@@ -28,7 +31,10 @@ const prod_config = {
           },
           {
             loader: 'less-loader',
-            options: { javascriptEnabled: true },
+            options: {
+              javascriptEnabled: true, 
+              modifyVars: antOverride
+            },
           },
         ],
       },
