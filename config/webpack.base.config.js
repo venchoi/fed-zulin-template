@@ -3,6 +3,8 @@ const htmlWebpackPlugin = require('html-webpack-plugin');
 const hardSourcePlugin = require('hard-source-webpack-plugin');
 const webpack = require('webpack');
 
+const antOverride = require('../src/vendor/antd');
+
 module.exports = {
     entry: {
         app: path.resolve(__dirname, '../src/index.tsx'),
@@ -57,7 +59,10 @@ module.exports = {
                             },
                             {
                                 loader: 'less-loader',
-                                options: { javascriptEnabled: true },
+                                options: {
+                                    javascriptEnabled: true,
+                                    modifyVars: antOverride
+                                },
                             },
                         ],
                     },
