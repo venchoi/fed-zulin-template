@@ -8,7 +8,7 @@ import { Dropdown, Menu } from 'antd';
 import Icon from '@ant-design/icons';
 import FedIcon from '../FedIcon';
 import { Props, AppInfo } from './interface';
-import { loginOut } from '../../api';
+import { loginOut } from '../../services/app';
 import Cookie from 'js-cookie';
 import removeCache from '../../helper/removeCache';
 
@@ -76,7 +76,7 @@ export default class UserInfo extends React.Component<Props> {
 
     loginOut = () => {
         const { logoutUrl } = this.props;
-        loginOut({}, 'POST');
+        loginOut({});
         Cookie.remove('gr_user_id');
         Cookie.remove('RENTALCENTER');
         removeCache();

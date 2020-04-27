@@ -5,7 +5,7 @@ import * as queryString from 'query-string';
 import { Layout as AntLayout } from 'antd';
 import FedHeader from '../../components/FedHeader';
 import FedMenu from '../../components/FedMenu';
-import { getHomeBaseInfo, mockLogin } from '../../api';
+import { getHomeBaseInfo, mockLogin } from '../../services/app';
 import { getItem } from '../../helper/getItem';
 import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
@@ -108,12 +108,12 @@ class Layout extends React.Component<Props, State> {
     getBaseInfo = async () => {
         if (DEV && (localStorage as any).getItem('is_login') == 0) {
             const query = queryString.parse((location as any).search);
-            await mockLogin(query, 'GET');
+            await mockLogin(query);
             localStorage.setItem('is_login', '1');
             (location as any).href = query.returnUrl || '/static/billing/list?_smp=Rental.Bill';
             return;
         }
-        const res = await getHomeBaseInfo({}, 'GET');
+        const res = await getHomeBaseInfo({});
         if (res.result) {
             const props: any = handleBaseInfo(res.data);
             this.setState({ ...props });
