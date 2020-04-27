@@ -29,7 +29,7 @@ module.exports = {
                                             '@babel/preset-env',
                                             {
                                                 modules: false,
-                                                useBuiltIns: 'usage',
+                                                useBuiltIns: 'entry',
                                                 corejs: 2, // 这里需要注意：是根据你的版本来写
                                             },
                                         ],
@@ -51,6 +51,14 @@ module.exports = {
                             },
                             {
                                 loader: 'awesome-typescript-loader',
+                            },
+                            {
+                                loader: 'thread-loader',
+                                // 有同样配置的 loader 会共享一个 worker 池(worker pool)
+                                options: {
+                                    // 产生的 worker 的数量，默认是 cpu 的核心数
+                                    workers: 4,
+                                },
                             },
                         ],
                     },
@@ -101,6 +109,8 @@ module.exports = {
         alias: {
             '@': path.resolve(__dirname, '../src'),
             '@c': path.resolve(__dirname, '../src/components'),
+            '@m': path.resolve(__dirname, '../src/model'),
+            '@s': path.resolve(__dirname, '../src/service'),
         },
     },
     optimization: {
