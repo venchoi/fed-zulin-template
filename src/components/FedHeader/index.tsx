@@ -61,7 +61,9 @@ export default class FedHeader extends React.Component<Props, State> {
                         ) : null}
                     </div>
                 </div>
-                {showModule ? <RedirectPanel onCancel={() => this.onCloseModal()} appList={outAppList} /> : null}
+                {showModule ? (
+                    <RedirectPanel onCancel={() => this.onCloseModal()} appList={outAppList} title={title} />
+                ) : null}
             </>
         );
     }

@@ -5,6 +5,7 @@ import './RedirectPanel.less';
 import { AppInfo, MapOptions } from './interface';
 
 interface Props {
+    title: string;
     appList: AppInfo[];
     onCancel: MouseEventHandler;
 }
@@ -32,10 +33,9 @@ export default class RedirectPanel extends Component<Props> {
     };
 
     render() {
-        const { onCancel, appList = [] } = this.props;
+        const { onCancel, appList = [], title } = this.props;
         const qualifiedAppNames = ['Rental', 'AssetCenter', 'Apartment', 'PropertyBase', 'MemberCenter', 'FangYi'];
         const allDisabled = appList.length === 0;
-        const appName = (appList.filter(item => item.current)[0] || {}).name;
         return (
             <Modal
                 className="module-modal"
@@ -48,7 +48,7 @@ export default class RedirectPanel extends Component<Props> {
             >
                 <div className="module-content">
                     <p className="text">
-                        {allDisabled ? '暂无权限，如需使用请联系管理员' : `即将离开${appName}，请选择跳转模块`}
+                        {allDisabled ? '暂无权限，如需使用请联系管理员' : `即将离开${title}，请选择跳转模块`}
                     </p>
                     <div className="wrap">
                         {appList.map(item => {
