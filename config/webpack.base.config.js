@@ -23,6 +23,7 @@ module.exports = {
                             {
                                 loader: 'babel-loader',
                                 options: {
+                                    exclude: ['node_modules'],
                                     //jsx语法
                                     presets: [
                                         [
