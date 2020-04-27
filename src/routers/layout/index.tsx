@@ -76,7 +76,7 @@ class Layout extends React.Component<Props, State> {
         } = this.state;
         const nav = getItem(appList, appCode, 'key');
         return (
-            <AntLayout>
+            <AntLayout className="main">
                 <Sider>
                     <FedMenu
                         logoUrl={logoIcon}
@@ -97,7 +97,9 @@ class Layout extends React.Component<Props, State> {
                         />
                     </Header>
                     <Content>{children}</Content>
-                    <Footer>Copyright © {new Date().getFullYear()} 明源云空间 版权所有 鄂ICP备15101856号-1</Footer>
+                    <Footer className="main-footer">
+                        Copyright © {new Date().getFullYear()} 明源云空间 版权所有 鄂ICP备15101856号-1
+                    </Footer>
                 </AntLayout>
             </AntLayout>
         );
