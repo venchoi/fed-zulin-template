@@ -6,7 +6,7 @@ import { Layout as AntLayout } from 'antd';
 import FedHeader from '../../components/FedHeader';
 import FedMenu from '../../components/FedMenu';
 import { getHomeBaseInfo, mockLogin } from '../../services/app';
-import { getItem } from '../../helper/getItem';
+import find from 'lodash/find';
 import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
 import { AppInfo, User } from '../../components/FedHeader/interface';
@@ -74,7 +74,7 @@ class Layout extends React.Component<Props, State> {
             logoutUrl,
             appCode,
         } = this.state;
-        const nav = getItem(appList, appCode, 'key');
+        const nav = find(appList, ['key', appCode]);
         return (
             <AntLayout className="main">
                 <Sider>
