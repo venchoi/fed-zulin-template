@@ -9,6 +9,8 @@ module.exports = {
     '@primary-7': '#248BF2',
     // Background color for `<body>`
     '@heading-color': '#313233',
+    // Button
+    '@btn-border-radius-base': '4px',
     // Layout
     '@layout-body-background': '#F5F6F7',
     '@layout-header-background': '#fff',
