@@ -4,6 +4,13 @@ import getApiPath from './getApiPath';
 import getFetchOptions from './getFetchOptions';
 import { message } from 'antd';
 const { DEV } = config;
+axios.interceptors.response.use(res => {
+    if (res?.data?.result) return res.data.data;
+    else
+        return Promise.reject({
+            ...res.data,
+        });
+});
 export default function ajax(path: string, data: object, method: 'GET' | 'POST') {
     let promise;
     const fetchOptions = getFetchOptions(getApiPath(path), method);
@@ -26,7 +33,7 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST')
     }
     return promise
         .then(res => {
-            return res.data;
+            return res;
         })
         .catch(err => {
             const { response = {} } = err;
