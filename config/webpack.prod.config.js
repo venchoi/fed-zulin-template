@@ -12,61 +12,64 @@ const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const antOverride = require('../src/vendor/antd');
 
 const prod_config = {
-  mode: 'production',
-  output: {
-    filename: '[name].[contenthash:8].js',
-    path: path.resolve(__dirname, '../middleground/assets'),
-    publicPath: '/middleground/assets',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(less)$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              importLoaders: 1,
-          },
-          },
-          {
-            loader: 'less-loader',
-            options: {
-              javascriptEnabled: true, 
-              modifyVars: antOverride
+    mode: 'production',
+    output: {
+        filename: '[name].[contenthash:8].js',
+        path: path.resolve(__dirname, '../middleground/assets'),
+        publicPath: '/middleground/assets',
+    },
+    module: {
+        rules: [
+            {
+                test: /\.(less)$/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            importLoaders: 1,
+                        },
+                    },
+                    {
+                        loader: 'postcss-loader',
+                    },
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            javascriptEnabled: true,
+                            modifyVars: antOverride,
+                        },
+                    },
+                ],
             },
-          },
         ],
-      },
+    },
+    plugins: [
+        new htmlWebpackPlugin({
+            template: path.resolve(__dirname, '../src/index.html'),
+            filename: path.resolve(__dirname, '../middleground/index.html'),
+            favicon: path.resolve(__dirname, '../src/assets/img/favicon.ico'),
+        }),
+        new webpack.HashedModuleIdsPlugin(),
+        new MiniCssExtractPlugin({
+            filename: '[name].[contenthash:8].css',
+        }),
+        new CleanWebpackPlugin(),
+        new OptimizeCssAssetsWebpackPlugin({
+            cssProcessPluginOptions: {
+                preset: ['default', { discardComments: { removeAll: true } }],
+            },
+        }),
+        //依赖分析
+        // new BundleAnalyzerPlugin()
+        //PWA
+        // new WorkboxPlugin.GenerateSW({
+        //   clientsClaim: true,
+        //   skipWaiting: true,
+        //   importWorkboxFrom: 'local',
+        //   include: [/\.js$/, /\.css$/, /\.html$/, /\.jpg/, /\.jpeg/, /\.svg/, /\.webp/, /\.png/],
+        // }),
     ],
-  },
-  plugins: [
-    new htmlWebpackPlugin({
-        template: path.resolve(__dirname, '../src/index.html'),
-        filename: path.resolve(__dirname, '../middleground/index.html'),
-        favicon: path.resolve(__dirname, '../src/assets/img/favicon.ico'),
-    }),
-    new webpack.HashedModuleIdsPlugin(),
-    new MiniCssExtractPlugin({
-      filename: '[name].[contenthash:8].css',
-    }),
-    new CleanWebpackPlugin(),
-    new OptimizeCssAssetsWebpackPlugin({
-      cssProcessPluginOptions: {
-        preset: ['default', { discardComments: { removeAll: true } }],
-      },
-    }),
-    //依赖分析
-    // new BundleAnalyzerPlugin()
-    //PWA
-    // new WorkboxPlugin.GenerateSW({
-    //   clientsClaim: true,
-    //   skipWaiting: true,
-    //   importWorkboxFrom: 'local',
-    //   include: [/\.js$/, /\.css$/, /\.html$/, /\.jpg/, /\.jpeg/, /\.svg/, /\.webp/, /\.png/],
-    // }),
-  ],
 };
 
 module.exports = merge([base_config, prod_config]);
