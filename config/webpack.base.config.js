@@ -7,7 +7,7 @@ const antOverride = require('../src/vendor/antd');
 
 module.exports = {
     entry: {
-        app: path.resolve(__dirname, '../src/index.tsx'),
+        app: ['@babel/polyfill', path.resolve(__dirname, '../src/index.tsx')],
         vendor: ['react', 'react-dom'],
     },
     output: {
