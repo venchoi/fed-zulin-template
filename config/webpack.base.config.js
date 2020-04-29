@@ -2,7 +2,7 @@ const path = require('path');
 const htmlWebpackPlugin = require('html-webpack-plugin');
 const hardSourcePlugin = require('hard-source-webpack-plugin');
 const webpack = require('webpack');
-
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const antOverride = require('../src/vendor/antd');
 
 module.exports = {
@@ -81,7 +81,7 @@ module.exports = {
                                 loader: 'less-loader',
                                 options: {
                                     javascriptEnabled: true,
-                                    modifyVars: antOverride
+                                    modifyVars: antOverride,
                                 },
                             },
                         ],
@@ -111,6 +111,7 @@ module.exports = {
         }),
         new hardSourcePlugin(),
         new webpack.NamedModulesPlugin(),
+        new LodashModuleReplacementPlugin(),
     ],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],

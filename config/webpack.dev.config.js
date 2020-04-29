@@ -28,7 +28,7 @@ const dev_config = {
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
-        //  new BundleAnalyzerPlugin()
+         new BundleAnalyzerPlugin()
     ],
 };
 
