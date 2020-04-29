@@ -122,7 +122,7 @@ module.exports = {
             '@': path.resolve(__dirname, '../src'),
             '@c': path.resolve(__dirname, '../src/components'),
             '@m': path.resolve(__dirname, '../src/model'),
-            '@s': path.resolve(__dirname, '../src/service'),
+            '@s': path.resolve(__dirname, '../src/services'),
         },
     },
     optimization: {

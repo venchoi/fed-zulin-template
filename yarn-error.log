@@ -1,30 +1,30 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\tanjj02\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js
+  /Users/a/.nvm/versions/node/v12.16.1/bin/node /usr/local/bin/yarn add @types/dva-loading -D
 
 PATH: 
-  C:\Users\tanjj02\AppData\Local\Temp\yarn--1588142852251-0.5892515539691459;C:\Users\tanjj02\Desktop\fed-zulin-template\node_modules\.bin;C:\Users\tanjj02\AppData\Local\Yarn\Data\link\node_modules\.bin;C:\Users\tanjj02\AppData\Local\Yarn\bin;C:\Program Files\libexec\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\lib\node_modules\npm\bin\node-gyp-bin;C:\Program Files\nodejs\node_modules\npm\bin\node-gyp-bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\tanjj02\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files (x86)\Microsoft SQL Server\130\Tools\Binn;C:\Program Files\Microsoft SQL Server\130\Tools\Binn;C:\Program Files (x86)\Microsoft SQL Server\130\DTS\Binn;C:\Program Files\Microsoft SQL Server\130\DTS\Binn;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn;C:\Program Files (x86)\Microsoft SQL Server\Client SDK\ODBC\130\Tools\Binn;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn;C:\Program Files (x86)\Microsoft SQL Server\140\DTS\Binn;C:\Program Files (x86)\Microsoft SQL Server\140\Tools\Binn\ManagementStudio;C:\Windows\system32\config\systemprofile\.dnx\bin;C:\Program Files\Microsoft DNX\Dnvm;C:\Program Files\Microsoft SQL Server\120\Tools\Binn;C:\Program Files\Git\cmd;C:\Program Files\dotnet;D:\nvm;C:\Program Files\nodejs;C:\Users\tanjj02\AppData\Local\Microsoft\WindowsApps;C:\Users\tanjj02\AppData\Roaming\npm;D:\Microsoft VS Code\bin;D:\nvm;C:\Program Files\nodejs
+  /Users/a/.nvm/versions/node/v12.16.1/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Applications/Wireshark.app/Contents/MacOS:/Users/a/.nvm/versions/node/v12.16.1/bin:/usr/local/mysql/bin:/usr/local/mysql/bin
 
 Yarn version: 
-  1.19.2
+  1.21.1
 
 Node version: 
-  12.13.1
+  12.16.1
 
 Platform: 
-  win32 x64
+  darwin x64
 
 Trace: 
-  TypeError: Cannot create property 'https' on string 'https://npm.taobao.org/mirrors/electron/'
-      at set (C:\Users\tanjj02\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:53902:28)
-      at set (C:\Users\tanjj02\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:53906:14)
-      at set (C:\Users\tanjj02\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:53886:16)
-      at Function.objectPath.set (C:\Users\tanjj02\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:53939:14)
-      at NpmRegistry.mergeEnv (C:\Users\tanjj02\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:95973:18)
-      at NpmRegistry.<anonymous> (C:\Users\tanjj02\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:31899:12)
-      at Generator.next (<anonymous>)
-      at step (C:\Users\tanjj02\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:304:30)
-      at C:\Users\tanjj02\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:322:14
-      at new Promise (<anonymous>)
+  Error: https://registry.npm.taobao.org/@types%2fdva-loading: Not found
+      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66947:18)
+      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:140665:22)
+      at Request.emit (events.js:311:20)
+      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141637:10)
+      at Request.emit (events.js:311:20)
+      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:141559:12)
+      at Object.onceWrapper (events.js:417:28)
+      at IncomingMessage.emit (events.js:323:22)
+      at endReadableNT (_stream_readable.js:1204:12)
+      at processTicksAndRejections (internal/process/task_queues.js:84:21)
 
 npm manifest: 
   {
@@ -47,6 +47,7 @@ npm manifest:
           "antd": "^4.1.5",
           "axios": "^0.19.0",
           "dva": "^2.4.1",
+          "dva-loading": "^3.0.20",
           "js-cookie": "^2.2.1",
           "lodash": "^4.17.15",
           "query-string": "5",
@@ -97,6 +98,7 @@ npm manifest:
           "mini-css-extract-plugin": "^0.8.0",
           "optimize-css-assets-webpack-plugin": "^5.0.3",
           "postcss-loader": "^3.0.0",
+          "postcss-nested": "^4.2.1",
           "precss": "^4.0.0",
           "prettier": "^1.19.1",
           "react-test-renderer": "^16.12.0",
@@ -3621,6 +3623,13 @@ Lockfile:
       redux "^3.7.1"
       redux-saga "^0.16.0"
       warning "^3.0.0"
+  
+  dva-loading@^3.0.20:
+    version "3.0.20"
+    resolved "https://registry.npm.taobao.org/dva-loading/download/dva-loading-3.0.20.tgz#348a0814e0091a80d6f608b51c3e3b92e3883c8d"
+    integrity sha1-NIoIFOAJGoDW9gi1HD47kuOIPI0=
+    dependencies:
+      "@babel/runtime" "^7.0.0"
   
   dva@*, dva@^2.4.1:
     version "2.4.1"
@@ -7776,7 +7785,7 @@ Lockfile:
       icss-utils "^4.0.0"
       postcss "^7.0.6"
   
-  postcss-nested@^4.1.0:
+  postcss-nested@^4.1.0, postcss-nested@^4.2.1:
     version "4.2.1"
     resolved "https://registry.npm.taobao.org/postcss-nested/download/postcss-nested-4.2.1.tgz#4bc2e5b35e3b1e481ff81e23b700da7f82a8b248"
     integrity sha1-S8Lls147Hkgf+B4jtwDaf4Koskg=

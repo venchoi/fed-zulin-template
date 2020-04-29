@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Button } from 'antd';
+import { Button, Spin } from 'antd';
 import { connect } from 'dva';
 import './index.less';
 interface Props {
@@ -7,51 +7,71 @@ interface Props {
     readonly count: number;
     dispatch: Function;
     list: string[];
+    loading: any;
 }
 class App extends React.PureComponent<Props> {
     public componentDidMount() {
         console.log(this.props);
     }
     public render() {
-        const { count } = this.props;
+        const {
+            count,
+            loading: { effects = {} },
+        } = this.props;
+        console.log(effects['count/addAfter1Second'], 'effects');
         return (
             <div className="home_container">
-                <Button
-                    onClick={() => {
-                        const data = count + 1;
-                        this.props.dispatch({
-                            type: 'count/add',
-                            data,
-                        });
-                    }}
-                    type="primary"
-                >
-                    增加数量
-                </Button>
-                <br />
-                <br />
-                <Button
-                    onClick={() => {
-                        const data = count - 1;
-                        this.props.dispatch({
-                            type: 'count/del',
-                            data,
-                        });
-                    }}
-                    type="primary"
-                >
-                    减少数量
-                </Button>
-                <br />
-                <br />
-                <h1 className="count">{count}</h1>
-                <Button
-                    onClick={() => {
-                        this.props.history.replace('/init');
-                    }}
-                >
-                    返回初始界面
-                </Button>
+                <Spin spinning={effects['count/addAfter1Second'] === true ? true : false}>
+                    <Button
+                        onClick={() => {
+                            const data = count + 1;
+                            this.props.dispatch({
+                                type: 'count/add',
+                                data,
+                            });
+                        }}
+                        type="primary"
+                    >
+                        增加数量
+                    </Button>
+                    <br />
+                    <br />
+                    <Button
+                        onClick={() => {
+                            const data = count - 1;
+                            this.props.dispatch({
+                                type: 'count/del',
+                                data,
+                            });
+                        }}
+                        type="primary"
+                    >
+                        减少数量
+                    </Button>
+                    <br />
+                    <br />
+                    <h1>dva-loading:{effects['count/addAfter1Second'] ? 'loading...' : '请求成功'}</h1>
+                    <Button
+                        onClick={() => {
+                            this.props.dispatch({
+                                type: 'count/addAfter1Second',
+                            });
+                        }}
+                    >
+                        发送请求-测试dva-loading
+                    </Button>
+                    <br />
+                    <br />
+                    <div>
+                        <Button
+                            onClick={() => {
+                                this.props.history.replace('/init');
+                            }}
+                        >
+                            返回
+                        </Button>
+                    </div>
+                </Spin>
             </div>
         );
     }
@@ -60,5 +80,6 @@ class App extends React.PureComponent<Props> {
 export default connect((state: any) => {
     return {
         count: state.count.count,
+        loading: state.loading,
     };
 })(App);

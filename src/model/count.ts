@@ -1,3 +1,4 @@
+import { getWorkflowTodo } from '@s/app';
 interface state {
     data: number;
     init: string;
@@ -27,6 +28,12 @@ export default {
                 ...state,
                 count: payload.data,
             };
+        },
+    },
+    effects: {
+        *addAfter1Second(action: any, { put, call }: any) {
+            yield put({ type: 'add' });
+            yield getWorkflowTodo({ a: 1 });
         },
     },
 };
