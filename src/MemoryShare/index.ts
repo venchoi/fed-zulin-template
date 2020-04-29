@@ -1,4 +1,12 @@
-// 共享内存数据、可以全局获取、操作替换
-export default {
-    test: '',
-};
+/**
+ * 内存、持久化缓存模块
+ */
+import cookie from './cookie';
+import localStore from './localStorage';
+import sessionStore from './sessionStorage';
+
+export const vm = new WeakMap(); //键为对象
+export const m = new Map(); //键为任意
+export const Cookies = cookie;
+export const Local = localStore;
+export const Session = sessionStore;

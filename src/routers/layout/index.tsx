@@ -9,7 +9,7 @@ import FedMenu from '../../components/FedMenu';
 import CollapseItem from './components/CollapseItem';
 import Logo from './components/Logo';
 import { getHomeBaseInfo, mockLogin } from '../../services/app';
-import find from 'lodash/find';
+import { find } from 'lodash';
 import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
 import { AppInfo, User } from '../../components/FedHeader/interface';
