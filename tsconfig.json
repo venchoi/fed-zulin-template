@@ -65,13 +65,13 @@
             "@c/*": ["./src/components/*"],
             "@m/*": ["./src/model/*"],
             "@s/*": ["./src/service/*"]
-        },
-        "exclude": ["node_modules", "dist", "static"]
+        }
     },
     "awesomeTypescriptLoaderOptions": {
         "useWebpackText": true,
         "useTranspileModule": true,
         "doTypeCheck": true,
         "forkChecker": true
-    }
+    },
+    "exclude": ["node_modules", "dist", "static"]
 }
