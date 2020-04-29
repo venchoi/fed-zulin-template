@@ -32,7 +32,6 @@ export default {
     },
     effects: {
         *addAfter1Second(action: any, { put, call }: any) {
-            yield put({ type: 'add' });
             yield getWorkflowTodo({ a: 1 });
         },
     },
