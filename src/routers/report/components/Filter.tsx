@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { DownloadOutlined } from '@ant-design/icons';
-import { Input, Button } from 'antd';
+import { Input } from 'antd';
 import './Filter.less';
-import MyIcon from '../../../components/FedIcon';
 
 const { Search } = Input;
 
@@ -13,18 +11,11 @@ interface IParams {
 interface IProps {
     onFilterChange?: <IParams>() => {};
     keyword?: string;
+    rightSlot?: JSX.Element;
 }
 
-const Filter = ({ onFilterChange }: IProps) => {
+const Filter = ({ onFilterChange, rightSlot }: IProps) => {
     const [keyword, setKeyword] = useState<string>('');
-    const handleDownload = () => {
-        const version = navigator.userAgent;
-        if (version.indexOf('Mac OS') !== -1) {
-            window.location.href = 'http://down.finereport.com/FineReport8.0-CN.dmg';
-        } else {
-            window.location.href = 'http://down.finereport.com/FineReport8.0-CN.exe';
-        }
-    };
     return (
         <div className="filter">
             <div className="filter-left">
@@ -36,13 +27,7 @@ const Filter = ({ onFilterChange }: IProps) => {
                     // onPressEnter={search}
                 />
             </div>
-            <div className="filter-right">
-                <Button icon={<DownloadOutlined />} onClick={handleDownload}>
-                    下载报表工具
-                </Button>
-                <Button>从报表库中添加</Button>
-                <Button type="primary">添加报表</Button>
-            </div>
+            {rightSlot ? <div className="filter-right">{rightSlot}</div> : null}
         </div>
     );
 };
