@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, DownloadOutlined } from '@ant-design/icons';
 import { Tabs, Card, Pagination, Button, Modal, message, Spin } from 'antd';
 import { getMyReportList, getBasicReportList, deleteReport, importReport, checkIsExit } from '../../services/report';
 import Filter from './components/Filter';
 import FedTable from '../../components/FedTable';
 import FedPagination from '../../components/FedPagination';
 import { getReportHref } from '../../helper/commonUtils';
+import Edit from './Edit';
+
 // types
 import { History } from 'history';
 import { ColumnProps } from 'antd/es/table';
@@ -26,6 +28,16 @@ const ReportList = (props: IProps) => {
     const [myReportDataSource, setMyReportDataSource] = useState([]);
     const [basicReportDataSource, setBasicReportDataSource] = useState([]);
     const [updateTime, setUpdateTime] = useState(''); // 最后更新时间
+    const [showEditModal, setShowEditModal] = useState(false);
+
+    const handleDownload = () => {
+        const version = navigator.userAgent;
+        if (version.indexOf('Mac OS') !== -1) {
+            window.location.href = 'http://down.finereport.com/FineReport8.0-CN.dmg';
+        } else {
+            window.location.href = 'http://down.finereport.com/FineReport8.0-CN.exe';
+        }
+    };
 
     const fetchMyReportList = async () => {
         setLoading(true);
@@ -81,7 +93,7 @@ const ReportList = (props: IProps) => {
     const tabList = [
         {
             key: 'myreport',
-            tab: '我的报表',
+            tab: '我的报表123',
         },
         {
             key: 'basicreport',
@@ -203,7 +215,19 @@ const ReportList = (props: IProps) => {
                 }}
                 // TODO tabProps
             >
-                <Filter />
+                <Filter
+                    rightSlot={
+                        <>
+                            <Button icon={<DownloadOutlined />} onClick={handleDownload}>
+                                下载报表工具
+                            </Button>
+                            <Button>从报表库中添加</Button>
+                            <Button type="primary" onClick={() => setShowEditModal(true)}>
+                                添加报表
+                            </Button>
+                        </>
+                    }
+                />
                 <Spin spinning={loading}>
                     <FedTable<IRecordType>
                         bordered
@@ -216,6 +240,7 @@ const ReportList = (props: IProps) => {
                     />
                     <FedPagination hideOnSinglePage showSizeChanger />
                 </Spin>
+                {showEditModal ? <Edit onOk={data => {}} /> : null}
             </Card>
         </div>
     );
