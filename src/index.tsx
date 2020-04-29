@@ -2,7 +2,6 @@
 import React from 'react';
 import dva from 'dva';
 import { BrowserRouter } from 'dva/router';
-import createLoading from 'dva-loading';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import App from './app';
