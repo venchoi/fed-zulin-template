@@ -56,7 +56,7 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST')
             } else {
                 console.log('请求失败了');
                 console.error(err);
-                message.error('网络请求失败');
+                message.error(err.msg || '网络请求失败');
                 console.log('错误已经捕获');
             }
         });
