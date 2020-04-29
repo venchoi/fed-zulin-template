@@ -22,6 +22,7 @@ class App extends React.PureComponent<Props> {
         return (
             <div className="home_container">
                 <Spin spinning={effects['count/addAfter1Second'] === true ? true : false}>
+                    <h1>{count}</h1>
                     <Button
                         onClick={() => {
                             const data = count + 1;
