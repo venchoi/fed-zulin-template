@@ -106,13 +106,9 @@ class Layout extends React.Component<Props, State> {
             (location as any).href = query.returnUrl || '/static/billing/list?_smp=Rental.Bill';
             return;
         }
-        const res = await getHomeBaseInfo({});
-        if (res.result) {
-            const props: any = handleBaseInfo(res.data);
-            this.setState({ ...props });
-        } else {
-            message.error(res.msg);
-        }
+        const data = await getHomeBaseInfo({});
+        const props: any = handleBaseInfo(data);
+        this.setState({ ...props });
     };
 
     onCollapse = (collapsed: boolean) => {
