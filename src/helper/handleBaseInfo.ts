@@ -1,6 +1,6 @@
 import Cookie from 'js-cookie';
 import { writeCssInStyles } from './cssUtils';
-import find from 'lodash/find';
+import { find } from 'lodash';
 import removeCahce from './removeCache';
 import { getKey } from '../components/FedMenu/menuRoutes';
 import config from '../config';
