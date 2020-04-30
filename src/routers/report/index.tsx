@@ -47,11 +47,15 @@ const ReportList = (props: IProps) => {
         page_index: 1,
         page_size: 20,
     });
-    // const [pageObj, setPageObj] = useState<PageObj>({
-    //     page_index: 1,
-    //     page_size: 20,
-    //     total: 0
-    // })
+    const [editItem, setEditItem] = useState({
+        id: '',
+        name: '',
+        desc: '',
+        standard_id: '',
+        rds_type: '',
+        upload_on: '',
+        download_url: '',
+    });
     const [myReportTotal, setMyReportTotal] = useState(0);
     const [basicReportTotal, setBasicReportTotal] = useState(0);
     const [updating, setUpdating] = useState(false);
@@ -94,6 +98,11 @@ const ReportList = (props: IProps) => {
         setLoading(false);
     };
 
+    const handleEdit = (record: IRecordType) => {
+        setEditItem(record);
+        setShowEditModal(true);
+    };
+
     const handleDelete = (record: IRecordType) => {
         confirm({
             icon: <ExclamationCircleOutlined />,
@@ -114,7 +123,7 @@ const ReportList = (props: IProps) => {
         setLoading(true);
         const data = await checkIsExit({ id: record.id });
         setLoading(false);
-        if (data.errcode === 5001) {
+        if (data?.errcode === 5001) {
             confirm({
                 title: '报表已存在，是否覆盖？',
                 icon: <ExclamationCircleOutlined />,
@@ -127,7 +136,7 @@ const ReportList = (props: IProps) => {
                 },
             });
         }
-        message.success('操作成功');
+        !data?.result && message.success('操作成功');
     };
 
     const handleUpdateStatus = () => {
@@ -220,7 +229,7 @@ const ReportList = (props: IProps) => {
             },
         },
         {
-            dataIndex: 'report_desc',
+            dataIndex: 'desc',
             title: '报表说明',
             width: 230,
             render: text => {
@@ -250,7 +259,9 @@ const ReportList = (props: IProps) => {
             render: (text, record, index) => {
                 return activeTabKey === 'myreport' ? (
                     <>
-                        <Button type="link">修改</Button>
+                        <Button type="link" onClick={() => handleEdit(record)}>
+                            修改
+                        </Button>
                         <Button type="link" onClick={() => handleDelete(record)}>
                             删除
                         </Button>
@@ -360,7 +371,9 @@ const ReportList = (props: IProps) => {
                         total={+pageObj.total}
                     />
                 </Spin>
-                {showEditModal ? <Edit onOk={data => {}} onCancel={() => setShowEditModal(false)} /> : null}
+                {showEditModal ? (
+                    <Edit onOk={data => {}} onCancel={() => setShowEditModal(false)} detail={editItem} />
+                ) : null}
             </Card>
         </div>
     );
