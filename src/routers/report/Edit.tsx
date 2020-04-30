@@ -6,15 +6,19 @@ import './Edit.less';
 import { FormInstance } from 'antd/lib/form';
 import { ModalProps } from 'antd/lib/modal';
 
+import IRecordType from './types';
+
 const { TextArea } = Input;
 const { Item: FormItem } = Form;
 const { Option } = Select;
 
 interface IProps extends ModalProps {
     onOk: (data: Object) => void;
+    detail: IRecordType;
 }
 
 const Edit = ({ ...props }: IProps) => {
+    const { detail } = props;
     const [form] = Form.useForm();
     const onOk = () => {
         form.validateFields()
@@ -28,7 +32,7 @@ const Edit = ({ ...props }: IProps) => {
     };
     return (
         <Modal
-            title="添加报表"
+            title={detail.id ? '修改报表' : '添加报表'}
             visible={true}
             onOk={() => onOk()}
             onCancel={e => {
@@ -36,7 +40,12 @@ const Edit = ({ ...props }: IProps) => {
             }}
         >
             <div className="report-edit">
-                <Form labelCol={{ span: 4 }} labelAlign="right" form={form}>
+                <Form
+                    labelCol={{ span: 4 }}
+                    labelAlign="right"
+                    initialValues={{ name: detail.name, desc: detail.desc, rds_type: detail.rds_type }}
+                    form={form}
+                >
                     {/* <input type="hidden" value={id} name="id" />
                     <input type="hidden" value="FineReport" name="report_mode" /> */}
 
