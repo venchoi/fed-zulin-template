@@ -127,6 +127,7 @@ const ReportList = (props: IProps) => {
                 },
             });
         }
+        message.success('操作成功');
     };
 
     const handleUpdateStatus = () => {
