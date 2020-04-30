@@ -9,6 +9,7 @@ import {
     checkIsExit,
     getUpdateStatus,
     updateReportRDS,
+    editReport,
 } from '../../services/report';
 import Filter from './components/Filter';
 import FedTable from '../../components/FedTable';
@@ -123,6 +124,7 @@ const ReportList = (props: IProps) => {
     const handleAddToMyReport = async (record: IRecordType) => {
         setLoading(true);
         const data = await checkIsExit({ id: record.id });
+        console.log(data);
         setLoading(false);
         if (data?.errcode === 5001) {
             confirm({
@@ -137,7 +139,7 @@ const ReportList = (props: IProps) => {
                 },
             });
         }
-        !data?.result && message.success('操作成功');
+        data && message.success('操作成功');
     };
 
     const handleUpdateStatus = () => {
@@ -148,6 +150,12 @@ const ReportList = (props: IProps) => {
                 const data = await updateReportRDS();
             },
         });
+    };
+    // @ts-ignore
+    const handleOk = async params => {
+        const data = await editReport(params);
+        message.success(params.id ? '修改成功' : '添加成功');
+        fetchMyReportList();
     };
 
     const fetchReportUpdateStatus = (waiting = false) => {
@@ -344,7 +352,7 @@ const ReportList = (props: IProps) => {
                         columns={columns}
                         dataSource={activeTabKey === 'myreport' ? myReportDataSource : basicReportDataSource}
                         scroll={{
-                            y: 'calc( 100vh - 312px )',
+                            y: 'calc( 100vh - 360px )',
                         }}
                     />
                     <FedPagination
@@ -373,7 +381,7 @@ const ReportList = (props: IProps) => {
                     />
                 </Spin>
                 {showEditModal ? (
-                    <Edit onOk={data => {}} onCancel={() => setShowEditModal(false)} detail={editItem} />
+                    <Edit onOk={data => handleOk(data)} onCancel={() => setShowEditModal(false)} detail={editItem} />
                 ) : null}
             </Card>
         </div>

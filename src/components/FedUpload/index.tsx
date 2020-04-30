@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { Upload, Button } from 'antd';
 import { UploadProps } from 'antd/es/upload';
+import './index.less';
 
 interface IUploadProps extends UploadProps {}
 
@@ -26,11 +27,12 @@ const FedUpload = ({ ...props }: IUploadProps) => {
     return (
         <div className="fed-upload">
             <div className="fed-upload-control">
-                <Upload className="fed-upload-control" {...props}>
+                <div className="fed-upload-control-container">
                     <Button>
                         <UploadOutlined /> 上传
                     </Button>
-                </Upload>
+                    <input className="fed-upload-control" type="file" name={props.name} accept={props.accept}></input>
+                </div>
                 <span className="fed-upload-tip">注：请选择{props.accept}格式的文件</span>
             </div>
             <div className="fed-upload-file-list"></div>

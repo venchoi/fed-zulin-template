@@ -11,6 +11,12 @@ interface DeleteParams {
     id: string;
 }
 
+interface UpdateParams {
+    name: string;
+    desc: string;
+    rds_type: string;
+}
+
 // 获取菜单和用户信息
 export const getMyReportList = (params: ReportListParams) => {
     return ajax('/report/report-proxy/cus-list', params, 'GET');
@@ -39,4 +45,9 @@ export const getUpdateStatus = () => {
 export const updateReportRDS = () => {
     // getFetchOptions(getApiPath(`${server}/statistics-report/push-dm-data-wash-order`, { _smp: 'Rental.Report', _ac: 'Rental', o }, false), 'GET');
     return ajax('statistics-report/push-dm-data-wash-order', {}, 'GET');
+};
+
+export const editReport = (params: UpdateParams) => {
+    // getFetchOptions(getApiPath(`${server}/statistics-report/push-dm-data-wash-order`, { _smp: 'Rental.Report', _ac: 'Rental', o }, false), 'GET');
+    return ajax('/report/report-proxy/save', params, 'POST');
 };

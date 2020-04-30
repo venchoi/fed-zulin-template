@@ -23,7 +23,6 @@ const Edit = ({ ...props }: IProps) => {
     const onOk = () => {
         form.validateFields()
             .then(values => {
-                console.log(values);
                 props.onOk && props.onOk(values);
             })
             .catch(error => {
@@ -61,8 +60,8 @@ const Edit = ({ ...props }: IProps) => {
                             <Option value="rds_dm">DM数据源</Option>
                         </Select>
                     </FormItem>
-                    {/* <FormItem label="上传文件" name="fileName">
-                        <FedUpload accept=".cpt" />
+                    {/* <FormItem label="上传文件">
+                        <FedUpload accept=".cpt"  name="report_file"/>
                     </FormItem> */}
                 </Form>
             </div>
