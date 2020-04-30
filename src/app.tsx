@@ -3,6 +3,8 @@ import { Route, Switch, Router, Redirect } from 'dva/router';
 import Home from './routers/home';
 import Init from './routers/login';
 import Layout from './routers/layout';
+import ReportList from './routers/report';
+
 interface Props {
     history?: any;
     getState?: any;
@@ -27,9 +29,21 @@ export default class App extends React.PureComponent<Props> {
                             }}
                         />
                         <Route
+                            path="/report"
+                            component={() => {
+                                return <ReportList history={this.props.history} />;
+                            }}
+                        />
+                        <Route
+                            path="/report/:type"
+                            component={() => {
+                                return <ReportList history={this.props.history} />;
+                            }}
+                        />
+                        <Route
                             path="/"
                             component={() => {
-                                return <Init changeShowContent={() => {}} history={this.props.history} />;
+                                return <ReportList history={this.props.history} />;
                             }}
                         />
                         <Redirect exact from="/*" to="/init?_smp=Rental.BillReminder" />
