@@ -264,7 +264,7 @@ const ReportList = (props: IProps) => {
         {
             title: '操作',
             dataIndex: 'id',
-            width: 172,
+            width: 178,
             render: (text, record, index) => {
                 return activeTabKey === 'myreport' ? (
                     <>
