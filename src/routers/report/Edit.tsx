@@ -27,7 +27,14 @@ const Edit = ({ ...props }: IProps) => {
             });
     };
     return (
-        <Modal visible={true} onOk={() => onOk()}>
+        <Modal
+            title="添加报表"
+            visible={true}
+            onOk={() => onOk()}
+            onCancel={e => {
+                props.onCancel && props.onCancel(e);
+            }}
+        >
             <div className="report-edit">
                 <Form labelCol={{ span: 4 }} labelAlign="right" form={form}>
                     {/* <input type="hidden" value={id} name="id" />

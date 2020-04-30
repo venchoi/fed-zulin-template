@@ -31,3 +31,12 @@ export const checkIsExit = (params: DeleteParams) => {
 export const importReport = (params: DeleteParams) => {
     return ajax('/report/report-proxy/add-from-std', params, 'POST');
 };
+
+export const getUpdateStatus = () => {
+    return ajax('/report/report/get-dm-status', {}, 'GET');
+};
+
+export const updateReportRDS = () => {
+    // getFetchOptions(getApiPath(`${server}/statistics-report/push-dm-data-wash-order`, { _smp: 'Rental.Report', _ac: 'Rental', o }, false), 'GET');
+    return ajax('statistics-report/push-dm-data-wash-order', {}, 'GET');
+};

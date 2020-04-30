@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from 'antd';
 import './Filter.less';
 
@@ -9,13 +9,17 @@ interface IParams {
 }
 
 interface IProps {
-    onFilterChange?: <IParams>() => {};
+    onFilterChange?: (params: IParams) => void;
     keyword?: string;
     rightSlot?: JSX.Element;
 }
 
 const Filter = ({ onFilterChange, rightSlot }: IProps) => {
     const [keyword, setKeyword] = useState<string>('');
+
+    useEffect(() => {
+        onFilterChange && onFilterChange({ keyword });
+    }, [keyword]);
     return (
         <div className="filter">
             <div className="filter-left">

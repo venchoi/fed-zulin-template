@@ -29,6 +29,18 @@ export default class App extends React.PureComponent<Props> {
                             }}
                         />
                         <Route
+                            path="/report"
+                            component={() => {
+                                return <ReportList history={this.props.history} />;
+                            }}
+                        />
+                        <Route
+                            path="/report/:type"
+                            component={() => {
+                                return <ReportList history={this.props.history} />;
+                            }}
+                        />
+                        <Route
                             path="/"
                             component={() => {
                                 return <ReportList history={this.props.history} />;
