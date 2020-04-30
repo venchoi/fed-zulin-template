@@ -1,5 +1,6 @@
 //统一发送ajax请求的接口
 import ajax from '../../api/utils/ajax';
+import otherServer from '../../api/config';
 
 interface ReportListParams {
     page_index: number;
@@ -44,7 +45,7 @@ export const getUpdateStatus = () => {
 
 export const updateReportRDS = () => {
     // getFetchOptions(getApiPath(`${server}/statistics-report/push-dm-data-wash-order`, { _smp: 'Rental.Report', _ac: 'Rental', o }, false), 'GET');
-    return ajax('statistics-report/push-dm-data-wash-order', {}, 'GET');
+    return ajax('statistics-report/push-dm-data-wash-order', {}, 'GET', otherServer.bmsReportCenter);
 };
 
 export const editReport = (params: UpdateParams) => {

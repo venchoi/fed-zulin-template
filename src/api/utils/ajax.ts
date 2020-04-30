@@ -2,6 +2,7 @@ import axios from 'axios';
 import config from '../../config';
 import getApiPath from './getApiPath';
 import getFetchOptions from './getFetchOptions';
+import { serverMap } from '../config';
 import { message } from 'antd';
 const { DEV } = config;
 axios.interceptors.response.use(res => {
@@ -11,10 +12,12 @@ axios.interceptors.response.use(res => {
             ...res.data,
         });
 });
-export default function ajax(path: string, data: object, method: 'GET' | 'POST') {
+export default function ajax(path: string, data: object, method: 'GET' | 'POST', otherServer: string = '') {
     let promise;
+    let otherServerDomain = '';
     const fetchOptions = getFetchOptions(getApiPath(path), method);
-    const url = fetchOptions.endpoint;
+    otherServer && serverMap[otherServer] && (otherServerDomain = serverMap[otherServer][DEV ? 'test' : 'prod']);
+    const url = `${otherServerDomain}${fetchOptions.endpoint}`;
     const headers = fetchOptions.headers;
     if (method === 'GET') {
         axios.defaults.headers.get = {
