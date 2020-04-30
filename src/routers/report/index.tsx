@@ -37,6 +37,15 @@ interface PageObj {
 const ReportList = (props: IProps) => {
     const { history } = props;
     let updaterTimer: NodeJS.Timeout;
+    const defaultEditItem: IRecordType = {
+        id: '',
+        name: '',
+        desc: '',
+        standard_id: '',
+        rds_type: 'rds_tenant',
+        upload_on: '',
+        download_url: '',
+    };
     const [myReportParams, setMyReportParams] = useState({
         keyword: '',
         page_index: 1,
@@ -47,15 +56,7 @@ const ReportList = (props: IProps) => {
         page_index: 1,
         page_size: 20,
     });
-    const [editItem, setEditItem] = useState({
-        id: '',
-        name: '',
-        desc: '',
-        standard_id: '',
-        rds_type: '',
-        upload_on: '',
-        download_url: '',
-    });
+    const [editItem, setEditItem] = useState(defaultEditItem);
     const [myReportTotal, setMyReportTotal] = useState(0);
     const [basicReportTotal, setBasicReportTotal] = useState(0);
     const [updating, setUpdating] = useState(false);
