@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Select, Upload, Modal } from 'antd';
 import FedUpload from '../../components/FedUpload';
@@ -19,15 +19,28 @@ interface IProps extends ModalProps {
 
 const Edit = ({ ...props }: IProps) => {
     const { detail } = props;
+    const [report_file, setFile] = useState(detail.report_file || '');
     const [form] = Form.useForm();
     const onOk = () => {
         form.validateFields()
             .then(values => {
-                props.onOk && props.onOk(values);
+                const formData = new FormData();
+                delete values.report_file;
+                Object.keys(values).map(key => {
+                    formData.append(key, values[key]);
+                });
+                report_file && formData.append('report_file', report_file);
+                detail.id && formData.append('id', detail.id);
+                formData.append('report_mode', 'FineReport');
+                props.onOk && props.onOk(formData);
             })
             .catch(error => {
                 console.log(error);
             });
+    };
+    const handleUpload = (file: File) => {
+        setFile(file);
+        return new Promise((resolve, reject) => resolve);
     };
     return (
         <Modal
@@ -39,15 +52,7 @@ const Edit = ({ ...props }: IProps) => {
             }}
         >
             <div className="report-edit">
-                <Form
-                    labelCol={{ span: 4 }}
-                    labelAlign="right"
-                    initialValues={{ name: detail.name, desc: detail.desc, rds_type: detail.rds_type }}
-                    form={form}
-                >
-                    {/* <input type="hidden" value={id} name="id" />
-                    <input type="hidden" value="FineReport" name="report_mode" /> */}
-
+                <Form labelCol={{ span: 4 }} labelAlign="right" initialValues={{ ...detail, report_file }} form={form}>
                     <FormItem label="报表名称" name="name" rules={[{ required: true }]}>
                         <Input type="text" placeholder="请输入" onChange={() => {}} />
                     </FormItem>
@@ -60,9 +65,14 @@ const Edit = ({ ...props }: IProps) => {
                             <Option value="rds_dm">DM数据源</Option>
                         </Select>
                     </FormItem>
-                    {/* <FormItem label="上传文件">
-                        <FedUpload accept=".cpt"  name="report_file"/>
-                    </FormItem> */}
+                    <FormItem label="上传文件" name="report_file">
+                        <Upload accept=".cpt" action="/" customRequest={({ file }) => handleUpload(file)}>
+                            <Button>
+                                <UploadOutlined /> 上传
+                            </Button>
+                        </Upload>
+                        <span className="fed-upload-tip">注：请选择.cpt格式的文件</span>
+                    </FormItem>
                 </Form>
             </div>
         </Modal>

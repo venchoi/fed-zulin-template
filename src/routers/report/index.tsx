@@ -46,6 +46,7 @@ const ReportList = (props: IProps) => {
         rds_type: 'rds_tenant',
         upload_on: '',
         download_url: '',
+        report_file: '',
     };
     const [myReportParams, setMyReportParams] = useState({
         keyword: '',
@@ -77,27 +78,35 @@ const ReportList = (props: IProps) => {
     }, [myReportParams, basicReportParams, myReportTotal, basicReportTotal, activeTabKey]);
 
     const handleDownload = () => {
-        const version = navigator.userAgent;
-        if (version.indexOf('Mac OS') !== -1) {
-            window.location.href = 'http://down.finereport.com/FineReport8.0-CN.dmg';
+        const agent = navigator.userAgent.toLocaleLowerCase();
+        if (agent.indexOf('mac os') !== -1) {
+            window.location.href =
+                'https://fine-build.oss-cn-shanghai.aliyuncs.com/finereport/10.0/stable/exe/macos_FineReport-CN.dmg';
         } else {
-            window.location.href = 'http://down.finereport.com/FineReport8.0-CN.exe';
+            window.location.href =
+                agent.indexOf('win64') >= 0 || agent.indexOf('wow64') >= 0
+                    ? 'https://fine-build.oss-cn-shanghai.aliyuncs.com/finereport/10.0/stable/exe/windows_x64_FineReport-CN.exe'
+                    : 'https://fine-build.oss-cn-shanghai.aliyuncs.com/finereport/10.0/stable/exe/windows_x86_FineReport-CN.exe';
         }
     };
 
     const fetchMyReportList = async () => {
         setLoading(true);
-        const data = await getMyReportList({ ...myReportParams });
-        setMyReportDataSource(data.list);
-        setMyReportTotal(data.total);
+        const { result, data } = await getMyReportList({ ...myReportParams });
         setLoading(false);
+        if (result) {
+            setMyReportDataSource(data.list);
+            setMyReportTotal(data.total);
+        }
     };
     const fetchBasicReportList = async () => {
         setLoading(true);
-        const data = await getBasicReportList({ ...basicReportParams });
-        setBasicReportDataSource(data.list);
-        setBasicReportTotal(data.total);
+        const { result, data } = await getBasicReportList({ ...basicReportParams });
         setLoading(false);
+        if (result) {
+            setBasicReportDataSource(data.list);
+            setBasicReportTotal(data.total);
+        }
     };
 
     const handleEdit = (record: IRecordType) => {
@@ -111,9 +120,9 @@ const ReportList = (props: IProps) => {
             title: '确定删除该项？',
             onOk: async () => {
                 setLoading(true);
-                const data = await deleteReport({ id: record.id });
+                const { result, data } = await deleteReport({ id: record.id });
                 setLoading(false);
-                if (data) {
+                if (result) {
                     message.success('操作成功');
                     fetchMyReportList();
                 }
@@ -123,23 +132,25 @@ const ReportList = (props: IProps) => {
 
     const handleAddToMyReport = async (record: IRecordType) => {
         setLoading(true);
-        const data = await checkIsExit({ id: record.id });
-        console.log(data);
+        const { result, data } = await checkIsExit({ id: record.id });
         setLoading(false);
+        result && message.success('操作成功');
         if (data?.errcode === 5001) {
             confirm({
                 title: '报表已存在，是否覆盖？',
                 icon: <ExclamationCircleOutlined />,
                 onOk: async () => {
                     setLoading(true);
-                    const data = await importReport({ id: record.id });
+                    const { result } = await importReport({ id: record.id });
                     setLoading(false);
-                    message.success('操作成功');
-                    fetchMyReportList();
+                    if (result) {
+                        message.success('操作成功');
+                        fetchMyReportList();
+                    }
                 },
             });
         }
-        data && message.success('操作成功');
+        data.result && message.success('操作成功');
     };
 
     const handleUpdateStatus = () => {
@@ -148,14 +159,18 @@ const ReportList = (props: IProps) => {
             icon: <ExclamationCircleOutlined />,
             onOk: async () => {
                 const data = await updateReportRDS();
+                // TODO
             },
         });
     };
     // @ts-ignore
     const handleOk = async params => {
-        const data = await editReport(params);
-        message.success(params.id ? '修改成功' : '添加成功');
-        fetchMyReportList();
+        const { result } = await editReport(params);
+        if (result) {
+            message.success(params.id ? '修改成功' : '添加成功');
+            setShowEditModal(false);
+            fetchMyReportList();
+        }
     };
 
     const fetchReportUpdateStatus = (waiting = false) => {
@@ -163,14 +178,14 @@ const ReportList = (props: IProps) => {
         updaterTimer = setTimeout(
             async () => {
                 setUpdating(true);
-                const data = await getUpdateStatus();
-
-                console.log(data);
-                setTimeout(() => {
-                    setUpdating(data.status === '未完成');
-                }, 2000);
-                setUpdateTime((data.status === '已完成' ? data.modified_on : data.last_finish_time) || '');
-                data.status === '未完成' && fetchReportUpdateStatus(true);
+                const { result, data } = await getUpdateStatus();
+                if (result) {
+                    setTimeout(() => {
+                        setUpdating(data.status === '未完成');
+                    }, 2000);
+                    setUpdateTime((data.status === '已完成' ? data.modified_on : data.last_finish_time) || '');
+                    data.status === '未完成' && fetchReportUpdateStatus(true);
+                }
             },
             waiting ? 5000 : 0
         );
@@ -232,7 +247,7 @@ const ReportList = (props: IProps) => {
         {
             dataIndex: 'rds_type',
             title: '报表类型',
-            width: 160,
+            width: 162,
             render: (text, record, index) => {
                 return <>{record.rds_type === 'rds_dm' ? 'DM数据源' : '租户数据源'}</>;
             },
@@ -240,7 +255,7 @@ const ReportList = (props: IProps) => {
         {
             dataIndex: 'desc',
             title: '报表说明',
-            width: 230,
+            width: 232,
             render: text => {
                 return <>{text || '-'}</>;
             },
@@ -248,7 +263,7 @@ const ReportList = (props: IProps) => {
         {
             dataIndex: 'upload_by',
             title: '上传人',
-            width: 110,
+            width: 112,
             render: text => {
                 return <>{text || '-'}</>;
             },
@@ -256,7 +271,7 @@ const ReportList = (props: IProps) => {
         {
             dataIndex: 'upload_on',
             title: '上传时间 ',
-            width: 160,
+            width: 162,
             render: text => {
                 return <>{text || '-'}</>;
             },
@@ -264,7 +279,7 @@ const ReportList = (props: IProps) => {
         {
             title: '操作',
             dataIndex: 'id',
-            width: 178,
+            width: 180,
             render: (text, record, index) => {
                 return activeTabKey === 'myreport' ? (
                     <>
@@ -299,11 +314,13 @@ const ReportList = (props: IProps) => {
                 title="统计报表"
                 // extra={<a href="#">More</a>}
                 tabList={tabList}
+                tabProps={{
+                    size: 'small',
+                }}
                 activeTabKey={activeTabKey}
                 onTabChange={key => {
                     setActiveTabKey(key);
                 }}
-                // TODO tabProps
             >
                 <Filter
                     onFilterChange={filters => {
@@ -335,7 +352,9 @@ const ReportList = (props: IProps) => {
                                 <Button icon={<DownloadOutlined />} onClick={handleDownload}>
                                     下载报表工具
                                 </Button>
-                                <Button onClick={() => setActiveTabKey('basicreport')}>从报表库中添加</Button>
+                                <Button type="primary" ghost onClick={() => setActiveTabKey('basicreport')}>
+                                    从报表库中添加
+                                </Button>
                                 <Button type="primary" onClick={() => setShowEditModal(true)}>
                                     添加报表
                                 </Button>
@@ -352,7 +371,7 @@ const ReportList = (props: IProps) => {
                         columns={columns}
                         dataSource={activeTabKey === 'myreport' ? myReportDataSource : basicReportDataSource}
                         scroll={{
-                            y: 'calc( 100vh - 360px )',
+                            y: 'calc( 100vh - 365px )',
                         }}
                     />
                     <FedPagination
@@ -376,7 +395,7 @@ const ReportList = (props: IProps) => {
                         defaultCurrent={1}
                         current={pageObj.page_index}
                         pageSize={pageObj.page_size}
-                        showTotal={total => `共${Math.ceil(+total / +(pageObj.page_size || 1))}页/${total}条`}
+                        showTotal={total => `共${Math.ceil(+total / +(pageObj.page_size || 1))}页， ${total}条记录`}
                         total={+pageObj.total}
                     />
                 </Spin>
