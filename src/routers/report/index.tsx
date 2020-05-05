@@ -321,7 +321,6 @@ const ReportList = (props: IProps) => {
                 onTabChange={key => {
                     setActiveTabKey(key);
                 }}
-                // TODO tabProps
             >
                 <Filter
                     onFilterChange={filters => {
