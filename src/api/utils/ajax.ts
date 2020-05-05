@@ -7,25 +7,17 @@ import { serverMap } from '../config';
 import { message } from 'antd';
 const { DEV } = config;
 axios.interceptors.request.use(config => {
-    console.log('interceptors.request  config.data', config);
     if (config.data instanceof FormData) {
         config.headers['Content-type'] = 'multipart/form-data';
     }
     return config;
 });
-axios.interceptors.response.use(res => {
-    if (res?.data?.result) return res.data.data;
-    else
-        return Promise.reject({
-            ...res.data,
-        });
-});
 export default function ajax(path: string, data: object, method: 'GET' | 'POST', otherServer: string = '') {
     let promise;
-    let otherServerDomain = '';
+    let serverDomain = '';
     const fetchOptions = getFetchOptions(getApiPath(path), method);
-    otherServer && serverMap[otherServer] && (otherServerDomain = serverMap[otherServer][DEV ? 'test' : 'prod']);
-    const url = `${otherServerDomain}${fetchOptions.endpoint}`;
+    otherServer && serverMap[otherServer] && (serverDomain = serverMap[otherServer][DEV ? 'test' : 'prod']);
+    const url = `${serverDomain}${fetchOptions.endpoint}`;
     const headers = fetchOptions.headers;
     if (method === 'GET') {
         axios.defaults.headers.get = {
@@ -42,12 +34,18 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
     }
     return promise
         .then(res => {
-            return res;
+            if (res?.data?.result) return res.data.data;
+            return Promise.reject(res);
         })
         .catch(err => {
+            if (err.status === 200) {
+                message.error(err?.data?.msg || '网络请求失败');
+                return Promise.reject(err.data);
+            }
+            // 状态码非200情况
             const { response = {} } = err;
+            const { data } = response;
             if (response.status === 401) {
-                const { data } = response;
                 if (!DEV) {
                     location.href = data.login_url + '?returnUrl=' + decodeURIComponent(location.href);
                 } else {
@@ -63,11 +61,9 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
                         location.href;
                 }
             } else {
-                console.log('请求失败了');
-                console.error(err);
-                message.error(err.msg || '网络请求失败');
-                console.log('错误已经捕获');
-                return err;
+                console.error('请求失败了', err);
+                message.error(data.msg || '网络请求失败');
+                return Promise.reject(data);
             }
         });
 }

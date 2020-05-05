@@ -164,8 +164,6 @@ const ReportList = (props: IProps) => {
             async () => {
                 setUpdating(true);
                 const data = await getUpdateStatus();
-
-                console.log(data);
                 setTimeout(() => {
                     setUpdating(data.status === '未完成');
                 }, 2000);
