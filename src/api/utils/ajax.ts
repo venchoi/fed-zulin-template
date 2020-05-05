@@ -1,3 +1,4 @@
+const FormData = require('form-data');
 import axios from 'axios';
 import config from '../../config';
 import getApiPath from './getApiPath';
@@ -5,6 +6,13 @@ import getFetchOptions from './getFetchOptions';
 import { serverMap } from '../config';
 import { message } from 'antd';
 const { DEV } = config;
+axios.interceptors.request.use(config => {
+    console.log('interceptors.request  config.data', config);
+    if (config.data instanceof FormData) {
+        config.headers['Content-type'] = 'multipart/form-data';
+    }
+    return config;
+});
 axios.interceptors.response.use(res => {
     if (res?.data?.result) return res.data.data;
     else
@@ -30,9 +38,7 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
         axios.defaults.headers.post = {
             ...headers,
         };
-        promise = axios.post(url, {
-            ...data,
-        });
+        promise = axios.post(url, data);
     }
     return promise
         .then(res => {
