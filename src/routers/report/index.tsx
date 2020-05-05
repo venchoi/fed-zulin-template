@@ -46,6 +46,7 @@ const ReportList = (props: IProps) => {
         rds_type: 'rds_tenant',
         upload_on: '',
         download_url: '',
+        report_file: '',
     };
     const [myReportParams, setMyReportParams] = useState({
         keyword: '',
@@ -77,11 +78,15 @@ const ReportList = (props: IProps) => {
     }, [myReportParams, basicReportParams, myReportTotal, basicReportTotal, activeTabKey]);
 
     const handleDownload = () => {
-        const version = navigator.userAgent;
-        if (version.indexOf('Mac OS') !== -1) {
-            window.location.href = 'http://down.finereport.com/FineReport8.0-CN.dmg';
+        const agent = navigator.userAgent.toLocaleLowerCase();
+        if (agent.indexOf('mac os') !== -1) {
+            window.location.href =
+                'https://fine-build.oss-cn-shanghai.aliyuncs.com/finereport/10.0/stable/exe/macos_FineReport-CN.dmg';
         } else {
-            window.location.href = 'http://down.finereport.com/FineReport8.0-CN.exe';
+            window.location.href =
+                agent.indexOf('win64') >= 0 || agent.indexOf('wow64') >= 0
+                    ? 'https://fine-build.oss-cn-shanghai.aliyuncs.com/finereport/10.0/stable/exe/windows_x64_FineReport-CN.exe'
+                    : 'https://fine-build.oss-cn-shanghai.aliyuncs.com/finereport/10.0/stable/exe/windows_x86_FineReport-CN.exe';
         }
     };
 
@@ -129,6 +134,7 @@ const ReportList = (props: IProps) => {
         setLoading(true);
         const { result, data } = await checkIsExit({ id: record.id });
         setLoading(false);
+        result && message.success('操作成功');
         if (data?.errcode === 5001) {
             confirm({
                 title: '报表已存在，是否覆盖？',
@@ -162,6 +168,7 @@ const ReportList = (props: IProps) => {
         const { result } = await editReport(params);
         if (result) {
             message.success(params.id ? '修改成功' : '添加成功');
+            setShowEditModal(false);
             fetchMyReportList();
         }
     };

@@ -36,8 +36,6 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
         .then(res => {
             if (!res?.data?.result) message.error(res?.data?.msg || '网络请求失败');
             return res.data;
-            // if (res?.data?.result) return res.data.data;
-            // return Promise.reject(res);
         })
         .catch(err => {
             // 状态码非200情况

@@ -19,16 +19,18 @@ interface IProps extends ModalProps {
 
 const Edit = ({ ...props }: IProps) => {
     const { detail } = props;
-    const [file, setFile] = useState<string | Blob>('');
+    const [report_file, setFile] = useState(detail.report_file || '');
     const [form] = Form.useForm();
     const onOk = () => {
         form.validateFields()
             .then(values => {
                 const formData = new FormData();
+                delete values.report_file;
                 Object.keys(values).map(key => {
                     formData.append(key, values[key]);
                 });
-                formData.append('report_file', file);
+                report_file && formData.append('report_file', report_file);
+                detail.id && formData.append('id', detail.id);
                 formData.append('report_mode', 'FineReport');
                 props.onOk && props.onOk(formData);
             })
@@ -50,12 +52,7 @@ const Edit = ({ ...props }: IProps) => {
             }}
         >
             <div className="report-edit">
-                <Form
-                    labelCol={{ span: 4 }}
-                    labelAlign="right"
-                    initialValues={{ name: detail.name, desc: detail.desc, rds_type: detail.rds_type }}
-                    form={form}
-                >
+                <Form labelCol={{ span: 4 }} labelAlign="right" initialValues={{ ...detail, report_file }} form={form}>
                     <FormItem label="报表名称" name="name" rules={[{ required: true }]}>
                         <Input type="text" placeholder="请输入" onChange={() => {}} />
                     </FormItem>
@@ -68,7 +65,7 @@ const Edit = ({ ...props }: IProps) => {
                             <Option value="rds_dm">DM数据源</Option>
                         </Select>
                     </FormItem>
-                    <FormItem label="上传文件" name="report_file" rules={[{ required: true }]}>
+                    <FormItem label="上传文件" name="report_file">
                         <Upload accept=".cpt" action="/" customRequest={({ file }) => handleUpload(file)}>
                             <Button>
                                 <UploadOutlined /> 上传
