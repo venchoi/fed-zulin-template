@@ -87,17 +87,21 @@ const ReportList = (props: IProps) => {
 
     const fetchMyReportList = async () => {
         setLoading(true);
-        const data = await getMyReportList({ ...myReportParams });
-        setMyReportDataSource(data.list);
-        setMyReportTotal(data.total);
+        const { result, data } = await getMyReportList({ ...myReportParams });
         setLoading(false);
+        if (result) {
+            setMyReportDataSource(data.list);
+            setMyReportTotal(data.total);
+        }
     };
     const fetchBasicReportList = async () => {
         setLoading(true);
-        const data = await getBasicReportList({ ...basicReportParams });
-        setBasicReportDataSource(data.list);
-        setBasicReportTotal(data.total);
+        const { result, data } = await getBasicReportList({ ...basicReportParams });
         setLoading(false);
+        if (result) {
+            setBasicReportDataSource(data.list);
+            setBasicReportTotal(data.total);
+        }
     };
 
     const handleEdit = (record: IRecordType) => {
@@ -111,9 +115,9 @@ const ReportList = (props: IProps) => {
             title: '确定删除该项？',
             onOk: async () => {
                 setLoading(true);
-                const data = await deleteReport({ id: record.id });
+                const { result, data } = await deleteReport({ id: record.id });
                 setLoading(false);
-                if (data) {
+                if (result) {
                     message.success('操作成功');
                     fetchMyReportList();
                 }
@@ -123,8 +127,7 @@ const ReportList = (props: IProps) => {
 
     const handleAddToMyReport = async (record: IRecordType) => {
         setLoading(true);
-        const data = await checkIsExit({ id: record.id });
-        console.log(data);
+        const { result, data } = await checkIsExit({ id: record.id });
         setLoading(false);
         if (data?.errcode === 5001) {
             confirm({
@@ -132,14 +135,16 @@ const ReportList = (props: IProps) => {
                 icon: <ExclamationCircleOutlined />,
                 onOk: async () => {
                     setLoading(true);
-                    const data = await importReport({ id: record.id });
+                    const { result } = await importReport({ id: record.id });
                     setLoading(false);
-                    message.success('操作成功');
-                    fetchMyReportList();
+                    if (result) {
+                        message.success('操作成功');
+                        fetchMyReportList();
+                    }
                 },
             });
         }
-        data && message.success('操作成功');
+        data.result && message.success('操作成功');
     };
 
     const handleUpdateStatus = () => {
@@ -148,14 +153,17 @@ const ReportList = (props: IProps) => {
             icon: <ExclamationCircleOutlined />,
             onOk: async () => {
                 const data = await updateReportRDS();
+                // TODO
             },
         });
     };
     // @ts-ignore
     const handleOk = async params => {
-        const data = await editReport(params);
-        message.success(params.id ? '修改成功' : '添加成功');
-        fetchMyReportList();
+        const { result } = await editReport(params);
+        if (result) {
+            message.success(params.id ? '修改成功' : '添加成功');
+            fetchMyReportList();
+        }
     };
 
     const fetchReportUpdateStatus = (waiting = false) => {
@@ -163,12 +171,14 @@ const ReportList = (props: IProps) => {
         updaterTimer = setTimeout(
             async () => {
                 setUpdating(true);
-                const data = await getUpdateStatus();
-                setTimeout(() => {
-                    setUpdating(data.status === '未完成');
-                }, 2000);
-                setUpdateTime((data.status === '已完成' ? data.modified_on : data.last_finish_time) || '');
-                data.status === '未完成' && fetchReportUpdateStatus(true);
+                const { result, data } = await getUpdateStatus();
+                if (result) {
+                    setTimeout(() => {
+                        setUpdating(data.status === '未完成');
+                    }, 2000);
+                    setUpdateTime((data.status === '已完成' ? data.modified_on : data.last_finish_time) || '');
+                    data.status === '未完成' && fetchReportUpdateStatus(true);
+                }
             },
             waiting ? 5000 : 0
         );

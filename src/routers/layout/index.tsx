@@ -106,7 +106,7 @@ class Layout extends React.Component<Props, State> {
             (location as any).href = query.returnUrl || '/static/billing/list?_smp=Rental.Bill';
             return;
         }
-        const data = await getHomeBaseInfo({});
+        const { data } = await getHomeBaseInfo({});
         const props: any = handleBaseInfo(data);
         this.setState({ ...props });
     };

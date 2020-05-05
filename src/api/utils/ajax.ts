@@ -34,17 +34,15 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
     }
     return promise
         .then(res => {
-            if (res?.data?.result) return res.data.data;
-            return Promise.reject(res);
+            if (!res?.data?.result) message.error(res?.data?.msg || '网络请求失败');
+            return res.data;
+            // if (res?.data?.result) return res.data.data;
+            // return Promise.reject(res);
         })
         .catch(err => {
-            if (err.status === 200) {
-                message.error(err?.data?.msg || '网络请求失败');
-                return Promise.reject(err.data);
-            }
             // 状态码非200情况
             const { response = {} } = err;
-            const { data } = response;
+            const { data = {} } = response;
             if (response.status === 401) {
                 if (!DEV) {
                     location.href = data.login_url + '?returnUrl=' + decodeURIComponent(location.href);
@@ -63,7 +61,6 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
             } else {
                 console.error('请求失败了', err);
                 message.error(data.msg || '网络请求失败');
-                return Promise.reject(data);
             }
         });
 }
