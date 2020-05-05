@@ -7,13 +7,29 @@
     background: #0D2640; // vendor/antd.js中设置了未生效
 }
 
+// Card
+.ant-card {
+    display: flex;
+    flex-direction: column;
+}
 .ant-card-head {
     font-weight: 400;
 }
-
 .ant-card-body {
-    padding: 0;
+    flex-grow: 1;
 }
+.ant-card-contain-tabs > .ant-card-head .ant-card-head-title {
+    padding: 20px 16px 12px 16px;
+}
+
+// Button
 .ant-btn-link {
     padding: 0;
+    &:not(:first-child) {
+        padding-left: 16px;
+    }
+}
+// Pagination 
+.ant-pagination-total-text {
+    color: @text-color-secondary;
 }

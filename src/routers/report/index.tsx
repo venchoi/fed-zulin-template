@@ -279,7 +279,7 @@ const ReportList = (props: IProps) => {
         {
             title: '操作',
             dataIndex: 'id',
-            width: 180,
+            width: 194,
             render: (text, record, index) => {
                 return activeTabKey === 'myreport' ? (
                     <>
@@ -312,10 +312,9 @@ const ReportList = (props: IProps) => {
             <Card
                 className="report-card"
                 title="统计报表"
-                // extra={<a href="#">More</a>}
                 tabList={tabList}
                 tabProps={{
-                    size: 'small',
+                    size: 'default',
                 }}
                 activeTabKey={activeTabKey}
                 onTabChange={key => {
@@ -336,7 +335,7 @@ const ReportList = (props: IProps) => {
                                 ) : null}
                                 {updating ? (
                                     <>
-                                        <LoadingOutlined style={{ color: '#248BF2' }} />
+                                        <LoadingOutlined style={{ color: '#248BF2', padding: '0 8px' }} />
                                         <span className="report-updating-text report-updating-tip">报表刷新中…</span>
                                     </>
                                 ) : (
@@ -375,7 +374,6 @@ const ReportList = (props: IProps) => {
                         }}
                     />
                     <FedPagination
-                        hideOnSinglePage
                         showSizeChanger
                         onShowSizeChange={(current, page_size) => {
                             activeTabKey === 'myreport'
