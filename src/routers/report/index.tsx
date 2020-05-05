@@ -247,7 +247,7 @@ const ReportList = (props: IProps) => {
         {
             dataIndex: 'rds_type',
             title: '报表类型',
-            width: 160,
+            width: 162,
             render: (text, record, index) => {
                 return <>{record.rds_type === 'rds_dm' ? 'DM数据源' : '租户数据源'}</>;
             },
@@ -255,7 +255,7 @@ const ReportList = (props: IProps) => {
         {
             dataIndex: 'desc',
             title: '报表说明',
-            width: 230,
+            width: 232,
             render: text => {
                 return <>{text || '-'}</>;
             },
@@ -263,7 +263,7 @@ const ReportList = (props: IProps) => {
         {
             dataIndex: 'upload_by',
             title: '上传人',
-            width: 110,
+            width: 112,
             render: text => {
                 return <>{text || '-'}</>;
             },
@@ -271,7 +271,7 @@ const ReportList = (props: IProps) => {
         {
             dataIndex: 'upload_on',
             title: '上传时间 ',
-            width: 160,
+            width: 162,
             render: text => {
                 return <>{text || '-'}</>;
             },
@@ -279,7 +279,7 @@ const ReportList = (props: IProps) => {
         {
             title: '操作',
             dataIndex: 'id',
-            width: 178,
+            width: 180,
             render: (text, record, index) => {
                 return activeTabKey === 'myreport' ? (
                     <>
@@ -314,6 +314,9 @@ const ReportList = (props: IProps) => {
                 title="统计报表"
                 // extra={<a href="#">More</a>}
                 tabList={tabList}
+                tabProps={{
+                    size: 'small',
+                }}
                 activeTabKey={activeTabKey}
                 onTabChange={key => {
                     setActiveTabKey(key);
@@ -350,7 +353,9 @@ const ReportList = (props: IProps) => {
                                 <Button icon={<DownloadOutlined />} onClick={handleDownload}>
                                     下载报表工具
                                 </Button>
-                                <Button onClick={() => setActiveTabKey('basicreport')}>从报表库中添加</Button>
+                                <Button type="primary" ghost onClick={() => setActiveTabKey('basicreport')}>
+                                    从报表库中添加
+                                </Button>
                                 <Button type="primary" onClick={() => setShowEditModal(true)}>
                                     添加报表
                                 </Button>
