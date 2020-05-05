@@ -395,7 +395,7 @@ const ReportList = (props: IProps) => {
                         defaultCurrent={1}
                         current={pageObj.page_index}
                         pageSize={pageObj.page_size}
-                        showTotal={total => `共${Math.ceil(+total / +(pageObj.page_size || 1))}页/${total}条`}
+                        showTotal={total => `共${Math.ceil(+total / +(pageObj.page_size || 1))}页， ${total}条记录`}
                         total={+pageObj.total}
                     />
                 </Spin>
