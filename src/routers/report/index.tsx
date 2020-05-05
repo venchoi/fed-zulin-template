@@ -367,7 +367,7 @@ const ReportList = (props: IProps) => {
                         columns={columns}
                         dataSource={activeTabKey === 'myreport' ? myReportDataSource : basicReportDataSource}
                         scroll={{
-                            y: 'calc( 100vh - 360px )',
+                            y: 'calc( 100vh - 365px )',
                         }}
                     />
                     <FedPagination
