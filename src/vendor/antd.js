@@ -82,7 +82,7 @@ module.exports = {
 
     // Form
     // ---
-    '@label-color': '@text-color', // 表单组件标签色
+    '@label-color': '@text-color-secondary', // 表单组件标签色
     '@form-item-margin-bottom': '16px', // 表单组件内下边距
     '@form-vertical-label-padding': '0 0 4px', // 表单组件垂直标签外边距
 
