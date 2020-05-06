@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Select, Upload, Modal } from 'antd';
 import FedUpload from '../../components/FedUpload';
+import FedIcon from '../../components/FedIcon';
 import './Edit.less';
 import { FormInstance } from 'antd/lib/form';
 import { ModalProps } from 'antd/lib/modal';
@@ -86,10 +87,10 @@ const Edit = (props: IProps) => {
                         {fileName ? (
                             <div className="upload-file">
                                 <div className="attachment-list">
-                                    <img
+                                    <FedIcon
                                         className="icon-file"
-                                        src={'/fed/assets/images/icon-file-unknown.png'}
-                                        alt=""
+                                        type="icon-attachment-cpt"
+                                        style={{ color: 'rgb(113, 172, 241)', fontSize: '40px' }}
                                     />
                                     <div>
                                         <div className="file-name">{fileName}</div>
