@@ -103,7 +103,7 @@ const ReportList = (props: Props) => {
                 <div className={`tabpane-container ${activeTabKey === 'myreport' ? 'visible' : 'hidden'}`}>
                     <MyReportList columns={columns} setActiveTabKey={setActiveTabKey} />
                 </div>
-                <div className={`tabpane-container ${activeTabKey === 'myreport' ? 'visible' : 'hidden'}`}>
+                <div className={`tabpane-container ${activeTabKey === 'myreport' ? 'hidden' : 'visible'}`}>
                     <StandReportList columns={columns} />
                 </div>
             </Card>
