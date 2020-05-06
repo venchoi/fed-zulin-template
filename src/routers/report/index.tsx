@@ -365,9 +365,7 @@ const ReportList = (props: IProps) => {
                         }
                     />
                     <FedTable<IRecordType>
-                        bordered
                         vsides={false}
-                        pagination={false}
                         columns={columns}
                         dataSource={activeTabKey === 'myreport' ? myReportDataSource : basicReportDataSource}
                         scroll={{
@@ -375,13 +373,11 @@ const ReportList = (props: IProps) => {
                         }}
                     />
                     <FedPagination
-                        showSizeChanger
                         onShowSizeChange={(current, page_size) => {
                             activeTabKey === 'myreport'
                                 ? setMyReportParams({ ...myReportParams, page_index: 1, page_size })
                                 : setBasicReportParams({ ...basicReportParams, page_index: 1, page_size });
                         }}
-                        pageSizeOptions={['10', '20', '30', '50']}
                         onChange={(page_index, page_size) => {
                             activeTabKey === 'myreport'
                                 ? setMyReportParams({ ...myReportParams, page_index, page_size: page_size || 20 })
@@ -391,7 +387,6 @@ const ReportList = (props: IProps) => {
                                       page_size: page_size || 20,
                                   });
                         }}
-                        defaultCurrent={1}
                         current={pageObj.page_index}
                         pageSize={pageObj.page_size}
                         showTotal={total => `共${Math.ceil(+total / +(pageObj.page_size || 1))}页， ${total}条记录`}
