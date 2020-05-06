@@ -90,7 +90,7 @@ module.exports = {
     // --
     '@modal-footer-padding-vertical': '8px', // 对话框底部垂直内边距
     '@modal-footer-padding-horizontal': '24px', // 对话框底部水平内边距
-    '@modal-mask-bg': 'fade(#04080D, 80%)', // 对话框蒙层背景色
+    '@modal-mask-bg': 'fade(#04080D, 50%)', // 对话框蒙层背景色
     '@modal-confirm-body-padding': '32px 24px 24px 32px', // 确认对话框内边距
 
     // Input
