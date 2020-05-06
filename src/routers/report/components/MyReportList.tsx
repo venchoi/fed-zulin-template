@@ -36,6 +36,7 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
         rds_type: 'rds_tenant',
         upload_on: '',
         download_url: '',
+        upload_by: '',
         report_file: '',
     }; // 默认编辑字段
     let updaterTimer: NodeJS.Timeout;
