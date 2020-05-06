@@ -1,3 +1,11 @@
+/*
+ * @作者: 陈文惠
+ * @创建日期: 2020-05-06 14:54:06
+ * @最近一次修改人:   陈文惠
+ * @最近一次修改时间: 2020-05-06 14:54:06
+ * @文件说明: 统计报表 - 标准报表tab
+ */
+
 import React, { useState, useEffect } from 'react';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { Button, Modal, message, Spin } from 'antd';
@@ -42,6 +50,10 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
         },
     ]);
 
+    /**
+     * 添加到“我的报表”
+     * @param record 被添加到“我的报表”的项
+     */
     const handleAddToMyReport = async (record: IRecordType) => {
         setLoading(true);
         const { result, data, errcode } = await checkIsExit({ id: record.id });
@@ -65,6 +77,9 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
         result && message.success('操作成功');
     };
 
+    /**
+     * 获取标准报表库列表数据
+     */
     const fetchBasicReportList = async () => {
         setLoading(true);
         const { result, data } = await getBasicReportList({ ...basicReportParams });
@@ -74,13 +89,21 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
             setBasicReportTotal(data.total);
         }
     };
+
+    /**
+     * 初始化获取列表数据
+     */
     useEffect(() => {
         fetchBasicReportList();
     }, []);
 
+    /**
+     * 列表数据参数更新后就请求报表列表数据
+     */
     useEffect(() => {
         fetchBasicReportList();
     }, [basicReportParams]);
+
     return (
         <Spin spinning={loading}>
             <Filter
