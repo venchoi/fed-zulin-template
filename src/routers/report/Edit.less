@@ -3,8 +3,35 @@
         display: inline-block;
     }
     &-tip {
+        display: inline-block;
+        padding-left: 16px;
         font-size:12px;
         color:rgba(198,201,204,1);
         line-height:18px;
-    }
+    }    
 }
+// TODO remove
+// reset
+.ant-upload-list {
+    display: none;
+}
+.attachment-list {
+    margin-top: 12px;
+    padding: 12px;
+    display: flex;
+    border: 1px solid #DFE2E6;
+    border-radius: 4px;
+    width: 260px;
+    position: relative;
+    .icon-file {
+      width: 42px;
+      height: 42px;
+      margin-right: 16px;
+    }
+    .file-name {
+      width: 175px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+} 
