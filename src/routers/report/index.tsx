@@ -23,6 +23,7 @@ import { ColumnProps } from 'antd/es/table';
 import IRecordType from './types';
 
 const { confirm } = Modal;
+const { TabPane } = Tabs;
 
 import './index.less';
 
@@ -221,9 +222,6 @@ const ReportList = (props: IProps) => {
             dataIndex: 'name',
             title: '报表名称',
             render: (text, record, index) => {
-                //判断是否是在标准报表库中
-                // TODO
-                // const { pms } = this.props;
                 if (activeTabKey === 'myreport') {
                     //新增
                     return (
@@ -321,51 +319,54 @@ const ReportList = (props: IProps) => {
                     setActiveTabKey(key);
                 }}
             >
-                <Filter
-                    onFilterChange={filters => {
-                        setMyReportParams({ ...myReportParams, ...filters });
-                    }}
-                    rightSlot={
-                        activeTabKey === 'myreport' ? (
-                            <>
-                                {updateTime ? (
-                                    <span className="report-updating-text report-updating-tip">
-                                        上次更新: {updateTime}
-                                    </span>
-                                ) : null}
-                                {updating ? (
-                                    <>
-                                        <LoadingOutlined style={{ color: '#248BF2', padding: '0 8px' }} />
-                                        <span className="report-updating-text report-updating-tip">报表刷新中…</span>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Button onClick={() => handleUpdateStatus()} type="link">
-                                            <SyncOutlined style={{ color: '#248BF2' }} spin={false} />
-                                            <span className="report-updating-text report-updating-action">
-                                                更新报表
-                                            </span>
-                                        </Button>
-                                    </>
-                                )}
-                                <Button icon={<DownloadOutlined />} onClick={handleDownload}>
-                                    下载报表工具
-                                </Button>
-                                <Button type="primary" ghost onClick={() => setActiveTabKey('basicreport')}>
-                                    从报表库中添加
-                                </Button>
-                                <Button type="primary" onClick={() => setShowEditModal(true)}>
-                                    添加报表
-                                </Button>
-                            </>
-                        ) : (
-                            <></>
-                        )
-                    }
-                />
                 <Spin spinning={loading}>
+                    <Filter
+                        onFilterChange={filters => {
+                            setMyReportParams({ ...myReportParams, ...filters });
+                        }}
+                        rightSlot={
+                            activeTabKey === 'myreport' ? (
+                                <>
+                                    {updateTime ? (
+                                        <span className="report-updating-text report-updating-tip">
+                                            上次更新: {updateTime}
+                                        </span>
+                                    ) : null}
+                                    {updating ? (
+                                        <>
+                                            <LoadingOutlined style={{ color: '#248BF2', padding: '0 8px' }} />
+                                            <span className="report-updating-text report-updating-tip">
+                                                报表刷新中…
+                                            </span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Button onClick={() => handleUpdateStatus()} type="link">
+                                                <SyncOutlined style={{ color: '#248BF2' }} spin={false} />
+                                                <span className="report-updating-text report-updating-action">
+                                                    更新报表
+                                                </span>
+                                            </Button>
+                                        </>
+                                    )}
+                                    <Button icon={<DownloadOutlined />} onClick={handleDownload}>
+                                        下载报表工具
+                                    </Button>
+                                    <Button type="primary" ghost onClick={() => setActiveTabKey('basicreport')}>
+                                        从报表库中添加
+                                    </Button>
+                                    <Button type="primary" onClick={() => setShowEditModal(true)}>
+                                        添加报表
+                                    </Button>
+                                </>
+                            ) : (
+                                <></>
+                            )
+                        }
+                    />
                     <FedTable<IRecordType>
                         bordered
+                        vsides={false}
                         pagination={false}
                         columns={columns}
                         dataSource={activeTabKey === 'myreport' ? myReportDataSource : basicReportDataSource}
@@ -397,10 +398,10 @@ const ReportList = (props: IProps) => {
                         total={+pageObj.total}
                     />
                 </Spin>
-                {showEditModal ? (
-                    <Edit onOk={data => handleOk(data)} onCancel={() => setShowEditModal(false)} detail={editItem} />
-                ) : null}
             </Card>
+            {showEditModal ? (
+                <Edit onOk={data => handleOk(data)} onCancel={() => setShowEditModal(false)} detail={editItem} />
+            ) : null}
         </div>
     );
 };

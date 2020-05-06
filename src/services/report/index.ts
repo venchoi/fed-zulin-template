@@ -8,15 +8,8 @@ interface ReportListParams {
     page_size: number;
 }
 
-// TODO  extends IRecordType
-interface DeleteParams {
+interface CURDParams {
     id: string;
-}
-
-interface UpdateParams {
-    name: string;
-    desc: string;
-    rds_type: string;
 }
 
 // 获取菜单和用户信息
@@ -28,15 +21,15 @@ export const getBasicReportList = (params: ReportListParams) => {
     return ajax('/report/report-proxy/std-list', params, 'GET');
 };
 
-export const deleteReport = (params: DeleteParams) => {
+export const deleteReport = (params: CURDParams) => {
     return ajax('/report/report-proxy/delete', params, 'POST');
 };
 
-export const checkIsExit = (params: DeleteParams) => {
+export const checkIsExit = (params: CURDParams) => {
     return ajax('/report/report-proxy/add-from-std', params, 'POST');
 };
 
-export const importReport = (params: DeleteParams) => {
+export const importReport = (params: CURDParams) => {
     return ajax('/report/report-proxy/add-from-std', params, 'POST');
 };
 
