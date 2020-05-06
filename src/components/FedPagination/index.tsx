@@ -14,7 +14,13 @@ const FedPagination = ({
         <div className="fed-pagination-container">
             <Divider />
             <div className="fed-pagination">
-                <Pagination hideOnSinglePage={hideOnSinglePage} {...props} />
+                <Pagination
+                    hideOnSinglePage={hideOnSinglePage}
+                    showSizeChanger={showSizeChanger}
+                    pageSizeOptions={pageSizeOptions}
+                    defaultCurrent={defaultCurrent}
+                    {...props}
+                />
                 {/* TODO slot */}
             </div>
         </div>
