@@ -19,3 +19,7 @@ export const loginOut = (data: any) => {
 export const mockLogin = (data: any) => {
     return ajax('/', data, 'GET');
 };
+// 模拟登录
+export const test = (data: any) => {
+    return ajax('/', data, 'POST');
+};
