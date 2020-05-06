@@ -4,7 +4,7 @@ import Home from './routers/home';
 import Init from './routers/login';
 import Layout from './routers/layout';
 import ReportList from './routers/report';
-
+import { History } from 'history';
 interface Props {
     history?: any;
     getState?: any;

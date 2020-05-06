@@ -9,8 +9,11 @@ import IRecordType from './types';
 import './index.less';
 import MyReportList from './components/MyReportList';
 import StandReportList from './components/StandReportList';
-
-const ReportList = () => {
+import { History } from 'history';
+interface Props {
+    history: History;
+}
+const ReportList = (props: Props) => {
     const [activeTabKey, setActiveTabKey] = useState('myreport');
 
     const tabList = [
