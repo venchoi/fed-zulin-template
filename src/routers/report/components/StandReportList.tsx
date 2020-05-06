@@ -118,7 +118,7 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
                 columns={columns}
                 dataSource={basicReportDataSource}
                 scroll={{
-                    y: 'calc( 100vh - 365px )',
+                    y: 'calc( 100vh - 350px )',
                 }}
             />
             <FedPagination
