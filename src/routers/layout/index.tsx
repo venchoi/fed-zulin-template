@@ -71,14 +71,16 @@ class Layout extends React.Component<Props, State> {
         return (
             <AntLayout style={{ minHeight: '100vh' }} className="main">
                 <Sider
-                    style={{ minHeight: '100vh' }}
+                    style={{ minHeight: '100vh', maxHeight: '100vh' }}
                     trigger={<CollapseItem collapsed={collapsed} />}
                     collapsible
                     collapsed={collapsed}
                     onCollapse={this.onCollapse}
                 >
                     <Logo collapsed={collapsed} logoUrl={logoIcon} />
-                    <FedMenu collapsed={collapsed} menuList={(nav && nav.children) || []} workflow={workflow} />
+                    <div style={{ maxHeight: 'calc(100vh - 56px)', overflowY: 'scroll' }}>
+                        <FedMenu collapsed={collapsed} menuList={(nav && nav.children) || []} workflow={workflow} />
+                    </div>
                 </Sider>
                 <AntLayout>
                     <Header>
