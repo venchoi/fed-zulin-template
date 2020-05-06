@@ -20,7 +20,7 @@ interface IProps extends ModalProps {
     detail: IRecordType;
 }
 
-const Edit = ({ ...props }: IProps) => {
+const Edit = (props: IProps) => {
     const { detail } = props;
     const [report_file, setFile] = useState(detail.report_file || '');
     const [fileName, setFileName] = useState('');
