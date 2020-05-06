@@ -71,6 +71,7 @@ class Layout extends React.Component<Props, State> {
         return (
             <AntLayout style={{ minHeight: '100vh' }} className="main">
                 <Sider
+                    style={{ minHeight: '100vh' }}
                     trigger={<CollapseItem collapsed={collapsed} />}
                     collapsible
                     collapsed={collapsed}
