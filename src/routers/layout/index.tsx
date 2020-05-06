@@ -93,7 +93,7 @@ class Layout extends React.Component<Props, State> {
                         />
                     </Header>
                     <Content style={{ overflowX: 'scroll' }}>
-                        <div style={{ minWidth: '1208px' }}>{children}</div>
+                        <div style={{ minWidth: '1208px', height: '100%' }}>{children}</div>
                     </Content>
                     <Footer className="main-footer">
                         Copyright © {new Date().getFullYear()} 明源云空间 版权所有 鄂ICP备15101856号-1
