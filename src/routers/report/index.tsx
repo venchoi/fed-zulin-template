@@ -100,10 +100,10 @@ const ReportList = (props: Props) => {
                     setActiveTabKey(key);
                 }}
             >
-                <div style={{ display: `${activeTabKey === 'myreport' ? 'block' : 'none'}`, height: '100%' }}>
+                <div className={`tabpane-container ${activeTabKey === 'myreport' ? 'visible' : 'hidden'}`}>
                     <MyReportList columns={columns} setActiveTabKey={setActiveTabKey} />
                 </div>
-                <div style={{ display: `${activeTabKey === 'myreport' ? 'none' : 'block'}`, height: '100%' }}>
+                <div className={`tabpane-container ${activeTabKey === 'myreport' ? 'visible' : 'hidden'}`}>
                     <StandReportList columns={columns} />
                 </div>
             </Card>

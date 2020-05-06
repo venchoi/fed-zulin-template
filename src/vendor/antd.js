@@ -26,7 +26,7 @@ module.exports = {
 
     // Base Scaffolding Variables
     // ---
-    '@text-color': '#636566', // 主文本色
+    '@text-color': '#636466', // 主文本色
     '@text-color-secondary': '#949799', // 副文本
     '@icon-color-hover': '#4A4B4D', // 灰色图标hover色
     '@heading-color': '#313233', // 标题色
