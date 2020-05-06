@@ -6,6 +6,9 @@ import './Edit.less';
 import { FormInstance } from 'antd/lib/form';
 import { ModalProps } from 'antd/lib/modal';
 
+// const unknowFile = require('../../assets/img/icon-file/icon-file-unknown.png')
+// import unknowFile from '../../assets/img/icon-file/icon-file-unknown.png';
+
 import IRecordType from './types';
 
 const { TextArea } = Input;
@@ -20,6 +23,7 @@ interface IProps extends ModalProps {
 const Edit = ({ ...props }: IProps) => {
     const { detail } = props;
     const [report_file, setFile] = useState(detail.report_file || '');
+    const [fileName, setFileName] = useState('');
     const [form] = Form.useForm();
     const onOk = () => {
         form.validateFields()
@@ -40,7 +44,8 @@ const Edit = ({ ...props }: IProps) => {
     };
     const handleUpload = (file: File) => {
         setFile(file);
-        return new Promise((resolve, reject) => resolve);
+        setFileName(file.name);
+        return new Promise((resolve, reject) => resolve());
     };
     return (
         <Modal
@@ -52,7 +57,13 @@ const Edit = ({ ...props }: IProps) => {
             }}
         >
             <div className="report-edit">
-                <Form labelCol={{ span: 4 }} labelAlign="right" initialValues={{ ...detail, report_file }} form={form}>
+                <Form
+                    labelCol={{ span: 4 }}
+                    labelAlign="right"
+                    initialValues={{ ...detail, report_file }}
+                    form={form}
+                    hideRequiredMark
+                >
                     <FormItem label="报表名称" name="name" rules={[{ required: true }]}>
                         <Input type="text" placeholder="请输入" onChange={() => {}} />
                     </FormItem>
@@ -70,8 +81,23 @@ const Edit = ({ ...props }: IProps) => {
                             <Button>
                                 <UploadOutlined /> 上传
                             </Button>
+                            <span className="fed-upload-tip">注：请选择.cpt格式的文件</span>
                         </Upload>
-                        <span className="fed-upload-tip">注：请选择.cpt格式的文件</span>
+                        {fileName ? (
+                            <div className="upload-file">
+                                <div className="attachment-list">
+                                    <img
+                                        className="icon-file"
+                                        src={'/fed/assets/images/icon-file-unknown.png'}
+                                        alt=""
+                                    />
+                                    <div>
+                                        <div className="file-name">{fileName}</div>
+                                        {/* <div className="file-description">{report_file}</div> */}
+                                    </div>
+                                </div>
+                            </div>
+                        ) : null}
                     </FormItem>
                 </Form>
             </div>

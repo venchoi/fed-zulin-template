@@ -83,7 +83,7 @@ module.exports = {
     // Form
     // ---
     '@label-color': '@text-color', // 表单组件标签色
-    '@form-item-margin-bottom': '16px', // 表单组件内下边距
+    // '@form-item-margin-bottom': '16px', // 表单组件内下边距
     '@form-vertical-label-padding': '0 0 4px', // 表单组件垂直标签外边距
 
     // Modal
@@ -119,7 +119,7 @@ module.exports = {
     // Card
     '@card-head-font-size': '16px',
     '@card-radius': '4px',
-    // '@card-padding-base': '0',
+    '@card-padding-base': '0',
     // Table
     '@table-padding-vertical-sm': '8px',
     '@table-padding-horizontal-sm': '16px',
@@ -143,4 +143,8 @@ module.exports = {
     // Filter
     '@table-header-filter-active-bg': 'darken(@table-header-sort-active-bg, 5%)', // 表头筛选选中色
     '@table-filter-btns-bg': 'inherit', // 表头筛选按钮背景色
+
+    // Tabs
+    '@tabs-horizontal-margin': '0',
+    '@tabs-horizontal-padding': '0 16px 10px 16px',
 };

@@ -12,22 +12,37 @@
 }
 
 .report {
+    position: relative;
+    height: 100%;
+    min-height: 100%;
     &-card {
-        height: calc(100vh - 115px);
+        height: 100%;
+        min-height: 100%;
     }
     &-updating {
         &-text {
             display: inline-block;
-            padding: 0 8px;
             line-height:21px;
             font-size:14px;
         }
         &-tip {
             color:@text-color-secondary;
         }
+        &-ing {
+            padding-right: 16px;
+        }
         &-action {
             color: @primary-color;
         }
     }
-
+    .ant-spin-nested-loading,.ant-spin-container {
+        height: 100%;
+    }
+    .fed-pagination-container {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+    }
 }
+

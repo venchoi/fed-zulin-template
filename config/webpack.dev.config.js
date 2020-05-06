@@ -8,7 +8,7 @@ const dev_config = {
     devServer: {
         contentBase: '/',
         open: true,
-        port: 8808,
+        port: 8807,
         hot: true,
         host: 'rental-dev.mysoft.com.cn',
         headers: {
