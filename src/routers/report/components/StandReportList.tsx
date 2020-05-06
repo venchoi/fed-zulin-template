@@ -44,10 +44,10 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
 
     const handleAddToMyReport = async (record: IRecordType) => {
         setLoading(true);
-        const { result, data } = await checkIsExit({ id: record.id });
+        const { result, data, errcode } = await checkIsExit({ id: record.id });
         setLoading(false);
         result && message.success('操作成功');
-        if (data?.errcode === 5001) {
+        if (errcode === 5001) {
             confirm({
                 title: '报表已存在，是否覆盖？',
                 icon: <ExclamationCircleOutlined />,
@@ -62,7 +62,7 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
                 },
             });
         }
-        data.result && message.success('操作成功');
+        result && message.success('操作成功');
     };
 
     const fetchBasicReportList = async () => {
