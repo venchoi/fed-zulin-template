@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch, Router, Redirect } from 'dva/router';
-import Home from './routers/home';
-import Init from './routers/login';
+import UI from './routers/ui';
 import Layout from './routers/layout';
 import ReportList from './routers/report';
 import { History } from 'history';
@@ -17,15 +16,9 @@ export default class App extends React.PureComponent<Props> {
                 <Router history={this.props.history}>
                     <Switch>
                         <Route
-                            path="/init"
+                            path="/ui"
                             component={() => {
-                                return <Init changeShowContent={() => {}} history={this.props.history} />;
-                            }}
-                        />
-                        <Route
-                            path="/home"
-                            component={() => {
-                                return <Home changeShowContent={() => {}} history={this.props.history} />;
+                                return <UI />;
                             }}
                         />
                         <Route

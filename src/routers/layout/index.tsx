@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { message } from 'antd';
-//@ts-ignore
+// @ts-ignore
 import * as queryString from 'query-string';
 import { Layout as AntLayout } from 'antd';
 import FedIcon from '../../components/FedIcon';

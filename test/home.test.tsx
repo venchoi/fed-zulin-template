@@ -1,4 +1,4 @@
-import App from '../src/routers/login';
+import App from '../src/routers/ui';
 import { mount, shallow } from 'enzyme';
 import React from 'react';
 import toJson from 'enzyme-to-json'; //做快照
