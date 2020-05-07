@@ -37,6 +37,16 @@ module.exports = {
     '@border-radius-base': '4px', // 默认圆角
     '@border-radius-sm': '2px', // 新增小号圆角
 
+    // vertical paddings
+    '@padding-xsss': '2px', // 新增小小小号padding，暂未使用
+    // The background colors for active and hover states for things like
+    // list items or table cells.
+    '@item-hover-bg': '@primary-1', // hover色，用于hover对象的背景色
+
+    // LINK
+    '@link-hover-color': '@primary-5', // 链接hover色
+    '@link-active-color': '@primary-7', // 链接active色
+
     // Border color
     '@border-color-base': '#D6D7D8', // 边框灰，用于组件外描边，按钮、控件等
     '@border-color-split': '#EDEFF0', // 分割灰，用于分割线等
@@ -68,17 +78,17 @@ module.exports = {
     '@btn-primary-shadow': '0 2px 0 rgba(49, 50, 51, 0.045)', // 主按钮投影
     '@btn-text-shadow': '0 -1px 0 rgba(49, 50, 51, 0.12)', // 文字按钮投影
 
-    // // Radio
-    // @radio-dot-disabled-color: @disabled-color; // 单选按钮圆点色
+    // Radio
+    '@radio-dot-disabled-color': '@disabled-color', // 单选按钮圆点色
 
-    // // Radio buttons
-    // @radio-disabled-button-checked-bg: @border-color-split; // 单选按钮已选失效背景色
+    // Radio buttons
+    '@radio-disabled-button-checked-bg': '@border-color-split', // 单选按钮已选失效背景色
 
-    // // Layout
-    // @layout-body-background: @background-color-base; // 页面灰色背景
-    // @layout-header-background: #0D2640; // 顶部导航背景
-    // @layout-header-height: 56px; // 顶部导航高度
-    // @layout-trigger-background: @layout-header-background; // 收起区域背景
+    // Layout
+    '@layout-body-background': '@background-color-base', // 页面灰色背景
+    '@layout-header-background': '#0D2640', // 顶部导航背景
+    '@layout-header-height': '56px', // 顶部导航高度
+    '@layout-trigger-background': '@layout-header-background', // 收起区域背景
 
     // Form
     // ---
@@ -86,19 +96,37 @@ module.exports = {
     '@form-item-margin-bottom': '16px', // 表单组件内下边距
     '@form-vertical-label-padding': '0 0 4px', // 表单组件垂直标签外边距
 
-    // Modal
-    // --
-    '@modal-footer-padding-vertical': '8px', // 对话框底部垂直内边距
-    '@modal-footer-padding-horizontal': '24px', // 对话框底部水平内边距
-    '@modal-mask-bg': 'fade(#04080D, 50%)', // 对话框蒙层背景色
-    '@modal-confirm-body-padding': '32px 24px 24px 32px', // 确认对话框内边距
-
     // Input
     // ---
     '@input-placeholder-color': ' @disabled-color', // 输入框占位符颜色
     '@input-number-handler-active-bg': '@background-color-base', // 数字输入框步进器按下颜色
     '@input-addon-bg': '@background-color-base', // 输入框前置/后置标签背景色
     '@input-icon-hover-color': '@heading-color', // 输入框按钮hover色
+
+    // Tooltip
+    // ---
+    // Tooltip max width
+    '@tooltip-max-width': '224px', // 文字提示最大宽度
+    // Tooltip background color
+    '@tooltip-bg': 'rgba(4, 8, 13, 0.80)', // 文字提示背景色
+    // Tooltip arrow width
+    '@tooltip-arrow-width': '4px', // 文字提示箭头大小
+    // Tooltip distance with trigger
+    '@tooltip-distance': '8px', // 文字提示与对象间距
+
+    // Popover
+    // ---
+    // Popover arrow width
+    '@popover-arrow-width': '4px', // 气泡卡片箭头大小
+    // Popover distance with trigger
+    '@popover-distance': '8px', // 气泡卡片与对象间距
+
+    // Modal
+    // --
+    '@modal-footer-padding-vertical': '8px', // 对话框底部垂直内边距
+    '@modal-footer-padding-horizontal': '24px', // 对话框底部水平内边距
+    '@modal-mask-bg': 'fade(#04080D, 50%)', // 对话框蒙层背景色
+    '@modal-confirm-body-padding': '32px 24px 24px 32px', // 确认对话框内边距
 
     // Layout
     '@layout-body-background': '#F5F6F7',
@@ -116,16 +144,11 @@ module.exports = {
     '@menu-dark-color': 'fade(#fff, 70%)', // 暗主题导航菜单文字/图标颜色
     '@menu-dark-arrow-color': '#fff', // 暗主题导航菜单箭头颜色
     '@menu-dark-submenu-bg': '#0D141A', // 暗主题导航菜单子菜单背景色
+
     // Card
     '@card-head-font-size': '16px',
     '@card-radius': '4px',
     '@card-padding-base': '16px',
-
-    // Table
-    '@table-padding-vertical-sm': '8px',
-    '@table-padding-horizontal-sm': '16px',
-
-    '@item-hover-bg': '@primary-1', // hover色，用于hover对象的背景色
 
     // Table
     // --
@@ -136,8 +159,8 @@ module.exports = {
     '@table-row-hover-bg': '@primary-1', // 表格行hover色
     '@table-selected-row-bg': '@item-hover-bg', // 表格选中行背景色
     '@table-expanded-row-bg': '@background-color-light', // 表格展开背景色
-    '@table-padding-vertical': '8px', // 表格垂直内边距
-    '@table-padding-horizontal': '16px', // 表格水平内边距
+    '@table-padding-vertical-sm': '8px', // 表格垂直内边距
+    '@table-padding-horizontal-sm': '16px', // 表格水平内边距
     // Sorter
     // Legacy: `table-header-sort-active-bg` is used for hover not real active
     '@table-header-sort-active-bg': 'darken(@table-header-bg, 3%)', // 表头排序选中色
@@ -145,8 +168,26 @@ module.exports = {
     '@table-header-filter-active-bg': 'darken(@table-header-sort-active-bg, 5%)', // 表头筛选选中色
     '@table-filter-btns-bg': 'inherit', // 表头筛选按钮背景色
 
+    // Tag
+    // --
+    '@tag-default-bg': '@background-color-base', // 默认标签背景色
+
+    // Badge
+    // ---
+    '@badge-height': '16px', // 徽标高度
+
     // Tabs
     '@tabs-card-head-background': '@background-color-base', // 标签页标签背景色
     '@tabs-card-height': '32px', // 标签页标签高度
     '@tabs-card-gutter': '4px', // 标签页各个标签之间的间距
+
+    // Tree
+    // ---
+    '@tree-child-padding': '24px', // 树型控件子级内边距
+    '@tree-node-hover-bg': '@item-hover-bg', // 树型控件节点hover背景色
+    '@tree-node-selected-bg': '@primary-1', // 树型控件节点选中背景色
+
+    // Steps
+    // ---
+    '@steps-nav-arrow-color': '#ADB0B3', // 导航步骤条箭头颜色
 };
