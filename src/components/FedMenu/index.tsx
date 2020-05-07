@@ -5,7 +5,6 @@ import 'antd/es/menu/style/index.css';
 import { Link } from 'dva/router';
 import FedIcon from '../FedIcon';
 import { getKey } from './menuRoutes';
-import './index.less';
 import {} from '../FedHeader/interface';
 
 interface Props {
