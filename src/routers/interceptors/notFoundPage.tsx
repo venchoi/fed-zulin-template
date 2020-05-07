@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Button } from 'antd';
+import { FedButton } from '@c/index';
 import img from './img_404@2x.png';
 import './index.less';
 
@@ -13,7 +13,7 @@ class NotFoundPage extends PureComponent {
                         <h1 className="interceptor-text-header">404</h1>
                         <span className="interceptor-text-tip">抱歉，您访问的页面不存在</span>
                         {/* <h1 className="interceptor-text-btn">
-                            <Button type="primary" onClick={() => history.goBack()}>返回</Button>
+                            <FedButton type="primary" onClick={() => history.goBack()}>返回</FedButton>
                         </h1> */}
                     </div>
                 </div>

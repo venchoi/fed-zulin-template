@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'antd';
+import { FedButton } from '@c/index';
 import img from './img_403@2x.png';
 import './index.less';
 
@@ -13,9 +13,9 @@ const NoRights = (props: { history: History }) => {
                     <div className="interceptor-text-header">403</div>
                     <span className="interceptor-text-tip">抱歉，您暂无该页面的访问权限</span>
                     <div className="interceptor-text-btn">
-                        <Button type="primary" onClick={() => history.back()}>
+                        <FedButton type="primary" onClick={() => history.back()}>
                             返回
-                        </Button>
+                        </FedButton>
                     </div>
                 </div>
             </div>
