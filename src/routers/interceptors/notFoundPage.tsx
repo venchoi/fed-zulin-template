@@ -10,11 +10,11 @@ class NotFoundPage extends PureComponent {
                 <div className="interceptor-content">
                     <img src={img} alt="访问的资源不存在" className="interceptor-img" />
                     <div className="interceptor-text">
-                        <h1 className="interceptor-text-header">404</h1>
+                        <div className="interceptor-text-header">404</div>
                         <span className="interceptor-text-tip">抱歉，您访问的页面不存在</span>
-                        {/* <h1 className="interceptor-text-btn">
+                        {/* <div className="interceptor-text-btn">
                             <FedButton type="primary" onClick={() => history.goBack()}>返回</FedButton>
-                        </h1> */}
+                        </div> */}
                     </div>
                 </div>
             </div>
