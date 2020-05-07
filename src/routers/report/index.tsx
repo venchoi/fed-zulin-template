@@ -10,6 +10,7 @@ import './index.less';
 import MyReportList from './components/MyReportList';
 import StandReportList from './components/StandReportList';
 import { History } from 'history';
+
 interface Props {
     history: History;
 }
