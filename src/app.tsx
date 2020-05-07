@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Router, Redirect } from 'dva/router';
+import { Route, Switch, Router, BrowserRouter, Redirect } from 'dva/router';
 // import dynamic from 'dva/dynamic'
 import UI from './routers/ui';
 import Layout from './routers/layout';
@@ -15,8 +15,8 @@ interface Props {
 export default class App extends React.PureComponent<Props> {
     public render() {
         return (
-            <Layout changeShowContent={() => {}} history={this.props.history}>
-                <Router history={this.props.history}>
+            <Layout>
+                <BrowserRouter basename="middleground">
                     <Switch>
                         <Route
                             path="/ui"
@@ -51,7 +51,7 @@ export default class App extends React.PureComponent<Props> {
                         />
                         <Redirect exact from="/*" to="/init?_smp=Rental.BillReminder" />
                     </Switch>
-                </Router>
+                </BrowserRouter>
             </Layout>
         );
     }

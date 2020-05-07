@@ -20,8 +20,6 @@ const { Header, Sider, Content, Footer } = AntLayout;
 
 const { DEV } = config;
 interface Props {
-    readonly changeShowContent: () => void;
-    readonly history?: any;
     children: ReactElement;
 }
 interface State {

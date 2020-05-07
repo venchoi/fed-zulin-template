@@ -20,9 +20,9 @@ app.model(model1);
 app.model(model2);
 app.router((obj: any) => (
     <ConfigProvider locale={zhCN}>
-        <BrowserRouter>
-            <App history={obj.history} getState={obj.app._store.getState} dispatch={obj.app._store.dispatch} />
-        </BrowserRouter>
+        {/* <BrowserRouter basename="middleground"> */}
+        <App history={obj.history} getState={obj.app._store.getState} dispatch={obj.app._store.dispatch} />
+        {/* </BrowserRouter> */}
     </ConfigProvider>
 ));
 app.start('#root');
