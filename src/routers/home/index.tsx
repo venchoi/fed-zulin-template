@@ -3,6 +3,8 @@ import { Button, Spin } from 'antd';
 import { connect } from 'dva';
 import './index.less';
 import { LoadingOutlined } from '@ant-design/icons';
+//@ts-ignore
+import { Demo } from 'ykj-ui';
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 interface Props {
@@ -126,6 +128,7 @@ function App(props: Props) {
 
     return (
         <div>
+            <Demo />
             <h1>hooks:{value}</h1>
             <Button onClick={onclick}>测试</Button>
         </div>
