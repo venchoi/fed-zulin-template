@@ -1,3 +1,11 @@
+/*
+ * @作者: 陈文惠
+ * @创建日期: 2020-05-06 14:37:20
+ * @最近一次修改人:   陈文惠
+ * @最近一次修改时间: 2020-05-06 14:37:20
+ * @文件说明: 统计报表 - 我的报表tab
+ */
+
 import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { ExclamationCircleOutlined, DownloadOutlined, LoadingOutlined, SyncOutlined } from '@ant-design/icons';
 import { Tabs, Card, Pagination, Button, Modal, message, Spin } from 'antd';
@@ -28,21 +36,22 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
         rds_type: 'rds_tenant',
         upload_on: '',
         download_url: '',
+        upload_by: '',
         report_file: '',
-    };
+    }; // 默认编辑字段
     let updaterTimer: NodeJS.Timeout;
-    const [loading, setLoading] = useState(false);
-    const [updating, setUpdating] = useState(false);
-    const [myReportTotal, setMyReportTotal] = useState(0);
-    const [editItem, setEditItem] = useState(defaultEditItem);
+    const [loading, setLoading] = useState(false); // loading
+    const [updating, setUpdating] = useState(false); // 报表更新中
+    const [myReportTotal, setMyReportTotal] = useState(0); // 列表数据总记录数
+    const [editItem, setEditItem] = useState(defaultEditItem); // 编辑的数据
     const [updateTime, setUpdateTime] = useState(''); // 最后更新时间
     const [myReportParams, setMyReportParams] = useState({
         keyword: '',
         page_index: 1,
         page_size: 20,
-    });
-    const [myReportDataSource, setMyReportDataSource] = useState([]);
-    const [showEditModal, setShowEditModal] = useState(false);
+    }); // 请求列表接口的参数
+    const [myReportDataSource, setMyReportDataSource] = useState([]); // 列表表格数据源
+    const [showEditModal, setShowEditModal] = useState(false); // 显示新增编辑弹窗
 
     const columns = propsColumns.concat([
         {
@@ -67,6 +76,10 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
         },
     ]);
 
+    /**
+     * 删除操作
+     * @param record 被删除的记录
+     */
     const handleDelete = (record: IRecordType) => {
         confirm({
             icon: <ExclamationCircleOutlined />,
@@ -83,16 +96,22 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
         });
     };
 
-    // @ts-ignore
-    const handleOk = async params => {
+    /**
+     * 新增编辑弹窗回调
+     * @param params 修改或新增的item
+     */
+    const handleOk = async (params: Object) => {
         const { result } = await editReport(params);
         if (result) {
-            message.success(params.id ? '修改成功' : '添加成功');
+            message.success(editItem.id ? '修改成功' : '添加成功');
             setShowEditModal(false);
             fetchMyReportList();
         }
     };
 
+    /**
+     * 获取列表数据
+     */
     const fetchMyReportList = async () => {
         setLoading(true);
         const { result, data } = await getMyReportList({ ...myReportParams });
@@ -103,6 +122,9 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
         }
     };
 
+    /**
+     * 下载报表工具
+     */
     const handleDownload = () => {
         const agent = navigator.userAgent.toLocaleLowerCase();
         if (agent.indexOf('mac os') !== -1) {
@@ -116,6 +138,9 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
         }
     };
 
+    /**
+     * 更新报表
+     */
     const handleUpdateStatus = () => {
         confirm({
             title: '确定更新？',
@@ -127,6 +152,10 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
         });
     };
 
+    /**
+     * 获取更新时间
+     * @param waiting 是否在5秒后重新请求，用于轮询
+     */
     const fetchReportUpdateStatus = (waiting = false) => {
         clearTimeout(updaterTimer);
         updaterTimer = setTimeout(
@@ -145,16 +174,26 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
         );
     };
 
+    /**
+     * 点击修改报表项
+     * @param record 被编辑item
+     */
     const handleEdit = (record: IRecordType) => {
         setEditItem(record);
         setShowEditModal(true);
     };
 
+    /**
+     * 初始化请求报表列表数据及更新时间
+     */
     useEffect(() => {
         fetchMyReportList();
         fetchReportUpdateStatus(false);
     }, []);
 
+    /**
+     * 列表数据参数更新后就请求报表列表数据
+     */
     useEffect(() => {
         fetchMyReportList();
     }, [myReportParams]);
@@ -204,7 +243,7 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
                     columns={columns}
                     dataSource={myReportDataSource}
                     scroll={{
-                        y: 'calc( 100vh - 365px )',
+                        y: 'calc( 100vh - 350px )',
                     }}
                 />
                 <FedPagination

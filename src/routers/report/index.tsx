@@ -1,3 +1,10 @@
+/*
+ * @作者: 陈文惠
+ * @创建日期: 2020-05-06 14:57:32
+ * @最近一次修改人:   陈文惠
+ * @最近一次修改时间: 2020-05-06 14:57:32
+ * @文件说明: 统计报表页面
+ */
 import React, { useState } from 'react';
 import { Card } from 'antd';
 import { getReportHref } from '../../helper/commonUtils';
@@ -15,7 +22,7 @@ interface Props {
     history: History;
 }
 const ReportList = (props: Props) => {
-    const [activeTabKey, setActiveTabKey] = useState('myreport');
+    const [activeTabKey, setActiveTabKey] = useState('myreport'); // 当前激活的tab: 我的报表myreport 或 标准报表库basicreport
 
     const tabList = [
         {
@@ -28,6 +35,7 @@ const ReportList = (props: Props) => {
         },
     ];
 
+    // 两个表格相同的列，除操作列
     const columns: ColumnProps<IRecordType>[] = [
         {
             dataIndex: 'name',

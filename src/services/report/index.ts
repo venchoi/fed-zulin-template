@@ -41,6 +41,6 @@ export const updateReportRDS = () => {
     return ajax('statistics-report/push-dm-data-wash-order', {}, 'GET', otherServer.bmsReportCenter);
 };
 
-export const editReport = (params: FormData) => {
+export const editReport = (params: Object) => {
     return ajax('/report/report-proxy/save', params, 'POST');
 };
