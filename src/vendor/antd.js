@@ -119,7 +119,8 @@ module.exports = {
     // Card
     '@card-head-font-size': '16px',
     '@card-radius': '4px',
-    '@card-padding-base': '0',
+    '@card-padding-base': '16px',
+
     // Table
     '@table-padding-vertical-sm': '8px',
     '@table-padding-horizontal-sm': '16px',
@@ -145,6 +146,7 @@ module.exports = {
     '@table-filter-btns-bg': 'inherit', // 表头筛选按钮背景色
 
     // Tabs
-    '@tabs-horizontal-margin': '0',
-    '@tabs-horizontal-padding': '0 16px 10px 16px',
+    '@tabs-card-head-background': '@background-color-base', // 标签页标签背景色
+    '@tabs-card-height': '32px', // 标签页标签高度
+    '@tabs-card-gutter': '4px', // 标签页各个标签之间的间距
 };
