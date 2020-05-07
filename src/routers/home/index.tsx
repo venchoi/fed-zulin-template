@@ -104,7 +104,7 @@ function App(props: Props) {
 
     const memo = useMemo(() => {}, [value]);
 
-    <Child memo={memo} />;
+    // <Child memo={memo} />;
     //子组件用到了value setValue, 此时我们setValue2导致了这个组件重新渲染，无论你的子组件做了什么判断，PureComponent,React.memo
     useEffect(() => {
         console.log('useEffect');
