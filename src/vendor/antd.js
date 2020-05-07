@@ -85,10 +85,15 @@ module.exports = {
     '@radio-disabled-button-checked-bg': '@border-color-split', // 单选按钮已选失效背景色
 
     // Layout
+
+    // Layout
+    '@layout-sider-background': '#0D2640',
+    '@layout-header-padding': '12px 16px',
+    '@layout-footer-padding': '8px 50px',
     '@layout-body-background': '@background-color-base', // 页面灰色背景
-    '@layout-header-background': '#0D2640', // 顶部导航背景
+    '@layout-header-background': '#fff', // 顶部导航背景
     '@layout-header-height': '56px', // 顶部导航高度
-    '@layout-trigger-background': '@layout-header-background', // 收起区域背景
+    '@layout-trigger-background': '#0D2640', // 收起区域背景
 
     // Form
     // ---
@@ -127,14 +132,6 @@ module.exports = {
     '@modal-footer-padding-horizontal': '24px', // 对话框底部水平内边距
     '@modal-mask-bg': 'fade(#04080D, 50%)', // 对话框蒙层背景色
     '@modal-confirm-body-padding': '32px 24px 24px 32px', // 确认对话框内边距
-
-    // Layout
-    '@layout-body-background': '#F5F6F7',
-    '@layout-header-background': '#fff',
-    '@layout-header-height': '56px',
-    '@layout-sider-background': '#0D2640',
-    '@layout-header-padding': '12px 16px',
-    '@layout-footer-padding': '8px 50px',
 
     // Menu
     '@menu-dark-bg': '#0D2640',
