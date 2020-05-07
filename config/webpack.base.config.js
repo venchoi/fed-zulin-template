@@ -39,6 +39,7 @@ module.exports = {
                                     ],
                                     cacheDirectory: true,
                                     plugins: [
+                                        'lodash',
                                         '@babel/plugin-transform-runtime',
                                         //支持import 懒加载
                                         '@babel/plugin-syntax-dynamic-import',
@@ -114,7 +115,7 @@ module.exports = {
         }),
         new hardSourcePlugin(),
         new webpack.NamedModulesPlugin(),
-        new LodashModuleReplacementPlugin(),
+        new LodashModuleReplacementPlugin({ shorthands: true }),
     ],
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx'],

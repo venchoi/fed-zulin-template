@@ -3,6 +3,7 @@ import { Route, Switch, Router, Redirect } from 'dva/router';
 import Home from './routers/home';
 import Init from './routers/login';
 import Layout from './routers/layout';
+
 interface Props {
     history?: any;
     getState?: any;

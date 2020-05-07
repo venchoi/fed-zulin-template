@@ -2,6 +2,9 @@ import React, { Fragment } from 'react';
 import { Button, Spin } from 'antd';
 import { connect } from 'dva';
 import './index.less';
+import { LoadingOutlined } from '@ant-design/icons';
+const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
 interface Props {
     history: any;
     readonly count: number;
@@ -21,7 +24,7 @@ class App extends React.PureComponent<Props> {
         console.log(effects['count/addAfter1Second'], 'effects');
         return (
             <div className="home_container">
-                <Spin spinning={effects['count/addAfter1Second'] === true ? true : false}>
+                <Spin spinning={effects['count/addAfter1Second'] === true ? true : false} indicator={antIcon}>
                     <h1>{count}</h1>
                     <Button
                         onClick={() => {
