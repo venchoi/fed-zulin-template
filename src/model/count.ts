@@ -18,12 +18,14 @@ export default {
     reducers: {
         // 为了做示例而已,所以写了两个，方便观看演示
         add(state: state, payload: countPayload) {
+            console.log(payload, 'payload');
             return {
                 ...state,
                 count: payload.data,
             };
         },
         del(state: state, payload: countPayload) {
+            console.log(payload, 'payload');
             return {
                 ...state,
                 count: payload.data,
