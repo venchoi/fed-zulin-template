@@ -1,8 +1,11 @@
 import React from 'react';
 import { Route, Switch, Router, Redirect } from 'dva/router';
+// import dynamic from 'dva/dynamic'
 import UI from './routers/ui';
 import Layout from './routers/layout';
 import ReportList from './routers/report';
+import NoRights from './routers/interceptors/noRights';
+import NotFoundPage from './routers/interceptors/notFoundPage';
 import { History } from 'history';
 interface Props {
     history?: any;
@@ -33,6 +36,13 @@ export default class App extends React.PureComponent<Props> {
                                 return <ReportList history={this.props.history} />;
                             }}
                         />
+                        <Route
+                            path="/noright"
+                            component={() => {
+                                return <NoRights history={this.props.history} />;
+                            }}
+                        />
+                        <Route path="/404" component={NotFoundPage} />
                         <Route
                             path="/"
                             component={() => {
