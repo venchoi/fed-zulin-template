@@ -92,7 +92,7 @@ class Layout extends React.Component<Props, State> {
                             personalCenterUrl={personalCenterUrl}
                         />
                     </Header>
-                    <Content style={{ overflowX: 'scroll' }}>
+                    <Content style={{ overflowX: 'auto' }}>
                         <div style={{ minWidth: '1208px', height: '100%' }}>{children}</div>
                     </Content>
                     <Footer className="main-footer">
