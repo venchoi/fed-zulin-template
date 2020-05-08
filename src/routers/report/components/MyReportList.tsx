@@ -61,13 +61,17 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
             render: (text, record, index) => {
                 return (
                     <>
-                        <Button type="link" onClick={() => handleEdit(record)}>
+                        <Button type="link" onClick={() => handleEdit(record)} className="f-hidden rental-report-edit">
                             修改
                         </Button>
-                        <Button type="link" onClick={() => handleDelete(record)}>
+                        <Button
+                            type="link"
+                            onClick={() => handleDelete(record)}
+                            className="f-hidden rental-report-delete"
+                        >
                             删除
                         </Button>
-                        <Button type="link" href={record.download_url}>
+                        <Button type="link" href={record.download_url} className="f-hidden rental-report-download">
                             下载
                         </Button>
                     </>
@@ -226,7 +230,11 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
                                 </>
                             ) : (
                                 <>
-                                    <Button onClick={() => handleUpdateStatus()} type="link">
+                                    <Button
+                                        onClick={() => handleUpdateStatus()}
+                                        type="link"
+                                        className="f-hidden rental-report-update"
+                                    >
                                         <SyncOutlined style={{ color: '#248BF2' }} spin={false} />
                                         <span className="report-updating-text report-updating-action">更新报表</span>
                                     </Button>
@@ -235,10 +243,19 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
                             <Button icon={<DownloadOutlined />} onClick={handleDownload}>
                                 下载报表工具
                             </Button>
-                            <Button type="primary" ghost onClick={() => setActiveTabKey('basicreport')}>
+                            <Button
+                                type="primary"
+                                ghost
+                                onClick={() => setActiveTabKey('basicreport')}
+                                className="f-hidden rental-report-add"
+                            >
                                 从报表库中添加
                             </Button>
-                            <Button type="primary" onClick={() => setShowEditModal(true)}>
+                            <Button
+                                type="primary"
+                                onClick={() => setShowEditModal(true)}
+                                className="f-hidden rental-report-add"
+                            >
                                 添加报表
                             </Button>
                         </>

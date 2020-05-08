@@ -38,10 +38,14 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
             render: (text, record, index) => {
                 return (
                     <>
-                        <Button type="link" onClick={() => handleAddToMyReport(record)}>
+                        <Button
+                            type="link"
+                            onClick={() => handleAddToMyReport(record)}
+                            className="f-hidden rental-report-add"
+                        >
                             添加到我的报表库
                         </Button>
-                        <Button type="link" href={record.download_url}>
+                        <Button type="link" href={record.download_url} className="f-hidden rental-report-download">
                             下载
                         </Button>
                     </>
