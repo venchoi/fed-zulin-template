@@ -146,8 +146,13 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
             title: '确定更新？',
             icon: <ExclamationCircleOutlined />,
             onOk: async () => {
-                const data = await updateReportRDS();
-                // TODO
+                setLoading(true);
+                const { result, data } = await updateReportRDS();
+                setLoading(false);
+                if (result) {
+                    message.success('操作成功');
+                    fetchReportUpdateStatus(false);
+                }
             },
         });
     };

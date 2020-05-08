@@ -74,7 +74,6 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
                 },
             });
         }
-        result && message.success('操作成功');
     };
 
     /**
