@@ -86,9 +86,7 @@ export default class Menus extends React.Component<Props, State> {
                                 }
                             }
 
-                            const url = (childItem.func_url || '')
-                                .replace('https://rental-ykj-test.myfuwu.com.cn/fed', '')
-                                .replace('https://rental-ykj-test.myfuwu.com.cn', '');
+                            const url = childItem.func_url || '';
                             // 后台返回的菜单栏地址截取掉。便于前端路由做判断
                             return (
                                 <Menu.Item key={key} className={navClass}>
