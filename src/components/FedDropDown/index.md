@@ -38,7 +38,7 @@ const menu = (
         </FedButton>
     </Dropdown>
     <Dropdown overlay={menu} key="2">
-        <FedButton ghost>
+        <FedButton type="link">
             Ghost Down <DownOutlined />
         </FedButton>
     </Dropdown>
