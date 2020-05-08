@@ -1,3 +1,4 @@
+import Cookie from 'js-cookie';
 //@ts-nocheck
 export default function removeCache() {
     Cookie.remove('stageName');
