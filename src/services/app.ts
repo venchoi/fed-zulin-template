@@ -13,7 +13,7 @@ export const getWorkflowTodo = (data: any) => {
 };
 // 登出系統
 export const loginOut = (data: any) => {
-    return ajax('/auth/logout', data, 'POST');
+    return ajax('/auth/logout', data, 'GET');
 };
 // 模拟登录
 export const mockLogin = (data: any) => {
