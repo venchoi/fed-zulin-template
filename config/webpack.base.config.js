@@ -57,7 +57,7 @@ module.exports = {
                                             'import',
                                             {
                                                 libraryName: 'ykj-ui',
-                                                libraryDirectory: 'lib/components',
+                                                libraryDirectory: 'es/components',
                                             },
                                             'ykj-ui',
                                         ],

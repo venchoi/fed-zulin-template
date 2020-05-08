@@ -1,7 +1,6 @@
 import React from 'react';
 import Button from '../../components/button';
 import './index.less';
-//@ts-ignore
 import { Demo } from 'ykj-ui';
 interface Props {
     readonly changeShowContent: () => void;
@@ -21,7 +20,7 @@ class App extends React.PureComponent<Props> {
         return (
             <div className="container">
                 <div className={'login login_fade_in'}>
-                    <Demo />
+                    <Demo test="1" />
                     <div className="login_title">欢迎来到明源云空间-通用脚手架</div>
                     <Button text="进入Todo示例" isNormal={true} onClick={this.login} />
                 </div>
