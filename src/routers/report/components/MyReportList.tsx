@@ -147,8 +147,10 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
             icon: <ExclamationCircleOutlined />,
             onOk: async () => {
                 setLoading(true);
-                const { result, data } = await updateReportRDS();
-                setLoading(false);
+                const { result, data } = await updateReportRDS().finally(() => {
+                    setLoading(false);
+                    Modal.destroyAll();
+                });
                 if (result) {
                     message.success('操作成功');
                     fetchReportUpdateStatus(false);
