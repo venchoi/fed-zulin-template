@@ -93,7 +93,7 @@ export default class Menus extends React.Component<Props, State> {
                                     <a href={url}>
                                         {/* 新站点使用langs.text会产生乱码？ */}
                                         {childItem.func_name}
-                                        {count > 0 && <span className={`badge ${countClass}`}>{count}</span>}
+                                        {count > 0 && <Badge count={count} style={{ marginLeft: '5px' }} />}
                                     </a>
                                 </Menu.Item>
                             );

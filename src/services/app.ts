@@ -15,7 +15,3 @@ export const getWorkflowTodo = (data: any) => {
 export const loginOut = (data: any) => {
     return ajax('/auth/logout', data, 'GET');
 };
-// 模拟登录
-export const mockLogin = (data: any) => {
-    return ajax('/', data, 'GET');
-};

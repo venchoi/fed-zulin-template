@@ -8,7 +8,7 @@ import FedHeader from '../../components/FedHeader';
 import FedMenu from '../../components/FedMenu';
 import CollapseItem from './components/CollapseItem';
 import Logo from './components/Logo';
-import { getHomeBaseInfo, mockLogin } from '../../services/app';
+import { getHomeBaseInfo, getWorkflowTodo } from '../../services/app';
 import { find } from 'lodash';
 import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
@@ -114,7 +114,6 @@ class Layout extends React.Component<Props, State> {
     getBaseInfo = async () => {
         if (DEV && (localStorage as any).getItem('is_login') == 0) {
             const query = queryString.parse((location as any).search);
-            await mockLogin(query);
             localStorage.setItem('is_login', '1');
             (location as any).href = query.returnUrl || '/static/billing/list?_smp=Rental.Bill';
             return;
@@ -122,6 +121,8 @@ class Layout extends React.Component<Props, State> {
         const { data } = await getHomeBaseInfo({});
         const props: any = handleBaseInfo(data);
         this.setState({ ...props });
+        const { data: workflowData } = await getWorkflowTodo({});
+        this.setState({ ...workflowData });
     };
 
     onCollapse = (collapsed: boolean) => {

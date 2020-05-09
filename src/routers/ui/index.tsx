@@ -4,7 +4,7 @@ import { find } from 'lodash';
 // @ts-ignore
 import * as queryString from 'query-string';
 import FedIcon from '../../components/FedIcon';
-import { getHomeBaseInfo, mockLogin } from '../../services/app';
+import { getHomeBaseInfo } from '../../services/app';
 import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
 
@@ -19,7 +19,6 @@ const UI = () => {
     const getBaseInfo = async () => {
         if (DEV && (localStorage as any).getItem('is_login') == 0) {
             const query = queryString.parse((location as any).search);
-            await mockLogin(query);
             localStorage.setItem('is_login', '1');
             (location as any).href = query.returnUrl || '/static/billing/list?_smp=Rental.Bill';
             return;
