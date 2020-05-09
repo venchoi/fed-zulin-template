@@ -113,10 +113,11 @@ export function handleBaseInfo(payload: any) {
     if (!payload.logo_info) {
         payload.logo_info = {};
     }
-    // if (payload.logo_info.icon) {
-    //     //替换数据
-    //     window.icon.setAttribute('href', payload.logo_info.icon)
-    // }
+    if (payload.logo_info.icon) {
+        //替换数据
+        // @ts-ignore
+        window.icon.setAttribute('href', payload.logo_info.icon);
+    }
 
     // // 排序app
     const sortNavsNames: any = [];
