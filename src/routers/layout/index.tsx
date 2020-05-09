@@ -22,13 +22,19 @@ const { DEV } = config;
 interface Props {
     children: ReactElement;
 }
+
+interface LogoInfo {
+    icon: string;
+    logo: string;
+    title: string;
+}
 interface State {
     collapsed: boolean;
     appList: AppInfo[];
     user: User;
     personalCenterUrl: string;
     logoutUrl: string;
-    logoIcon: string;
+    logoInfo: LogoInfo;
     workflow: object;
     appCode: string;
 }
@@ -52,7 +58,11 @@ class Layout extends React.Component<Props, State> {
             },
             personalCenterUrl: '',
             logoutUrl: '',
-            logoIcon: '',
+            logoInfo: {
+                icon: '',
+                logo: '',
+                title: '',
+            },
             workflow: {},
             appCode: '',
         };
@@ -64,7 +74,7 @@ class Layout extends React.Component<Props, State> {
 
     public render() {
         const { children } = this.props;
-        const { collapsed, logoIcon, appList = [], workflow, user, personalCenterUrl, logoutUrl, appCode } = this.state;
+        const { collapsed, logoInfo, appList = [], workflow, user, personalCenterUrl, logoutUrl, appCode } = this.state;
         const nav = find(appList, ['key', appCode]);
         return (
             <AntLayout style={{ minHeight: '100vh' }} className="main">
@@ -75,7 +85,7 @@ class Layout extends React.Component<Props, State> {
                     collapsed={collapsed}
                     onCollapse={this.onCollapse}
                 >
-                    <Logo collapsed={collapsed} logoUrl={logoIcon} />
+                    <Logo collapsed={collapsed} logoInfo={logoInfo} />
                     <div style={{ maxHeight: 'calc(100vh - 56px)', overflowY: 'scroll' }} className="hide-scrollbar">
                         <FedMenu collapsed={collapsed} menuList={(nav && nav.children) || []} workflow={workflow} />
                     </div>
