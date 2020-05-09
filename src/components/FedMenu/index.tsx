@@ -68,22 +68,13 @@ export default class Menus extends React.Component<Props, State> {
                             const key = childItem.func_code;
 
                             let count: number | string = 0;
-                            let countClass = '';
                             if (childItem.func_code === 'EstablishWorkflowApproval') {
-                                const totalNotApproved = workflow.total_not_approved ? workflow.total_not_approved : 0;
-                                const totalWithdraw = workflow.total_withdraw ? workflow.total_withdraw : 0;
+                                const totalNotApproved = workflow.total_not_approved || 0;
+                                const totalWithdraw = workflow.total_withdraw || 0;
                                 count = totalNotApproved + totalWithdraw;
                             }
                             if (childItem.func_code === 'WorkflowApproval') {
-                                count = workflow.total_todo ? workflow.total_todo : 0;
-                            }
-                            if (count > 0 && count < 10) {
-                                countClass = 'circle';
-                            } else if (count >= 10) {
-                                countClass = 'oval';
-                                if (count >= 100) {
-                                    count = '99+';
-                                }
+                                count = workflow.total_todo || 0;
                             }
 
                             const url = childItem.func_url || '';
@@ -93,7 +84,9 @@ export default class Menus extends React.Component<Props, State> {
                                     <a href={url}>
                                         {/* 新站点使用langs.text会产生乱码？ */}
                                         {childItem.func_name}
-                                        {count > 0 && <Badge count={count} style={{ marginLeft: '5px' }} />}
+                                        {count ? (
+                                            <Badge count={count} overflowCount={99} style={{ marginLeft: '5px' }} />
+                                        ) : null}
                                     </a>
                                 </Menu.Item>
                             );
