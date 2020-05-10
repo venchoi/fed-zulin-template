@@ -5,7 +5,6 @@ import 'antd/es/menu/style/index.css';
 import { Link } from 'dva/router';
 import FedIcon from '../FedIcon';
 import { getKey } from './menuRoutes';
-import './index.less';
 import {} from '../FedHeader/interface';
 
 interface Props {
@@ -69,34 +68,25 @@ export default class Menus extends React.Component<Props, State> {
                             const key = childItem.func_code;
 
                             let count: number | string = 0;
-                            let countClass = '';
                             if (childItem.func_code === 'EstablishWorkflowApproval') {
-                                const totalNotApproved = workflow.total_not_approved ? workflow.total_not_approved : 0;
-                                const totalWithdraw = workflow.total_withdraw ? workflow.total_withdraw : 0;
+                                const totalNotApproved = workflow.total_not_approved || 0;
+                                const totalWithdraw = workflow.total_withdraw || 0;
                                 count = totalNotApproved + totalWithdraw;
                             }
                             if (childItem.func_code === 'WorkflowApproval') {
-                                count = workflow.total_todo ? workflow.total_todo : 0;
-                            }
-                            if (count > 0 && count < 10) {
-                                countClass = 'circle';
-                            } else if (count >= 10) {
-                                countClass = 'oval';
-                                if (count >= 100) {
-                                    count = '99+';
-                                }
+                                count = workflow.total_todo || 0;
                             }
 
-                            const url = (childItem.func_url || '')
-                                .replace('https://rental-ykj-test.myfuwu.com.cn/fed', '')
-                                .replace('https://rental-ykj-test.myfuwu.com.cn', '');
+                            const url = childItem.func_url || '';
                             // 后台返回的菜单栏地址截取掉。便于前端路由做判断
                             return (
                                 <Menu.Item key={key} className={navClass}>
                                     <a href={url}>
                                         {/* 新站点使用langs.text会产生乱码？ */}
                                         {childItem.func_name}
-                                        {count > 0 && <span className={`badge ${countClass}`}>{count}</span>}
+                                        {count ? (
+                                            <Badge count={count} overflowCount={99} style={{ marginLeft: '5px' }} />
+                                        ) : null}
                                     </a>
                                 </Menu.Item>
                             );
