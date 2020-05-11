@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 import { message } from 'antd';
-//@ts-ignore
+// @ts-ignore
 import * as queryString from 'query-string';
 import { Layout as AntLayout } from 'antd';
 import FedIcon from '../../components/FedIcon';
@@ -8,7 +8,7 @@ import FedHeader from '../../components/FedHeader';
 import FedMenu from '../../components/FedMenu';
 import CollapseItem from './components/CollapseItem';
 import Logo from './components/Logo';
-import { getHomeBaseInfo, mockLogin } from '../../services/app';
+import { getHomeBaseInfo, getWorkflowTodo } from '../../services/app';
 import { find } from 'lodash';
 import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
@@ -20,9 +20,13 @@ const { Header, Sider, Content, Footer } = AntLayout;
 
 const { DEV } = config;
 interface Props {
-    readonly changeShowContent: () => void;
-    readonly history?: any;
     children: ReactElement;
+}
+
+interface LogoInfo {
+    icon: string;
+    logo: string;
+    title: string;
 }
 interface State {
     collapsed: boolean;
@@ -30,7 +34,7 @@ interface State {
     user: User;
     personalCenterUrl: string;
     logoutUrl: string;
-    logoIcon: string;
+    logoInfo: LogoInfo;
     workflow: object;
     appCode: string;
 }
@@ -54,7 +58,11 @@ class Layout extends React.Component<Props, State> {
             },
             personalCenterUrl: '',
             logoutUrl: '',
-            logoIcon: '',
+            logoInfo: {
+                icon: '',
+                logo: '',
+                title: '',
+            },
             workflow: {},
             appCode: '',
         };
@@ -66,18 +74,21 @@ class Layout extends React.Component<Props, State> {
 
     public render() {
         const { children } = this.props;
-        const { collapsed, logoIcon, appList = [], workflow, user, personalCenterUrl, logoutUrl, appCode } = this.state;
+        const { collapsed, logoInfo, appList = [], workflow, user, personalCenterUrl, logoutUrl, appCode } = this.state;
         const nav = find(appList, ['key', appCode]);
         return (
             <AntLayout style={{ minHeight: '100vh' }} className="main">
                 <Sider
+                    style={{ minHeight: '100vh', maxHeight: '100vh' }}
                     trigger={<CollapseItem collapsed={collapsed} />}
                     collapsible
                     collapsed={collapsed}
                     onCollapse={this.onCollapse}
                 >
-                    <Logo collapsed={collapsed} logoUrl={logoIcon} />
-                    <FedMenu collapsed={collapsed} menuList={(nav && nav.children) || []} workflow={workflow} />
+                    <Logo collapsed={collapsed} logoInfo={logoInfo} />
+                    <div style={{ maxHeight: 'calc(100vh - 56px)', overflowY: 'scroll' }} className="hide-scrollbar">
+                        <FedMenu collapsed={collapsed} menuList={(nav && nav.children) || []} workflow={workflow} />
+                    </div>
                 </Sider>
                 <AntLayout>
                     <Header>
@@ -89,7 +100,9 @@ class Layout extends React.Component<Props, State> {
                             personalCenterUrl={personalCenterUrl}
                         />
                     </Header>
-                    <Content>{children}</Content>
+                    <Content style={{ overflowX: 'auto' }}>
+                        <div style={{ minWidth: '1208px', height: '100%' }}>{children}</div>
+                    </Content>
                     <Footer className="main-footer">
                         Copyright © {new Date().getFullYear()} 明源云空间 版权所有 鄂ICP备15101856号-1
                     </Footer>
@@ -101,14 +114,15 @@ class Layout extends React.Component<Props, State> {
     getBaseInfo = async () => {
         if (DEV && (localStorage as any).getItem('is_login') == 0) {
             const query = queryString.parse((location as any).search);
-            await mockLogin(query);
             localStorage.setItem('is_login', '1');
             (location as any).href = query.returnUrl || '/static/billing/list?_smp=Rental.Bill';
             return;
         }
-        const data = await getHomeBaseInfo({});
+        const { data } = await getHomeBaseInfo({});
         const props: any = handleBaseInfo(data);
         this.setState({ ...props });
+        const { data: workflowData } = await getWorkflowTodo({});
+        this.setState({ ...workflowData });
     };
 
     onCollapse = (collapsed: boolean) => {

@@ -1,9 +1,14 @@
 import React from 'react';
 import './Logo.less';
 
+interface LogoInfo {
+    icon: string;
+    logo: string;
+    title: string;
+}
 interface Props {
     collapsed: boolean;
-    logoUrl: string;
+    logoInfo: LogoInfo;
 }
 
 const defaultLogo =
@@ -16,14 +21,13 @@ const logos = [
     'https://ykj-public-prod.oss-cn-hangzhou.aliyuncs.com/Logo/icon.ico',
 ];
 
-const Logo = ({ collapsed = false, logoUrl }: Props) => {
-    const logoState = !logos.includes(logoUrl);
+const Logo = ({ collapsed = false, logoInfo }: Props) => {
     return (
         <div className="sider-logo">
             {collapsed ? (
-                <img className="sider-logo__small" src={logoState ? logoUrl : defaultSmallLogo} alt="" />
+                <img className="sider-logo__small" src={logoInfo.icon || defaultSmallLogo} alt="" />
             ) : (
-                <img className="sider-logo__default" src={logoState ? logoUrl : defaultLogo} alt="" />
+                <img className="sider-logo__default" src={logoInfo.logo || defaultLogo} alt="" />
             )}
         </div>
     );
