@@ -2,7 +2,7 @@ import Cookie from 'js-cookie';
 import { writeCssInStyles } from './cssUtils';
 import { find } from 'lodash';
 import removeCahce from './removeCache';
-import { getKey } from '../components/FedMenu/menuRoutes';
+import { getKey } from '../routers/layout/components/FedMenu/menuRoutes';
 import config from '../config';
 
 const { DEV, serverPort } = config;

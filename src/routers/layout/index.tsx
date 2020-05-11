@@ -4,15 +4,15 @@ import { message } from 'antd';
 import * as queryString from 'query-string';
 import { Layout as AntLayout } from 'antd';
 import FedIcon from '../../components/FedIcon';
-import FedHeader from '../../components/FedHeader';
-import FedMenu from '../../components/FedMenu';
+import FedHeader from './components/FedHeader';
+import FedMenu from './components/FedMenu';
 import CollapseItem from './components/CollapseItem';
 import Logo from './components/Logo';
 import { getHomeBaseInfo, getWorkflowTodo } from '../../services/app';
 import { find } from 'lodash';
 import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
-import { AppInfo, User } from '../../components/FedHeader/interface';
+import { AppInfo, User } from './components/FedHeader/interface';
 
 import './index.less';
 
