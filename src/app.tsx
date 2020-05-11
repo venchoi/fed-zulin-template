@@ -49,7 +49,7 @@ export default class App extends React.PureComponent<Props> {
                                 return <ReportList history={this.props.history} />;
                             }}
                         />
-                        <Redirect exact from="/*" to="/init?_smp=Rental.BillReminder" />
+                        <Redirect exact from="/*" to="/report?_smp=Rental.Reort" />
                     </Switch>
                 </BrowserRouter>
             </Layout>
