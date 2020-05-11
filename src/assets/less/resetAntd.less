@@ -1,0 +1,55 @@
+// Badge
+.ant-badge-count, .ant-badge-dot {
+    box-shadow: unset;
+}
+// Divider
+.ant-divider {
+    margin: 0; // 没有该变量
+}
+// Menu
+.ant-menu.ant-menu-dark {
+    background: #0D2640; // vendor/antd.js中设置了未生效
+}
+
+// Card
+.ant-card {
+    display: flex;
+    flex-direction: column;
+}
+.ant-card-head {
+    font-weight: 400;
+}
+.ant-card-body {
+    flex-grow: 1;
+}
+.ant-card-contain-tabs > .ant-card-head .ant-card-head-title {
+    padding-bottom: 16px;
+}
+.ant-card-body {
+    padding: 0;
+}
+
+// Tabs
+.ant-tabs-nav .ant-tabs-tab {
+    padding-top: 0;
+}
+
+// Button
+.ant-btn-link {
+    padding: 0;
+    &:not(:first-child) {
+        padding-left: 16px;
+    }
+}
+// Pagination 
+.ant-pagination-total-text {
+    color: @text-color-secondary;
+}
+
+// Form
+.ant-form-item:last-of-type {
+    margin-bottom: 0;
+}
+.ant-form-item-has-error {
+    margin-bottom: 8px;
+}

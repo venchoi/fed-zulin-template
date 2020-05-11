@@ -120,7 +120,6 @@ module.exports = {
     plugins: [
         new htmlWebpackPlugin({
             template: path.resolve(__dirname, '../src/index.html'),
-            favicon: path.resolve(__dirname, '../src/assets/img/favicon.ico'),
         }),
         new hardSourcePlugin(),
         new webpack.NamedModulesPlugin(),

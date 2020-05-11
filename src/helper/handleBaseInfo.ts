@@ -113,10 +113,15 @@ export function handleBaseInfo(payload: any) {
     if (!payload.logo_info) {
         payload.logo_info = {};
     }
-    // if (payload.logo_info.icon) {
-    //     //替换数据
-    //     window.icon.setAttribute('href', payload.logo_info.icon)
-    // }
+    if (payload.logo_info.icon) {
+        //替换数据
+        // @ts-ignore
+        window.icon.setAttribute('href', payload.logo_info.icon);
+    }
+    if (payload.logo_info.title) {
+        //替换数据
+        window.document.title = payload.logo_info.title;
+    }
 
     // // 排序app
     const sortNavsNames: any = [];
@@ -138,8 +143,7 @@ export function handleBaseInfo(payload: any) {
         appList: appLists,
         // hasAssetCenter: payload.hasOwnProperty('is_open_asset_center') ? payload.is_open_asset_center : false, // 是否包含资管中心
         // onlineUrl: payload.onlineServiceUrl,
-        logoIcon: payload.logo_info.icon,
-        // title: payload.logo_info.title,
+        logoInfo: payload.logo_info || {},
         user: payload.user,
         logoutUrl: payload.logoutUrl,
         passwordUrl: payload.passwordUrl,
