@@ -68,7 +68,7 @@ export default class UserInfo extends React.Component<Props> {
             >
                 <div>
                     <FedIcon type="icon-icn_avatar" className="icon-avatar" />
-                    <Icon type="caret-down" style={{ fontSize: '12px', marginLeft: '4px' }} />
+                    <FedIcon type="icon-icn_caret" style={{ fontSize: '16px', marginLeft: '4px' }} />
                 </div>
             </Dropdown>
         );

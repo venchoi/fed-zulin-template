@@ -147,6 +147,7 @@ export function handleBaseInfo(payload: any) {
         user: payload.user,
         logoutUrl: payload.logoutUrl,
         passwordUrl: payload.passwordUrl,
+        is_enabled_wh_workflow: !!+payload.is_enabled_wh_workflow,
         // merchantsSiteUrl: payload.merchantsSiteUrl, //用于rental跳转merchants的绝对地址
         // hasMenued: true
     };

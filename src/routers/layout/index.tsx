@@ -37,6 +37,7 @@ interface State {
     logoInfo: LogoInfo;
     workflow: object;
     appCode: string;
+    is_enabled_wh_workflow: boolean;
 }
 class Layout extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -65,6 +66,7 @@ class Layout extends React.Component<Props, State> {
             },
             workflow: {},
             appCode: '',
+            is_enabled_wh_workflow: false,
         };
     }
 
@@ -74,7 +76,17 @@ class Layout extends React.Component<Props, State> {
 
     public render() {
         const { children } = this.props;
-        const { collapsed, logoInfo, appList = [], workflow, user, personalCenterUrl, logoutUrl, appCode } = this.state;
+        const {
+            collapsed,
+            logoInfo,
+            appList = [],
+            is_enabled_wh_workflow,
+            workflow,
+            user,
+            personalCenterUrl,
+            logoutUrl,
+            appCode,
+        } = this.state;
         const nav = find(appList, ['key', appCode]);
         return (
             <AntLayout style={{ minHeight: '100vh' }} className="main">
@@ -93,6 +105,7 @@ class Layout extends React.Component<Props, State> {
                 <AntLayout>
                     <Header>
                         <FedHeader
+                            is_enabled_wh_workflow={is_enabled_wh_workflow}
                             appList={appList}
                             appCode={appCode}
                             user={user}
