@@ -27,7 +27,7 @@
         "query-string": "5",
         "react": "^16.12.0",
         "react-dom": "^16.12.0",
-        "ykj-ui": "^1.1.1"
+        "ykj-ui": "^1.1.6"
     },
     "devDependencies": {
         "@babel/core": "^7.7.4",
