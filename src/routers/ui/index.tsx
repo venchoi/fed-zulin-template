@@ -17,13 +17,8 @@ const { Item: ListItem } = List;
 const UI = () => {
     const [appList, setAppList] = useState<any[]>([]);
     const getBaseInfo = async () => {
-        if (DEV && (localStorage as any).getItem('is_login') == 0) {
-            const query = queryString.parse((location as any).search);
-            localStorage.setItem('is_login', '1');
-            (location as any).href = query.returnUrl || '/static/billing/list?_smp=Rental.Bill';
-            return;
-        }
-        const { data } = await getHomeBaseInfo({});
+        const query = queryString.parse((location as any).search);
+        const { data } = await getHomeBaseInfo(query);
         const { appList }: { appList: any[] } = handleBaseInfo(data);
         const nav = find(appList, ['key', 'Rental']).children;
         setAppList(nav);
