@@ -97,7 +97,7 @@ module.exports = {
                                 loader: 'url-loader',
                                 options: {
                                     limit: 1024 * 1,
-                                    outputPath: './',
+                                    outputPath: '/',
                                     name: '[name].[hash:5].[ext]',
                                 },
                             },
