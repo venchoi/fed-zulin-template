@@ -13,21 +13,6 @@ import './assets/less/index.less';
 import createHistory from 'history/createBrowserHistory';
 //@ts-ignore
 import createLoading from 'dva-loading';
-const search = location && location.search;
-//设置sid的cookie,并且进行跳转操作
-if (search) {
-    const arr = search.split('&');
-    let pk;
-    arr.forEach(item => {
-        pk = item.split('=');
-        //简易的处理一个 或者使用trim
-        if (pk[0].trim() === 'sid') {
-            Cookie.set(pk[0].trim(), pk[1], {
-                expires: 1,
-            });
-        }
-    });
-}
 const app = dva({
     history: createHistory(),
 });
