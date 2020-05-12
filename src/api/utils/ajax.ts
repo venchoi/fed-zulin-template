@@ -45,16 +45,10 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
                 if (!DEV) {
                     location.href = data.login_url + '?returnUrl=' + decodeURIComponent(location.href);
                 } else {
-                    localStorage.setItem('is_login', '0');
                     const loginUrl = data.login_url
                         ? data.login_url.replace(/^(.+)\?(.*)/, '$1')
                         : 'https://passport-ykj-test.myfuwu.com.cn/auth/login';
-                    location.href =
-                        loginUrl +
-                        '?returnUrl=' +
-                        decodeURIComponent(location.origin) +
-                        '/static/cookie/set?returnUrl=' +
-                        location.href;
+                    location.href = loginUrl + '?returnUrl=' + decodeURIComponent(location.origin);
                 }
             } else {
                 console.error('请求失败了', err);
