@@ -15,8 +15,8 @@ const prod_config = {
     mode: 'production',
     output: {
         filename: '[name].[contenthash:8].js',
-        path: path.resolve(__dirname, '../middleground/assets'),
-        publicPath: '/middleground/assets',
+        path: path.resolve(__dirname, '../dist'),
+        publicPath: './',
     },
     module: {
         rules: [
