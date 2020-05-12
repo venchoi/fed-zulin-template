@@ -1,0 +1,59 @@
+@import '../../constants';
+
+.fed-header-content-right, .user-info {
+    .user-role {
+        display: flex;
+        align-items: center;
+        padding-left: 24px;
+        position: relative;
+        cursor: pointer;
+        .logout {
+          margin-left: 16px;
+          padding: 4px 0px 4px 16px;
+          border-left: 1px solid #EDEFF0;
+        }
+    }
+    .icon-avatar {
+        width: 32px;
+        height: 32px;
+        svg { 
+            width: 32px;
+            height: 100%;
+        }
+    }
+}
+
+
+.header-right-dropdown {
+  top: 60px !important;
+  .ant-dropdown-menu-item {
+    padding: 8px 16px;
+    .item {
+      display: flex;
+      align-items: center;
+    }
+    .item + .item {
+      margin-top: 16px;
+    }
+  }
+  .user-info {
+    display: flex;
+    max-width: 300px;
+    white-space: normal;
+    .info {
+      margin-left: 12px;
+      a {
+        color: @color-title;
+        font-size: @font-size-medium;
+      }
+      span {
+        font-size: @font-size-small-x;
+        color: #30B39D;
+        border: 1px solid #68CCBB;
+        padding: 0 4px;
+        background: #f5fcfb;
+        border-radius: 2px;
+      }
+    }
+  }
+}

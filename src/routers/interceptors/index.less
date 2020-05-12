@@ -1,0 +1,35 @@
+.interceptor {
+    &-page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100vh - 56px - 32px);
+    }
+    &-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    &-img {
+        width: 400px;
+    }
+    &-text {
+        padding-left: 140px;
+        &-header {
+            line-height:100px;
+            font-size:100px;
+            font-weight:600;
+            color:#36424D;
+        }
+        &-tip {
+            display: inline-block;
+            margin-top: 16px;
+            line-height:27px;
+            font-size:18px;
+            color:#949799;
+        }
+        &-btn {
+            margin-top: 16px;
+        }
+    }
+}
