@@ -76,7 +76,7 @@ export default class UserInfo extends React.Component<Props> {
 
     loginOut = () => {
         const { logoutUrl } = this.props;
-        loginOut({});
+        loginOut();
         Cookie.remove('gr_user_id');
         Cookie.remove('RENTALCENTER');
         removeCache();

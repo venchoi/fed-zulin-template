@@ -13,9 +13,12 @@ import { find } from 'lodash';
 import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
 import { AppInfo, User } from '../../components/FedHeader/interface';
-
+import { Router, Route, Switch, Redirect } from 'dva/router';
+import Home from '@/routers/home';
+import Init from '@/routers/login';
+import NoRights from '@/routers/interceptors/noRights';
+import NotFoundPage from '@/routers/interceptors/notFoundPage';
 import './index.less';
-
 const { Header, Sider, Content, Footer } = AntLayout;
 
 const { DEV } = config;
@@ -116,7 +119,7 @@ class Layout extends React.Component<Props, State> {
         const { data } = await getHomeBaseInfo(query);
         const props: any = handleBaseInfo(data);
         this.setState({ ...props });
-        const { data: workflowData } = await getWorkflowTodo({});
+        const { data: workflowData } = await getWorkflowTodo();
         this.setState({ ...workflowData });
     };
 

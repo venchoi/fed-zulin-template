@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Switch, Router, BrowserRouter, Redirect } from 'dva/router';
+import React, { Fragment } from 'react';
+import { Route, Switch, Router, Redirect } from 'dva/router';
 import Home from './routers/home';
 import Init from './routers/login';
 import Layout from './routers/layout';
@@ -14,18 +14,18 @@ export default class App extends React.PureComponent<Props> {
     public render() {
         return (
             <Layout>
-                <BrowserRouter basename="middleground">
+                <Router history={this.props.history}>
                     <Switch>
                         <Route
                             path="/init"
                             component={() => {
-                                return <Init changeShowContent={() => {}} history={this.props.history} />;
+                                return <Init history={this.props.history} />;
                             }}
                         />
                         <Route
                             path="/home"
                             component={() => {
-                                return <Home changeShowContent={() => {}} history={this.props.history} />;
+                                return <Home history={this.props.history} />;
                             }}
                         />
                         <Route
@@ -38,12 +38,12 @@ export default class App extends React.PureComponent<Props> {
                         <Route
                             path="/"
                             component={() => {
-                                return <Init changeShowContent={() => {}} history={this.props.history} />;
+                                return <Init history={this.props.history} />;
                             }}
                         />
                         <Redirect exact from="/*" to="/init?_smp=Rental.BillReminder" />
                     </Switch>
-                </BrowserRouter>
+                </Router>
             </Layout>
         );
     }

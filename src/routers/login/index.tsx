@@ -2,10 +2,9 @@ import React from 'react';
 import Button from '../../components/button';
 import './index.less';
 import { Demo } from 'ykj-ui';
-// import Demo from 'ykj-ui/es/components/demo';
+import { History } from 'history';
 interface Props {
-    readonly changeShowContent: () => void;
-    readonly history?: any;
+    readonly history: History;
 }
 class App extends React.PureComponent<Props> {
     constructor(props: Props) {
@@ -14,6 +13,7 @@ class App extends React.PureComponent<Props> {
 
     // 登录获取所有的数据,校验通过后才发送请求
     public login = () => {
+        console.log(this.props.history);
         this.props.history.push('/home');
     };
 

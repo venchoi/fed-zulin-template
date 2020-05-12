@@ -3,84 +3,16 @@ import { Button, Spin } from 'antd';
 import { connect } from 'dva';
 import './index.less';
 import { LoadingOutlined } from '@ant-design/icons';
+import { History } from 'history';
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
 interface Props {
-    history: any;
+    history: History;
     readonly count: number;
     dispatch: Function;
     list: string[];
     loading: any;
 }
-
-// class App extends React.PureComponent<Props> {
-//     public componentDidMount() {
-//         console.log(this.props);
-//     }
-//     public render() {
-//         const {
-//             count,
-//             loading: { effects = {} },
-//         } = this.props;
-//         console.log(effects['count/addAfter1Second'], 'effects');
-//         return (
-//             <div className="home_container">
-//                 <Spin spinning={effects['count/addAfter1Second'] === true ? true : false}>
-//                     <h1>{count}</h1>
-//                     <Button
-//                         onClick={() => {
-//                             const data = count + 1;
-//                             this.props.dispatch({
-//                                 type: 'count/add',
-//                                 data,
-//                             });
-//                         }}
-//                         type="primary"
-//                     >
-//                         增加数量
-//                     </Button>
-//                     <br />
-//                     <br />
-//                     <Button
-//                         onClick={() => {
-//                             const data = count - 1;
-//                             this.props.dispatch({
-//                                 type: 'count/del',
-//                                 data,
-//                             });
-//                         }}
-//                         type="primary"
-//                     >
-//                         减少数量
-//                     </Button>
-//                     <br />
-//                     <br />
-//                     <h1>dva-loading:{effects['count/addAfter1Second'] ? 'loading...' : '请求成功'}</h1>
-//                     <Button
-//                         onClick={() => {
-//                             this.props.dispatch({
-//                                 type: 'count/addAfter1Second',
-//                             });
-//                         }}
-//                     >
-//                         发送请求-测试dva-loading
-//                     </Button>
-//                     <br />
-//                     <br />
-//                     <div>
-//                         <Button
-//                             onClick={() => {
-//                                 this.props.history.replace('/init');
-//                             }}
-//                         >
-//                             返回
-//                         </Button>
-//                     </div>
-//                 </Spin>
-//             </div>
-//         );
-//     }
-// }
 
 function App(props: Props) {
     // console.log(props, 'props');
@@ -128,6 +60,13 @@ function App(props: Props) {
         <div>
             <h1>hooks:{value}</h1>
             <Button onClick={onclick}>测试</Button>
+            <Button
+                onClick={() => {
+                    props.history.replace('/');
+                }}
+            >
+                返回
+            </Button>
         </div>
     );
 }
