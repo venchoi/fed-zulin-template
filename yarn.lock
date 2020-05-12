@@ -12658,17 +12658,10 @@ yargs@^13.3.0:
     y18n "^4.0.0"
     yargs-parser "^13.1.1"
 
-<<<<<<< HEAD
-ykj-ui@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.npmjs.org/ykj-ui/-/ykj-ui-1.1.6.tgz#62bd54cf3813af1e93b214e97a1c6c9befb6a2b3"
-  integrity sha512-60wgaiYCMT3RniEFmEDV7bYAtZv//q7bWXxycuQqRU+DRLGiLWPDGCbylIdvdy1fNJ976uae1kw+V2bDkdGa3w==
-=======
 ykj-ui@^1.1.8:
   version "1.1.8"
   resolved "https://registry.npm.taobao.org/ykj-ui/download/ykj-ui-1.1.8.tgz?cache=0&sync_timestamp=1588948372322&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fykj-ui%2Fdownload%2Fykj-ui-1.1.8.tgz#6a6fd90cbac641b2374a71c96312414fdd256d0a"
   integrity sha1-am/ZDLrGQbI3SnHJYxJBT90lbQo=
->>>>>>> 99561ccd9ddeb651db841598dd20e989d5de87a3
   dependencies:
     react "^16.13.1"
     react-dom "^16.13.1"

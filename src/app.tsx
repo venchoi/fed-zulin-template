@@ -5,11 +5,10 @@ import Init from './routers/login';
 import Layout from './routers/layout';
 import NoRights from './routers/interceptors/noRights';
 import NotFoundPage from './routers/interceptors/notFoundPage';
-import { History } from 'history';
-interface Props {
-    history?: any;
-    getState?: any;
-    dispatch?: any;
+import { RouteComponentProps } from 'dva/router';
+interface Props extends RouteComponentProps {
+    getState: any;
+    dispatch: any;
 }
 export default class App extends React.PureComponent<Props> {
     public render() {

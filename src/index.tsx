@@ -21,7 +21,13 @@ app.model(model1);
 app.model(model2);
 app.router((obj: any) => (
     <ConfigProvider locale={zhCN}>
-        <App history={obj.history} getState={obj.app._store.getState} dispatch={obj.app._store.dispatch} />
+        <App
+            history={obj.history}
+            match={obj.match}
+            location={obj.localtion}
+            getState={obj.app._store.getState}
+            dispatch={obj.app._store.dispatch}
+        />
     </ConfigProvider>
 ));
 app.start('#root');
