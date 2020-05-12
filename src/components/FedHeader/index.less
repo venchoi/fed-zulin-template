@@ -1,0 +1,36 @@
+@import '../../constants';
+
+.fed-header {
+  &-content {
+    display: flex;
+    flex:1;
+    align-items: center;
+    justify-content: space-between;
+    &-left{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 6px 12px;
+      line-height: 21px;
+      border-radius:18px;
+      background: rgba(222,238,255,1);
+      &:hover {
+        cursor: pointer;
+      }
+      .title {
+        color:@color-blue;
+        font-size: @font-size-medium;
+      }
+      .icon-switch {
+        color:@color-blue;
+        margin-left: 8px;
+      }
+    }
+    &-right {
+      position: relative; 
+      display: flex;
+      align-items: center;
+    }
+  }
+
+}

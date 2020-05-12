@@ -1,0 +1,122 @@
+@import '../../constants';
+.module-modal{
+  .ant-modal-body {
+    padding: 0;
+  }
+  .module-content {
+    .flex-column;
+    padding: 48px 56px;
+    width: 100%;
+    height: 100%;
+    color:@color-text;
+    .title {
+      font-size: @font-size-large-x;
+      text-align: center;
+    }
+    .icon-app {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 16px;
+      display: block;
+      cursor: pointer;
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    .panel {
+      height: 330px;
+      border: 1px solid #ededed;
+      padding: 48px;
+      box-sizing: border-box;
+      margin-bottom: 0;
+      background: #fff;
+      border-radius: 8px;
+      text-align: center;
+      position: relative;
+
+      .text {
+          color: #313233;
+          font-size: 20px;
+          margin-bottom: 48px;
+      }
+
+      .icon-cancel {
+          width: 16px;
+          height: 16px;
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          cursor: pointer;
+      }
+
+      .u-links {
+          display: flex;
+          justify-content: space-between;
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+
+          li {
+              margin: 0 24px;
+              list-style: none;
+          }
+
+          .app-name-icon {
+              margin-bottom: 16px;
+              display: block;
+              cursor: pointer;
+              font-size: 120px;
+          }
+
+          a {
+              color: #949799;
+              font-size: 16px;
+              text-decoration: none;
+          }
+
+          .active {
+              color: #313233;
+          }
+      }
+      .hvr-float {
+        display: inline-block;
+        vertical-align: middle;
+        transform: perspective(1px) translateZ(0);
+        box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+        transition-duration: 0.3s;
+        transition-property: transform;
+        transition-timing-function: ease-out;
+      }
+      .hvr-float:hover, .hvr-float:focus, .hvr-float:active {
+          transform: translateY(-8px);
+      }
+  }
+
+    .wrap {
+      .flex;
+      margin-top: 48px;
+      justify-content: center;
+      .item {
+        .flex-column;
+        align-items: center;
+        margin: 0 24px;
+        .select-icon {
+          width: 120px;
+          height: 120px;
+          cursor: pointer;
+          &:hover {
+            transform: scale(1.1);
+          }
+        }
+        .text {
+          margin-top: 16px;
+          cursor: pointer;
+          color: @color-paratext;
+        }
+      }
+    }
+  }
+}
+
