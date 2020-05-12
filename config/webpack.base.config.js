@@ -97,9 +97,7 @@ module.exports = {
                                 loader: 'url-loader',
                                 options: {
                                     limit: 1024 * 1,
-                                    outputPath: './asset/images',
                                     name: '[name].[hash:5].[ext]',
-                                    pulbicPath: './dist/asset/images',
                                 },
                             },
                         ],
