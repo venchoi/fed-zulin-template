@@ -1,4 +1,6 @@
 module.exports={
+    serverPort: 8808,
+    baseAlias: '/middleground',
     //选择开发模式下你需要代理的地址
     // target: 'http://127.0.0.1:8000', //开发环境下，请求服务器地址
     // target: 'http://rental-dev.mysoft.com.cn/', //开发环境下，请求服务器地址
