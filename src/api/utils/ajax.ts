@@ -53,7 +53,7 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
                         loginUrl +
                         '?returnUrl=' +
                         decodeURIComponent(location.origin) +
-                        '/middleground/cookie/set?returnUrl=' +
+                        '/middleground/cookie-set?returnUrl=' +
                         location.href;
                 }
             } else {

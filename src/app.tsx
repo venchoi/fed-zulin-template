@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, Router, BrowserRouter, Redirect } from 'dva/router';
 import Home from './routers/home';
 import Init from './routers/login';
+import CookieSet from './routers/login/cookieSet';
 import Layout from './routers/layout';
 import NoRights from './routers/interceptors/noRights';
 import NotFoundPage from './routers/interceptors/notFoundPage';
@@ -33,6 +34,12 @@ export default class App extends React.PureComponent<Props> {
                             path="/noright"
                             component={() => {
                                 return <NoRights history={this.props.history} />;
+                            }}
+                        />
+                        <Route
+                            path="/cookie-set"
+                            component={() => {
+                                return <CookieSet history={this.props.history} />;
                             }}
                         />
                         <Route path="/404" component={NotFoundPage} />
