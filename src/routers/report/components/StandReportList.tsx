@@ -101,7 +101,7 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
     }, []);
 
     /**
-     *
+     * 当搜索关键词变化时修改页码为1
      */
     useEffect(() => {
         setBasicReportParams({ ...basicReportParams, page_index: 1 });
