@@ -24,6 +24,23 @@ const dev_config = {
                 },
             },
         },
+        before(app) {
+            app.get('/middleground/cookie/set', (req, res) => {
+                const cookies = req.query
+                for (const cookie in cookies) {
+                    if (Object.prototype.hasOwnProperty.call(cookies, cookie)) {
+                        res.cookie(cookie, cookies[cookie], {
+                            httpOnly: true
+                        })
+                    }
+                }
+                res.redirect(
+                    `${req.protocol}://${req.host}:${proxyConfig.serverPort}${
+                        proxyConfig.baseAlias
+                    }`
+                )
+            })
+        },
         disableHostCheck: true,
     },
     plugins: [

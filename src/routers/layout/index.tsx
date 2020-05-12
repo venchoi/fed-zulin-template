@@ -115,7 +115,7 @@ class Layout extends React.Component<Props, State> {
         if (DEV && (localStorage as any).getItem('is_login') == 0) {
             const query = queryString.parse((location as any).search);
             localStorage.setItem('is_login', '1');
-            (location as any).href = query.returnUrl || '/static/billing/list?_smp=Rental.Bill';
+            (location as any).href = query.returnUrl || '/middleground';
             return;
         }
         const { data } = await getHomeBaseInfo({});
