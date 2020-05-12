@@ -206,12 +206,7 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
      * 当搜索关键词变化时修改页码为1
      */
     useEffect(() => {
-        setMyReportParams(prev => {
-            return {
-                ...prev,
-                page: 1,
-            };
-        });
+        setMyReportParams({ ...myReportParams, page_index: 1 });
     }, [keyword]);
 
     /**

@@ -21,8 +21,8 @@ import IRecordType from '../types';
 const { confirm } = Modal;
 
 const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<IRecordType>[] }) => {
+    const [keyword, setKeyword] = useState('');
     const [basicReportParams, setBasicReportParams] = useState({
-        keyword: '',
         page_index: 1,
         page_size: 20,
     });
@@ -85,7 +85,7 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
      */
     const fetchBasicReportList = async () => {
         setLoading(true);
-        const { result, data } = await getBasicReportList({ ...basicReportParams });
+        const { result, data } = await getBasicReportList({ keyword, ...basicReportParams });
         setLoading(false);
         if (result) {
             setBasicReportDataSource(data.list);
@@ -101,6 +101,13 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
     }, []);
 
     /**
+     *
+     */
+    useEffect(() => {
+        setBasicReportParams({ ...basicReportParams, page_index: 1 });
+    }, [keyword]);
+
+    /**
      * 列表数据参数更新后就请求报表列表数据
      */
     useEffect(() => {
@@ -111,7 +118,7 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
         <Spin spinning={loading}>
             <Filter
                 onFilterChange={filters => {
-                    setBasicReportParams({ ...basicReportParams, ...filters });
+                    setKeyword(filters?.keyword || '');
                 }}
                 rightSlot={<></>}
             />
@@ -125,12 +132,9 @@ const StandReportList = ({ columns: propsColumns = [] }: { columns: ColumnProps<
                 }}
             />
             <FedPagination
-                onShowSizeChange={(current, page_size) =>
-                    setBasicReportParams({ ...basicReportParams, page_index: 1, page_size })
-                }
+                onShowSizeChange={(current, page_size) => setBasicReportParams({ page_index: 1, page_size })}
                 onChange={(page_index, page_size) => {
                     setBasicReportParams({
-                        ...basicReportParams,
                         page_index: 1,
                         page_size: page_size || 20,
                     });
