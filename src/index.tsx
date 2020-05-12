@@ -1,10 +1,8 @@
 // import '@babel/polyfill';
 import React from 'react';
 import dva from 'dva';
-import { BrowserRouter } from 'dva/router';
 import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-import Cookie from 'js-cookie';
 import App from './app';
 import model1 from './model/count';
 import model2 from './model/list';

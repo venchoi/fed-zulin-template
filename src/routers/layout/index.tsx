@@ -8,7 +8,7 @@ import FedHeader from '../../components/FedHeader';
 import FedMenu from '../../components/FedMenu';
 import CollapseItem from './components/CollapseItem';
 import Logo from './components/Logo';
-import { getHomeBaseInfo, getWorkflowTodo, mockLogin } from '../../services/app';
+import { getHomeBaseInfo, getWorkflowTodo } from '../../services/app';
 import { find } from 'lodash';
 import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
