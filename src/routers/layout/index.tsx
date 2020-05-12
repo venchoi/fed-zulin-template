@@ -112,14 +112,8 @@ class Layout extends React.Component<Props, State> {
     }
 
     getBaseInfo = async () => {
-        if (DEV && (localStorage as any).getItem('is_login') == 0) {
-            const query = queryString.parse((location as any).search);
-            await mockLogin(query);
-            localStorage.setItem('is_login', '1');
-            (location as any).href = query.returnUrl || '/middleground';
-            return;
-        }
-        const { data } = await getHomeBaseInfo({});
+        const query = queryString.parse((location as any).search);
+        const { data } = await getHomeBaseInfo(query);
         const props: any = handleBaseInfo(data);
         this.setState({ ...props });
         const { data: workflowData } = await getWorkflowTodo({});
