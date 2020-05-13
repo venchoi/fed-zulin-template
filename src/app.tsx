@@ -47,7 +47,7 @@ export default class App extends React.PureComponent<Props> {
                     <Suspense fallback={<Spin size="large" tip="Loading..."></Spin>}>
                         <Switch>
                             {routes.map(item => {
-                                return <Route path={item.path} component={item.component} />;
+                                return <Route path={item.path} component={item.component} key={item.path} />;
                             })}
                             <Route
                                 path="/"
