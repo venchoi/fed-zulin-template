@@ -1,9 +1,9 @@
 // 导出状态
 export enum Status {
-    '', // 全部
-    '导出中',
-    '成功',
-    '失败',
+    DEFAULT = '', // 全部
+    ING = '导出中',
+    SUCCESS = '成功',
+    FAILED = '失败',
 }
 
 export interface ExportListParams {
@@ -12,7 +12,7 @@ export interface ExportListParams {
     page: number; // 页码
     page_size: number; // 单页长度
     keyword?: string; // 关键词
-    status?: keyof Status; // 导出状态
+    status?: Status; // 导出状态
     start_date?: string; // 导出开始时间
     end_date?: string; // 导出结束时间
 }
@@ -21,5 +21,5 @@ export interface ExportListParams {
 export default interface ExportItemType {
     created_on: string; // 导出时间
     created_by: string; // 导出人
-    status: keyof Status; // 状态
+    status: Status; // 状态
 }

@@ -5,7 +5,7 @@ import FedPagination from '@c/FedPagination';
 
 // types
 import { ColumnProps } from 'antd/es/table';
-import ExportItemType, { ExportListParams } from '@t/exportTypes';
+import ExportItemType, { ExportListParams, Status } from '@t/exportTypes';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -49,15 +49,15 @@ const exportCard = () => {
             name: '全部状态',
         },
         {
-            value: '成功',
+            value: Status.SUCCESS,
             name: '成功',
         },
         {
-            value: '失败',
+            value: Status.FAILED,
             name: '失败',
         },
         {
-            value: '导出中',
+            value: Status.ING,
             name: '导出中',
         },
     ];

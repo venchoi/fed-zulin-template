@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { PageHeader } from 'antd';
 import { RouteComponentProps } from 'dva/router';
-import { getExportList } from '@s/export';
 import { match } from 'react-router';
+import { getExportList } from '@s/export';
 import ExportCard from './exporList';
+import { Status } from '@t/exportTypes';
 
 interface HistoryParams {
     type: string;
-    stageId: string;
+    stage_id: string;
 }
 interface Match extends match {
     params: HistoryParams;
@@ -18,10 +19,10 @@ interface Props extends RouteComponentProps {
 }
 
 const exportList = ({ match: { params } }: Props) => {
-    const { type = '', stageId = '' } = params;
+    const { type = '', stage_id = '' } = params;
 
     const fetchExportList = async () => {
-        const { data, result } = await getExportList({ stage_id: stageId, type: '营业额管理', page: 1, page_size: 20 });
+        const { data, result } = await getExportList({ stage_id, type, page: 1, page_size: 10 });
         console.log(data);
     };
     const routes = [
@@ -37,7 +38,7 @@ const exportList = ({ match: { params } }: Props) => {
 
     useEffect(() => {
         fetchExportList();
-    }, [type, stageId]);
+    }, [type, stage_id]);
 
     return (
         <>
