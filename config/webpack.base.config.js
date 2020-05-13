@@ -91,15 +91,14 @@ module.exports = {
                         ],
                     },
                     {
-                        test: /\.(png|jpg|jpeg|gif)$/,
+                        test: /\.(png|jpg|jpeg|gif|svg)$/,
                         use: [
                             {
                                 loader: 'url-loader',
                                 options: {
                                     limit: 1024 * 1,
-                                    outputPath: './asset/images',
+                                    outputPath: '/',
                                     name: '[name].[hash:5].[ext]',
-                                    pulbicPath: './dist/asset/images',
                                 },
                             },
                         ],

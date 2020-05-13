@@ -4,6 +4,7 @@ import ajax from '../../api/utils/ajax';
 import otherServer from '../../api/config';
 
 interface ReportListParams {
+    keyword: string;
     page_index: number;
     page_size: number;
 }

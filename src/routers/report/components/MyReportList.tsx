@@ -45,8 +45,8 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
     const [myReportTotal, setMyReportTotal] = useState(0); // 列表数据总记录数
     const [editItem, setEditItem] = useState(defaultEditItem); // 编辑的数据
     const [updateTime, setUpdateTime] = useState(''); // 最后更新时间
+    const [keyword, setKeyword] = useState('');
     const [myReportParams, setMyReportParams] = useState({
-        keyword: '',
         page_index: 1,
         page_size: 20,
     }); // 请求列表接口的参数
@@ -118,7 +118,7 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
      */
     const fetchMyReportList = async () => {
         setLoading(true);
-        const { result, data } = await getMyReportList({ ...myReportParams });
+        const { result, data } = await getMyReportList({ keyword, ...myReportParams });
         setLoading(false);
         if (result) {
             setMyReportDataSource(data.list);
@@ -203,7 +203,15 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
     }, []);
 
     /**
+     * 当搜索关键词变化时修改页码为1
+     */
+    useEffect(() => {
+        setMyReportParams({ ...myReportParams, page_index: 1 });
+    }, [keyword]);
+
+    /**
      * 列表数据参数更新后就请求报表列表数据
+     * 这里不需要监听keyword的改变，因为keyword改变已经引起myReportParams的改变了
      */
     useEffect(() => {
         fetchMyReportList();
@@ -214,7 +222,7 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
             <Spin spinning={loading}>
                 <Filter
                     onFilterChange={filters => {
-                        setMyReportParams({ ...myReportParams, ...filters });
+                        setKeyword(filters?.keyword || '');
                     }}
                     rightSlot={
                         <>
@@ -272,10 +280,10 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
                 />
                 <FedPagination
                     onShowSizeChange={(current, page_size) => {
-                        setMyReportParams({ ...myReportParams, page_index: 1, page_size });
+                        setMyReportParams({ page_index: 1, page_size });
                     }}
                     onChange={(page_index, page_size) => {
-                        setMyReportParams({ ...myReportParams, page_index, page_size: page_size || 20 });
+                        setMyReportParams({ page_index, page_size: page_size || 20 });
                     }}
                     current={myReportParams.page_index}
                     pageSize={myReportParams.page_size}

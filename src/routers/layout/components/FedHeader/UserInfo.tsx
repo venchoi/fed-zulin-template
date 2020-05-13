@@ -6,11 +6,11 @@ import React from 'react';
 import './UserInfo.less';
 import { Dropdown, Menu } from 'antd';
 import Icon from '@ant-design/icons';
-import FedIcon from '../FedIcon';
+import FedIcon from '../../../../components/FedIcon';
 import { Props, AppInfo } from './interface';
-import { loginOut } from '../../services/app';
+import { loginOut } from '../../../../services/app';
 import Cookie from 'js-cookie';
-import removeCache from '../../helper/removeCache';
+import removeCache from '../../../../helper/removeCache';
 
 export default class UserInfo extends React.Component<Props> {
     constructor(props: Props) {
@@ -68,7 +68,7 @@ export default class UserInfo extends React.Component<Props> {
             >
                 <div>
                     <FedIcon type="icon-icn_avatar" className="icon-avatar" />
-                    <Icon type="caret-down" style={{ fontSize: '12px', marginLeft: '4px' }} />
+                    <FedIcon type="icon-icn_caret" style={{ fontSize: '16px', marginLeft: '4px' }} />
                 </div>
             </Dropdown>
         );
@@ -76,7 +76,7 @@ export default class UserInfo extends React.Component<Props> {
 
     loginOut = () => {
         const { logoutUrl } = this.props;
-        loginOut({});
+        loginOut();
         Cookie.remove('gr_user_id');
         Cookie.remove('RENTALCENTER');
         removeCache();
