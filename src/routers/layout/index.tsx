@@ -103,7 +103,7 @@ class Layout extends React.Component<Props, State> {
                     </div>
                 </Sider>
                 <AntLayout>
-                    <Header>
+                    <Header className="main-header">
                         <FedHeader
                             is_enabled_wh_workflow={is_enabled_wh_workflow}
                             appList={appList}
