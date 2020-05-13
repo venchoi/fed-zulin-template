@@ -123,6 +123,7 @@ module.exports = {
             '@c': path.resolve(__dirname, '../src/components'),
             '@m': path.resolve(__dirname, '../src/model'),
             '@s': path.resolve(__dirname, '../src/services'),
+            '@t': path.resolve(__dirname, '../src/types'),
         },
     },
     optimization: {
