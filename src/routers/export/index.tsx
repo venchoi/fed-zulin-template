@@ -18,25 +18,33 @@ interface Props extends RouteComponentProps {
 }
 
 const exportList = ({ match: { params } }: Props) => {
-    const [pageObj, setPageObj] = useState({
-        page: 1,
-        page_size: 20,
-    });
     const { type = '', stageId = '' } = params;
 
     const fetchExportList = async () => {
-        const { data, result } = await getExportList({ stage_id: stageId, type: '营业额管理', ...pageObj });
+        const { data, result } = await getExportList({ stage_id: stageId, type: '营业额管理', page: 1, page_size: 20 });
         console.log(data);
     };
+    const routes = [
+        {
+            path: '/business-volume/list',
+            breadcrumbName: '营业额管理',
+        },
+        {
+            path: '/',
+            breadcrumbName: '导出记录',
+        },
+    ];
 
     useEffect(() => {
         fetchExportList();
-    }, [pageObj, type, stageId]);
+    }, [type, stageId]);
 
     return (
         <div>
-            <PageHeader title="导出记录" />
-            <ExportCard />
+            <PageHeader title="导出记录" breadcrumb={{ routes }} ghost={false} />
+            <div className="layout-list">
+                <ExportCard />
+            </div>
         </div>
     );
 };
