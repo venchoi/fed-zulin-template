@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Input, Select } from 'antd';
+import { Card, Input, Select, DatePicker } from 'antd';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
 
@@ -9,6 +9,7 @@ import ExportItemType, { ExportListParams } from '@t/exportTypes';
 
 const { Search } = Input;
 const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 const exportCard = () => {
     const [dataSource, setDataSource] = useState([]);
@@ -84,9 +85,12 @@ const exportCard = () => {
                             })}
                         </Select>
                     </span>
+                    <span className="filter-item">
+                        <RangePicker placeholder={['导出日期', '导出日期']} onChange={() => {}} />
+                    </span>
                 </div>
             </div>
-            <FedTable<ExportItemType> dataSource={dataSource} columns={columns} />
+            <FedTable<ExportItemType> dataSource={dataSource} columns={columns} vsides={false} />
             <FedPagination />
         </Card>
     );
