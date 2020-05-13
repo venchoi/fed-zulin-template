@@ -19,6 +19,7 @@ const defaultSmallLogo =
 const logos = [
     'https://ykj-public-prod.oss-cn-hangzhou.aliyuncs.com/Logo/ykj-logo.png',
     'https://ykj-public-prod.oss-cn-hangzhou.aliyuncs.com/Logo/icon.ico',
+    'https://resources-public-test.myfuwu.com.cn/jq2/46767610-23249f-9980-817e-34d2484287.png',
 ];
 
 const Logo = ({ collapsed = false, logoInfo }: Props) => {
