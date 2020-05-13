@@ -12,7 +12,7 @@ export interface ExportListParams {
     page: number; // 页码
     page_size: number; // 单页长度
     keyword?: string; // 关键词
-    status: keyof Status; // 导出状态
+    status?: keyof Status; // 导出状态
     start_date?: string; // 导出开始时间
     end_date?: string; // 导出结束时间
 }
