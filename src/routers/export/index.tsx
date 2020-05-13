@@ -20,10 +20,11 @@ interface Props extends RouteComponentProps {
 
 const exportList = ({ match: { params } }: Props) => {
     const { type = '', stage_id = '' } = params;
+    const [dataSource, setDataSource] = useState([]);
 
     const fetchExportList = async () => {
         const { data, result } = await getExportList({ stage_id, type, page: 1, page_size: 10 });
-        console.log(data);
+        setDataSource(data?.items || []);
     };
     const routes = [
         {
@@ -44,7 +45,7 @@ const exportList = ({ match: { params } }: Props) => {
         <>
             <PageHeader title="导出记录" breadcrumb={{ routes }} ghost={false} />
             <div className="layout-list">
-                <ExportCard />
+                <ExportCard dataSource={dataSource} />
             </div>
         </>
     );
