@@ -18,7 +18,7 @@ const routes = [
         component: lazy(() => import('./routers/ui')),
     },
     {
-        path: '/export/:type/:projectId',
+        path: '/export/:type/:stageId',
         // @ts-ignore
         component: lazy(() => import('./routers/export')),
     },
