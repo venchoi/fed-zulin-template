@@ -16,7 +16,8 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
     let promise;
     let serverDomain = '';
     const fetchOptions = getFetchOptions(getApiPath(path), method);
-    otherServer && serverMap[otherServer] && (serverDomain = serverMap[otherServer][DEV ? 'test' : 'prod']);
+    const isTest = window.location.hostname.indexOf('test') !== -1;
+    otherServer && serverMap[otherServer] && (serverDomain = serverMap[otherServer][DEV || isTest ? 'test' : 'prod']);
     const url = `${serverDomain}${fetchOptions.endpoint}`;
     const headers = fetchOptions.headers;
     if (method === 'GET') {
