@@ -5,8 +5,8 @@ import Layout from './routers/layout';
 import ReportList from './routers/report';
 import NotFoundPage from './routers/interceptors/notFoundPage';
 import { History } from 'history';
-interface Props {
-    history?: any;
+import { RouteComponentProps } from 'dva/router';
+interface Props extends RouteComponentProps {
     getState?: any;
     dispatch?: any;
 }
@@ -16,6 +16,11 @@ const routes = [
         path: '/ui',
         // @ts-ignore
         component: lazy(() => import('./routers/ui')),
+    },
+    {
+        path: '/export/:type/:projectId',
+        // @ts-ignore
+        component: lazy(() => import('./routers/export')),
     },
     {
         path: '/report',
