@@ -4,6 +4,11 @@ import { Spin } from 'antd';
 import Layout from './routers/layout';
 import ReportList from './routers/report';
 import NotFoundPage from './routers/interceptors/notFoundPage';
+import Report from './routers/report';
+import UI from './routers/ui';
+import NoRights from './routers/interceptors/noRights';
+import Export from './routers/export';
+
 import { History } from 'history';
 import { RouteComponentProps } from 'dva/router';
 interface Props extends RouteComponentProps {
@@ -14,28 +19,33 @@ interface Props extends RouteComponentProps {
 const routes = [
     {
         path: '/ui',
+        component: UI,
         // @ts-ignore
-        component: lazy(() => import('./routers/ui')),
+        // component: lazy(() => import('./routers/ui')),
     },
     {
         path: '/export/:stage_id/:type',
+        component: Export,
         // @ts-ignore
-        component: lazy(() => import('./routers/export')),
+        // component: lazy(() => import('./routers/export')),
     },
     {
         path: '/report',
+        component: Report,
         // @ts-ignore
-        component: lazy(() => import('./routers/report')),
+        // component: lazy(() => import('./routers/report')),
     },
     {
         path: '/noright',
+        component: NoRights,
         // @ts-ignore
-        component: lazy(() => import('./routers/interceptors/noRights')),
+        // component: lazy(() => import('./routers/interceptors/noRights')),
     },
     {
         path: '/404',
+        component: NotFoundPage,
         // @ts-ignore
-        component: lazy(() => import('./routers/interceptors/notFoundPage')),
+        // component: lazy(() => import('./routers/interceptors/notFoundPage')),
     },
 ];
 
@@ -44,20 +54,20 @@ export default class App extends React.PureComponent<Props> {
         return (
             <Layout>
                 <BrowserRouter basename="middleground">
-                    <Suspense fallback={<Spin size="large" tip="Loading..."></Spin>}>
-                        <Switch>
-                            {routes.map(item => {
-                                return <Route path={item.path} component={item.component} key={item.path} />;
-                            })}
-                            <Route
-                                path="/"
-                                component={() => {
-                                    return <ReportList history={this.props.history} />;
-                                }}
-                            />
-                            <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
-                        </Switch>
-                    </Suspense>
+                    {/* <Suspense fallback={<Spin size="large" tip="Loading..."></Spin>}> */}
+                    <Switch>
+                        {routes.map(item => {
+                            return <Route path={item.path} component={item.component} key={item.path} />;
+                        })}
+                        <Route
+                            path="/"
+                            component={() => {
+                                return <ReportList history={this.props.history} />;
+                            }}
+                        />
+                        <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
+                    </Switch>
+                    {/* </Suspense> */}
                 </BrowserRouter>
             </Layout>
         );
