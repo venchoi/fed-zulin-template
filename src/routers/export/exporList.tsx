@@ -8,7 +8,7 @@ import ExportItemType from '@t/exportTypes';
 
 const { Search } = Input;
 
-const exportList = () => {
+const exportCard = () => {
     const [dataSource, setDataSource] = useState([]);
     const columns: ColumnProps<ExportItemType>[] = [
         {
@@ -39,4 +39,4 @@ const exportList = () => {
         </Card>
     );
 };
-export default exportList;
+export default exportCard;

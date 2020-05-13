@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { PageHeader } from 'antd';
 import { RouteComponentProps } from 'dva/router';
 import { getExportList } from '@s/export';
 import { match } from 'react-router';
+import ExportCard from './exporList';
 
 interface HistoryParams {
     type: string;
@@ -31,6 +33,11 @@ const exportList = ({ match: { params } }: Props) => {
         fetchExportList();
     }, [pageObj, type, stageId]);
 
-    return <div>234</div>;
+    return (
+        <div>
+            <PageHeader title="导出记录" />
+            <ExportCard />
+        </div>
+    );
 };
 export default exportList;
