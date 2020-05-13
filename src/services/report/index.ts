@@ -39,7 +39,7 @@ export const getUpdateStatus = () => {
 };
 
 export const updateReportRDS = () => {
-    return ajax('statistics-report/push-dm-data-wash-order', {}, 'GET', otherServer.bmsReportCenter);
+    return ajax('/statistics-report/push-dm-data-wash-order', {}, 'GET', otherServer.bmsReportCenter);
 };
 
 export const editReport = (params: Object) => {
