@@ -64,7 +64,8 @@
             "@/*": ["./src/*"],
             "@c/*": ["./src/components/*"],
             "@m/*": ["./src/model/*"],
-            "@s/*": ["./src/services/*"]
+            "@s/*": ["./src/services/*"],
+            "@t/*": ["./src/types/*"]
         }
     },
     "awesomeTypescriptLoaderOptions": {

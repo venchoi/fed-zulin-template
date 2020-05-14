@@ -4,15 +4,15 @@ import { message } from 'antd';
 import * as queryString from 'query-string';
 import { Layout as AntLayout } from 'antd';
 import FedIcon from '../../components/FedIcon';
-import FedHeader from '../../components/FedHeader';
-import FedMenu from '../../components/FedMenu';
+import FedHeader from './components/FedHeader';
+import FedMenu from './components/FedMenu';
 import CollapseItem from './components/CollapseItem';
 import Logo from './components/Logo';
 import { getHomeBaseInfo, getWorkflowTodo } from '../../services/app';
 import { find } from 'lodash';
 import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
-import { AppInfo, User } from '../../components/FedHeader/interface';
+import { AppInfo, User } from './components/FedHeader/interface';
 
 import './index.less';
 
@@ -37,6 +37,7 @@ interface State {
     logoInfo: LogoInfo;
     workflow: object;
     appCode: string;
+    is_enabled_wh_workflow: boolean;
 }
 class Layout extends React.Component<Props, State> {
     constructor(props: Props) {
@@ -65,6 +66,7 @@ class Layout extends React.Component<Props, State> {
             },
             workflow: {},
             appCode: '',
+            is_enabled_wh_workflow: false,
         };
     }
 
@@ -74,7 +76,17 @@ class Layout extends React.Component<Props, State> {
 
     public render() {
         const { children } = this.props;
-        const { collapsed, logoInfo, appList = [], workflow, user, personalCenterUrl, logoutUrl, appCode } = this.state;
+        const {
+            collapsed,
+            logoInfo,
+            appList = [],
+            is_enabled_wh_workflow,
+            workflow,
+            user,
+            personalCenterUrl,
+            logoutUrl,
+            appCode,
+        } = this.state;
         const nav = find(appList, ['key', appCode]);
         return (
             <AntLayout style={{ minHeight: '100vh' }} className="main">
@@ -91,8 +103,9 @@ class Layout extends React.Component<Props, State> {
                     </div>
                 </Sider>
                 <AntLayout>
-                    <Header>
+                    <Header className="main-header">
                         <FedHeader
+                            is_enabled_wh_workflow={is_enabled_wh_workflow}
                             appList={appList}
                             appCode={appCode}
                             user={user}
@@ -112,16 +125,11 @@ class Layout extends React.Component<Props, State> {
     }
 
     getBaseInfo = async () => {
-        if (DEV && (localStorage as any).getItem('is_login') == 0) {
-            const query = queryString.parse((location as any).search);
-            localStorage.setItem('is_login', '1');
-            (location as any).href = query.returnUrl || '/static/billing/list?_smp=Rental.Bill';
-            return;
-        }
-        const { data } = await getHomeBaseInfo({});
+        const query = queryString.parse((location as any).search);
+        const { data } = await getHomeBaseInfo(query);
         const props: any = handleBaseInfo(data);
         this.setState({ ...props });
-        const { data: workflowData } = await getWorkflowTodo({});
+        const { data: workflowData } = await getWorkflowTodo();
         this.setState({ ...workflowData });
     };
 

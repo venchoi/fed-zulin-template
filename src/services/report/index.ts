@@ -1,9 +1,10 @@
 //统一发送ajax请求的接口
-const FormData = require('form-data');
+import { Cookies } from '@/MemoryShare';
 import ajax from '../../api/utils/ajax';
 import otherServer from '../../api/config';
 
 interface ReportListParams {
+    keyword: string;
     page_index: number;
     page_size: number;
 }
@@ -38,7 +39,12 @@ export const getUpdateStatus = () => {
 };
 
 export const updateReportRDS = () => {
-    return ajax('statistics-report/push-dm-data-wash-order', {}, 'GET', otherServer.bmsReportCenter);
+    // const params = {
+    //     _ac: 'Rental',
+    //     _smp: 'Rental.Report',
+    //     o: Cookies.get('src_tenant_code'),
+    // };
+    return ajax('/report/report-proxy/update-report', {}, 'GET');
 };
 
 export const editReport = (params: Object) => {

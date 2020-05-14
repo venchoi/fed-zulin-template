@@ -8,8 +8,8 @@ interface ServerMap {
 
 export const serverMap: ServerMap = {
     bmsReportCenter: {
-        test: 'https://app-ykj-test.myfuwu.com.cn/bms/ReportCenter/',
-        prod: 'https://app-ykj.myfuwu.com.cn/bms/ReportCenter/',
+        test: 'https://app-ykj-test.myfuwu.com.cn/bms/ReportCenter',
+        prod: 'https://app-ykj.myfuwu.com.cn/bms/ReportCenter',
     },
 };
 

@@ -42,4 +42,5 @@ export interface Props {
     personalCenterUrl: string;
     logoutUrl: string;
     className?: string;
+    is_enabled_wh_workflow?: boolean;
 }
