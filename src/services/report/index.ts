@@ -39,12 +39,12 @@ export const getUpdateStatus = () => {
 };
 
 export const updateReportRDS = () => {
-    const params = {
-        _ac: 'Rental',
-        _smp: 'Rental.Report',
-        o: Cookies.get('src_tenant_code'),
-    };
-    return ajax('/statistics-report/push-dm-data-wash-order', params, 'GET', otherServer.bmsReportCenter);
+    // const params = {
+    //     _ac: 'Rental',
+    //     _smp: 'Rental.Report',
+    //     o: Cookies.get('src_tenant_code'),
+    // };
+    return ajax('/report/report-proxy/update-report', {}, 'GET');
 };
 
 export const editReport = (params: Object) => {
