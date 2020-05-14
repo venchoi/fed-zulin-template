@@ -109,7 +109,7 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
         if (result) {
             message.success(editItem.id ? '修改成功' : '添加成功');
             setShowEditModal(false);
-            fetchMyReportList();
+            setMyReportParams({ ...myReportParams, page_index: 1 });
         }
     };
 
