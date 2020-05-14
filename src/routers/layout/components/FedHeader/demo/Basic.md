@@ -6,10 +6,10 @@ order: 0
 默认示例
 
 ```jsx
-import React, { Component } from 'react'
-import { Button } from 'antd'
-import FedHeader from '../index'
-import './Basic.less'
+import React, { Component } from 'react';
+import { Button } from 'antd';
+import FedHeader from '../index';
+import './Basic.less';
 
 const data = {
     appList: [
@@ -27,7 +27,7 @@ const data = {
             name: '租赁中心',
             key: 'Rental',
             url: 'https://rental-ykj-test.myfuwu.com.cn?_smp=Rental',
-            current: true
+            current: true,
         },
         {
             name: '资管中心',
@@ -53,7 +53,7 @@ const data = {
             name: 'xxxxx',
             key: 'xxxxx',
             url: 'https://member-ykj-test.myfuwu.com.cn?_smp=xxxxx',
-        }
+        },
     ],
     passwordUrl: 'https://app-ykj-test.myfuwu.com.cn/bms//Organization/user/password?_ac=ManagementCenter',
     user: {
@@ -66,41 +66,50 @@ const data = {
         tenantCode: 'jqs',
         tenant_code: 'jqs',
         tenant_name: '资管三组测试专用帐号',
-        organ_name: '测试集团'
+        organ_name: '测试集团',
     },
     logoutFunction: () => {
-        console.log('登出')
-    }
-}
-
+        console.log('登出');
+    },
+};
 
 class Basic extends Component {
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
-            menuMode: 'inline'
-        }
+            menuMode: 'inline',
+        };
     }
 
     render() {
-        const { menuMode } = this.state
+        const { menuMode } = this.state;
         return (
             <div className="basic-demo-wrapper">
                 <div className="demo-header-wrapper">
                     <FedHeader {...data} getPopupContainer />
                 </div>
                 <div>
-                    <Button type={menuMode === 'inline' ? 'primary' : 'default'} onClick={this.toggleMenuMode.bind(this, 'inline')}>menuMode: inline</Button>
-                    <Button type={menuMode === 'vertical' ? 'primary' : 'default'} style={{ marginLeft: '16px' }} onClick={this.toggleMenuMode.bind(this, 'vertical')}>menuMode: vertical</Button>
+                    <Button
+                        type={menuMode === 'inline' ? 'primary' : 'default'}
+                        onClick={this.toggleMenuMode.bind(this, 'inline')}
+                    >
+                        menuMode: inline
+                    </Button>
+                    <Button
+                        type={menuMode === 'vertical' ? 'primary' : 'default'}
+                        style={{ marginLeft: '16px' }}
+                        onClick={this.toggleMenuMode.bind(this, 'vertical')}
+                    >
+                        menuMode: vertical
+                    </Button>
                 </div>
             </div>
-        )
+        );
     }
-    toggleMenuMode = (menuMode) => {
-        this.setState({ menuMode })
-    }
+    toggleMenuMode = menuMode => {
+        this.setState({ menuMode });
+    };
 }
-
 
 ReactDOM.render(<Basic />, mountNode);
 ```

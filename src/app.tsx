@@ -1,56 +1,73 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Route, Switch, Router, BrowserRouter, Redirect } from 'dva/router';
-// import dynamic from 'dva/dynamic'
-import UI from './routers/ui';
+import { Spin } from 'antd';
 import Layout from './routers/layout';
 import ReportList from './routers/report';
-import NoRights from './routers/interceptors/noRights';
 import NotFoundPage from './routers/interceptors/notFoundPage';
+import Report from './routers/report';
+import UI from './routers/ui';
+import NoRights from './routers/interceptors/noRights';
+import Export from './routers/export';
+
 import { History } from 'history';
-interface Props {
-    history?: any;
+import { RouteComponentProps } from 'dva/router';
+interface Props extends RouteComponentProps {
     getState?: any;
     dispatch?: any;
 }
+
+const routes = [
+    {
+        path: '/ui',
+        component: UI,
+        // @ts-ignore
+        // component: lazy(() => import('./routers/ui')),
+    },
+    {
+        path: '/export/:stage_id/:type',
+        component: Export,
+        // @ts-ignore
+        // component: lazy(() => import('./routers/export')),
+    },
+    {
+        path: '/report',
+        component: Report,
+        // @ts-ignore
+        // component: lazy(() => import('./routers/report')),
+    },
+    {
+        path: '/noright',
+        component: NoRights,
+        // @ts-ignore
+        // component: lazy(() => import('./routers/interceptors/noRights')),
+    },
+    {
+        path: '/404',
+        component: NotFoundPage,
+        // @ts-ignore
+        // component: lazy(() => import('./routers/interceptors/notFoundPage')),
+    },
+];
+
 export default class App extends React.PureComponent<Props> {
     public render() {
         return (
             <Layout>
                 <BrowserRouter basename="middleground">
+                    {/* <Suspense fallback={<Spin size="large" tip="Loading..."></Spin>}> */}
                     <Switch>
-                        <Route
-                            path="/ui"
-                            component={() => {
-                                return <UI />;
-                            }}
-                        />
-                        <Route
-                            path="/report"
-                            component={() => {
-                                return <ReportList history={this.props.history} />;
-                            }}
-                        />
-                        <Route
-                            path="/report/:type"
-                            component={() => {
-                                return <ReportList history={this.props.history} />;
-                            }}
-                        />
-                        <Route
-                            path="/noright"
-                            component={() => {
-                                return <NoRights history={this.props.history} />;
-                            }}
-                        />
-                        <Route path="/404" component={NotFoundPage} />
+                        {routes.map(item => {
+                            return <Route path={item.path} component={item.component} key={item.path} />;
+                        })}
                         <Route
                             path="/"
                             component={() => {
                                 return <ReportList history={this.props.history} />;
                             }}
                         />
-                        <Redirect exact from="/*" to="/init?_smp=Rental.BillReminder" />
+                        <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
                     </Switch>
+                    {/* </Suspense> */}
                 </BrowserRouter>
             </Layout>
         );

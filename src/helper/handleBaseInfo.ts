@@ -2,7 +2,7 @@ import Cookie from 'js-cookie';
 import { writeCssInStyles } from './cssUtils';
 import { find } from 'lodash';
 import removeCahce from './removeCache';
-import { getKey } from '../components/FedMenu/menuRoutes';
+import { getKey } from '../routers/layout/components/FedMenu/menuRoutes';
 import config from '../config';
 
 const { DEV, serverPort } = config;
@@ -147,6 +147,7 @@ export function handleBaseInfo(payload: any) {
         user: payload.user,
         logoutUrl: payload.logoutUrl,
         passwordUrl: payload.passwordUrl,
+        is_enabled_wh_workflow: !!+payload.is_enabled_wh_workflow,
         // merchantsSiteUrl: payload.merchantsSiteUrl, //用于rental跳转merchants的绝对地址
         // hasMenued: true
     };

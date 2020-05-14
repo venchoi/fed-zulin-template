@@ -16,7 +16,8 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
     let promise;
     let serverDomain = '';
     const fetchOptions = getFetchOptions(getApiPath(path), method);
-    otherServer && serverMap[otherServer] && (serverDomain = serverMap[otherServer][DEV ? 'test' : 'prod']);
+    const isTest = window.location.hostname.indexOf('test') !== -1;
+    otherServer && serverMap[otherServer] && (serverDomain = serverMap[otherServer][DEV || isTest ? 'test' : 'prod']);
     const url = `${serverDomain}${fetchOptions.endpoint}`;
     const headers = fetchOptions.headers;
     if (method === 'GET') {
@@ -45,16 +46,10 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
                 if (!DEV) {
                     location.href = data.login_url + '?returnUrl=' + decodeURIComponent(location.href);
                 } else {
-                    localStorage.setItem('is_login', '0');
                     const loginUrl = data.login_url
                         ? data.login_url.replace(/^(.+)\?(.*)/, '$1')
                         : 'https://passport-ykj-test.myfuwu.com.cn/auth/login';
-                    location.href =
-                        loginUrl +
-                        '?returnUrl=' +
-                        decodeURIComponent(location.origin) +
-                        '/static/cookie/set?returnUrl=' +
-                        location.href;
+                    location.href = loginUrl + '?returnUrl=' + decodeURIComponent(location.origin);
                 }
             } else {
                 console.error('请求失败了', err);

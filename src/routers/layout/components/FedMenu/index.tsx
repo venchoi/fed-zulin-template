@@ -1,9 +1,7 @@
 import React from 'react';
-import { Badge } from 'antd';
-import Menu from 'antd/es/menu';
-import 'antd/es/menu/style/index.css';
+import { Badge, Menu } from 'antd';
 import { Link } from 'dva/router';
-import FedIcon from '../FedIcon';
+import FedIcon from '../../../../components/FedIcon';
 import { getKey } from './menuRoutes';
 import {} from '../FedHeader/interface';
 

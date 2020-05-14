@@ -19,15 +19,24 @@ const defaultSmallLogo =
 const logos = [
     'https://ykj-public-prod.oss-cn-hangzhou.aliyuncs.com/Logo/ykj-logo.png',
     'https://ykj-public-prod.oss-cn-hangzhou.aliyuncs.com/Logo/icon.ico',
+    'https://resources-public-test.myfuwu.com.cn/jq2/46767610-23249f-9980-817e-34d2484287.png',
 ];
 
 const Logo = ({ collapsed = false, logoInfo }: Props) => {
     return (
         <div className="sider-logo">
             {collapsed ? (
-                <img className="sider-logo__small" src={logoInfo.icon || defaultSmallLogo} alt="" />
+                <img
+                    className="sider-logo__small"
+                    src={logos.includes(logoInfo.icon) ? defaultSmallLogo : logoInfo.icon}
+                    alt=""
+                />
             ) : (
-                <img className="sider-logo__default" src={logoInfo.logo || defaultLogo} alt="" />
+                <img
+                    className="sider-logo__default"
+                    src={logos.includes(logoInfo.logo) ? defaultLogo : logoInfo.logo}
+                    alt=""
+                />
             )}
         </div>
     );
