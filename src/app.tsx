@@ -1,16 +1,9 @@
-import React, { lazy, Suspense } from 'react';
-import { Route, Switch, Router, BrowserRouter, Redirect } from 'dva/router';
+import React from 'react';
+import { Route, Switch, BrowserRouter, Redirect } from 'dva/router';
 import { Spin } from 'antd';
 import Layout from './routers/layout';
-import ReportList from './routers/report';
-import NotFoundPage from './routers/interceptors/notFoundPage';
-import Report from './routers/report';
-import UI from './routers/ui';
-import NoRights from './routers/interceptors/noRights';
-import Export from './routers/export';
-
-import { History } from 'history';
 import { RouteComponentProps } from 'dva/router';
+import ReportList from './routers/report';
 import Loadable from 'react-loadable';
 interface Props extends RouteComponentProps {
     getState?: any;
@@ -18,51 +11,52 @@ interface Props extends RouteComponentProps {
 }
 
 function loading() {
-    return <div>loading</div>;
+    return <Spin />;
 }
 const routes = [
     {
         path: '/ui',
-        // component: UI,
         component: Loadable({
             loader: () => import('./routers/ui'),
             loading: loading,
         }),
-
-        // component: lazy(() => import('./routers/ui')),
     },
     {
         path: '/export/:stage_id/:type',
-        component: Export,
-        // @ts-ignore
-        // component: lazy(() => import('./routers/export')),
+        component: Loadable({
+            loader: () => import('./routers/export'),
+            loading: loading,
+        }),
     },
     {
         path: '/report',
-        component: Report,
-        // @ts-ignore
-        // component: lazy(() => import('./routers/report')),
-    },
-    {
-        path: '/derate',
         component: Loadable({
-            loader: () => import('./routers/derate'),
+            loader: () => import('./routers/report'),
             loading: loading,
         }),
-        // @ts-ignore
-        // component: lazy(() => import('./routers/report')),
     },
+    // {
+    //     path: '/derate',
+    //     component: Loadable({
+    //         loader: () => import('./routers/derate'),
+    //         loading: loading,
+    //     }),
+    //     // @ts-ignore
+    //     // component: lazy(() => import('./routers/report')),
+    // },
     {
         path: '/noright',
-        component: NoRights,
-        // @ts-ignore
-        // component: lazy(() => import('./routers/interceptors/noRights')),
+        component: Loadable({
+            loader: () => import('./routers/interceptors/noRights'),
+            loading: loading,
+        }),
     },
     {
         path: '/404',
-        component: NotFoundPage,
-        // @ts-ignore
-        // component: lazy(() => import('./routers/interceptors/notFoundPage')),
+        component: Loadable({
+            loader: () => import('./routers/interceptors/notFoundPage'),
+            loading: loading,
+        }),
     },
 ];
 
@@ -76,12 +70,12 @@ export default class App extends React.PureComponent<Props> {
                         {routes.map(item => {
                             return <Route path={item.path} component={item.component} key={item.path} />;
                         })}
-                        <Route
+                        {/* <Route
                             path="/"
                             component={() => {
                                 return <ReportList history={this.props.history} />;
                             }}
-                        />
+                        /> */}
                         <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
                     </Switch>
                     {/* </Suspense> */}
