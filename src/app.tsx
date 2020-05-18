@@ -11,16 +11,24 @@ import Export from './routers/export';
 
 import { History } from 'history';
 import { RouteComponentProps } from 'dva/router';
+import Loadable from 'react-loadable';
 interface Props extends RouteComponentProps {
     getState?: any;
     dispatch?: any;
 }
 
+function loading() {
+    return <div>loading</div>;
+}
 const routes = [
     {
         path: '/ui',
-        component: UI,
-        // @ts-ignore
+        // component: UI,
+        component: Loadable({
+            loader: () => import('./routers/ui'),
+            loading: loading,
+        }),
+
         // component: lazy(() => import('./routers/ui')),
     },
     {
@@ -54,19 +62,21 @@ export default class App extends React.PureComponent<Props> {
         return (
             <Layout>
                 <BrowserRouter basename="middleground">
-                    {/* <Suspense fallback={<Spin size="large" tip="Loading..."></Spin>}> */}
-                    <Switch>
-                        {routes.map(item => {
-                            return <Route path={item.path} component={item.component} key={item.path} />;
-                        })}
-                        <Route
-                            path="/"
-                            component={() => {
-                                return <ReportList history={this.props.history} />;
-                            }}
-                        />
-                        <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
-                    </Switch>
+                    <Router history={this.props.history}>
+                        {/* <Suspense fallback={<Spin size="large" tip="Loading..."></Spin>}> */}
+                        <Switch>
+                            {routes.map(item => {
+                                return <Route path={item.path} component={item.component} key={item.path} />;
+                            })}
+                            <Route
+                                path="/"
+                                component={() => {
+                                    return <ReportList history={this.props.history} />;
+                                }}
+                            />
+                            <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
+                        </Switch>
+                    </Router>
                     {/* </Suspense> */}
                 </BrowserRouter>
             </Layout>
