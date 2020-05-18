@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { message } from 'antd';
+import { message, Spin } from 'antd';
 // @ts-ignore
 import * as queryString from 'query-string';
 import { Layout as AntLayout } from 'antd';
@@ -29,6 +29,7 @@ interface LogoInfo {
     title: string;
 }
 interface State {
+    inited: boolean;
     collapsed: boolean;
     appList: AppInfo[];
     user: User;
@@ -43,6 +44,7 @@ class Layout extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
+            inited: false,
             collapsed: false,
             appList: [],
             user: {
@@ -70,13 +72,14 @@ class Layout extends React.Component<Props, State> {
         };
     }
 
-    componentDidMount() {
-        this.getBaseInfo();
+    async componentDidMount() {
+        await this.getBaseInfo();
     }
 
     public render() {
         const { children } = this.props;
         const {
+            inited,
             collapsed,
             logoInfo,
             appList = [],
@@ -114,7 +117,7 @@ class Layout extends React.Component<Props, State> {
                         />
                     </Header>
                     <Content style={{ overflowX: 'auto' }}>
-                        <div style={{ minWidth: '1208px', height: '100%' }}>{children}</div>
+                        <div style={{ minWidth: '1208px', height: '100%' }}>{inited ? children : <Spin />}</div>
                     </Content>
                     <Footer className="main-footer">
                         Copyright © {new Date().getFullYear()} 明源云空间 版权所有 鄂ICP备15101856号-1
@@ -124,13 +127,20 @@ class Layout extends React.Component<Props, State> {
         );
     }
 
-    getBaseInfo = async () => {
+    getBaseInfo = () => {
         const query = queryString.parse((location as any).search);
-        const { data } = await getHomeBaseInfo(query);
-        const props: any = handleBaseInfo(data);
-        this.setState({ ...props });
-        const { data: workflowData } = await getWorkflowTodo();
-        this.setState({ ...workflowData });
+        getHomeBaseInfo(query).then(res => {
+            const { data } = res;
+            const props: any = handleBaseInfo(data);
+            this.setState({ ...props });
+            getWorkflowTodo().then(res => {
+                const { data: workflowData } = res;
+                this.setState({ ...workflowData });
+            });
+            this.setState({
+                inited: true,
+            });
+        });
     };
 
     onCollapse = (collapsed: boolean) => {
