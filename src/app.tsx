@@ -44,6 +44,15 @@ const routes = [
         // component: lazy(() => import('./routers/report')),
     },
     {
+        path: '/derate',
+        component: Loadable({
+            loader: () => import('./routers/derate'),
+            loading: loading,
+        }),
+        // @ts-ignore
+        // component: lazy(() => import('./routers/report')),
+    },
+    {
         path: '/noright',
         component: NoRights,
         // @ts-ignore
@@ -61,22 +70,20 @@ export default class App extends React.PureComponent<Props> {
     public render() {
         return (
             <Layout>
-                <BrowserRouter basename="middleground">
-                    <Router history={this.props.history}>
-                        {/* <Suspense fallback={<Spin size="large" tip="Loading..."></Spin>}> */}
-                        <Switch>
-                            {routes.map(item => {
-                                return <Route path={item.path} component={item.component} key={item.path} />;
-                            })}
-                            <Route
-                                path="/"
-                                component={() => {
-                                    return <ReportList history={this.props.history} />;
-                                }}
-                            />
-                            <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
-                        </Switch>
-                    </Router>
+                <BrowserRouter basename="/middleground">
+                    {/* <Suspense fallback={<Spin size="large" tip="Loading..."></Spin>}> */}
+                    <Switch>
+                        {routes.map(item => {
+                            return <Route path={item.path} component={item.component} key={item.path} />;
+                        })}
+                        <Route
+                            path="/"
+                            component={() => {
+                                return <ReportList history={this.props.history} />;
+                            }}
+                        />
+                        <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
+                    </Switch>
                     {/* </Suspense> */}
                 </BrowserRouter>
             </Layout>
