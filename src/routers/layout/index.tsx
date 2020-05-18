@@ -131,7 +131,7 @@ class Layout extends React.Component<Props, State> {
         const query = queryString.parse((location as any).search);
         const { data } = await getHomeBaseInfo(query);
         const props: any = handleBaseInfo(data);
-        this.setState({ ...props });
+        this.setState({ ...props, inited: true });
         const { data: workflowData } = await getWorkflowTodo();
         this.setState({ ...workflowData });
     };
