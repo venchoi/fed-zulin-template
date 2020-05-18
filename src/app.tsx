@@ -3,6 +3,7 @@ import { Route, Switch, BrowserRouter, Redirect } from 'dva/router';
 import { Spin } from 'antd';
 import Layout from './routers/layout';
 import { RouteComponentProps } from 'dva/router';
+import ReportList from './routers/report';
 import Loadable from 'react-loadable';
 interface Props extends RouteComponentProps {
     getState?: any;
@@ -34,15 +35,15 @@ const routes = [
             loading: loading,
         }),
     },
-    {
-        path: '/derate',
-        component: Loadable({
-            loader: () => import('./routers/derate'),
-            loading: loading,
-        }),
-        // @ts-ignore
-        // component: lazy(() => import('./routers/report')),
-    },
+    // {
+    //     path: '/derate',
+    //     component: Loadable({
+    //         loader: () => import('./routers/derate'),
+    //         loading: loading,
+    //     }),
+    //     // @ts-ignore
+    //     // component: lazy(() => import('./routers/report')),
+    // },
     {
         path: '/noright',
         component: Loadable({
@@ -69,12 +70,12 @@ export default class App extends React.PureComponent<Props> {
                         {routes.map(item => {
                             return <Route path={item.path} component={item.component} key={item.path} />;
                         })}
-                        <Route
+                        {/* <Route
                             path="/"
                             component={() => {
                                 return <ReportList history={this.props.history} />;
                             }}
-                        />
+                        /> */}
                         <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
                     </Switch>
                     {/* </Suspense> */}

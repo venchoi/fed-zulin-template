@@ -6,7 +6,7 @@
  * @文件说明: 统计报表页面
  */
 import React, { useState } from 'react';
-import { Card } from 'antd';
+import { Card, Button } from 'antd';
 import { getReportHref } from '../../helper/commonUtils';
 // types
 import { ColumnProps } from 'antd/es/table';
@@ -95,6 +95,13 @@ const ReportList = (props: Props) => {
 
     return (
         <div className="report layout-list">
+            <Button
+                onClick={() => {
+                    props.history.push('/ui');
+                }}
+            >
+                测试
+            </Button>
             <Card
                 className="report-card"
                 title="统计报表"
