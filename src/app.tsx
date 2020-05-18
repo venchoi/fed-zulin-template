@@ -35,6 +35,15 @@ const routes = [
         }),
     },
     {
+        path: '/derate',
+        component: Loadable({
+            loader: () => import('./routers/derate'),
+            loading: loading,
+        }),
+        // @ts-ignore
+        // component: lazy(() => import('./routers/report')),
+    },
+    {
         path: '/noright',
         component: Loadable({
             loader: () => import('./routers/interceptors/noRights'),
@@ -60,12 +69,12 @@ export default class App extends React.PureComponent<Props> {
                         {routes.map(item => {
                             return <Route path={item.path} component={item.component} key={item.path} />;
                         })}
-                        {/* <Route
+                        <Route
                             path="/"
                             component={() => {
                                 return <ReportList history={this.props.history} />;
                             }}
-                        /> */}
+                        />
                         <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
                     </Switch>
                     {/* </Suspense> */}
