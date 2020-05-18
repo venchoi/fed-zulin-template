@@ -6,51 +6,6 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>明源云空间</title>
         <link rel="shortcut icon" href="//rental.myfuwu.com.cn/static/assets/images/icon.ico" type="image/x-icon" id="icon"/>
-        <script>
-            function getCookie(cookieName) {
-                var cookie = document.cookie;
-                var i = cookie.indexOf(cookieName);
-                if (i == -1) {
-                    return null;
-                } else {
-                    var starti = i + cookieName.length + 1;
-                    var endi = cookie.indexOf(';', starti);
-                    if (endi == -1) {
-                        return cookie.slice(starti);
-                    } else {
-                        return cookie.slice(starti, endi);
-                    }
-                }
-            }
-            function setCookie(name, value) {
-                var Days = 30;
-                var exp = new Date();
-                exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 30);
-                document.cookie = name + '=' + escape(value) + ';expires=' + exp.toGMTString() + ';path=/';
-            }
-            function getQueryString(name) {
-                var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-                var reg_rewrite = new RegExp('(^|/)' + name + '/([^/]*)(/|$)', 'i');
-                var r = window.location.search.substr(1).match(reg);
-                var q = window.location.pathname.substr(1).match(reg_rewrite);
-                if (r != null) {
-                    return unescape(r[2]);
-                } else if (q != null) {
-                    return unescape(q[2]);
-                } else {
-                    return null;
-                }
-            }
-
-            if (!getCookie('tenant_code') && getQueryString('o')) {
-                setCookie('tenant_code', getQueryString('o'));
-                setTimeout(function() {
-                    // window.location.reload();
-                }, 10);
-            }
-        </script>
-        <!-- sentry -->
-        <script src="https://cdn.ravenjs.com/3.18.1/raven.min.js" crossorigin="anonymous"></script>
     </head>
 
     <body>

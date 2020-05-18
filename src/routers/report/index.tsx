@@ -8,11 +8,9 @@
 import React, { useState } from 'react';
 import { Card, Button } from 'antd';
 import { getReportHref } from '../../helper/commonUtils';
-
 // types
 import { ColumnProps } from 'antd/es/table';
 import IRecordType from './types';
-
 import './index.less';
 import MyReportList from './components/MyReportList';
 import StandReportList from './components/StandReportList';
