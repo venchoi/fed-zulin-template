@@ -95,13 +95,6 @@ const ReportList = (props: Props) => {
 
     return (
         <div className="report layout-list">
-            <Button
-                onClick={() => {
-                    props.history.push('/ui');
-                }}
-            >
-                测试
-            </Button>
             <Card
                 className="report-card"
                 title="统计报表"
