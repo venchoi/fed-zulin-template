@@ -18,42 +18,43 @@ interface Props extends RouteComponentProps {
 }
 
 function loading() {
-    return <div>loading</div>;
+    return <Spin />;
 }
 const routes = [
     {
         path: '/ui',
-        // component: UI,
         component: Loadable({
             loader: () => import('./routers/ui'),
             loading: loading,
         }),
-
-        // component: lazy(() => import('./routers/ui')),
     },
     {
         path: '/export/:stage_id/:type',
-        component: Export,
-        // @ts-ignore
-        // component: lazy(() => import('./routers/export')),
+        component: Loadable({
+            loader: () => import('./routers/export'),
+            loading: loading,
+        }),
     },
     {
         path: '/report',
-        component: Report,
-        // @ts-ignore
-        // component: lazy(() => import('./routers/report')),
+        component: Loadable({
+            loader: () => import('./routers/report'),
+            loading: loading,
+        }),
     },
     {
         path: '/noright',
-        component: NoRights,
-        // @ts-ignore
-        // component: lazy(() => import('./routers/interceptors/noRights')),
+        component: Loadable({
+            loader: () => import('./routers/interceptors/noRights'),
+            loading: loading,
+        }),
     },
     {
         path: '/404',
-        component: NotFoundPage,
-        // @ts-ignore
-        // component: lazy(() => import('./routers/interceptors/notFoundPage')),
+        component: Loadable({
+            loader: () => import('./routers/interceptors/notFoundPage'),
+            loading: loading,
+        }),
     },
 ];
 
