@@ -6,7 +6,7 @@
  * @文件说明: 统计报表页面
  */
 import React, { useState } from 'react';
-import { Card } from 'antd';
+import { Card, Button } from 'antd';
 import { getReportHref } from '../../helper/commonUtils';
 
 // types

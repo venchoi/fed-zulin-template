@@ -45,7 +45,7 @@
             if (!getCookie('tenant_code') && getQueryString('o')) {
                 setCookie('tenant_code', getQueryString('o'));
                 setTimeout(function() {
-                    window.location.reload();
+                    // window.location.reload();
                 }, 10);
             }
         </script>
