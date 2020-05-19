@@ -92,10 +92,14 @@ export const DerateList = (props: Props) => {
 
     useEffect(() => {
         getDerateListData();
-    }, []);
+    }, [searchParams]);
 
     const handleTreeSelected = (selecctedProject: projsValue) => {
         setselectedProjectIds(selecctedProject.projIds);
+        setsearchParams({
+            ...searchParams,
+            proj_id: selecctedProject.projIds.join(','),
+        });
         getDerateListData();
     };
 
@@ -441,7 +445,14 @@ export const DerateList = (props: Props) => {
             }
         >
             <div>
-                <SearchArea />
+                <SearchArea
+                    onKeywordChange={keyword => {
+                        setsearchParams({
+                            ...searchParams,
+                            keyword: keyword,
+                        });
+                    }}
+                />
                 <FedTable<derateType>
                     vsides={false}
                     rowKey="id"
@@ -456,10 +467,10 @@ export const DerateList = (props: Props) => {
                 />
                 <FedPagination
                     onShowSizeChange={(current, page_size) => {
-                        setsearchParams({ page: 1, page_size });
+                        setsearchParams({ ...searchParams, page: 1, page_size });
                     }}
                     onChange={(page_index, page_size) => {
-                        setsearchParams({ page: page_index, page_size: page_size || 10 });
+                        setsearchParams({ ...searchParams, page: page_index, page_size: page_size || 10 });
                     }}
                     current={searchParams.page}
                     pageSize={searchParams.page_size}

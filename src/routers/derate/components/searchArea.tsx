@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { Button, Input } from 'antd';
 import './searchArea.less';
 
-interface searchAreaProps {}
+interface searchAreaProps {
+    onKeywordChange(keyword: string): void;
+}
 export const SearchArea = function(props: searchAreaProps) {
     const [keyword, setkeyword] = useState<string>('');
 
-    const handleKeywordChange = (value: string): void => {
-        console.log(value);
+    const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        const value = e.target.value;
+        const { onKeywordChange } = props;
         setkeyword(value);
+        onKeywordChange(value);
     };
 
     return (
@@ -16,7 +20,7 @@ export const SearchArea = function(props: searchAreaProps) {
             <Button type="primary">审核</Button>
             <Input.Search
                 placeholder="减免流水号、租客、资源、合同、意向书、发起人"
-                onSearch={handleKeywordChange}
+                onChange={handleKeywordChange}
                 value={keyword}
                 style={{ width: 360 }}
             />
