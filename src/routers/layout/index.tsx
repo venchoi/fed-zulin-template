@@ -19,8 +19,13 @@ import './index.less';
 const { Header, Sider, Content, Footer } = AntLayout;
 
 const { DEV } = config;
+interface dispatchArg {
+    type: string;
+    data: any;
+}
 interface Props {
     children: ReactElement;
+    dispatch(data: dispatchArg): void;
 }
 
 interface LogoInfo {
@@ -131,6 +136,10 @@ class Layout extends React.Component<Props, State> {
         const query = queryString.parse((location as any).search);
         const { data } = await getHomeBaseInfo(query);
         const props: any = handleBaseInfo(data);
+        this.props.dispatch({
+            type: 'initBaseInfo',
+            data: props,
+        });
         this.setState({ ...props, inited: true });
         const { data: workflowData } = await getWorkflowTodo();
         this.setState({ ...workflowData });

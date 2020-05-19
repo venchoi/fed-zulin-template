@@ -1,13 +1,16 @@
 import { TreeSelect } from 'antd';
+import { TreeNodeProps } from 'rc-tree-select/lib/TreeNode';
 
-export type treeNode = React.FC<import('rc-tree-select/lib/TreeNode').TreeNodeProps>;
+export type treeNode = TreeNodeProps;
 export interface treeOriginNode extends treeNode {
-    value: string;
-    full_name?: string;
     id: string;
+    value: string;
+    label: string;
+    is_end: number;
+    title: string;
+    full_name?: string;
     disabled?: boolean;
     is_end_company?: string | number;
-    label?: string;
     level?: string | number;
     name?: string;
     parent_full_name?: string;
@@ -15,30 +18,41 @@ export interface treeOriginNode extends treeNode {
     parent_name?: string;
     room_num?: number | string;
     total_area?: string;
-    children?: treeOriginNode;
+    children?: treeOriginNode[];
     isLeaf?: boolean;
-    is_end: number;
-    title: string;
     key?: string;
 }
 
-export interface treeOriginData {
-    company: Array<treeOriginNode>;
-}
-
 export interface treeProjectSelectProps {
-    width?: string;
+    width?: number;
     height?: string;
     dropdownStyle?: any;
+    maxTagCount?: number;
+    isJustSelect?: boolean;
+    isCompanySelect?: boolean;
+    onTreeSelected?: (value: projsValue) => void;
+    value?: string[];
 }
 export interface treeProjectSelectState {
-    treeData: treeNode[];
+    treeData: treeOriginNode[];
     searchValue: string;
     projIds: string[];
     projNames: string[];
 }
+
 declare class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProjectSelectState> {
     getProjectData(): void;
     transferOriginTreeData(): treeNode[];
     render(): JSX.Element;
+    onTreeSelect(value: string[]): projsValue;
+}
+
+export interface projsValue {
+    projIds: Array<string>;
+    projNames: Array<string>;
+}
+
+interface EventType extends MouseEvent {
+    path?: HTMLElement[];
+    target: HTMLElement;
 }

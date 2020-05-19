@@ -4,5 +4,29 @@
             float: right;
         }
     }
+    .status-item {
+        .icon-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #F77D54;
+            &.unaudit {
+                background-color: #F77D54;
+            }
+            &.auditing {
+                background-color: #F5B027;
+            }
+            &.audited {
+                background-color: #30B39D;
+            }
+            &.deleted {
+                background-color: #D7D8D9;
+            }
+        }
+        .status-text {
+
+        }
+    }
     
+
 }

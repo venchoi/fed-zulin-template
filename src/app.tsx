@@ -35,15 +35,13 @@ const routes = [
             loading: loading,
         }),
     },
-    // {
-    //     path: '/derate',
-    //     component: Loadable({
-    //         loader: () => import('./routers/derate'),
-    //         loading: loading,
-    //     }),
-    //     // @ts-ignore
-    //     // component: lazy(() => import('./routers/report')),
-    // },
+    {
+        path: '/derate',
+        component: Loadable({
+            loader: () => import('./routers/derate'),
+            loading: loading,
+        }),
+    },
     {
         path: '/noright',
         component: Loadable({
@@ -63,7 +61,7 @@ const routes = [
 export default class App extends React.PureComponent<Props> {
     public render() {
         return (
-            <Layout>
+            <Layout dispatch={this.props.dispatch}>
                 <BrowserRouter basename="/middleground">
                     {/* <Suspense fallback={<Spin size="large" tip="Loading..."></Spin>}> */}
                     <Switch>
