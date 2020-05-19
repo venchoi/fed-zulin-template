@@ -280,8 +280,15 @@ export const DerateList = (props: Props) => {
             title: '减免金额',
             width: 162,
             render: (text, record: derateType, index) => {
-                const derated_amount = +record.derated_amount;
-                const demurrage_derated_amount = +record.demurrage_derated_amount;
+                const derated_amount = record.items.reduce((total: number, curr: any) => {
+                    total += +curr.derated_amount || 0;
+                    return total;
+                }, 0);
+                const demurrage_derated_amount = record.items.reduce((total, curr: any) => {
+                    total += +curr.demurrage_derated_amount || 0;
+                    return total;
+                }, 0);
+                console.log(record, derated_amount, demurrage_derated_amount);
                 const totalDerate = comma(formatNum(derated_amount + demurrage_derated_amount));
                 return <>{totalDerate || '-'}</>;
             },
