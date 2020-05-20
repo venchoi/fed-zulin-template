@@ -6,7 +6,7 @@ import { ColumnProps } from 'antd/es/table';
 import { History } from 'history';
 import FedTable from '@c/FedTable';
 import { fetchMuiltStageWorkflowTempIsEnabled, getDerateList } from '@s/derate';
-import { formatNum, comma, checkPermission } from '../../../helper/commonUtils';
+import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
 import { User, projsValue, feeItem, derateType, statusMapType, responseType, enableItemType } from '../list.d';
 
 interface derateTableProps {
@@ -14,6 +14,7 @@ interface derateTableProps {
     derateTotal: number;
     user: User;
     history: History;
+    selectedRowKeys: string[];
     onTableSelect?(keys: string[], rows: derateType[]): void;
 }
 
@@ -23,7 +24,7 @@ interface selectedRowKeyType {
 
 const baseAlias = 'static';
 export const DerateTable = (props: derateTableProps) => {
-    const { derateList, derateTotal, user, history, onTableSelect } = props;
+    const { derateList, derateTotal, user, history, onTableSelect, selectedRowKeys } = props;
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
     const [enableList, setenableList] = useState<enableItemType[]>([]); // 减免列表
 
@@ -130,6 +131,7 @@ export const DerateTable = (props: derateTableProps) => {
     };
 
     const rowSelection = {
+        selectedRowKeys,
         onChange: (selectedRowKeys: any, selectedRows: derateType[]) => {
             console.log(selectedRowKeys, selectedRows);
             onTableSelect && onTableSelect(selectedRowKeys, selectedRows);
@@ -140,6 +142,16 @@ export const DerateTable = (props: derateTableProps) => {
             return {
                 disabled: !oaName && !isEnabled && record.status === '待审核', // Column configuration not to be checked
             };
+        },
+    };
+
+    const expandable = {
+        childrenColumnName: 'code',
+        expandedRowRender: (record: derateType) => {
+            return <p style={{ margin: 0 }}>测试</p>;
+        },
+        rowExpandable: (record: derateType) => {
+            return true;
         },
     };
 
@@ -373,6 +385,7 @@ export const DerateTable = (props: derateTableProps) => {
             rowSelection={{
                 ...rowSelection,
             }}
+            expandable={expandable}
             scroll={{
                 y: 'calc( 100vh - 340px )',
             }}

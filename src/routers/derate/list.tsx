@@ -7,8 +7,8 @@ import TreeProjectSelect from '@c/TreeProjectSelect';
 import FedPagination from './components/pagination';
 import DerateTable from './components/derateTable';
 import { fetchMuiltStageWorkflowTempIsEnabled, getDerateList } from '@s/derate';
-import { formatNum, comma, checkPermission } from '../../helper/commonUtils';
-import { getDerateListParams } from '../../types/derateTypes';
+import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
+import { getDerateListParams } from '@/types/derateTypes';
 import { User, Props, projsValue, feeItem, derateType, statusMapType, responseType, enableItemType } from './list.d';
 import './list.less';
 
@@ -65,6 +65,13 @@ export const DerateList = (props: Props) => {
         setselectedRowKeys(selectedRowKeys);
     };
 
+    const handleAudit = (e: React.MouseEvent) => {};
+
+    const handleCancelSelect = () => {
+        setselectedRows([]);
+        setselectedRowKeys([]);
+    };
+
     return (
         <ContentLayout
             className="derate-list-page"
@@ -78,6 +85,8 @@ export const DerateList = (props: Props) => {
         >
             <div>
                 <SearchArea
+                    selectedRowKeys={selectedRowKeys}
+                    onAudit={handleAudit}
                     onKeywordChange={keyword => {
                         setsearchParams({
                             ...searchParams,
@@ -90,6 +99,7 @@ export const DerateList = (props: Props) => {
                     derateTotal={derateTotal}
                     history={history}
                     user={user}
+                    selectedRowKeys={selectedRowKeys}
                     onTableSelect={handleTableSelect}
                 />
                 {selectedRowKeys.length > 0 ? (
@@ -97,7 +107,9 @@ export const DerateList = (props: Props) => {
                         <span className="text">
                             已选：<span className="selected-num">{selectedRowKeys.length}</span>条 减免单
                         </span>
-                        <Button type="link">取消已选</Button>
+                        <Button type="link" onClick={handleCancelSelect}>
+                            取消已选
+                        </Button>
                     </div>
                 ) : null}
                 <FedPagination

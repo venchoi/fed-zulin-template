@@ -4,8 +4,11 @@ import './searchArea.less';
 
 interface searchAreaProps {
     onKeywordChange(keyword: string): void;
+    onAudit(e: React.MouseEvent): void;
+    selectedRowKeys: string[];
 }
 export const SearchArea = function(props: searchAreaProps) {
+    const { selectedRowKeys, onAudit } = props;
     const [keyword, setkeyword] = useState<string>('');
 
     const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -17,7 +20,9 @@ export const SearchArea = function(props: searchAreaProps) {
 
     return (
         <div className="derate-search-area">
-            <Button type="primary">审核</Button>
+            <Button type="primary" disabled={selectedRowKeys.length === 0} onClick={onAudit}>
+                审核
+            </Button>
             <Input.Search
                 placeholder="减免流水号、租客、资源、合同、意向书、发起人"
                 onChange={handleKeywordChange}
