@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Table, message } from 'antd';
-import { connect } from 'dva';
+import DerateSubRow from './derateSubRow';
+import InputWithCount from './InputWithCount';
 import { Link } from 'dva/router';
 import { ColumnProps } from 'antd/es/table';
+import { RightOutlined, DownOutlined } from '@ant-design/icons';
 import { History } from 'history';
 import FedTable from '@c/FedTable';
 import { fetchMuiltStageWorkflowTempIsEnabled, getDerateList } from '@s/derate';
@@ -146,11 +148,24 @@ export const DerateTable = (props: derateTableProps) => {
     };
 
     const expandable = {
+        expandIconColumnIndex: 1,
+        expandRowByClick: true,
         expandedRowRender: (record: derateType) => {
-            return <p style={{ margin: 0 }}>测试</p>;
+            return <DerateSubRow record={record} />;
         },
         rowExpandable: (record: derateType) => {
             return true;
+        },
+        expandIcon: ({ expanded, onExpand, record }: any): JSX.Element => {
+            return expanded ? (
+                <div className="expandable-col">
+                    <DownOutlined onClick={e => onExpand(record, e)} />
+                </div>
+            ) : (
+                <div className="expandable-col">
+                    <RightOutlined onClick={e => onExpand(record, e)} />
+                </div>
+            );
         },
     };
 
