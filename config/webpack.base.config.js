@@ -86,7 +86,7 @@ module.exports = {
                                 options: {
                                     javascriptEnabled: true,
                                     modifyVars: {
-                                        'hack': `true; @import "${path.resolve(__dirname, '../src/assets/less/default.less')}";`,
+                                        'hack': `true; @import "${path.resolve(__dirname, '../src/assets/less/antd/index.less')}";`,
                                     }
                                     // modifyVars: antOverride,
                                 },
