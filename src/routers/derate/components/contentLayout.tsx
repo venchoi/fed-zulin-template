@@ -6,6 +6,7 @@
  * @文件说明: 页面布局组件
  */
 import React from 'react';
+import { Spin } from 'antd';
 import './contentLayout.less';
 
 interface contentLayoutProps {
@@ -13,19 +14,22 @@ interface contentLayoutProps {
     children?: JSX.Element;
     topRightSlot?: JSX.Element;
     className?: string;
+    isLoading?: boolean;
 }
 const contentLayout = (props: contentLayoutProps) => {
-    const { title, children, topRightSlot, className } = props;
+    const { title, children, topRightSlot, className, isLoading = false } = props;
     return (
-        <div className="content-container">
-            <div className={`content ${className}`}>
-                <div className="top-area">
-                    <span className="title">{title}</span>
-                    <div className="right-slot-area">{topRightSlot}</div>
+        <Spin spinning={isLoading}>
+            <div className="content-container">
+                <div className={`content ${className}`}>
+                    <div className="top-area">
+                        <span className="title">{title}</span>
+                        <div className="right-slot-area">{topRightSlot}</div>
+                    </div>
+                    <div className="content-area">{children}</div>
                 </div>
-                <div className="content-area">{children}</div>
             </div>
-        </div>
+        </Spin>
     );
 };
 
