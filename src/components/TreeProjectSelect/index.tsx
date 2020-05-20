@@ -2,8 +2,8 @@ import React from 'react';
 import { TreeSelect, message } from 'antd';
 import { getProjectTreeData } from '@s/derate';
 import cloneDeep from 'lodash/cloneDeep';
-import { Local } from '../../MemoryShare';
-import { isOutsideClick } from '../../helper/commonUtils';
+import { Local } from '@/MemoryShare';
+import { isOutsideClick } from '@/helper/commonUtils';
 import {
     treeProjectSelectProps,
     treeProjectSelectState,
@@ -11,10 +11,13 @@ import {
     projsValue,
     EventType,
 } from './TreeProjectSelect';
+
 interface callbackFn {
     (item: treeOriginNode): void;
 }
+
 const dropdownClassName = 'multi-project-tree-select';
+
 class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProjectSelectState> {
     constructor(props: treeProjectSelectProps) {
         super(props);
@@ -26,7 +29,6 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             projIds: projIdsStr ? projIdsStr.split(',') : [],
             projNames: projNamesStr ? projNamesStr.split(',') : [],
         };
-        this.onTreeSelect = this.onTreeSelect.bind(this);
     }
 
     componentDidMount() {
@@ -44,11 +46,10 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
         const { width, height, dropdownStyle, maxTagCount } = this.props;
         const { treeData, projIds } = this.state;
         const projIdsArr = projIds ? projIds : [];
-        const onTreeSelect = this.onTreeSelect;
         const treeProps = {
             treeData: treeData,
             value: treeData.length > 0 ? projIdsArr : [],
-            onChange: onTreeSelect,
+            onChange: this.onTreeSelect,
             style: {
                 width: width || 400,
                 height: height,
@@ -153,7 +154,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
     }
 
     // 树形组件选中
-    onTreeSelect(value: string[]): void {
+    onTreeSelect = (value: string[]): void => {
         const projs = this.getSelectedProjIds(value);
         this.setProjIds(projs);
         const { onTreeSelected } = this.props;
@@ -164,7 +165,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
                 searchValue: ele.value,
             });
         }
-    }
+    };
 
     // 转换请求回来的项目树变成 antd 所需的 treeData 数据
     transferOriginTreeData(originData: treeOriginNode[]): treeOriginNode[] {
