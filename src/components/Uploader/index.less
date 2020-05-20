@@ -1,0 +1,58 @@
+.m-attachment{
+    input[type=file] {
+        display: none;
+    }
+    &-list{
+        margin: 0 -10px -10px 0;
+    }
+    &-item{
+        border: 1px solid #e7e7eb;
+        width: 200px;
+        float: left;
+        margin: 0 10px 10px 0;
+    }
+    &-item__inner{
+        padding: 10px;
+    }
+    &-item__media{
+        height: 150px;
+        text-align: center;
+        img{
+            max-height: 100%;
+            max-width: 100%;
+        }
+    }
+    &-item__content{
+        padding-top: 10px;
+    }
+    &-item__btn-wrap{
+        margin-right: -1px;
+    }
+    &-item__btn-inner{
+        border-top: 1px solid #e7e7eb;
+        display: table;
+        width: 100%;
+    }
+    &-item__btn{
+        border-right: 1px solid #e7e7eb;
+        display: table-cell;
+        text-align: center;
+        height: 32px;
+        line-height: 32px;
+        padding: 0 10px;
+    }
+    &__btn-wrap{
+        margin-top: 10px;
+    }
+    &__btn-after,
+    &__tips{
+        color: #666;
+        font-size: 12px;
+    }
+    &__btn-after{
+        margin-left: 10px;
+    }
+    &__tips{
+        margin-top: 10px;
+    }
+}

@@ -23,6 +23,7 @@
         "classnames": "^2.2.6",
         "dva": "^2.4.1",
         "dva-loading": "^3.0.20",
+        "fedtoolgroup": "^1.1.13",
         "js-cookie": "^2.2.1",
         "lodash": "^4.17.15",
         "query-string": "5",
