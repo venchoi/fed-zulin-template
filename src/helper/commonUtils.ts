@@ -91,3 +91,20 @@ export function checkPermission(funcCode: string, elementId: string) {
     }
     return hasRights;
 }
+
+/**
+ * encode文件名
+ * @param url
+ */
+export function enCodeFileName(url: string) {
+    if (url) {
+        const index = url.lastIndexOf('/');
+        const pre = url.substring(0, index + 1);
+        let next = url.substring(index + 1);
+        if (next) {
+            next = encodeURIComponent(next);
+        }
+        return `${pre}${next}`;
+    }
+    return url;
+}
