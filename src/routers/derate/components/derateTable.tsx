@@ -14,10 +14,16 @@ interface derateTableProps {
     derateTotal: number;
     user: User;
     history: History;
+    onTableSelect?(keys: string[], rows: derateType[]): void;
 }
+
+interface selectedRowKeyType {
+    id: string;
+}
+
 const baseAlias = 'static';
 export const DerateTable = (props: derateTableProps) => {
-    const { derateList, derateTotal, user, history } = props;
+    const { derateList, derateTotal, user, history, onTableSelect } = props;
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
     const [enableList, setenableList] = useState<enableItemType[]>([]); // 减免列表
 
@@ -123,6 +129,20 @@ export const DerateTable = (props: derateTableProps) => {
         }
     };
 
+    const rowSelection = {
+        onChange: (selectedRowKeys: any, selectedRows: derateType[]) => {
+            console.log(selectedRowKeys, selectedRows);
+            onTableSelect && onTableSelect(selectedRowKeys, selectedRows);
+        },
+        getCheckboxProps: (record: derateType) => {
+            const oaName = getVal(record.proj_id, 'oaName');
+            const isEnabled = getVal(record.proj_id, 'isEnabled');
+            return {
+                disabled: !oaName && !isEnabled && record.status === '待审核', // Column configuration not to be checked
+            };
+        },
+    };
+
     const columns: ColumnProps<derateType>[] = [
         {
             dataIndex: 'code',
@@ -192,7 +212,6 @@ export const DerateTable = (props: derateTableProps) => {
                     total += +curr.demurrage_derated_amount || 0;
                     return total;
                 }, 0);
-                console.log(record, derated_amount, demurrage_derated_amount);
                 const totalDerate = comma(formatNum(derated_amount + demurrage_derated_amount));
                 return <>{totalDerate || '-'}</>;
             },
@@ -352,7 +371,7 @@ export const DerateTable = (props: derateTableProps) => {
             columns={columns}
             dataSource={derateList}
             rowSelection={{
-                type: 'checkbox',
+                ...rowSelection,
             }}
             scroll={{
                 y: 'calc( 100vh - 340px )',

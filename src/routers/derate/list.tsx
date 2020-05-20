@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Table, message } from 'antd';
+import { message, Pagination, Button } from 'antd';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
-import { ColumnProps } from 'antd/es/table';
-import { History } from 'history';
 import ContentLayout from './components/contentLayout';
 import SearchArea from './components/searchArea';
 import TreeProjectSelect from '@c/TreeProjectSelect';
-import FedTable from '@c/FedTable';
-import FedPagination from '@c/FedPagination';
+import FedPagination from './components/pagination';
 import DerateTable from './components/derateTable';
 import { fetchMuiltStageWorkflowTempIsEnabled, getDerateList } from '@s/derate';
 import { formatNum, comma, checkPermission } from '../../helper/commonUtils';
@@ -29,6 +25,8 @@ export const DerateList = (props: Props) => {
     const [derateTotal, setderateTotal] = useState(0);
     const [derateList, setderateList] = useState([]); // 减免列表
     const [loading, setloading] = useState(false);
+    const [selectedRowKeys, setselectedRowKeys] = useState<string[]>([]);
+    const [selectedRows, setselectedRows] = useState<derateType[]>([]);
 
     useEffect(() => {
         getDerateListData();
@@ -61,6 +59,12 @@ export const DerateList = (props: Props) => {
             });
     };
 
+    const handleTableSelect = (selectedRowKeys: string[], selectedRows: derateType[]) => {
+        console.log(selectedRowKeys);
+        setselectedRows(selectedRows);
+        setselectedRowKeys(selectedRowKeys);
+    };
+
     return (
         <ContentLayout
             className="derate-list-page"
@@ -81,7 +85,21 @@ export const DerateList = (props: Props) => {
                         });
                     }}
                 />
-                <DerateTable derateList={derateList} derateTotal={derateTotal} history={history} user={user} />
+                <DerateTable
+                    derateList={derateList}
+                    derateTotal={derateTotal}
+                    history={history}
+                    user={user}
+                    onTableSelect={handleTableSelect}
+                />
+                {selectedRowKeys.length > 0 ? (
+                    <div className="selected-status-bar">
+                        <span className="text">
+                            已选：<span className="selected-num">{selectedRowKeys.length}</span>条 减免单
+                        </span>
+                        <Button type="link">取消已选</Button>
+                    </div>
+                ) : null}
                 <FedPagination
                     onShowSizeChange={(current, page_size) => {
                         setsearchParams({ ...searchParams, page: 1, page_size });
