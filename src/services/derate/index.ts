@@ -1,5 +1,10 @@
 import ajax from '@/api/utils/ajax';
-import { getTreeDataParams, getTemplateIsEnabled, getDerateListParams } from '@/types/derateTypes';
+import {
+    getTreeDataParams,
+    getTemplateIsEnabled,
+    getDerateListParams,
+    getDerateDetailParams,
+} from '@/types/derateTypes';
 
 export const getProjectTreeData = (data: getTreeDataParams) => {
     return ajax('/resource/stage/get-organization-tree', { ...data, _csrf: '' }, 'GET');
@@ -11,4 +16,8 @@ export const fetchMuiltStageWorkflowTempIsEnabled = (data: getTemplateIsEnabled)
 
 export const getDerateList = (data: getDerateListParams) => {
     return ajax('/bill/derated/list', { ...data, _csrf: '' }, 'POST');
+};
+
+export const getDerateDetail = (data: getDerateDetailParams) => {
+    return ajax('/bill/derated/detail', { ...data, _csrf: '' }, 'GET');
 };

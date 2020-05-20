@@ -11,3 +11,7 @@ export interface getDerateListParams {
     page_size: number;
     keyword?: string;
 }
+
+export interface getDerateDetailParams {
+    id: string;
+}
