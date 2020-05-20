@@ -146,7 +146,6 @@ export const DerateTable = (props: derateTableProps) => {
     };
 
     const expandable = {
-        childrenColumnName: 'code',
         expandedRowRender: (record: derateType) => {
             return <p style={{ margin: 0 }}>测试</p>;
         },
