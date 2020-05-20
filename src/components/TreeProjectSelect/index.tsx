@@ -36,8 +36,6 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
         document.addEventListener('click', this.handleOutsideClick, false);
     }
 
-    componentDidUpdate() {}
-
     componentWillUnmount() {
         document.removeEventListener('click', this.handleOutsideClick, false);
     }

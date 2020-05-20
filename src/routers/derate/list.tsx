@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { message, Pagination, Button } from 'antd';
+import { message, Button } from 'antd';
 import { connect } from 'dva';
 import ContentLayout from './components/contentLayout';
 import SearchArea from './components/searchArea';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import FedPagination from './components/pagination';
 import DerateTable from './components/derateTable';
-import { fetchMuiltStageWorkflowTempIsEnabled, getDerateList } from '@s/derate';
-import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
+import { getDerateList } from '@s/derate';
 import { getDerateListParams } from '@/types/derateTypes';
-import { User, Props, projsValue, feeItem, derateType, statusMapType, responseType, enableItemType } from './list.d';
+import { Props, projsValue, derateType } from './list.d';
 import './list.less';
 
 const baseAlias = 'static';

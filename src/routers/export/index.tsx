@@ -4,7 +4,6 @@ import { RouteComponentProps } from 'dva/router';
 import { match } from 'react-router';
 import { getExportList } from '@s/export';
 import ExportCard from './exporList';
-import { Status } from '@t/exportTypes';
 
 interface HistoryParams {
     type: string;
@@ -23,7 +22,7 @@ const exportList = ({ match: { params } }: Props) => {
     const [dataSource, setDataSource] = useState([]);
 
     const fetchExportList = async () => {
-        const { data, result } = await getExportList({ stage_id, type, page: 1, page_size: 10 });
+        const { data } = await getExportList({ stage_id, type, page: 1, page_size: 10 });
         setDataSource(data?.items || []);
     };
     const routes = [

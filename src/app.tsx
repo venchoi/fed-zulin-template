@@ -3,7 +3,6 @@ import { Route, Switch, BrowserRouter, Redirect } from 'dva/router';
 import { Spin } from 'antd';
 import Layout from './routers/layout';
 import { RouteComponentProps } from 'dva/router';
-import ReportList from './routers/report';
 import Loadable from 'react-loadable';
 interface Props extends RouteComponentProps {
     getState?: any;

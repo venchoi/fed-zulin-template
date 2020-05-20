@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { Card, Input, Select, DatePicker } from 'antd';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
-
 // types
 import { ColumnProps } from 'antd/es/table';
-import ExportItemType, { ExportListParams, Status } from '@t/exportTypes';
+import ExportItemType, { Status } from '@t/exportTypes';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -23,6 +22,7 @@ const exportCard = ({ dataSource }: Props) => {
         start_date: '',
         end_date: '',
     });
+
     const columns: ColumnProps<ExportItemType>[] = [
         {
             dataIndex: 'created_on',
