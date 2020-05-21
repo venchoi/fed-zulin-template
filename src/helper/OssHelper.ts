@@ -152,7 +152,7 @@ export function getOssDirectParams(file: any) {
  * 获取直传的阿里云地址 上传的地址
  * @returns {null}
  */
-export function getOssDirectDomain() {
+export function getOssDirectDomain(arg?: any) {
     getOssDirectConfig();
     return config.fileDomain;
 }
