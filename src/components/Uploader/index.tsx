@@ -248,6 +248,7 @@ class Uploader extends React.Component<Props> {
                                         accept.indexOf(item.type) > -1
                                             ? `icon-file-${item.type}.png`
                                             : 'icon-file-unknown.png';
+                                    console.log(fileIconName);
                                     return item.type.indexOf('image') > -1 ? (
                                         <div className="attachment-item-for-image" key={item.id}>
                                             {item.done ? (
@@ -256,7 +257,7 @@ class Uploader extends React.Component<Props> {
                                                     src={
                                                         (item.image_path &&
                                                             `${item.auth_file_path || item.image_path}`) ||
-                                                        require(`../../assets/img/icon-file/${fileIconName}`)
+                                                        `../../assets/img/icon-file/${fileIconName}`
                                                     }
                                                     alt=""
                                                 />

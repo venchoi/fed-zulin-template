@@ -8,6 +8,7 @@ import { getDerateDetail } from '@s/derate';
 import InputWithCount from './InputWithCount';
 import { formatNum, comma } from '@/helper/commonUtils';
 import { derateType, feeItem } from '../list.d';
+import { fileType } from '@/types/common';
 import './derateSubRow.less';
 
 interface derateSubRowProps {
@@ -17,6 +18,7 @@ interface derateSubRowProps {
 type status = '' | 'success' | 'warning' | 'error' | 'validating';
 
 interface feeItemType {
+    id: string;
     renter_organization_name: string;
     contract_code?: string;
     room_name: string;
@@ -41,7 +43,7 @@ interface derateDetail {
     items: feeItemType[];
     proj_name: string;
     remark: string;
-    attachment: any[];
+    attachment: fileType[];
 }
 
 interface derateDetailType {}
@@ -57,8 +59,8 @@ const layout = {
 
 export const DerateSubRow = (props: derateSubRowProps) => {
     const [form] = Form.useForm();
-    const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
-    const [selectedRows, setSelectedRows] = useState<any>([]);
+    const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
+    const [selectedRows, setSelectedRows] = useState<feeItemType[]>([]);
     const [detail, setDetail] = useState<derateDetail>({
         items: [],
         proj_name: '',
@@ -114,6 +116,11 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 }
             });
             data.items = data.copyItems;
+            const selectedRowKeys = data.items.map((item: feeItemType) => {
+                return item.id + (item.isDemurrage ? '1' : '0');
+            });
+            console.log(selectedRowKeys);
+            setSelectedRowKeys(selectedRowKeys);
             const roomNames: string[] = Object.keys(roomsMap);
             roomNames.forEach(roomName => {
                 const len = roomsMap[roomName].length;
@@ -159,6 +166,14 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         };
     };
 
+    const handleAttachmentChange = (file: fileType, files: fileType[]) => {
+        console.log(file, files);
+        setDetail({
+            attachment: files,
+            ...detail,
+        });
+    };
+
     const basicInfoForms = [
         {
             name: '租客',
@@ -196,6 +211,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
     const rowSelection = {
         selectedRowKeys,
         onChange: (selectedRowKeys: any, selectedRows: any[]) => {
+            console.log(selectedRowKeys);
             setSelectedRowKeys(selectedRowKeys);
             setSelectedRows(selectedRows);
         },
@@ -276,11 +292,18 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             },
         },
     ];
+    const selectedRowKeysMap: { [index: string]: boolean } = {};
+    selectedRowKeys.forEach((item: string) => {
+        selectedRowKeysMap[item] = true;
+    });
     // 合计减免
     const totalDeratedAmount = detail.items.reduce((total: number, item) => {
-        total =
-            total + (!item.isDemurrage ? (+item.derated_amount || 0) * 1 : (item.demurrage_derated_amount || 0) * 1);
-        console.log(total);
+        const key = item.id + (item.isDemurrage ? '1' : '0');
+        if (selectedRowKeysMap[key]) {
+            total =
+                total +
+                (!item.isDemurrage ? (+item.derated_amount || 0) * 1 : (item.demurrage_derated_amount || 0) * 1);
+        }
         return total;
     }, 0);
 
@@ -354,10 +377,13 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 <FedSection title="减免明细" key="减免明细">
                     <>
                         <Table
-                            rowSelection={rowSelection}
+                            rowSelection={isEditMode ? rowSelection : undefined}
                             pagination={false}
                             columns={columns}
                             dataSource={detail.items}
+                            rowKey={(record: feeItemType) => {
+                                return record.id + (record.isDemurrage ? '1' : '0');
+                            }}
                         />
                         <div className="total-bar">
                             <span>本次合计减免：</span>
@@ -366,11 +392,11 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                     </>
                 </FedSection>
                 <FedSection title="减免附件" key="减免附件">
-                    <Uploader
-                        files={detail.attachment}
-                        onChange={() => {}}
-                        // description="注：单个附件最大支持10M，支持jpg/gif/png/pdf格式，已上传1/15"
-                    />
+                    {(detail.attachment && detail.attachment.length > 0) || isEditMode ? (
+                        <Uploader files={detail.attachment} onChange={handleAttachmentChange} readonly={!isEditMode} />
+                    ) : (
+                        <span>-</span>
+                    )}
                 </FedSection>
             </div>
         </div>
