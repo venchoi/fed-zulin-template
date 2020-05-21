@@ -57,7 +57,6 @@ class Uploader extends React.Component<Props> {
         const _this = this;
         const config = {
             multiple: true,
-            name: 'file',
             disabled: (files && files.length) >= fileLength,
             // action: getOssDirectDomain(),
             action:
@@ -115,8 +114,6 @@ class Uploader extends React.Component<Props> {
                 if (!_this.reUpload) {
                     ObjectUpload.upload(fileEl, isPrivate)
                         .then((res: any) => {
-                            console.log('res');
-                            console.log(res);
                             const file = {
                                 type: isImage ? 'image' : isZip ? 'zip' : fileType,
                                 id: fileEl.id,
@@ -260,11 +257,11 @@ class Uploader extends React.Component<Props> {
                                             {item.done ? (
                                                 <img
                                                     className="icon-file"
-                                                    // src={
-                                                    //     (item.image_path &&
-                                                    //         `${item.auth_file_path || item.image_path}`) ||
-                                                    //     require(`../../../static/images/icon-file/${fileIconName}`)
-                                                    // }
+                                                    src={
+                                                        (item.image_path &&
+                                                            `${item.auth_file_path || item.image_path}`) ||
+                                                        require(`../../assets/img/icon-file/${fileIconName}`)
+                                                    }
                                                     alt=""
                                                 />
                                             ) : (
@@ -285,11 +282,11 @@ class Uploader extends React.Component<Props> {
                                         </div>
                                     ) : (
                                         <div className="attachment-item" key={item.id}>
-                                            {/* <img
+                                            <img
                                                 className="icon-file"
-                                                src={require(`../../../static/images/icon-file/${fileIconName}`)}
+                                                src={require(`../../assets/img/icon-file/${fileIconName}`)}
                                                 alt=""
-                                            /> */}
+                                            />
                                             <div>
                                                 <div className="file-name">{item.file_name}</div>
                                                 {item.process === 100 ? (
@@ -338,13 +335,13 @@ class Uploader extends React.Component<Props> {
                                           <img src={`${item.auth_file_path || item.file_path}`} alt="" />
                                       </a>
                                   ) : (
-                                      <div className="inline-block">
-                                          <div className="attachment-list" key={item.id}>
-                                              {/* <img
+                                      <div className="inline-block" key={item.id}>
+                                          <div className="attachment-list">
+                                              <img
                                                   className="icon-file"
-                                                  src={require(`src/static/images/icon-file/${fileIconName}`)}
+                                                  src={require(`../../assets/img/icon-file/${fileIconName}`)}
                                                   alt=""
-                                              /> */}
+                                              />
                                               <div>
                                                   <div className="file-name">{item.file_name}</div>
                                                   <div className="file-description">{item.upload_time}</div>
