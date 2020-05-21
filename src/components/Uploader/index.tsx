@@ -35,15 +35,15 @@ interface Props {
     maxFile?: number;
     listType?: 'picture' | 'text' | 'picture-card' | undefined;
     drag?: boolean;
-    accept: string;
-    ossProtected: any;
+    accept?: string;
+    ossProtected?: any;
     maxNum?: number;
     maxSize?: number;
     reuploadMode: any;
     onRemove?: (file: any) => {};
     onChange?: (file: any, fileList: any) => {};
-    noMessage: any;
-    onReUploaded: (fileList: any) => {};
+    noMessage?: any;
+    onReUploaded?: (fileList: any) => {};
     onError: any;
 }
 
