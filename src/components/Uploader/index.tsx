@@ -27,7 +27,7 @@ interface Props {
     files: any;
     fileLength?: number;
     readonly?: any;
-    description: any;
+    description?: any;
     ossProtected?: any;
     multiple?: boolean;
     accept?: any;
@@ -225,7 +225,7 @@ class Uploader extends React.Component<Props> {
                 message.error(`${fileEl.name} 文件上传出错`);
             },
         };
-
+        console.log(files.length, fileLength, 'hehe');
         return (
             <div className="component-uploader">
                 {!readonly ? (
@@ -234,10 +234,6 @@ class Uploader extends React.Component<Props> {
                             <Button>
                                 <UploadOutlined ref={this.clickUploadRef} /> 上传
                             </Button>
-                            {/* <Button>
-                                <Icon type="upload" />
-                                <span ref={this.clickUploadRef}>上传</span>
-                            </Button> */}
                             <span className="uploader-description">
                                 <span>{description ? description : '注：单个附件最大支持10M，已上传'}</span>
                                 {files.length}
