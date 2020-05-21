@@ -9,7 +9,7 @@ const webpack = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // const WorkboxPlugin = require('workbox-webpack-plugin');
 
-const antOverride = require('../src/vendor/antd');
+// const antOverride = require('../src/vendor/antd');
 
 const prod_config = {
     mode: 'production',
@@ -37,7 +37,13 @@ const prod_config = {
                         loader: 'less-loader',
                         options: {
                             javascriptEnabled: true,
-                            modifyVars: antOverride,
+                            // modifyVars: antOverride,
+                            modifyVars: {
+                                hack: `true; @import "${path.resolve(
+                                    __dirname,
+                                    '../src/assets/less/antd/index.less'
+                                )}";`,
+                            },
                         },
                     },
                 ],
