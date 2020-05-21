@@ -3,8 +3,10 @@ import { Form, Row, Col, Table, message } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import FedButton from '@c/FedButton';
 import FedSection from '@c/FedSection';
+import Uploader from '@c/Uploader';
 import { getDerateDetail } from '@s/derate';
 import InputWithCount from './InputWithCount';
+import { formatNum, comma } from '@/helper/commonUtils';
 import { derateType, feeItem } from '../list.d';
 import './derateSubRow.less';
 
@@ -25,12 +27,17 @@ interface feeItemType {
     stay_amount: number;
     stayAmount: number;
     renter_name: string;
+    start_date: string;
+    end_date: string;
+    amount: string;
+    rowSpan?: number;
 }
 
 interface derateDetail {
     items: feeItemType[];
     proj_name: string;
     remark: string;
+    attachment: any[];
 }
 
 interface derateDetailType {}
@@ -50,6 +57,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         items: [],
         proj_name: '',
         remark: '',
+        attachment: [],
     }); // 减免详情
     const [isEditMode, setIsEditMode] = useState(false); // 是否编辑模式
 
@@ -64,12 +72,12 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 return;
             }
             const { data = { items: [] } } = res;
-            data.rooms = {};
+            const roomsMap: { [index: string]: feeItemType[] } = {};
             data.items.forEach((item: feeItemType) => {
-                if (data.rooms[item.room_name]) {
-                    data.rooms[item.room_name].push(item);
+                if (roomsMap[item.room_name]) {
+                    roomsMap[item.room_name].push(item);
                 } else {
-                    data.rooms[item.room_name] = [item];
+                    roomsMap[item.room_name] = [item];
                 }
                 if (Array.isArray(item.full_room_name)) {
                     item.full_room_name = item.full_room_name.join('、');
@@ -79,6 +87,17 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                     +item.demurrage_derated_amount > 0 ? item.demurrage_derated_amount : item.stayDemurrageAmount;
                 item.stay_amount = item.stayAmount;
                 item.renter_name = item.renter_organization_name;
+            });
+            const roomNames: string[] = Object.keys(roomsMap);
+            roomNames.forEach(roomName => {
+                const len = roomsMap[roomName].length;
+                for (let j = 0; j < len; j++) {
+                    if (j === 0) {
+                        roomsMap[roomName][j].rowSpan = len;
+                    } else {
+                        roomsMap[roomName][j].rowSpan = 0;
+                    }
+                }
             });
             setDetail(data);
         });
@@ -101,7 +120,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         {
             name: '合同编号',
             field: 'contract_code',
-            required: false,
+            required: true,
             value: (detail: derateDetail) => {
                 return (detail.items && detail.items[0] && detail.items[0].contract_code) || '';
             },
@@ -120,63 +139,89 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             required: false,
         },
     ];
-    const columns: ColumnProps<feeItem>[] = [
+    const columns: ColumnProps<feeItemType>[] = [
         {
-            dataIndex: 'code',
+            dataIndex: 'room_name',
             title: '资源',
-            width: 168,
-            render: (text: string, record: feeItem, index: number) => {
-                return {};
+            width: 240,
+            render: (text: string, record: feeItemType, index: number) => {
+                const tempObj = {
+                    children: record.full_room_name,
+                    props: {
+                        rowSpan: record.rowSpan,
+                    },
+                };
+                return tempObj;
             },
         },
-        // {
-        //     dataIndex: 'proj_name',
-        //     title: '项目名称',
-        //     width: 120,
-        //     render: (text: string, record: derateDetailType, index: number) => {
-        //         return <>{text || '-'}</>;
-        //     },
-        // },
-        // {
-        //     dataIndex: 'renter_organization_names',
-        //     title: '租客',
-        //     width: 136,
-        //     render: (text: string, record: derateDetailType, index: number) => {
-        //         let renterOrganizationNames = record.items.map(bill => bill.renter_organization_name);
-        //         renterOrganizationNames = [...new Set(renterOrganizationNames)];
-        //         return renterOrganizationNames.join(',');
-        //     },
-        // },
-        // {
-        //     dataIndex: 'items',
-        //     title: '资源',
-        //     width: 144,
-        //     render: (text: string, record: derateDetailType, index: number) => {
-        //         const items = record.items;
-        //         const resource = items.length > 0 ? items[0].full_room_name : '';
-        //         return <>{resource || '-'}</>;
-        //     },
-        // },
-        // {
-        //     dataIndex: 'created_on',
-        //     title: '申请日期',
-        //     width: 112,
-        //     render: (text: string, record: derateDetailType, index: number) => {
-        //         const createdOn = record.created_on && record.created_on.replace(/(.*)\s.*/, '$1');
-        //         return <>{createdOn || '-'}</>;
-        //     },
-        // },
-        // {
-        //     dataIndex: 'fee_item',
-        //     title: '减免费项',
-        //     width: 112,
-        //     render: (text: string, record: derateDetailType, index: number) => {
-        //         let feeName: any = Array.from(new Set(record.items.map(bill => bill.fee_name)));
-        //         feeName = feeName.join(',');
-        //         return <>{feeName || '-'}</>;
-        //     },
-        // }
+        {
+            dataIndex: 'fee_name',
+            title: '费项',
+            width: 144,
+            render: (text: string, record: feeItemType, index: number) => {
+                return text;
+            },
+        },
+        {
+            dataIndex: 'start_date',
+            title: '账期',
+            width: 224,
+            render: (text: string, record: feeItemType, index: number) => {
+                return `${record.start_date} 至 ${record.end_date}`;
+            },
+        },
+        {
+            dataIndex: 'amount',
+            title: '应收金额',
+            width: 120,
+            render: (text: string, record: feeItemType, index: number) => {
+                return comma(formatNum(+record.amount || '0.00'));
+            },
+        },
+        {
+            dataIndex: 'derate',
+            title: '本金减免金额',
+            width: 120,
+            render: (text: string, record: feeItemType, index: number) => {
+                return !isEditMode ? comma(formatNum(record.derated_amount || '0.00')) : null;
+            },
+        },
+        {
+            dataIndex: 'demurrageDerate',
+            title: '滞纳金减免金额',
+            width: 120,
+            render: (text: string, record: feeItemType, index: number) => {
+                return !isEditMode ? comma(formatNum(record.demurrage_derated_amount || '0.00')) : null;
+            },
+        },
+        {
+            dataIndex: 'totalDerate',
+            title: '本次减免金额',
+            width: 120,
+            render: (text: string, record: feeItemType, index: number) => {
+                const totalDeratedAmount =
+                    +(record.derated_amount || 0) * 1 + (record.demurrage_derated_amount || 0) * 1;
+                return comma(formatNum(totalDeratedAmount));
+            },
+        },
     ];
+    if (isEditMode) {
+        columns.push({
+            dataIndex: 'op',
+            title: '操作',
+            width: 120,
+            render: (text: string, record: feeItemType, index: number) => {
+                return <FedButton type="link">删除</FedButton>;
+            },
+        });
+    }
+    // 合计减免
+    const totalDeratedAmount = detail.items.reduce((total: number, item) => {
+        total = total + (item.derated_amount || 0) * 1 + (item.demurrage_derated_amount || 0) * 1;
+        console.log(total);
+        return total;
+    }, 0);
+
     return (
         <div className="derate-detail">
             <div className="head-area">
@@ -225,12 +270,17 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                     label="减免原因"
                                     rules={[
                                         {
-                                            required: true,
+                                            required: false,
                                         },
                                     ]}
                                 >
                                     {isEditMode ? (
-                                        <InputWithCount placeholder="请输入" maxLength={255} />
+                                        <InputWithCount
+                                            value={detail.remark}
+                                            placeholder="请输入"
+                                            maxLength={255}
+                                            onChange={handleRemarkChange}
+                                        />
                                     ) : (
                                         detail.remark || '-'
                                     )}
@@ -240,10 +290,20 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                     </Form>
                 </FedSection>
                 <FedSection title="减免明细" key="减免明细">
-                    <Table columns={columns} />
+                    <>
+                        <Table pagination={false} columns={columns} dataSource={detail.items} />
+                        <div className="total-bar">
+                            <span>本次合计减免：</span>
+                            <span>{comma(formatNum(totalDeratedAmount))}</span>
+                        </div>
+                    </>
                 </FedSection>
                 <FedSection title="减免附件" key="减免附件">
-                    <span>3</span>
+                    <Uploader
+                        files={detail.attachment}
+                        onChange={() => {}}
+                        description="注：单个附件最大支持10M，支持jpg/gif/png/pdf格式，已上传1/15"
+                    />
                 </FedSection>
             </div>
         </div>
