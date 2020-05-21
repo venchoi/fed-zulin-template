@@ -8,10 +8,9 @@
  */
 import React, { Fragment } from 'react';
 import { Upload, message, Button, Dropdown, Menu, Progress } from 'antd';
-import { randomStr, enCodeFileName } from '@/helper/commonUtils';
-import { getFileType, getOssDirectParams, getOssDirectImageDomain, getOssDirectDomain } from '@/helper/OssHelper';
+import { randomStr } from '@/helper/commonUtils';
+import { getFileType, getOssDirectDomain } from '@/helper/OssHelper';
 import config from '@/config';
-import moment from 'moment';
 import { UploadOutlined, MoreOutlined, DownloadOutlined } from '@ant-design/icons';
 import './index.less';
 //@ts-ignore
@@ -26,15 +25,15 @@ message.config({
 
 interface Props {
     files: any;
-    fileLength: number;
-    readonly: any;
+    fileLength?: number;
+    readonly?: any;
     description: any;
-    ossProtected: any;
+    ossProtected?: any;
     multiple?: boolean;
-    accept: any;
+    accept?: any;
     maxSize?: number;
     onChange: Function;
-    onReUploaded: Function;
+    onReUploaded?: Function;
 }
 class Uploader extends React.Component<Props> {
     constructor(props: any) {
@@ -261,11 +260,11 @@ class Uploader extends React.Component<Props> {
                                             {item.done ? (
                                                 <img
                                                     className="icon-file"
-                                                    src={
-                                                        (item.image_path &&
-                                                            `${item.auth_file_path || item.image_path}`) ||
-                                                        require(`../../../static/images/icon-file/${fileIconName}`)
-                                                    }
+                                                    // src={
+                                                    //     (item.image_path &&
+                                                    //         `${item.auth_file_path || item.image_path}`) ||
+                                                    //     require(`../../../static/images/icon-file/${fileIconName}`)
+                                                    // }
                                                     alt=""
                                                 />
                                             ) : (
@@ -286,11 +285,11 @@ class Uploader extends React.Component<Props> {
                                         </div>
                                     ) : (
                                         <div className="attachment-item" key={item.id}>
-                                            <img
+                                            {/* <img
                                                 className="icon-file"
                                                 src={require(`../../../static/images/icon-file/${fileIconName}`)}
                                                 alt=""
-                                            />
+                                            /> */}
                                             <div>
                                                 <div className="file-name">{item.file_name}</div>
                                                 {item.process === 100 ? (
@@ -341,11 +340,11 @@ class Uploader extends React.Component<Props> {
                                   ) : (
                                       <div className="inline-block">
                                           <div className="attachment-list" key={item.id}>
-                                              <img
+                                              {/* <img
                                                   className="icon-file"
                                                   src={require(`src/static/images/icon-file/${fileIconName}`)}
                                                   alt=""
-                                              />
+                                              /> */}
                                               <div>
                                                   <div className="file-name">{item.file_name}</div>
                                                   <div className="file-description">{item.upload_time}</div>

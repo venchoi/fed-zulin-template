@@ -279,7 +279,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                             value={detail.remark}
                                             placeholder="请输入"
                                             maxLength={255}
-                                            onChange={handleRemarkChange}
+                                            // onChange={handleRemarkChange}
                                         />
                                     ) : (
                                         detail.remark || '-'
