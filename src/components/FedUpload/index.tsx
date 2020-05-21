@@ -3,7 +3,8 @@ import { UploadOutlined } from '@ant-design/icons';
 import { Upload, Button } from 'antd';
 import { UploadProps } from 'antd/es/upload';
 import './index.less';
-
+const modelsFile = require.context('../assets/img/icon-file', true);
+console.log(modelsFile, 'modelsFile');
 interface IUploadProps extends UploadProps {}
 
 interface TypeMap {

@@ -368,7 +368,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 <FedSection title="减免附件" key="减免附件">
                     <Uploader
                         files={detail.attachment || []}
-                        onChange={() => {}}
+                        // onChange={() => {}}
                         // description="注：单个附件最大支持10M，支持jpg/gif/png/pdf格式，已上传1/15"
                     />
                 </FedSection>

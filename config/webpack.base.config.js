@@ -86,8 +86,11 @@ module.exports = {
                                 options: {
                                     javascriptEnabled: true,
                                     modifyVars: {
-                                        'hack': `true; @import "${path.resolve(__dirname, '../src/assets/less/antd/index.less')}";`,
-                                    }
+                                        hack: `true; @import "${path.resolve(
+                                            __dirname,
+                                            '../src/assets/less/antd/index.less'
+                                        )}";`,
+                                    },
                                     // modifyVars: antOverride,
                                 },
                             },
@@ -102,6 +105,7 @@ module.exports = {
                                     limit: 1024 * 1,
                                     outputPath: '/',
                                     name: '[name].[hash:5].[ext]',
+                                    esModule: false,
                                 },
                             },
                         ],

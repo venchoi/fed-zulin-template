@@ -4,6 +4,7 @@ import { Spin } from 'antd';
 import Layout from './routers/layout';
 import { RouteComponentProps } from 'dva/router';
 import Loadable from 'react-loadable';
+
 interface Props extends RouteComponentProps {
     getState?: any;
     dispatch?: any;
