@@ -3,7 +3,7 @@ const htmlWebpackPlugin = require('html-webpack-plugin');
 const hardSourcePlugin = require('hard-source-webpack-plugin');
 const webpack = require('webpack');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const antOverride = require('../src/vendor/antd');
+// const antOverride = require('../src/vendor/antd');
 
 module.exports = {
     entry: {
