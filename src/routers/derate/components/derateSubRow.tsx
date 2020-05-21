@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Row, Col, Table, message } from 'antd';
+import { Form, Row, Col, Table, message, Input } from 'antd';
 import { ColumnProps } from 'antd/es/table';
 import FedButton from '@c/FedButton';
 import FedSection from '@c/FedSection';
@@ -14,13 +14,15 @@ interface derateSubRowProps {
     record: derateType;
 }
 
+type status = '' | 'success' | 'warning' | 'error' | 'validating';
+
 interface feeItemType {
     renter_organization_name: string;
     contract_code?: string;
     room_name: string;
     full_room_name: string;
-    derated_amount: number;
-    tempDerateAmount: number;
+    derated_amount: number | string;
+    tempDerateAmount: number | string;
     demurrage_derated_amount: number;
     stayDemurrageAmount: number;
     stay_demurrage_amount: number;
@@ -31,6 +33,8 @@ interface feeItemType {
     end_date: string;
     amount: string;
     rowSpan?: number;
+    validateStatus?: status;
+    isDemurrage: boolean;
 }
 
 interface derateDetail {
@@ -53,6 +57,8 @@ const layout = {
 
 export const DerateSubRow = (props: derateSubRowProps) => {
     const [form] = Form.useForm();
+    const [selectedRowKeys, setSelectedRowKeys] = useState<any>([]);
+    const [selectedRows, setSelectedRows] = useState<any>([]);
     const [detail, setDetail] = useState<derateDetail>({
         items: [],
         proj_name: '',
@@ -73,21 +79,41 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             }
             const { data = { items: [] } } = res;
             const roomsMap: { [index: string]: feeItemType[] } = {};
+            data.copyItems = [];
             data.items.forEach((item: feeItemType) => {
-                if (roomsMap[item.room_name]) {
-                    roomsMap[item.room_name].push(item);
-                } else {
-                    roomsMap[item.room_name] = [item];
+                const copyItem = {
+                    isDemurrage: false,
+                    ...item,
+                };
+                const copyDemurrageItem = {
+                    isDemurrage: true,
+                    ...item,
+                };
+                if (!roomsMap[item.room_name]) {
+                    roomsMap[item.room_name] = [];
                 }
-                if (Array.isArray(item.full_room_name)) {
-                    item.full_room_name = item.full_room_name.join('、');
+                if ((copyItem.stayAmount || 0) * 1 > 0) {
+                    roomsMap[item.room_name].push(copyItem);
                 }
-                item.tempDerateAmount = item.derated_amount;
-                item.stay_demurrage_amount =
-                    +item.demurrage_derated_amount > 0 ? item.demurrage_derated_amount : item.stayDemurrageAmount;
-                item.stay_amount = item.stayAmount;
-                item.renter_name = item.renter_organization_name;
+                if ((copyItem.stayDemurrageAmount || 0) * 1 > 0) {
+                    roomsMap[item.room_name].push(copyDemurrageItem);
+                }
+                if (Array.isArray(copyItem.full_room_name)) {
+                    copyItem.full_room_name = copyItem.full_room_name.join('、');
+                }
+                if (Array.isArray(copyDemurrageItem.full_room_name)) {
+                    copyDemurrageItem.full_room_name = copyDemurrageItem.full_room_name.join('、');
+                }
+                copyItem.renter_name = copyItem.renter_organization_name;
+                copyDemurrageItem.renter_name = copyDemurrageItem.renter_organization_name;
+                if ((copyItem.stayAmount || 0) * 1 > 0) {
+                    data.copyItems.push(copyItem);
+                }
+                if ((copyItem.stayDemurrageAmount || 0) * 1 > 0) {
+                    data.copyItems.push(copyDemurrageItem);
+                }
             });
+            data.items = data.copyItems;
             const roomNames: string[] = Object.keys(roomsMap);
             roomNames.forEach(roomName => {
                 const len = roomsMap[roomName].length;
@@ -106,6 +132,33 @@ export const DerateSubRow = (props: derateSubRowProps) => {
     const handleCancelEdit = () => {
         setIsEditMode(false);
     };
+
+    const handleRemarkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const remark = e.target.value;
+        setDetail({
+            ...detail,
+            remark: remark,
+        });
+    };
+
+    const handleDerateAmountChange = (record: feeItemType) => {
+        return (e: React.ChangeEvent<HTMLInputElement>) => {
+            console.log(e);
+            let value: any = e.target.value || '';
+            value = value.replace(/[^0-9\.]/g, '');
+            value = value.replace(/(\d*\.\d{1,2})(.*)/, '$1');
+            if (value * 100 - (record.stayAmount || 0) * 100 > 0) {
+                record.validateStatus = 'error';
+            } else {
+                record.validateStatus = '';
+            }
+            record.derated_amount = value;
+            setDetail({
+                ...detail,
+            });
+        };
+    };
+
     const basicInfoForms = [
         {
             name: '租客',
@@ -139,11 +192,20 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             required: false,
         },
     ];
+
+    const rowSelection = {
+        selectedRowKeys,
+        onChange: (selectedRowKeys: any, selectedRows: any[]) => {
+            setSelectedRowKeys(selectedRowKeys);
+            setSelectedRows(selectedRows);
+        },
+    };
+
     const columns: ColumnProps<feeItemType>[] = [
         {
             dataIndex: 'room_name',
             title: '资源',
-            width: 240,
+            width: 192,
             render: (text: string, record: feeItemType, index: number) => {
                 const tempObj = {
                     children: record.full_room_name,
@@ -157,9 +219,9 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         {
             dataIndex: 'fee_name',
             title: '费项',
-            width: 144,
+            width: 137,
             render: (text: string, record: feeItemType, index: number) => {
-                return text;
+                return record.isDemurrage ? '滞纳金' : text;
             },
         },
         {
@@ -174,50 +236,50 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             dataIndex: 'amount',
             title: '应收金额',
             width: 120,
+            align: 'right',
             render: (text: string, record: feeItemType, index: number) => {
-                return comma(formatNum(+record.amount || '0.00'));
+                return record.isDemurrage
+                    ? comma(formatNum(+record.stayDemurrageAmount || '0.00'))
+                    : comma(formatNum(+record.amount || '0.00'));
+            },
+        },
+        {
+            dataIndex: 'amount',
+            title: '可减免金额',
+            width: 120,
+            align: 'right',
+            render: (text: string, record: feeItemType, index: number) => {
+                return record.isDemurrage
+                    ? comma(formatNum(+record.stayDemurrageAmount || '0.00'))
+                    : comma(formatNum(+record.stayAmount || '0.00'));
             },
         },
         {
             dataIndex: 'derate',
-            title: '本金减免金额',
+            title: '减免金额',
             width: 120,
+            align: 'right',
             render: (text: string, record: feeItemType, index: number) => {
-                return !isEditMode ? comma(formatNum(record.derated_amount || '0.00')) : null;
-            },
-        },
-        {
-            dataIndex: 'demurrageDerate',
-            title: '滞纳金减免金额',
-            width: 120,
-            render: (text: string, record: feeItemType, index: number) => {
-                return !isEditMode ? comma(formatNum(record.demurrage_derated_amount || '0.00')) : null;
-            },
-        },
-        {
-            dataIndex: 'totalDerate',
-            title: '本次减免金额',
-            width: 120,
-            render: (text: string, record: feeItemType, index: number) => {
-                const totalDeratedAmount =
-                    +(record.derated_amount || 0) * 1 + (record.demurrage_derated_amount || 0) * 1;
-                return comma(formatNum(totalDeratedAmount));
+                const deratedAmount = record.isDemurrage
+                    ? comma(formatNum(record.demurrage_derated_amount || '0.00'))
+                    : comma(formatNum(record.derated_amount || '0.00'));
+                const deratedFormItem = record.isDemurrage ? (
+                    <Form.Item validateStatus={record.validateStatus}>
+                        <Input disabled value={record.demurrage_derated_amount} />
+                    </Form.Item>
+                ) : (
+                    <Form.Item validateStatus={record.validateStatus}>
+                        <Input onChange={handleDerateAmountChange(record)} value={record.derated_amount} />
+                    </Form.Item>
+                );
+                return !isEditMode ? deratedAmount : deratedFormItem;
             },
         },
     ];
-    if (isEditMode) {
-        columns.push({
-            dataIndex: 'op',
-            title: '操作',
-            width: 120,
-            render: (text: string, record: feeItemType, index: number) => {
-                return <FedButton type="link">删除</FedButton>;
-            },
-        });
-    }
     // 合计减免
     const totalDeratedAmount = detail.items.reduce((total: number, item) => {
-        total = total + (item.derated_amount || 0) * 1 + (item.demurrage_derated_amount || 0) * 1;
+        total =
+            total + (!item.isDemurrage ? (+item.derated_amount || 0) * 1 : (item.demurrage_derated_amount || 0) * 1);
         console.log(total);
         return total;
     }, 0);
@@ -276,7 +338,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                 >
                                     {isEditMode ? (
                                         <InputWithCount
-                                            value={detail.remark}
+                                            defaultValue={detail.remark}
                                             placeholder="请输入"
                                             maxLength={255}
                                             // onChange={handleRemarkChange}
@@ -291,7 +353,12 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 </FedSection>
                 <FedSection title="减免明细" key="减免明细">
                     <>
-                        <Table pagination={false} columns={columns} dataSource={detail.items} />
+                        <Table
+                            rowSelection={rowSelection}
+                            pagination={false}
+                            columns={columns}
+                            dataSource={detail.items}
+                        />
                         <div className="total-bar">
                             <span>本次合计减免：</span>
                             <span>{comma(formatNum(totalDeratedAmount))}</span>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from 'antd';
 import './inputWithCount.less';
 interface InputWithCountType {
@@ -9,7 +9,7 @@ interface InputWithCountType {
 
 export const InputWithCount = (props: InputWithCountType) => {
     const { maxLength, onChange } = props;
-    const [inputLen, setInputLen] = useState(0);
+    const [inputLen, setInputLen] = useState(props.defaultValue ? props.defaultValue.length : 0);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const value = e.target.value;
         setInputLen(value.length);
