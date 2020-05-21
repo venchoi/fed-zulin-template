@@ -1,3 +1,5 @@
+import { fileType } from './common';
+
 export interface getTreeDataParams {}
 
 export interface getTemplateIsEnabled {
@@ -13,5 +15,19 @@ export interface getDerateListParams {
 }
 
 export interface getDerateDetailParams {
+    id: string;
+}
+
+interface derateItemType {
+    bill_item_id: string;
+    derated_amount?: string | number;
+    demurrage_derated_amount?: string | number;
+}
+
+export interface saveDataType {
+    attachment: fileType[];
+    derated_items: derateItemType[];
+    remark?: string;
+    proj_id: string;
     id: string;
 }

@@ -51,7 +51,7 @@ export interface statusMapType {
 }
 
 export interface responseType {
-    status?: boolean;
+    result?: boolean;
     msg?: string;
     data?: any[];
 }

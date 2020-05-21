@@ -4,6 +4,7 @@ import {
     getTemplateIsEnabled,
     getDerateListParams,
     getDerateDetailParams,
+    saveDataType,
 } from '@/types/derateTypes';
 
 export const getProjectTreeData = (data: getTreeDataParams) => {
@@ -20,4 +21,8 @@ export const getDerateList = (data: getDerateListParams) => {
 
 export const getDerateDetail = (data: getDerateDetailParams) => {
     return ajax('/bill/derated/detail', { ...data, _csrf: '' }, 'GET');
+};
+
+export const submitDerate = (data: saveDataType) => {
+    return ajax('/bill/derated/edit', { ...data, _csrf: '' }, 'POST');
 };

@@ -8,4 +8,11 @@ export interface fileType {
     process: number;
     status: string;
     type: string;
+    edit?: string | boolean;
+}
+
+export interface responseType {
+    status?: boolean;
+    msg?: string;
+    data?: any[];
 }

@@ -1,53 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Row, Col, Table, message, Input } from 'antd';
-import { ColumnProps } from 'antd/es/table';
+import { Form, Row, Col, Table, message, Input, Spin } from 'antd';
 import FedButton from '@c/FedButton';
 import FedSection from '@c/FedSection';
 import Uploader from '@c/Uploader';
-import { getDerateDetail } from '@s/derate';
+import { getDerateDetail, getDerateList } from '@s/derate';
 import InputWithCount from './InputWithCount';
 import { formatNum, comma } from '@/helper/commonUtils';
-import { derateType, feeItem } from '../list.d';
+import { ColumnProps } from 'antd/es/table';
+import { derateType, feeItem, responseType } from '../list.d';
 import { fileType } from '@/types/common';
+import { submitDerate } from '@s/derate';
 import './derateSubRow.less';
-
-interface derateSubRowProps {
-    record: derateType;
-}
-
-type status = '' | 'success' | 'warning' | 'error' | 'validating';
-
-interface feeItemType {
-    id: string;
-    renter_organization_name: string;
-    contract_code?: string;
-    room_name: string;
-    full_room_name: string;
-    derated_amount: number | string;
-    tempDerateAmount: number | string;
-    demurrage_derated_amount: number;
-    stayDemurrageAmount: number;
-    stay_demurrage_amount: number;
-    stay_amount: number;
-    stayAmount: number;
-    renter_name: string;
-    start_date: string;
-    end_date: string;
-    amount: string;
-    rowSpan?: number;
-    validateStatus?: status;
-    isDemurrage: boolean;
-}
-
-interface derateDetail {
-    items: feeItemType[];
-    proj_name: string;
-    remark: string;
-    attachment: fileType[];
-}
-
-interface derateDetailType {}
-
+import { derateSubRowProps, status, feeItemType, derateDetail, saveDataType } from './derateSubRow.d';
 const layout = {
     labelCol: {
         style: {
@@ -66,74 +30,83 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         proj_name: '',
         remark: '',
         attachment: [],
+        proj_id: '',
+        id: '',
     }); // 减免详情
     const [isEditMode, setIsEditMode] = useState(false); // 是否编辑模式
-
-    useEffect(() => {
+    const [loading, setLoading] = useState(false);
+    const fetchDerateDetail = () => {
         const id = props.record.id;
         if (!id) {
             return;
         }
-        getDerateDetail({ id }).then(res => {
-            if (!res.result) {
-                message.error(res.msg || '获取失败');
-                return;
-            }
-            const { data = { items: [] } } = res;
-            const roomsMap: { [index: string]: feeItemType[] } = {};
-            data.copyItems = [];
-            data.items.forEach((item: feeItemType) => {
-                const copyItem = {
-                    isDemurrage: false,
-                    ...item,
-                };
-                const copyDemurrageItem = {
-                    isDemurrage: true,
-                    ...item,
-                };
-                if (!roomsMap[item.room_name]) {
-                    roomsMap[item.room_name] = [];
+        setLoading(true);
+        getDerateDetail({ id })
+            .then(res => {
+                if (!res.result) {
+                    message.error(res.msg || '获取失败');
+                    return;
                 }
-                if ((copyItem.stayAmount || 0) * 1 > 0) {
-                    roomsMap[item.room_name].push(copyItem);
-                }
-                if ((copyItem.stayDemurrageAmount || 0) * 1 > 0) {
-                    roomsMap[item.room_name].push(copyDemurrageItem);
-                }
-                if (Array.isArray(copyItem.full_room_name)) {
-                    copyItem.full_room_name = copyItem.full_room_name.join('、');
-                }
-                if (Array.isArray(copyDemurrageItem.full_room_name)) {
-                    copyDemurrageItem.full_room_name = copyDemurrageItem.full_room_name.join('、');
-                }
-                copyItem.renter_name = copyItem.renter_organization_name;
-                copyDemurrageItem.renter_name = copyDemurrageItem.renter_organization_name;
-                if ((copyItem.stayAmount || 0) * 1 > 0) {
-                    data.copyItems.push(copyItem);
-                }
-                if ((copyItem.stayDemurrageAmount || 0) * 1 > 0) {
-                    data.copyItems.push(copyDemurrageItem);
-                }
-            });
-            data.items = data.copyItems;
-            const selectedRowKeys = data.items.map((item: feeItemType) => {
-                return item.id + (item.isDemurrage ? '1' : '0');
-            });
-            console.log(selectedRowKeys);
-            setSelectedRowKeys(selectedRowKeys);
-            const roomNames: string[] = Object.keys(roomsMap);
-            roomNames.forEach(roomName => {
-                const len = roomsMap[roomName].length;
-                for (let j = 0; j < len; j++) {
-                    if (j === 0) {
-                        roomsMap[roomName][j].rowSpan = len;
-                    } else {
-                        roomsMap[roomName][j].rowSpan = 0;
+                const { data = { items: [] } } = res;
+                const roomsMap: { [index: string]: feeItemType[] } = {};
+                data.copyItems = [];
+                data.items.forEach((item: feeItemType) => {
+                    const copyItem = {
+                        isDemurrage: false,
+                        ...item,
+                    };
+                    const copyDemurrageItem = {
+                        isDemurrage: true,
+                        ...item,
+                    };
+                    if (!roomsMap[item.room_name]) {
+                        roomsMap[item.room_name] = [];
                     }
-                }
+                    if ((copyItem.stayAmount || 0) * 1 > 0) {
+                        roomsMap[item.room_name].push(copyItem);
+                    }
+                    if ((copyItem.stayDemurrageAmount || 0) * 1 > 0) {
+                        roomsMap[item.room_name].push(copyDemurrageItem);
+                    }
+                    if (Array.isArray(copyItem.full_room_name)) {
+                        copyItem.full_room_name = copyItem.full_room_name.join('、');
+                    }
+                    if (Array.isArray(copyDemurrageItem.full_room_name)) {
+                        copyDemurrageItem.full_room_name = copyDemurrageItem.full_room_name.join('、');
+                    }
+                    copyItem.renter_name = copyItem.renter_organization_name;
+                    copyDemurrageItem.renter_name = copyDemurrageItem.renter_organization_name;
+                    if ((copyItem.stayAmount || 0) * 1 > 0) {
+                        data.copyItems.push(copyItem);
+                    }
+                    if ((copyItem.stayDemurrageAmount || 0) * 1 > 0) {
+                        data.copyItems.push(copyDemurrageItem);
+                    }
+                });
+                data.items = data.copyItems;
+                const selectedRowKeys = data.items.map((item: feeItemType) => {
+                    return item.id + (item.isDemurrage ? '1' : '0');
+                });
+                setSelectedRowKeys(selectedRowKeys);
+                const roomNames: string[] = Object.keys(roomsMap);
+                roomNames.forEach(roomName => {
+                    const len = roomsMap[roomName].length;
+                    for (let j = 0; j < len; j++) {
+                        if (j === 0) {
+                            roomsMap[roomName][j].rowSpan = len;
+                        } else {
+                            roomsMap[roomName][j].rowSpan = 0;
+                        }
+                    }
+                });
+                setDetail(data);
+            })
+            .finally(() => {
+                setLoading(false);
             });
-            setDetail(data);
-        });
+    };
+    useEffect(() => {
+        fetchDerateDetail();
     }, [props.record.id]);
 
     const handleCancelEdit = () => {
@@ -208,10 +181,61 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         },
     ];
 
+    const handleSave = () => {
+        const { attachment, remark, proj_id, id } = detail;
+        const params: saveDataType = {
+            attachment,
+            derated_items: [],
+            remark: remark,
+            proj_id,
+            id,
+        };
+        params.attachment.forEach((attach: fileType) => delete attach.edit);
+        if (selectedRowKeys.length === 0) {
+            message.error('没有选择的减免明细');
+            return;
+        }
+        const billsMap: { [index: string]: feeItemType[] } = {};
+        detail.items.forEach((item: feeItemType) => {
+            if (!billsMap[item.bill_item_id]) {
+                billsMap[item.bill_item_id] = [];
+            }
+            billsMap[item.bill_item_id].push(item);
+        });
+        params.derated_items = Object.keys(billsMap).map(billItemId => {
+            let deratedAmount, demurrageDeratedAmount;
+            billsMap[billItemId].forEach(innerItem => {
+                if (innerItem.isDemurrage) {
+                    deratedAmount = innerItem.derated_amount;
+                } else {
+                    demurrageDeratedAmount = innerItem.demurrage_derated_amount;
+                }
+            });
+            return {
+                bill_item_id: billItemId,
+                derated_amount: deratedAmount,
+                demurrage_derated_amount: demurrageDeratedAmount,
+            };
+        });
+        setLoading(true);
+        submitDerate(params)
+            .then((res: responseType) => {
+                if (res.result) {
+                    message.success('保存成功！');
+                    setIsEditMode(false);
+                    fetchDerateDetail();
+                } else {
+                    message.error(res.msg || `保存失败`);
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    };
+
     const rowSelection = {
         selectedRowKeys,
         onChange: (selectedRowKeys: any, selectedRows: any[]) => {
-            console.log(selectedRowKeys);
             setSelectedRowKeys(selectedRowKeys);
             setSelectedRows(selectedRows);
         },
@@ -308,98 +332,104 @@ export const DerateSubRow = (props: derateSubRowProps) => {
     }, 0);
 
     return (
-        <div className="derate-detail">
-            <div className="head-area">
-                <span className="title">减免详情</span>
-                <div className="op-btns">
-                    {isEditMode ? (
+        <Spin spinning={loading}>
+            <div className="derate-detail">
+                <div className="head-area">
+                    <span className="title">减免详情</span>
+                    <div className="op-btns">
+                        {isEditMode ? (
+                            <>
+                                <FedButton type="primary" size="small" onClick={handleSave}>
+                                    保存
+                                </FedButton>
+                                <FedButton size="small" onClick={handleCancelEdit}>
+                                    取消
+                                </FedButton>
+                            </>
+                        ) : (
+                            <FedButton size="small" onClick={() => setIsEditMode(true)}>
+                                编辑
+                            </FedButton>
+                        )}
+                    </div>
+                </div>
+                <div className="content-area">
+                    <FedSection title="基本信息" key="基本信息">
+                        <Form {...layout} form={form} name="advanced_search" className="ant-advanced-search-form">
+                            <Row gutter={24}>
+                                {basicInfoForms.map((formItem, i) => {
+                                    return (
+                                        <Col span={8} key={i} className="derate-detail-form-item">
+                                            <Form.Item
+                                                name={formItem.field}
+                                                label={formItem.name}
+                                                rules={[
+                                                    {
+                                                        required: formItem.required,
+                                                    },
+                                                ]}
+                                            >
+                                                {formItem.value ? formItem.value(detail) : '-'}
+                                            </Form.Item>
+                                        </Col>
+                                    );
+                                })}
+                                <Col span={16} key={5}>
+                                    <Form.Item
+                                        name="remark"
+                                        label="减免原因"
+                                        rules={[
+                                            {
+                                                required: false,
+                                            },
+                                        ]}
+                                    >
+                                        {isEditMode ? (
+                                            <InputWithCount
+                                                defaultValue={detail.remark}
+                                                placeholder="请输入"
+                                                maxLength={255}
+                                                // onChange={handleRemarkChange}
+                                            />
+                                        ) : (
+                                            detail.remark || '-'
+                                        )}
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        </Form>
+                    </FedSection>
+                    <FedSection title="减免明细" key="减免明细">
                         <>
-                            <FedButton type="primary" size="small" ghost>
-                                保存
-                            </FedButton>
-                            <FedButton size="small" onClick={handleCancelEdit}>
-                                取消
-                            </FedButton>
+                            <Table
+                                rowSelection={isEditMode ? rowSelection : undefined}
+                                pagination={false}
+                                columns={columns}
+                                dataSource={detail.items}
+                                rowKey={(record: feeItemType) => {
+                                    return record.id + (record.isDemurrage ? '1' : '0');
+                                }}
+                            />
+                            <div className="total-bar">
+                                <span>本次合计减免：</span>
+                                <span>{comma(formatNum(totalDeratedAmount))}</span>
+                            </div>
                         </>
-                    ) : (
-                        <FedButton size="small" onClick={() => setIsEditMode(true)}>
-                            编辑
-                        </FedButton>
-                    )}
+                    </FedSection>
+                    <FedSection title="减免附件" key="减免附件">
+                        {(detail.attachment && detail.attachment.length > 0) || isEditMode ? (
+                            <Uploader
+                                files={detail.attachment}
+                                onChange={handleAttachmentChange}
+                                readonly={!isEditMode}
+                            />
+                        ) : (
+                            <span>-</span>
+                        )}
+                    </FedSection>
                 </div>
             </div>
-            <div className="content-area">
-                <FedSection title="基本信息" key="基本信息">
-                    <Form {...layout} form={form} name="advanced_search" className="ant-advanced-search-form">
-                        <Row gutter={24}>
-                            {basicInfoForms.map((formItem, i) => {
-                                return (
-                                    <Col span={8} key={i} className="derate-detail-form-item">
-                                        <Form.Item
-                                            name={formItem.field}
-                                            label={formItem.name}
-                                            rules={[
-                                                {
-                                                    required: formItem.required,
-                                                },
-                                            ]}
-                                        >
-                                            {formItem.value ? formItem.value(detail) : '-'}
-                                        </Form.Item>
-                                    </Col>
-                                );
-                            })}
-                            <Col span={16} key={5}>
-                                <Form.Item
-                                    name="remark"
-                                    label="减免原因"
-                                    rules={[
-                                        {
-                                            required: false,
-                                        },
-                                    ]}
-                                >
-                                    {isEditMode ? (
-                                        <InputWithCount
-                                            defaultValue={detail.remark}
-                                            placeholder="请输入"
-                                            maxLength={255}
-                                            // onChange={handleRemarkChange}
-                                        />
-                                    ) : (
-                                        detail.remark || '-'
-                                    )}
-                                </Form.Item>
-                            </Col>
-                        </Row>
-                    </Form>
-                </FedSection>
-                <FedSection title="减免明细" key="减免明细">
-                    <>
-                        <Table
-                            rowSelection={isEditMode ? rowSelection : undefined}
-                            pagination={false}
-                            columns={columns}
-                            dataSource={detail.items}
-                            rowKey={(record: feeItemType) => {
-                                return record.id + (record.isDemurrage ? '1' : '0');
-                            }}
-                        />
-                        <div className="total-bar">
-                            <span>本次合计减免：</span>
-                            <span>{comma(formatNum(totalDeratedAmount))}</span>
-                        </div>
-                    </>
-                </FedSection>
-                <FedSection title="减免附件" key="减免附件">
-                    {(detail.attachment && detail.attachment.length > 0) || isEditMode ? (
-                        <Uploader files={detail.attachment} onChange={handleAttachmentChange} readonly={!isEditMode} />
-                    ) : (
-                        <span>-</span>
-                    )}
-                </FedSection>
-            </div>
-        </div>
+        </Spin>
     );
 };
 
