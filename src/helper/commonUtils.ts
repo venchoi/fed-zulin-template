@@ -108,3 +108,15 @@ export function enCodeFileName(url: string) {
     }
     return url;
 }
+
+/**
+ * 生成随机字符串
+ * @returns {string}
+ */
+export function randomStr() {
+    return (
+        Math.random()
+            .toString(32)
+            .slice(2) + (+new Date()).toString(16)
+    );
+}

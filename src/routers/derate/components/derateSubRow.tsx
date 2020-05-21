@@ -341,7 +341,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                             defaultValue={detail.remark}
                                             placeholder="请输入"
                                             maxLength={255}
-                                            onChange={handleRemarkChange}
+                                            // onChange={handleRemarkChange}
                                         />
                                     ) : (
                                         detail.remark || '-'
@@ -366,13 +366,11 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                     </>
                 </FedSection>
                 <FedSection title="减免附件" key="减免附件">
-                    {/* <Uploader
+                    <Uploader
                         files={detail.attachment}
-                        onChange={(file: any, fileList: any) => {
-                            return {}
-                        }}
-                        description="注：单个附件最大支持10M，支持jpg/gif/png/pdf格式，已上传1/15"
-                    /> */}
+                        onChange={() => {}}
+                        // description="注：单个附件最大支持10M，支持jpg/gif/png/pdf格式，已上传1/15"
+                    />
                 </FedSection>
             </div>
         </div>

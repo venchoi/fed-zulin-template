@@ -8,7 +8,7 @@ const dev_config = {
     devServer: {
         contentBase: '/',
         open: true,
-        port: 8807,
+        port: 8808,
         hot: true,
         host: 'rental-dev.mysoft.com.cn',
         headers: {
@@ -22,6 +22,13 @@ const dev_config = {
                 pathRewrite: {
                     '^/api': '',
                 },
+            },
+            '/auth': {
+                target: proxyConfig.target,
+                changeOrigin: true,
+                // pathRewrite: {
+                //     '^/api': '',
+                // },
             },
         },
         disableHostCheck: true,

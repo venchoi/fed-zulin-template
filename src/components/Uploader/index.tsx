@@ -1,148 +1,88 @@
 /*
  * @作者: 谭金杰
- * @创建时间: 2020-05-20 16:52:10
+ * @创建时间: 2020-05-21 14:33:47
  * @最后修改人:   谭金杰
- * @最后修改日期: 2020-05-20 16:52:10
+ * @最后修改日期: 2020-05-21 14:33:47
  */ /**
- * 文件上传
- * @param
- * accept = 'image/*',
- * maxNum = 15, 单次上传
- *  maxSize = 10, 文件大小
- *  defaultFileList,  默认文件列表
- * maxFile = 50 全部文件个数
- * multiple 多个文件上传
- * listType  文件上传后展示模式
- * disabled 禁止
- * create by miracle 2019年4月18日16:13:38
+ * 修改缴费通知单页面
  */
-import React from 'react';
-// import Upload from 'rc-upload'
-import { Upload, message } from 'antd';
-import moment from 'moment';
-import { getFileType, getOssDirectDomain, getOssDirectParams } from '@/helper/OssHelper';
+import React, { Fragment } from 'react';
+import { Upload, message, Button, Dropdown, Menu, Progress } from 'antd';
+import { randomStr } from '@/helper/commonUtils';
+import { getFileType, getOssDirectDomain } from '@/helper/OssHelper';
+import config from '@/config';
+import { UploadOutlined, MoreOutlined, DownloadOutlined } from '@ant-design/icons';
 import './index.less';
-import { enCodeFileName } from '@/helper/commonUtils';
-
-const { Dragger } = Upload;
 //@ts-ignore
 import { ObjectUpload } from 'fedtoolgroup';
+const { DEV } = config;
+message.config({
+    top: 100,
+    duration: 2,
+    maxCount: 3,
+    rtl: true,
+});
 
 interface Props {
-    defaultFileList?: Array<any>;
-    disabled?: boolean;
-    multiple?: boolean;
-    maxFile?: number;
-    listType?: 'picture' | 'text' | 'picture-card' | undefined;
-    drag?: boolean;
-    accept?: string;
+    files: any;
+    fileLength?: number;
+    readonly?: any;
+    description?: any;
     ossProtected?: any;
-    maxNum?: number;
+    multiple?: boolean;
+    accept?: any;
     maxSize?: number;
-    reuploadMode: any;
-    onRemove?: (file: any) => {};
-    onChange?: (file: any, fileList: any) => {};
-    noMessage?: any;
-    onReUploaded?: (fileList: any) => {};
-    onError: any;
+    onChange: Function;
+    onReUploaded?: Function;
 }
-
-interface State {
-    defaultAccept: string;
-    fileList: Array<any>;
-}
-
-export default class FileUpload extends React.Component<Props, State> {
-    constructor(props: Props) {
+class Uploader extends React.Component<Props> {
+    constructor(props: any) {
         super(props);
-        const { defaultFileList = [], disabled } = this.props;
-        // 初始化配置
-        this.state = {
-            fileList: [...defaultFileList], // 上传的文件列表
-            defaultAccept:
-                'image/png,image/jpeg,image/jpg,image/gif,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel',
-        };
-        this.initUploadConfig();
+        this.reUpload = false;
+        this.reUploadIndex = 0;
+        this.clickUploadRef = React.createRef();
     }
-
-    uploaderProps: any = {};
+    reUpload = false;
+    reUploadIndex = 0;
+    clickUploadRef: any = {};
 
     componentDidMount() {
         ObjectUpload.init();
     }
 
     render() {
-        const {
-            children,
-            multiple = true,
-            accept,
-            listType = 'picture',
-            drag = false,
-            disabled = false,
-            maxFile = 50,
-        } = this.props;
-        const { defaultAccept, fileList } = this.state;
+        const { files, fileLength = 30, readonly, description, ossProtected, multiple = false } = this.props;
+        const accept = ['docx', 'xlsx', 'pptx', 'pdf', 'rar', 'zip'];
 
-        const props = {
-            ...this.uploaderProps,
-            accept: accept || defaultAccept,
+        const _this = this;
+        const config = {
             multiple: true,
-            fileList,
-            listType,
+            disabled: (files && files.length) >= fileLength,
+            // action: getOssDirectDomain(),
+            action:
+                false && DEV ? 'https://www.mocky.io/v2/5cc8019d300000980a055e76' : getOssDirectDomain(ossProtected),
             className: 'upload-list-inline',
-            disabled,
-        };
-
-        return (
-            <div className="file-upload-wrapper">
-                {drag ? (
-                    //@ts-ignore
-                    <Dragger {...props}>{fileList.length >= maxFile ? null : children}</Dragger>
-                ) : (
-                    <Upload
-                        {...this.uploaderProps}
-                        accept={accept || defaultAccept}
-                        multiple={multiple}
-                        fileList={fileList}
-                        listType={listType}
-                        disabled={disabled}
-                        showUploadList={false}
-                        className="upload-list-inline"
-                    >
-                        {fileList.length >= maxFile ? null : children}
-                    </Upload>
-                )}
-            </div>
-        );
-    }
-
-    //
-    checkIsCanChange = () => {};
-
-    // 初始化上传配置
-    // todo
-    // beforeUpload return false 或是 reject 并不能阻止继续上传。还是会调用onchange方法
-    // 目前解决思路。1.限制单个上传。当上传个数达到上传最大数。隐藏上传按钮
-    // 2.不符合上传规则时，直接通过父组件将之关闭。强行中断upload
-    // 3.通过上传状态判断 当上传成功时， 才去增加。
-    initUploadConfig = () => {
-        const that = this;
-        const { defaultAccept, fileList } = this.state;
-        const { ossProtected } = this.props;
-        this.uploaderProps = {
-            action: getOssDirectDomain(),
             data(file: any) {
                 return file.data;
             },
-            beforeUpload(fileEl: any, fileListUpload: any) {
-                //maxNum 单次最大上传个数 maxSize 单个文件最大M  maxFile 全部上传个数
-                const { accept = defaultAccept, maxNum = 15, maxSize = 10, maxFile = 50, reuploadMode } = that.props;
-                const { fileList } = that.state;
-                if (fileListUpload.length > maxNum) {
-                    message.error(`单次上传文件不能超过${maxNum}个`);
+            beforeUpload(fileEl: any, ...arg: any) {
+                //记在之前添加对应的数据 新建一个数组 在其中写入状态
+                fileEl.id = randomStr();
+                const {
+                    // accept = 'picture',
+                    accept = 'image/png,image/jpeg,image/jpg,image/gif,application/pdf,application/zip,.rar,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel',
+                    fileLength = 30,
+                    maxSize = 10,
+                    files,
+                    onChange,
+                } = _this.props;
+                if (files.length + arg[0].length > fileLength) {
+                    message.error(`最多上传${fileLength}个文件`);
                     return false;
                 }
                 const fileType = getFileType(fileEl.name).slice(1);
+                const isImage = fileEl.type.indexOf('image') !== -1;
+                const isZip = 'zip,rar'.indexOf(fileType) !== -1;
                 let fileMineType = fileEl.type;
                 const MAX_ROOM_FILE_FILE = 1024 * 1024 * maxSize;
                 if (fileMineType === '') {
@@ -157,21 +97,21 @@ export default class FileUpload extends React.Component<Props, State> {
                     return false;
                 }
                 if (MAX_ROOM_FILE_FILE < fileEl.size) {
-                    message.error(`${fileEl.name}超过了单个文件最大(${maxSize}M)限制`);
+                    message.error(`文件最大为${maxSize}M`);
                     return false;
                 }
-                if (fileList.length > maxFile && !reuploadMode) {
-                    message.error(`最多上传${maxFile}个文件`);
+                if (files.length >= fileLength) {
+                    message.error(`最多上传${fileLength}个文件`);
                     return false;
                 }
-                const isImage = fileEl.type.indexOf('image') !== -1;
-                const isZip = 'zip,rar'.indexOf(fileType) !== -1;
-
+                //初始化上传sdk
                 ObjectUpload.init();
                 let isPrivate = ossProtected == true;
-                if (!reuploadMode) {
-                    fileEl.percent = 0;
-                    fileEl.status = 'uploading';
+
+                //todo
+                //制造一个假的进度条
+
+                if (!_this.reUpload) {
                     ObjectUpload.upload(fileEl, isPrivate)
                         .then((res: any) => {
                             const file = {
@@ -182,50 +122,82 @@ export default class FileUpload extends React.Component<Props, State> {
                                 image_path: res,
                                 done: true,
                                 process: 100,
+                                status: 'done',
                             };
-                            fileList.push(file);
-                            that.uploaderProps.onSuccessNew(res, fileEl);
+                            files.push(file);
+                            config.onSuccessNew(fileEl, files);
+
+                            onChange && onChange(file, files);
                         })
                         .catch((err: any) => {
-                            that.uploaderProps.onErrorNew(fileEl);
+                            // message.error(`${fileEl.name}文件上传出错`);
+                            config.onErrorNew(fileEl);
+                            console.log('文件上传出错');
+                            console.log(err);
+                        });
+                } else {
+                    ObjectUpload.upload(fileEl, isPrivate)
+                        .then((res: any) => {
+                            const file = {
+                                type: isImage ? 'image' : isZip ? 'zip' : fileType,
+                                id: fileEl.id,
+                                file_name: fileEl.name,
+                                file_path: res,
+                                image_path: res,
+                                done: true,
+                                process: 100,
+                                status: 'done',
+                            };
+                            files.splice(_this.reUploadIndex, 1, file);
+                            config.onSuccessNew(fileEl, files);
+
+                            onChange && onChange(file, files);
+                        })
+                        .catch((err: any) => {
+                            config.onErrorNew(fileEl);
+                            // this.onErrorNew(fileEl);
+                            console.log('文件上传出错');
+                            console.log(err);
                         });
                 }
 
                 return false;
-
-                const config = getOssDirectParams(fileEl);
-                fileEl.data = config;
-                fileEl.url = enCodeFileName(`${getOssDirectDomain()}/${config.key}`);
-                fileEl.create_on = moment()
-                    .format('YYYY-MM-DD')
-                    .toString();
-                fileEl.file_type = isImage ? 'image' : isZip ? 'zip' : fileType;
-                return true;
             },
-            onChange({ file, fileList }: any) {
-                const { onChange, noMessage } = that.props;
-                // 上传成功后 将数据返回
-                if (file.status === 'uploading') {
-                    file.percent = file.percent || 0;
-                    onChange && onChange(file, fileList);
-                } else if (file.status === 'done') {
-                    !noMessage && message.success(`${file.name} 上传成功`);
-                    // 由于后台不支持base64 故需要将thumbUrl的存储的值替换掉
-                    file.thumbUrl = file.url;
-                    onChange && onChange(file, fileList);
-                } else if (file.status === 'error') {
-                    !noMessage && message.error(`${file.name} 上传失败`);
+            headers: {
+                authorization: 'authorization-text',
+            },
+            onChange(info: any) {
+                const { files, onChange } = _this.props;
+                if (info.file.status === 'uploading') {
+                    const file = files.find((f: any) => f.id === info.file.id);
+                    if (file) {
+                        file.process = Math.round(info.file.percent);
+                    }
+                    onChange && onChange(file, files);
                 }
-                file.status && that.setState({ fileList: [...fileList] });
+                if (info.file.status === 'done') {
+                    const file = files.find((f: any) => f.id === info.file.id);
+                    if (file) {
+                        file.done = true;
+                        file.process = 100;
+                    }
+
+                    _this.reUpload = false;
+                    setTimeout(() => {
+                        onChange && onChange(file, files);
+                    }, 500);
+
+                    message.success(`${info.file.name} 文件上传成功`);
+                } else if (info.file.status === 'error') {
+                    _this.reUpload = false;
+                    message.error(`${info.file.name} 文件上传失败`);
+                }
             },
-            onRemove(file: any) {
-                const { onRemove } = that.props;
-                onRemove && onRemove(file);
-            },
-            onSuccessNew(result: any, fileEl: any) {
-                const { fileList } = that.state;
-                const { onChange, onReUploaded, noMessage } = that.props;
-                const file = fileList.find(f => f.id === fileEl.id);
+            onSuccessNew(fileEl: any, files: any) {
+                _this.reUpload = false;
+
+                const { onChange, onReUploaded } = _this.props;
+                const file = files.find((f: any) => f.id === fileEl.id);
                 //给file设置下载地址
                 //根据ossProtected 区分, 如果是私有地址将file_path设置为通过getDownloadUrl返回的路径
 
@@ -236,40 +208,197 @@ export default class FileUpload extends React.Component<Props, State> {
                         file.auth_file_path = res;
                         file.file_path = url;
                         file.image_path = url;
-                        file.url = url;
-                        file.percent = 100;
-                        file.status = 'done';
-                        onChange && onChange(file, fileList);
-                        onReUploaded && onReUploaded(fileList);
+                        onChange && onChange(file, files);
+                        onReUploaded && onReUploaded(files);
+                        message.success(`${fileEl.name} 文件上传成功`);
                         return this;
                     });
                 } else {
                     file.auth_file_path = file.file_path;
-                    !noMessage && message.success(`${file.file_name} 上传成功`);
-                    file.percent = 100;
-                    file.status = 'done';
-                    file.url = file.file_path || result;
-                    onChange && onChange(file, fileList);
-                    onReUploaded && onReUploaded(fileList);
+                    onChange && onChange(file, files);
+                    onReUploaded && onReUploaded(files);
+                    message.success(`${fileEl.name} 文件上传成功`);
                 }
             },
-            onError(err: any, response: any, fileEl: any) {
-                const { fileList } = that.state;
-                const { onError, onReUploaded } = that.props;
-                fileList.forEach((f, i) => {
-                    if (f.id === fileEl.id) {
-                        fileList.splice(i, 1);
-                    }
-                });
-                onError && onError(null, `${fileEl.name}文件上传出错`);
-                onReUploaded && onReUploaded(fileEl); //之前是files 找不到
-            },
             onErrorNew(fileEl: any) {
-                const { fileList } = that.state;
-                const { onError, onReUploaded } = that.props;
-                onError && onError(null, `${fileEl.name}文件上传出错`);
-                onReUploaded && onReUploaded(fileList);
+                _this.reUpload = false;
+                message.error(`${fileEl.name} 文件上传出错`);
             },
         };
-    };
+        console.log(files.length, fileLength, 'hehe');
+        return (
+            <div className="component-uploader">
+                {!readonly ? (
+                    <Fragment>
+                        <Upload {...config} listType={'picture'}>
+                            <Button>
+                                <UploadOutlined ref={this.clickUploadRef} /> 上传
+                            </Button>
+                            <span className="uploader-description">
+                                <span>{description ? description : '注：单个附件最大支持10M，已上传'}</span>
+                                {files.length}
+                                <span>/</span>
+                                {fileLength}
+                            </span>
+                        </Upload>
+                        {files.length > 0 ? (
+                            <div className="attachment-list">
+                                {files.map((item: any) => {
+                                    const fileIconName =
+                                        accept.indexOf(item.type) > -1
+                                            ? `icon-file-${item.type}.png`
+                                            : 'icon-file-unknown.png';
+                                    return item.type.indexOf('image') > -1 ? (
+                                        <div className="attachment-item-for-image" key={item.id}>
+                                            {item.done ? (
+                                                <img
+                                                    className="icon-file"
+                                                    src={
+                                                        (item.image_path &&
+                                                            `${item.auth_file_path || item.image_path}`) ||
+                                                        require(`../../assets/img/icon-file/${fileIconName}`)
+                                                    }
+                                                    alt=""
+                                                />
+                                            ) : (
+                                                <Progress
+                                                    percent={item.process}
+                                                    width={120}
+                                                    strokeWidth={3}
+                                                    size="small"
+                                                    showInfo={false}
+                                                />
+                                            )}
+                                            <div className="delete-img-mask" />
+                                            <i
+                                                className="iconfont icon-shanchu2 delete-icon"
+                                                title="删除"
+                                                onClick={this.delete.bind(this, item)}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="attachment-item" key={item.id}>
+                                            <img
+                                                className="icon-file"
+                                                src={require(`../../assets/img/icon-file/${fileIconName}`)}
+                                                alt=""
+                                            />
+                                            <div>
+                                                <div className="file-name">{item.file_name}</div>
+                                                {item.process === 100 ? (
+                                                    <div className="file-description">
+                                                        {item.upload_time || '2019-06-13'}
+                                                    </div>
+                                                ) : (
+                                                    <Progress
+                                                        percent={item.process}
+                                                        width={120}
+                                                        strokeWidth={3}
+                                                        size="small"
+                                                        showInfo={false}
+                                                    />
+                                                )}
+                                            </div>
+                                            {item.process === 100 ? (
+                                                <Dropdown overlay={this.menu.bind(this, item)}>
+                                                    <MoreOutlined />
+                                                </Dropdown>
+                                            ) : null}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : null}
+                    </Fragment>
+                ) : (
+                    <Fragment>
+                        {files
+                            ? files.map((item: any) => {
+                                  const accept = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf', 'rar', 'zip'];
+                                  const fileIconName =
+                                      accept.indexOf(item.type) > -1
+                                          ? `icon-file-${item.type}.png`
+                                          : 'icon-file-unknown.png';
+
+                                  return item.type === 'image' ? (
+                                      <a
+                                          className="attachment-image"
+                                          href={item.auth_file_path || item.file_path}
+                                          key={item.id}
+                                          rel="noopener noreferrer"
+                                          target="_blank"
+                                      >
+                                          <img src={`${item.auth_file_path || item.file_path}`} alt="" />
+                                      </a>
+                                  ) : (
+                                      <div className="inline-block" key={item.id}>
+                                          <div className="attachment-list">
+                                              <img
+                                                  className="icon-file"
+                                                  src={require(`../../assets/img/icon-file/${fileIconName}`)}
+                                                  alt=""
+                                              />
+                                              <div>
+                                                  <div className="file-name">{item.file_name}</div>
+                                                  <div className="file-description">{item.upload_time}</div>
+                                              </div>
+                                              <a
+                                                  href={item.auth_file_path || item.file_path}
+                                                  rel="noopener noreferrer"
+                                                  target="_blank"
+                                                  className="icon-download"
+                                              >
+                                                  <DownloadOutlined />
+                                              </a>
+                                          </div>
+                                      </div>
+                                  );
+                              })
+                            : null}
+                    </Fragment>
+                )}
+            </div>
+        );
+    }
+
+    menu(item: any) {
+        return (
+            <Menu>
+                <Menu.Item onClick={this.delete.bind(this, item)} key="1">
+                    <span>删除</span>
+                </Menu.Item>
+                <Menu.Item onClick={this.reUploadAction.bind(this, item)} key="2">
+                    <span>重新上传</span>
+                </Menu.Item>
+            </Menu>
+        );
+    }
+
+    delete(item: any) {
+        const { files, onChange } = this.props;
+        onChange &&
+            onChange(
+                '',
+                files.filter((i: any) => i.id !== item.id)
+            );
+    }
+
+    reUploadAction(item: any) {
+        const { files } = this.props;
+        let reUploadIndex = 0;
+        for (let i = 0; i < files.length; i++) {
+            if (files[i].id === item.id) {
+                reUploadIndex = i;
+                break;
+            }
+        }
+
+        this.reUpload = true;
+        this.reUploadIndex = reUploadIndex;
+        if (this.clickUploadRef && this.clickUploadRef.current) {
+            this.clickUploadRef.current.click();
+        }
+    }
 }
+
+export default Uploader;

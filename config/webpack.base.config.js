@@ -3,7 +3,7 @@ const htmlWebpackPlugin = require('html-webpack-plugin');
 const hardSourcePlugin = require('hard-source-webpack-plugin');
 const webpack = require('webpack');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const antOverride = require('../src/vendor/antd');
+// const antOverride = require('../src/vendor/antd');
 
 module.exports = {
     entry: {
@@ -85,7 +85,10 @@ module.exports = {
                                 loader: 'less-loader',
                                 options: {
                                     javascriptEnabled: true,
-                                    modifyVars: antOverride,
+                                    modifyVars: {
+                                        'hack': `true; @import "${path.resolve(__dirname, '../src/assets/less/antd/index.less')}";`,
+                                    }
+                                    // modifyVars: antOverride,
                                 },
                             },
                         ],
