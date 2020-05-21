@@ -10,7 +10,7 @@ import { getDerateList } from '@s/derate';
 import { getDerateListParams } from '@/types/derateTypes';
 import { Props, projsValue, derateType } from './list.d';
 import './list.less';
-
+import { Demo } from 'ykj-ui';
 const baseAlias = 'static';
 export const DerateList = (props: Props) => {
     const { user, history } = props;
@@ -83,6 +83,7 @@ export const DerateList = (props: Props) => {
             }
         >
             <div>
+                <Demo test="测试" />
                 <SearchArea
                     selectedRowKeys={selectedRowKeys}
                     onAudit={handleAudit}

@@ -32,7 +32,7 @@ interface Props {
     multiple?: boolean;
     accept?: any;
     maxSize?: number;
-    onChange: Function;
+    onChange?: any;
     onReUploaded?: Function;
 }
 class Uploader extends React.Component<Props> {
@@ -57,6 +57,7 @@ class Uploader extends React.Component<Props> {
         const _this = this;
         const config = {
             multiple: true,
+            name: 'file',
             disabled: (files && files.length) >= fileLength,
             // action: getOssDirectDomain(),
             action:
@@ -114,6 +115,8 @@ class Uploader extends React.Component<Props> {
                 if (!_this.reUpload) {
                     ObjectUpload.upload(fileEl, isPrivate)
                         .then((res: any) => {
+                            console.log('res');
+                            console.log(res);
                             const file = {
                                 type: isImage ? 'image' : isZip ? 'zip' : fileType,
                                 id: fileEl.id,
@@ -225,7 +228,7 @@ class Uploader extends React.Component<Props> {
                 message.error(`${fileEl.name} 文件上传出错`);
             },
         };
-        console.log(files.length, fileLength, 'hehe');
+
         return (
             <div className="component-uploader">
                 {!readonly ? (
@@ -234,6 +237,10 @@ class Uploader extends React.Component<Props> {
                             <Button>
                                 <UploadOutlined ref={this.clickUploadRef} /> 上传
                             </Button>
+                            {/* <Button>
+                                <Icon type="upload" />
+                                <span ref={this.clickUploadRef}>上传</span>
+                            </Button> */}
                             <span className="uploader-description">
                                 <span>{description ? description : '注：单个附件最大支持10M，已上传'}</span>
                                 {files.length}
@@ -248,7 +255,7 @@ class Uploader extends React.Component<Props> {
                                         accept.indexOf(item.type) > -1
                                             ? `icon-file-${item.type}.png`
                                             : 'icon-file-unknown.png';
-                                    console.log(fileIconName);
+                                    // const path = require(`../../assets/img/icon-file/${fileIconName}`);
                                     return item.type.indexOf('image') > -1 ? (
                                         <div className="attachment-item-for-image" key={item.id}>
                                             {item.done ? (
@@ -257,7 +264,7 @@ class Uploader extends React.Component<Props> {
                                                     src={
                                                         (item.image_path &&
                                                             `${item.auth_file_path || item.image_path}`) ||
-                                                        `../../assets/img/icon-file/${fileIconName}`
+                                                        require(`../../assets/img/icon-file/${fileIconName}`)
                                                     }
                                                     alt=""
                                                 />
@@ -320,7 +327,7 @@ class Uploader extends React.Component<Props> {
                                       accept.indexOf(item.type) > -1
                                           ? `icon-file-${item.type}.png`
                                           : 'icon-file-unknown.png';
-
+                                  const path = require(`../../assets/img/icon-file/${fileIconName}`);
                                   return item.type === 'image' ? (
                                       <a
                                           className="attachment-image"
@@ -332,8 +339,8 @@ class Uploader extends React.Component<Props> {
                                           <img src={`${item.auth_file_path || item.file_path}`} alt="" />
                                       </a>
                                   ) : (
-                                      <div className="inline-block" key={item.id}>
-                                          <div className="attachment-list">
+                                      <div className="inline-block">
+                                          <div className="attachment-list" key={item.id}>
                                               <img
                                                   className="icon-file"
                                                   src={require(`../../assets/img/icon-file/${fileIconName}`)}

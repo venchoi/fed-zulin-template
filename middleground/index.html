@@ -5,52 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>明源云空间</title>
-        <script>
-            function getCookie(cookieName) {
-                var cookie = document.cookie;
-                var i = cookie.indexOf(cookieName);
-                if (i == -1) {
-                    return null;
-                } else {
-                    var starti = i + cookieName.length + 1;
-                    var endi = cookie.indexOf(';', starti);
-                    if (endi == -1) {
-                        return cookie.slice(starti);
-                    } else {
-                        return cookie.slice(starti, endi);
-                    }
-                }
-            }
-            function setCookie(name, value) {
-                var Days = 30;
-                var exp = new Date();
-                exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 30);
-                document.cookie = name + '=' + escape(value) + ';expires=' + exp.toGMTString() + ';path=/';
-            }
-            function getQueryString(name) {
-                var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-                var reg_rewrite = new RegExp('(^|/)' + name + '/([^/]*)(/|$)', 'i');
-                var r = window.location.search.substr(1).match(reg);
-                var q = window.location.pathname.substr(1).match(reg_rewrite);
-                if (r != null) {
-                    return unescape(r[2]);
-                } else if (q != null) {
-                    return unescape(q[2]);
-                } else {
-                    return null;
-                }
-            }
-
-            if (!getCookie('tenant_code') && getQueryString('o')) {
-                setCookie('tenant_code', getQueryString('o'));
-                setTimeout(function() {
-                    window.location.reload();
-                }, 10);
-            }
-        </script>
-    <link rel="shortcut icon" href="/middleground/assets/favicon.ico"><link href="/middleground/assets/vendors~app.d0a0441b.css" rel="stylesheet"><link href="/middleground/assets/app.23103a1d.css" rel="stylesheet"></head>
+        <link rel="shortcut icon" href="//rental.myfuwu.com.cn/static/assets/images/icon.ico" type="image/x-icon" id="icon"/>
+    <link href="/middleground/assets/vendors~app.a501d9e9.css" rel="stylesheet"><link href="/middleground/assets/app.aa343ca9.css" rel="stylesheet"></head>
 
     <body>
         <div id="root"></div>
-    <script type="text/javascript" src="/middleground/assets/runtime~app.b0519967.js"></script><script type="text/javascript" src="/middleground/assets/vendors~app~vendor.aeeae769.js"></script><script type="text/javascript" src="/middleground/assets/vendors~app.382cc464.js"></script><script type="text/javascript" src="/middleground/assets/app.e5df4cae.js"></script><script type="text/javascript" src="/middleground/assets/runtime~vendor.74903b77.js"></script><script type="text/javascript" src="/middleground/assets/vendor.e5937917.js"></script></body>
+    <script type="text/javascript" src="/middleground/assets/runtime~app.a3de4de8.js"></script><script type="text/javascript" src="/middleground/assets/vendors~app~vendor.cbdad0aa.js"></script><script type="text/javascript" src="/middleground/assets/vendors~app.aa510817.js"></script><script type="text/javascript" src="/middleground/assets/app.c68e7e92.js"></script><script type="text/javascript" src="/middleground/assets/runtime~vendor.af39b10e.js"></script><script type="text/javascript" src="/middleground/assets/vendor.f0436c7f.js"></script></body>
 </html>
