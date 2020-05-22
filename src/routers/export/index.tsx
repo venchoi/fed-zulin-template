@@ -4,22 +4,22 @@ import { RouteComponentProps } from 'dva/router';
 import { match } from 'react-router';
 import { getExportList } from '@s/export';
 import ExportCard from './exporList';
-import { Status } from '@t/exportTypes';
+import { Status, ExportType } from '@t/exportTypes';
 
-interface HistoryParams {
-    type: string;
+interface IHistoryParams {
+    type: ExportType;
     stage_id: string;
 }
-interface Match extends match {
-    params: HistoryParams;
+interface IMatch extends match {
+    params: IHistoryParams;
 }
 
-interface Props extends RouteComponentProps {
-    match: Match;
+interface IProps extends RouteComponentProps {
+    match: IMatch;
 }
 
-const exportList = ({ match: { params } }: Props) => {
-    const { type = '', stage_id = '' } = params;
+const exportList = ({ match: { params } }: IProps) => {
+    const { type = ExportType.DEFAULT, stage_id = '' } = params;
     const [dataSource, setDataSource] = useState([]);
 
     const fetchExportList = async () => {

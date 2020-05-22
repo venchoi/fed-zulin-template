@@ -6,6 +6,7 @@ export enum Status {
     FAILED = '失败',
 }
 export enum ExportType {
+    DEFAULT = '',
     METER = '导出抄表数据',
 }
 
