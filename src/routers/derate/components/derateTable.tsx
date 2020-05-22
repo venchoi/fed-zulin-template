@@ -71,7 +71,12 @@ export const DerateTable = (props: derateTableProps) => {
         return false;
     };
 
-    const handleOaAudit = (record: derateType) => {};
+    const handleOaAudit = (record: derateType, e: React.MouseEvent) => {
+        e && e.stopPropagation();
+        setTimeout(() => {
+            location.href = `${baseAlias}/workflowApproval/add/${record.proj_id}/${record.id}/derated_apply`;
+        }, 20);
+    };
 
     const fetchOaDetail = async (record: derateType, e: React.MouseEvent) => {
         e && e.stopPropagation();
