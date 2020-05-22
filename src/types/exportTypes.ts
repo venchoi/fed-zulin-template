@@ -22,6 +22,14 @@ export interface IExportListParams {
     end_date?: string; // 导出结束时间
 }
 
+export interface IHistoryParams {
+    stage_id: string;
+    type: ExportType;
+}
+
+// TODO Exclude<IExportListParams, IHistoryParams>
+export interface IExportCardParams extends Partial<IExportListParams> {}
+
 // 导出记录
 export default interface IExportItemType {
     created_on: string; // 导出时间

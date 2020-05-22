@@ -4,12 +4,8 @@ import { RouteComponentProps } from 'dva/router';
 import { match } from 'react-router';
 import { getExportList } from '@s/export';
 import ExportCard from './exporList';
-import { Status, ExportType } from '@t/exportTypes';
+import { Status, ExportType, IHistoryParams, IExportCardParams } from '@t/exportTypes';
 
-interface IHistoryParams {
-    type: ExportType;
-    stage_id: string;
-}
 interface IMatch extends match {
     params: IHistoryParams;
 }
@@ -22,8 +18,9 @@ const exportList = ({ match: { params } }: IProps) => {
     const { type = ExportType.DEFAULT, stage_id = '' } = params;
     const [dataSource, setDataSource] = useState([]);
 
-    const fetchExportList = async () => {
-        const { data, result } = await getExportList({ stage_id, type, page: 1, page_size: 10 });
+    const fetchExportList = async (payload: IExportCardParams = {}) => {
+        // TODO page？
+        const { data, result } = await getExportList({ stage_id, type, page: 1, page_size: 10, ...payload });
         setDataSource(data?.items || []);
     };
     const routes = [
@@ -45,7 +42,7 @@ const exportList = ({ match: { params } }: IProps) => {
         <>
             <PageHeader title="导出记录" breadcrumb={{ routes }} ghost={false} />
             <div className="layout-list">
-                <ExportCard dataSource={dataSource} />
+                <ExportCard dataSource={dataSource} paramsChange={payload => fetchExportList(payload)} />
             </div>
         </>
     );
