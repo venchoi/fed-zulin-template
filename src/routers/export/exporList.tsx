@@ -50,7 +50,7 @@ const exportCard = ({ dataSource, paramsChange }: IProps) => {
 
     const options = [
         {
-            value: '',
+            value: Status.DEFAULT,
             name: '全部状态',
         },
         {

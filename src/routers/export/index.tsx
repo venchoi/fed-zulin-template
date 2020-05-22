@@ -5,6 +5,7 @@ import { match } from 'react-router';
 import { getExportList } from '@s/export';
 import ExportCard from './exporList';
 import { Status, ExportType, IHistoryParams, IExportCardParams } from '@t/exportTypes';
+import './index.less';
 
 interface IMatch extends match {
     params: IHistoryParams;
