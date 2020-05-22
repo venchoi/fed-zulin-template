@@ -5,13 +5,13 @@ import FedPagination from '@c/FedPagination';
 
 // types
 import { ColumnProps } from 'antd/es/table';
-import ExportItemType, { ExportListParams, Status } from '@t/exportTypes';
+import IExportItemType, { IExportListParams, Status } from '@t/exportTypes';
 
 const { Search } = Input;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 interface Props {
-    dataSource: Array<ExportItemType>;
+    dataSource: Array<IExportItemType>;
 }
 
 const exportCard = ({ dataSource }: Props) => {
@@ -23,7 +23,7 @@ const exportCard = ({ dataSource }: Props) => {
         start_date: '',
         end_date: '',
     });
-    const columns: ColumnProps<ExportItemType>[] = [
+    const columns: ColumnProps<IExportItemType>[] = [
         {
             dataIndex: 'created_on',
             title: '导出时间',
@@ -92,7 +92,7 @@ const exportCard = ({ dataSource }: Props) => {
                     </span>
                 </div>
             </div>
-            <FedTable<ExportItemType> dataSource={dataSource} columns={columns} vsides={false} />
+            <FedTable<IExportItemType> dataSource={dataSource} columns={columns} vsides={false} />
             <FedPagination />
         </Card>
     );

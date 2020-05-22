@@ -16,10 +16,10 @@ import MyReportList from './components/MyReportList';
 import StandReportList from './components/StandReportList';
 import { History } from 'history';
 
-interface Props {
+interface IProps {
     history: History;
 }
-const ReportList = (props: Props) => {
+const ReportList = (props: IProps) => {
     const [activeTabKey, setActiveTabKey] = useState('myreport'); // 当前激活的tab: 我的报表myreport 或 标准报表库basicreport
 
     const tabList = [
@@ -40,7 +40,7 @@ const ReportList = (props: Props) => {
             title: '报表名称',
             render: (text, record, index) => {
                 if (activeTabKey === 'myreport') {
-                    //新增
+                    // 新增
                     return (
                         <span>
                             <a href={getReportHref({ id: record.id })} target="_blank" title={record.name}>
