@@ -31,3 +31,11 @@ export interface saveDataType {
     proj_id: string;
     id: string;
 }
+
+export interface auditParams {
+    id: string;
+}
+
+export interface voidParams {
+    id: string;
+}

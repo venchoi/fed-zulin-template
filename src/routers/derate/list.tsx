@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { message, Button } from 'antd';
 import { connect } from 'dva';
 import ContentLayout from './components/contentLayout';
@@ -26,7 +26,7 @@ export const DerateList = (props: Props) => {
     const [loading, setloading] = useState(false);
     const [selectedRowKeys, setselectedRowKeys] = useState<string[]>([]);
     const [selectedRows, setselectedRows] = useState<derateType[]>([]);
-
+    const tableSetLoading = useCallback(setloading, [setloading]);
     useEffect(() => {
         getDerateListData();
     }, [searchParams]);
@@ -102,6 +102,8 @@ export const DerateList = (props: Props) => {
                     selectedRowKeys={selectedRowKeys}
                     onTableSelect={handleTableSelect}
                     projIds={selectedProjectIds}
+                    setLoading={tableSetLoading}
+                    getDerateListData={getDerateListData}
                 />
                 {selectedRowKeys.length > 0 ? (
                     <div className="selected-status-bar">

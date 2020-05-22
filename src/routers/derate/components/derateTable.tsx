@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Table, message } from 'antd';
+import { Card, Button, Table, message, Modal } from 'antd';
 import DerateSubRow from './derateSubRow';
 import { Link } from 'dva/router';
 import { ColumnProps } from 'antd/es/table';
-import { RightOutlined, DownOutlined } from '@ant-design/icons';
+import { RightOutlined, DownOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { History } from 'history';
 import FedTable from '@c/FedTable';
-import { fetchMuiltStageWorkflowTempIsEnabled, getDerateList } from '@s/derate';
+import { fetchMuiltStageWorkflowTempIsEnabled, auditDerate, voidDerate } from '@s/derate';
 import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
 import { User, projsValue, feeItem, derateType, statusMapType, responseType, enableItemType } from '../list.d';
-
+const { confirm } = Modal;
 interface derateTableProps {
     derateList: derateType[];
     derateTotal: number;
@@ -18,6 +18,8 @@ interface derateTableProps {
     selectedRowKeys: string[];
     onTableSelect?(keys: string[], rows: derateType[]): void;
     projIds: string[];
+    setLoading(loading: boolean): void;
+    getDerateListData(): void;
 }
 
 interface selectedRowKeyType {
@@ -26,6 +28,7 @@ interface selectedRowKeyType {
 
 const baseAlias = 'static';
 export const DerateTable = (props: derateTableProps) => {
+    const { setLoading, getDerateListData } = props;
     const { derateList, derateTotal, user, history, onTableSelect, selectedRowKeys } = props;
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
     const [enableList, setenableList] = useState<enableItemType[]>([]); // 减免列表
@@ -68,7 +71,23 @@ export const DerateTable = (props: derateTableProps) => {
 
     const fetchOaDetail = (record: derateType) => {};
 
-    const handleAudit = (id: string) => {};
+    const handleAudit = (id: string) => {
+        confirm({
+            icon: <ExclamationCircleOutlined />,
+            title: '确定审核该记录？',
+            onOk: async () => {
+                setLoading(true);
+                const { result, msg = '操作失败', data } = await auditDerate({ id });
+                setLoading(false);
+                if (result) {
+                    getDerateListData();
+                    message.success('操作成功');
+                } else {
+                    message.error(msg);
+                }
+            },
+        });
+    };
 
     const handleVoid = (id: string) => {};
 
@@ -99,34 +118,6 @@ export const DerateTable = (props: derateTableProps) => {
                     project_id: rowData.proj_id,
                     business_id: rowData.id,
                 };
-                // this.setState({
-                //     workflow: {
-                //         showModal: true,
-                //         params,
-                //         actions,
-                //         errorTips: this.showErr,
-                //         callBack: (json) => {
-                //             console.log('json', json);
-                //             this.setState({
-                //                 workflow: {
-                //                     showModal: false,
-                //                     params: null,
-                //                     actions: null,
-                //                     errorTips: null,
-                //                     callBack: null
-                //                 }
-                //             }, () => {
-                //                 console.log('json', json);
-                //                 if (json.result && json.data === 'wh_approval') {
-                //                     //
-                //                 }
-                //                 if (json && json.data === 'original_approval') {
-                //                     setTimeout(() => this.context.router.push(`${baseAlias}/workflowApproval/add/${rowData.proj_id}/${rowData.id}/${scenarioCode}`), 20);
-                //                 }
-                //             })
-                //         }
-                //     }
-                // })
                 break;
             }
         }
@@ -274,7 +265,7 @@ export const DerateTable = (props: derateTableProps) => {
             title: '操作',
             key: 'action',
             fixed: 'right',
-            width: 120,
+            width: 128,
             render(text: string, record: derateType, index: number) {
                 const { user } = props;
                 const stageId = record.proj_id;
@@ -351,15 +342,6 @@ export const DerateTable = (props: derateTableProps) => {
                             >
                                 作废
                             </Button>
-                        ) : null}
-                        {record.status === '待审核' ? (
-                            <Link
-                                className="link-btn f-hidden rental-derate-edit"
-                                to={`${baseAlias}/derate/edit/${record.id}?type=edit`}
-                                style={{ marginRight: '5px' }}
-                            >
-                                修改
-                            </Link>
                         ) : null}
                         {record.status === '已减免' ? (
                             <Button

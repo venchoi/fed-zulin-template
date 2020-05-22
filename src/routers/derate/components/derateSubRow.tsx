@@ -347,11 +347,11 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                     取消
                                 </FedButton>
                             </>
-                        ) : (
+                        ) : props.record.status === '待审核' ? (
                             <FedButton size="small" onClick={() => setIsEditMode(true)}>
                                 编辑
                             </FedButton>
-                        )}
+                        ) : null}
                     </div>
                 </div>
                 <div className="content-area">
