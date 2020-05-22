@@ -36,6 +36,14 @@ export interface auditParams {
     id: string;
 }
 
+export interface batchAuditParams {
+    ids: string[];
+}
+
 export interface voidParams {
     id: string;
+}
+
+export interface cancelDerateParams {
+    ids: string;
 }

@@ -10,6 +10,7 @@ import { ColumnProps } from 'antd/es/table';
 import { derateType, feeItem, responseType } from '../list.d';
 import { fileType } from '@/types/common';
 import { submitDerate } from '@s/derate';
+import { cloneDeep } from 'lodash';
 import './derateSubRow.less';
 import { derateSubRowProps, status, feeItemType, derateDetail, saveDataType } from './derateSubRow.d';
 const layout = {
@@ -33,6 +34,14 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         proj_id: '',
         id: '',
     }); // 减免详情
+    const [originDetail, setOriginDetail] = useState({
+        items: [],
+        proj_name: '',
+        remark: '',
+        attachment: [],
+        proj_id: '',
+        id: '',
+    }); // 减免详情拷贝值，编辑取消后还原
     const [isEditMode, setIsEditMode] = useState(false); // 是否编辑模式
     const [loading, setLoading] = useState(false);
     const fetchDerateDetail = () => {
@@ -44,7 +53,6 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         getDerateDetail({ id })
             .then(res => {
                 if (!res.result) {
-                    message.error(res.msg || '获取失败');
                     return;
                 }
                 const { data = { items: [] } } = res;
@@ -100,6 +108,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                     }
                 });
                 setDetail(data);
+                setOriginDetail(cloneDeep(data));
             })
             .finally(() => {
                 setLoading(false);
@@ -110,6 +119,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
     }, [props.record.id]);
 
     const handleCancelEdit = () => {
+        setDetail(originDetail);
         setIsEditMode(false);
     };
 
@@ -175,17 +185,12 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 return detail['proj_name'];
             },
         },
-        {
-            name: '品牌',
-            field: 'renter_organization_name',
-            required: false,
-        },
     ];
 
-    const handleSave = () => {
+    const handleSave = async () => {
         const { attachment, remark, proj_id, id, items = [] } = detail;
         const params: saveDataType = {
-            attachment,
+            attachment: attachment || [],
             derated_items: [],
             remark: remark,
             proj_id,
@@ -219,19 +224,13 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             };
         });
         setLoading(true);
-        submitDerate(params)
-            .then((res: responseType) => {
-                if (res.result) {
-                    message.success('保存成功！');
-                    setIsEditMode(false);
-                    fetchDerateDetail();
-                } else {
-                    message.error(res.msg || `保存失败`);
-                }
-            })
-            .finally(() => {
-                setLoading(false);
-            });
+        const { data, msg, result } = await submitDerate(params);
+        if (result) {
+            message.success('保存成功！');
+            setIsEditMode(false);
+            fetchDerateDetail();
+        }
+        setLoading(false);
     };
 
     const rowSelection = {
@@ -375,7 +374,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                         </Col>
                                     );
                                 })}
-                                <Col span={16} key={5}>
+                                <Col span={24} key={5}>
                                     <Form.Item
                                         name="remark"
                                         label="减免原因"
@@ -390,7 +389,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                                 defaultValue={detail.remark}
                                                 placeholder="请输入"
                                                 maxLength={255}
-                                                // onChange={handleRemarkChange}
+                                                onChange={handleRemarkChange}
                                             />
                                         ) : (
                                             detail.remark || '-'
@@ -420,7 +419,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                     <FedSection title="减免附件" key="减免附件">
                         {(detail.attachment && detail.attachment.length > 0) || isEditMode ? (
                             <Uploader
-                                files={detail.attachment}
+                                files={detail.attachment || []}
                                 onChange={handleAttachmentChange}
                                 readonly={!isEditMode}
                             />

@@ -6,6 +6,7 @@ import {
     getDerateDetailParams,
     saveDataType,
     auditParams,
+    batchAuditParams,
     voidParams,
     cancelDerateParams,
 } from '@/types/derateTypes';
@@ -36,6 +37,10 @@ export const submitDerate = (data: saveDataType) => {
 // 审核
 export const auditDerate = (data: auditParams) => {
     return ajax('/bill/derated/audit', { ...data, _csrf: '' }, 'POST');
+};
+
+export const batchAuditDerate = (data: batchAuditParams) => {
+    return ajax('/bill/derated/batch-audit', { ...data, _csrf: '' }, 'POST');
 };
 
 // 作废

@@ -6,7 +6,13 @@ import { ColumnProps } from 'antd/es/table';
 import { RightOutlined, DownOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import { History } from 'history';
 import FedTable from '@c/FedTable';
-import { fetchMuiltStageWorkflowTempIsEnabled, auditDerate, voidDerate } from '@s/derate';
+import {
+    fetchMuiltStageWorkflowTempIsEnabled,
+    auditDerate,
+    batchAuditDerate,
+    voidDerate,
+    cancelDerate,
+} from '@s/derate';
 import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
 import { User, projsValue, feeItem, derateType, statusMapType, responseType, enableItemType } from '../list.d';
 const { confirm } = Modal;
@@ -45,18 +51,15 @@ export const DerateTable = (props: derateTableProps) => {
         setenableList(enableList);
     };
 
-    const getWorkflowStatus = (projIdStr: string) => {
-        fetchMuiltStageWorkflowTempIsEnabled({
+    const getWorkflowStatus = async (projIdStr: string) => {
+        const res = await fetchMuiltStageWorkflowTempIsEnabled({
             proj_id: projIdStr,
             scenario_code: 'derated_apply',
-        }).then(res => {
-            if (!res.result) {
-                message.error(res.msg);
-                return;
-            }
+        });
+        if (res.result) {
             const data = res;
             setIsEnabledList(data, 'derated_apply');
-        });
+        }
     };
 
     const getVal = (projId: string, key: string) => {
@@ -71,7 +74,8 @@ export const DerateTable = (props: derateTableProps) => {
 
     const fetchOaDetail = (record: derateType) => {};
 
-    const handleAudit = (id: string) => {
+    const handleAudit = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation();
         confirm({
             icon: <ExclamationCircleOutlined />,
             title: '确定审核该记录？',
@@ -89,9 +93,63 @@ export const DerateTable = (props: derateTableProps) => {
         });
     };
 
-    const handleVoid = (id: string) => {};
+    const handleBatchAudit = (e: React.MouseEvent) => {
+        const ids = selectedRowKeys;
+        e.stopPropagation();
+        confirm({
+            icon: <ExclamationCircleOutlined />,
+            title: '确定审核选中的记录？',
+            onOk: async () => {
+                setLoading(true);
+                const { result, msg = '操作失败', data } = await batchAuditDerate({ ids });
+                setLoading(false);
+                if (result) {
+                    getDerateListData();
+                    message.success('操作成功');
+                } else {
+                    message.error(msg);
+                }
+            },
+        });
+    };
 
-    const handleCancelDerate = (id: string) => {};
+    const handleVoid = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        confirm({
+            icon: <ExclamationCircleOutlined />,
+            title: '确定作废该记录？',
+            onOk: async () => {
+                setLoading(true);
+                const { result, msg = '操作失败', data } = await voidDerate({ id });
+                setLoading(false);
+                if (result) {
+                    getDerateListData();
+                    message.success('操作成功');
+                } else {
+                    message.error(msg);
+                }
+            },
+        });
+    };
+
+    const handleCancelDerate = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        confirm({
+            icon: <ExclamationCircleOutlined />,
+            title: '确定取消减免该记录？',
+            onOk: async () => {
+                setLoading(true);
+                const { result, msg = '操作失败', data } = await cancelDerate({ ids: id });
+                setLoading(false);
+                if (result) {
+                    getDerateListData();
+                    message.success('操作成功');
+                } else {
+                    message.error(msg);
+                }
+            },
+        });
+    };
 
     const run = (type: string, rowData: derateType, e?: React.MouseEvent) => {
         e && e.stopPropagation();

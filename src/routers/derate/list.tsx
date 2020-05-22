@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { message, Button } from 'antd';
+import { message, Button, Modal } from 'antd';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { connect } from 'dva';
 import ContentLayout from './components/contentLayout';
 import SearchArea from './components/searchArea';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import FedPagination from './components/pagination';
 import DerateTable from './components/derateTable';
-import { getDerateList } from '@s/derate';
+import { getDerateList, batchAuditDerate } from '@s/derate';
 import { getDerateListParams } from '@/types/derateTypes';
 import { Props, projsValue, derateType } from './list.d';
 import './list.less';
 import { Demo } from 'ykj-ui';
 const baseAlias = 'static';
+const { confirm } = Modal;
 export const DerateList = (props: Props) => {
     const { user, history } = props;
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
@@ -39,36 +41,45 @@ export const DerateList = (props: Props) => {
         });
     };
 
-    const getDerateListData = () => {
+    const getDerateListData = async () => {
         setloading(true);
-        getDerateList(searchParams)
-            .then(res => {
-                console.log(res.data.items);
-                if (!res.result) {
-                    message.error(res.msg);
-                    return;
-                }
-                if (res.data) {
-                    setderateList(res.data.items || []);
-                    setderateTotal(res.data.total);
-                }
-            })
-            .finally(() => {
-                setloading(false);
-            });
+        const { result, data } = await getDerateList(searchParams);
+        if (result && data) {
+            setderateList(data.items || []);
+            setderateTotal(data.total);
+        }
+        setloading(false);
     };
 
     const handleTableSelect = (selectedRowKeys: string[], selectedRows: derateType[]) => {
-        console.log(selectedRowKeys);
         setselectedRows(selectedRows);
         setselectedRowKeys(selectedRowKeys);
     };
 
-    const handleAudit = (e: React.MouseEvent) => {};
-
     const handleCancelSelect = () => {
         setselectedRows([]);
         setselectedRowKeys([]);
+    };
+
+    const handleBatchAudit = (e: React.MouseEvent) => {
+        const ids = selectedRowKeys;
+        e.stopPropagation();
+        confirm({
+            icon: <ExclamationCircleOutlined />,
+            title: '确定审核选中的记录？',
+            onOk: async () => {
+                setloading(true);
+                const { result, msg = '操作失败', data } = await batchAuditDerate({ ids });
+                setloading(false);
+                if (result) {
+                    setselectedRowKeys([]);
+                    getDerateListData();
+                    message.success('操作成功');
+                } else {
+                    message.error(msg);
+                }
+            },
+        });
     };
 
     return (
@@ -86,7 +97,7 @@ export const DerateList = (props: Props) => {
                 <Demo test="测试" />
                 <SearchArea
                     selectedRowKeys={selectedRowKeys}
-                    onAudit={handleAudit}
+                    onAudit={handleBatchAudit}
                     onKeywordChange={keyword => {
                         setsearchParams({
                             ...searchParams,
