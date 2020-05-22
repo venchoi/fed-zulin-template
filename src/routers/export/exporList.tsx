@@ -10,11 +10,11 @@ import IExportItemType, { IExportListParams, Status } from '@t/exportTypes';
 const { Search } = Input;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-interface Props {
-    dataSource: Array<IExportItemType>;
+interface IProps {
+    dataSource: IExportItemType[];
 }
 
-const exportCard = ({ dataSource }: Props) => {
+const exportCard = ({ dataSource }: IProps) => {
     const [params, setParams] = useState({
         status: '',
         page: 1,
