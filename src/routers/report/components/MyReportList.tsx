@@ -8,7 +8,7 @@
 
 import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import { ExclamationCircleOutlined, DownloadOutlined, LoadingOutlined, SyncOutlined } from '@ant-design/icons';
-import { Tabs, Card, Pagination, Button, Modal, message, Spin } from 'antd';
+import { Tabs, Button, Modal, message, Spin } from 'antd';
 import { getMyReportList, deleteReport, getUpdateStatus, updateReportRDS, editReport } from '../../../services/report';
 import Filter from '../components/Filter';
 import FedTable from '../../../components/FedTable';

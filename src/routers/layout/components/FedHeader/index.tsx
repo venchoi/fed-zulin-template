@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import qs from 'querystring';
 import './index.less';
 import UserInfo from './UserInfo';
-import FedIcon from '../../../../components/FedIcon';
+import FedIcon from '@c/FedIcon';
 import RedirectPanel from './RedirectPanel';
 import { Props } from './interface';
 import procedureImg from './images/icon_procedure.svg';

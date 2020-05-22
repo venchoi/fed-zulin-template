@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { message, Spin } from 'antd';
+import { Spin } from 'antd';
 // @ts-ignore
 import * as queryString from 'query-string';
 import { Layout as AntLayout } from 'antd';
@@ -7,9 +7,9 @@ import FedHeader from './components/FedHeader';
 import FedMenu from './components/FedMenu';
 import CollapseItem from './components/CollapseItem';
 import Logo from './components/Logo';
-import { getHomeBaseInfo, getWorkflowTodo } from '../../services/app';
+import { getHomeBaseInfo, getWorkflowTodo } from '@s/app';
 import { find } from 'lodash';
-import { handleBaseInfo } from '../../helper/handleBaseInfo';
+import { handleBaseInfo } from '@/helper/handleBaseInfo';
 import { AppInfo, User } from './components/FedHeader/interface';
 
 import './index.less';

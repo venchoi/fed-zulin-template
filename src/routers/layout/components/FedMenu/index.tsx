@@ -1,9 +1,7 @@
 import React from 'react';
 import { Badge, Menu } from 'antd';
-import { Link } from 'dva/router';
-import FedIcon from '../../../../components/FedIcon';
+import FedIcon from '@c/FedIcon';
 import { getKey } from './menuRoutes';
-import {} from '../FedHeader/interface';
 
 interface Props {
     collapsed: boolean;

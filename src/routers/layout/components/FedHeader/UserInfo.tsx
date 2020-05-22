@@ -6,11 +6,11 @@ import React from 'react';
 import './UserInfo.less';
 import { Dropdown, Menu } from 'antd';
 import Icon from '@ant-design/icons';
-import FedIcon from '../../../../components/FedIcon';
+import FedIcon from '@c/FedIcon';
 import { Props, AppInfo } from './interface';
-import { loginOut } from '../../../../services/app';
+import { loginOut } from '@s/app';
 import Cookie from 'js-cookie';
-import removeCache from '../../../../helper/removeCache';
+import removeCache from '@/helper/removeCache';
 
 export default class UserInfo extends React.Component<Props> {
     constructor(props: Props) {
