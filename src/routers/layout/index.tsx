@@ -3,14 +3,12 @@ import { message, Spin } from 'antd';
 // @ts-ignore
 import * as queryString from 'query-string';
 import { Layout as AntLayout } from 'antd';
-import FedIcon from '../../components/FedIcon';
 import FedHeader from './components/FedHeader';
 import FedMenu from './components/FedMenu';
 import CollapseItem from './components/CollapseItem';
 import Logo from './components/Logo';
 import { getHomeBaseInfo, getWorkflowTodo } from '../../services/app';
 import { find } from 'lodash';
-import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
 import { AppInfo, User } from './components/FedHeader/interface';
 
@@ -18,7 +16,6 @@ import './index.less';
 
 const { Header, Sider, Content, Footer } = AntLayout;
 
-const { DEV } = config;
 interface dispatchArg {
     type: string;
     data: any;
@@ -77,9 +74,27 @@ class Layout extends React.Component<Props, State> {
         };
     }
 
-    async componentDidMount() {
-        await this.getBaseInfo();
+    componentDidMount() {
+        this.getBaseInfo();
     }
+
+    //获取基本信息/左侧菜单+单点登录鉴权
+    getBaseInfo = async () => {
+        const query = queryString.parse((location as any).search);
+        const { data } = await getHomeBaseInfo(query);
+        const props: any = handleBaseInfo(data);
+        this.props.dispatch({
+            type: 'initBaseInfo',
+            data: props,
+        });
+        this.setState({ ...props, inited: true });
+        const { data: workflowData } = await getWorkflowTodo();
+        this.setState({ ...workflowData });
+    };
+
+    onCollapse = (collapsed: boolean) => {
+        this.setState({ collapsed });
+    };
 
     public render() {
         const { children } = this.props;
@@ -131,22 +146,5 @@ class Layout extends React.Component<Props, State> {
             </AntLayout>
         );
     }
-
-    getBaseInfo = async () => {
-        const query = queryString.parse((location as any).search);
-        const { data } = await getHomeBaseInfo(query);
-        const props: any = handleBaseInfo(data);
-        this.props.dispatch({
-            type: 'initBaseInfo',
-            data: props,
-        });
-        this.setState({ ...props, inited: true });
-        const { data: workflowData } = await getWorkflowTodo();
-        this.setState({ ...workflowData });
-    };
-
-    onCollapse = (collapsed: boolean) => {
-        this.setState({ collapsed });
-    };
 }
 export default Layout;

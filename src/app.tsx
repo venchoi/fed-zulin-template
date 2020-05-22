@@ -68,12 +68,6 @@ export default class App extends React.PureComponent<Props> {
                         {routes.map(item => {
                             return <Route path={item.path} component={item.component} key={item.path} />;
                         })}
-                        {/* <Route
-                            path="/"
-                            component={() => {
-                                return <ReportList history={this.props.history} />;
-                            }}
-                        /> */}
                         <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
                     </Switch>
                     {/* </Suspense> */}
