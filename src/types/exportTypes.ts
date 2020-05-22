@@ -5,10 +5,13 @@ export enum Status {
     SUCCESS = '成功',
     FAILED = '失败',
 }
+export enum ExportType {
+    METER = '导出抄表数据',
+}
 
-export interface ExportListParams {
+export interface IExportListParams {
     stage_id: string; // 项目id
-    type: string; // 与后端对接时获得，如：导出企业租客、导出工商个体租客、导出个人租客等
+    type: ExportType; // 与后端对接时获得，如：导出企业租客、导出工商个体租客、导出个人租客等
     page: number; // 页码
     page_size: number; // 单页长度
     keyword?: string; // 关键词
@@ -18,7 +21,7 @@ export interface ExportListParams {
 }
 
 // 导出记录
-export default interface ExportItemType {
+export default interface IExportItemType {
     created_on: string; // 导出时间
     created_by: string; // 导出人
     status: Status; // 状态
