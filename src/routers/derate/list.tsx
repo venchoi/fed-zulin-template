@@ -101,6 +101,7 @@ export const DerateList = (props: Props) => {
                     user={user}
                     selectedRowKeys={selectedRowKeys}
                     onTableSelect={handleTableSelect}
+                    projIds={selectedProjectIds}
                 />
                 {selectedRowKeys.length > 0 ? (
                     <div className="selected-status-bar">

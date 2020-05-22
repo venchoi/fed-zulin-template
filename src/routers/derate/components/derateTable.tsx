@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Table, message } from 'antd';
 import DerateSubRow from './derateSubRow';
-import InputWithCount from './InputWithCount';
 import { Link } from 'dva/router';
 import { ColumnProps } from 'antd/es/table';
 import { RightOutlined, DownOutlined } from '@ant-design/icons';
@@ -18,6 +17,7 @@ interface derateTableProps {
     history: History;
     selectedRowKeys: string[];
     onTableSelect?(keys: string[], rows: derateType[]): void;
+    projIds: string[];
 }
 
 interface selectedRowKeyType {
@@ -135,14 +135,13 @@ export const DerateTable = (props: derateTableProps) => {
     const rowSelection = {
         selectedRowKeys,
         onChange: (selectedRowKeys: any, selectedRows: derateType[]) => {
-            console.log(selectedRowKeys, selectedRows);
             onTableSelect && onTableSelect(selectedRowKeys, selectedRows);
         },
         getCheckboxProps: (record: derateType) => {
             const oaName = getVal(record.proj_id, 'oaName');
             const isEnabled = getVal(record.proj_id, 'isEnabled');
             return {
-                disabled: !oaName && !isEnabled && record.status === '待审核', // Column configuration not to be checked
+                disabled: oaName || isEnabled || record.status !== '待审核', // Column configuration not to be checked
             };
         },
     };
@@ -168,6 +167,11 @@ export const DerateTable = (props: derateTableProps) => {
             );
         },
     };
+
+    useEffect(() => {
+        const projStr = props.projIds ? props.projIds.join(',') : '';
+        getWorkflowStatus(projStr);
+    }, [props.projIds.join(',')]);
 
     const columns: ColumnProps<derateType>[] = [
         {
@@ -276,7 +280,6 @@ export const DerateTable = (props: derateTableProps) => {
                 const stageId = record.proj_id;
                 const oaName = getVal(record.proj_id, 'oaName');
                 const isEnabled = getVal(record.proj_id, 'isEnabled');
-                const gotIsEnabled = getVal(record.proj_id, 'gotIsEnabled');
                 const startApprovalPermission = checkPermission(
                     'EstablishWorkflowApproval',
                     'rental-establishworkflowapproval-start-approval'
@@ -377,13 +380,6 @@ export const DerateTable = (props: derateTableProps) => {
                                 审批详情
                             </a>
                         ) : null}
-                        <Link
-                            className="link-btn f-hidden rental-derate-view"
-                            to={`${baseAlias}/derate/detail/${record.id}`}
-                            style={{ marginRight: '5px' }}
-                        >
-                            详情
-                        </Link>
                     </div>
                 );
             },

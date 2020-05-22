@@ -133,6 +133,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 record.validateStatus = '';
             }
             record.derated_amount = value;
+            console.log(value);
             setDetail({
                 ...detail,
             });
@@ -151,7 +152,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         {
             name: '租客',
             field: 'renter_organization_name',
-            required: true,
+            required: false,
             value: (detail: derateDetail) => {
                 let renterOrganizationNames = detail.items.map(bill => bill.renter_organization_name);
                 renterOrganizationNames = [...new Set(renterOrganizationNames)];
@@ -161,7 +162,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         {
             name: '合同编号',
             field: 'contract_code',
-            required: true,
+            required: false,
             value: (detail: derateDetail) => {
                 return (detail.items && detail.items[0] && detail.items[0].contract_code) || '';
             },
@@ -182,7 +183,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
     ];
 
     const handleSave = () => {
-        const { attachment, remark, proj_id, id } = detail;
+        const { attachment, remark, proj_id, id, items = [] } = detail;
         const params: saveDataType = {
             attachment,
             derated_items: [],
@@ -196,7 +197,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             return;
         }
         const billsMap: { [index: string]: feeItemType[] } = {};
-        detail.items.forEach((item: feeItemType) => {
+        items.forEach((item: feeItemType) => {
             if (!billsMap[item.bill_item_id]) {
                 billsMap[item.bill_item_id] = [];
             }
@@ -206,9 +207,9 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             let deratedAmount, demurrageDeratedAmount;
             billsMap[billItemId].forEach(innerItem => {
                 if (innerItem.isDemurrage) {
-                    deratedAmount = innerItem.derated_amount;
+                    demurrageDeratedAmount = innerItem.stayDemurrageAmount;
                 } else {
-                    demurrageDeratedAmount = innerItem.demurrage_derated_amount;
+                    deratedAmount = innerItem.derated_amount;
                 }
             });
             return {
@@ -305,7 +306,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                     : comma(formatNum(record.derated_amount || '0.00'));
                 const deratedFormItem = record.isDemurrage ? (
                     <Form.Item validateStatus={record.validateStatus}>
-                        <Input disabled value={record.demurrage_derated_amount} />
+                        <Input disabled value={record.stayDemurrageAmount} />
                     </Form.Item>
                 ) : (
                     <Form.Item validateStatus={record.validateStatus}>
