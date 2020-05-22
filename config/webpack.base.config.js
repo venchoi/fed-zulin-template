@@ -51,6 +51,15 @@ module.exports = {
                                                 libraryDirectory: 'es',
                                                 style: true, // or 'css'
                                             },
+                                            'antd',
+                                        ],
+                                        [
+                                            'import',
+                                            {
+                                                libraryName: 'ykj-ui',
+                                                libraryDirectory: 'es',
+                                            },
+                                            'ykj-ui',
                                         ],
                                     ],
                                 },
