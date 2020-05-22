@@ -1,9 +1,15 @@
 import React, { useState, useEffect, ReactText } from 'react';
-import { Card, Button, Table, message, Modal, Popover } from 'antd';
+import { Card, Button, Table, message, Modal, Popover, DatePicker } from 'antd';
 import DerateSubRow from './derateSubRow';
-import { Link } from 'dva/router';
+import moment from 'moment';
 import { ColumnProps } from 'antd/es/table';
-import { RightOutlined, DownOutlined, ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import {
+    RightOutlined,
+    DownOutlined,
+    ExclamationCircleOutlined,
+    InfoCircleOutlined,
+    FilterOutlined,
+} from '@ant-design/icons';
 import { History } from 'history';
 import FedTable from '@c/FedTable';
 import {
@@ -16,6 +22,7 @@ import {
 } from '@s/derate';
 import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
 import { User, projsValue, feeItem, derateType, statusMapType, responseType, enableItemType } from '../list.d';
+import { getDerateListParams } from '@/types/derateTypes';
 const { confirm } = Modal;
 interface derateTableProps {
     derateList: derateType[];
@@ -27,6 +34,8 @@ interface derateTableProps {
     projIds: string[];
     setLoading(loading: boolean): void;
     getDerateListData(): void;
+    searchParams: getDerateListParams;
+    setSearchParams(params: getDerateListParams): void;
 }
 
 interface selectedRowKeyType {
@@ -40,6 +49,7 @@ export const DerateTable = (props: derateTableProps) => {
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
     const [enableList, setenableList] = useState<enableItemType[]>([]); // 减免列表
     const [expandedRows, setExpandedRows] = useState<ReactText[]>([]);
+    const [filterDropdownVisible, setFilterDropdownVisible] = useState(false);
     const setIsEnabledList = (json: responseType = {}, scenarioCode: string) => {
         const list = json.data || [];
         const enableList = list.map(item => ({
@@ -105,26 +115,6 @@ export const DerateTable = (props: derateTableProps) => {
             onOk: async () => {
                 setLoading(true);
                 const { result, msg = '操作失败', data } = await auditDerate({ id });
-                setLoading(false);
-                if (result) {
-                    getDerateListData();
-                    message.success('操作成功');
-                } else {
-                    message.error(msg);
-                }
-            },
-        });
-    };
-
-    const handleBatchAudit = (e: React.MouseEvent) => {
-        const ids = selectedRowKeys;
-        e.stopPropagation();
-        confirm({
-            icon: <ExclamationCircleOutlined />,
-            title: '确定审核选中的记录？',
-            onOk: async () => {
-                setLoading(true);
-                const { result, msg = '操作失败', data } = await batchAuditDerate({ ids });
                 setLoading(false);
                 if (result) {
                     getDerateListData();
@@ -246,6 +236,9 @@ export const DerateTable = (props: derateTableProps) => {
         const projStr = props.projIds ? props.projIds.join(',') : '';
         getWorkflowStatus(projStr);
     }, [props.projIds.join(',')]);
+    console.log(!!props.searchParams.start_date || !!props.searchParams.end_date);
+    const isFiltered = !!props.searchParams.start_date || !!props.searchParams.end_date;
+    console.log(isFiltered);
     const columns: ColumnProps<derateType>[] = [
         {
             dataIndex: 'code',
@@ -336,6 +329,30 @@ export const DerateTable = (props: derateTableProps) => {
             dataIndex: 'created_on',
             title: '申请日期',
             width: 120,
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
+                const value: any = [
+                    props.searchParams.start_date ? moment(props.searchParams.start_date) : '',
+                    props.searchParams.end_date ? moment(props.searchParams.end_date) : '',
+                ];
+                return (
+                    <DatePicker.RangePicker
+                        onChange={(values: any, formatString: [string, string]) => {
+                            console.log(values);
+                            confirm();
+                            props.setSearchParams({
+                                ...props.searchParams,
+                                start_date: values && values[0] ? values[0].format('YYYY-MM-DD') : '',
+                                end_date: values && values[1] ? values[1].format('YYYY-MM-DD') : '',
+                            });
+                        }}
+                        value={value}
+                    ></DatePicker.RangePicker>
+                );
+            },
+            filtered: isFiltered,
+            filterIcon: () => {
+                return <FilterOutlined style={{ color: isFiltered ? '#1890ff' : undefined }} />;
+            },
             render: (text: string, record: derateType, index: number) => {
                 const createdOn = record.created_on && record.created_on.replace(/(.*)\s.*/, '$1');
                 return (
@@ -506,6 +523,7 @@ export const DerateTable = (props: derateTableProps) => {
             },
         },
     ];
+    console.log(columns);
     return (
         <FedTable<derateType>
             className="derate-table"

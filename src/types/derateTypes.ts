@@ -12,6 +12,8 @@ export interface getDerateListParams {
     page: number;
     page_size: number;
     keyword?: string;
+    start_date?: string;
+    end_date?: string;
 }
 
 export interface getDerateDetailParams {

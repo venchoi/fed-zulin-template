@@ -21,6 +21,8 @@ export const DerateList = (props: Props) => {
         keyword: '',
         page: 1,
         page_size: 10,
+        start_date: '',
+        end_date: '',
     }); // 减免列表搜索参数
     const [derateTotal, setderateTotal] = useState(0);
     const [derateList, setderateList] = useState([]); // 减免列表
@@ -113,6 +115,8 @@ export const DerateList = (props: Props) => {
                     projIds={selectedProjectIds}
                     setLoading={tableSetLoading}
                     getDerateListData={getDerateListData}
+                    searchParams={searchParams}
+                    setSearchParams={setsearchParams}
                 />
                 {selectedRowKeys.length > 0 ? (
                     <div className="selected-status-bar">
