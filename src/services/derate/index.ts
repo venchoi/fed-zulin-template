@@ -9,6 +9,7 @@ import {
     batchAuditParams,
     voidParams,
     cancelDerateParams,
+    oaDetailParams,
 } from '@/types/derateTypes';
 
 export const getProjectTreeData = (data: getTreeDataParams) => {
@@ -51,4 +52,8 @@ export const voidDerate = (data: voidParams) => {
 // 取消减免
 export const cancelDerate = (data: cancelDerateParams) => {
     return ajax('/bill/derated/cancel-audited', { ...data, _csrf: '' }, 'POST');
+};
+
+export const fetchOaDetailData = (data: oaDetailParams) => {
+    return ajax('/third/scene/get-third-url', { ...data, _csrf: '' }, 'POST');
 };

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Row, Col, Table, message, Input, Spin } from 'antd';
+import { Form, Row, Col, Table, message, Input, Spin, Popover } from 'antd';
+import { CloseCircleFilled } from '@ant-design/icons';
 import FedButton from '@c/FedButton';
 import FedSection from '@c/FedSection';
 import Uploader from '@c/Uploader';
@@ -26,6 +27,8 @@ export const DerateSubRow = (props: derateSubRowProps) => {
     const [form] = Form.useForm();
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
     const [selectedRows, setSelectedRows] = useState<feeItemType[]>([]);
+    const [errorMsg, setErrorMsg] = useState('test'); // 错误弹窗popover内容
+    const [isShowError, setIsShowError] = useState(false);
     const [detail, setDetail] = useState<derateDetail>({
         items: [],
         proj_name: '',
@@ -133,17 +136,19 @@ export const DerateSubRow = (props: derateSubRowProps) => {
 
     const handleDerateAmountChange = (record: feeItemType) => {
         return (e: React.ChangeEvent<HTMLInputElement>) => {
-            console.log(e);
             let value: any = e.target.value || '';
             value = value.replace(/[^0-9\.]/g, '');
             value = value.replace(/(\d*\.\d{1,2})(.*)/, '$1');
             if (value * 100 - (record.stayAmount || 0) * 100 > 0) {
                 record.validateStatus = 'error';
+                setErrorMsg('减免金额超出可减免金额，请修改正确后提交！');
+                setIsShowError(true);
             } else {
                 record.validateStatus = '';
+                setErrorMsg('');
+                setIsShowError(false);
             }
             record.derated_amount = value;
-            console.log(value);
             setDetail({
                 ...detail,
             });
@@ -151,7 +156,6 @@ export const DerateSubRow = (props: derateSubRowProps) => {
     };
 
     const handleAttachmentChange = (file: fileType, files: fileType[]) => {
-        console.log(file, files);
         setDetail({
             attachment: files,
             ...detail,
@@ -187,6 +191,18 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         },
     ];
 
+    const validateForm = () => {
+        const { items = [] } = detail;
+        const hasError = items.some(item => {
+            const isSelected = selectedRowKeys.find(id => {
+                const itemId = item.id + (item.isDemurrage ? '1' : '0');
+                return itemId === id;
+            });
+            return item.validateStatus === 'error' && isSelected;
+        });
+        return !hasError;
+    };
+
     const handleSave = async () => {
         const { attachment, remark, proj_id, id, items = [] } = detail;
         const params: saveDataType = {
@@ -199,6 +215,9 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         params.attachment.forEach((attach: fileType) => delete attach.edit);
         if (selectedRowKeys.length === 0) {
             message.error('没有选择的减免明细');
+            return;
+        }
+        if (!validateForm()) {
             return;
         }
         const billsMap: { [index: string]: feeItemType[] } = {};
@@ -331,6 +350,13 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         return total;
     }, 0);
 
+    const popoverError = (
+        <div className="content-container">
+            <CloseCircleFilled className="red" />
+            <span className="text">{errorMsg}</span>
+        </div>
+    );
+
     return (
         <Spin spinning={loading}>
             <div className="derate-detail">
@@ -339,9 +365,23 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                     <div className="op-btns">
                         {isEditMode ? (
                             <>
-                                <FedButton type="primary" size="small" onClick={handleSave}>
-                                    保存
-                                </FedButton>
+                                {isShowError ? (
+                                    <Popover
+                                        content={popoverError}
+                                        title=""
+                                        trigger="hover"
+                                        placement="bottomRight"
+                                        overlayClassName="derate-err-content"
+                                    >
+                                        <FedButton type="primary" size="small" onClick={handleSave}>
+                                            保存
+                                        </FedButton>
+                                    </Popover>
+                                ) : (
+                                    <FedButton type="primary" size="small" onClick={handleSave}>
+                                        保存
+                                    </FedButton>
+                                )}
                                 <FedButton size="small" onClick={handleCancelEdit}>
                                     取消
                                 </FedButton>

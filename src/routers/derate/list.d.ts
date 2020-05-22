@@ -44,6 +44,7 @@ export interface derateType {
     wh_new_approval_info: any;
     wh_renew_approval_info: any;
     created_by: string;
+    package_rooms?: { package_name: string; room_names: string }[];
 }
 
 export interface statusMapType {

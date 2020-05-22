@@ -47,3 +47,9 @@ export interface voidParams {
 export interface cancelDerateParams {
     ids: string;
 }
+
+export interface oaDetailParams {
+    business_id: string;
+    scenario_code: string;
+    url_field: string;
+}

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Button, Table, message, Modal } from 'antd';
+import React, { useState, useEffect, ReactText } from 'react';
+import { Card, Button, Table, message, Modal, Popover } from 'antd';
 import DerateSubRow from './derateSubRow';
 import { Link } from 'dva/router';
 import { ColumnProps } from 'antd/es/table';
-import { RightOutlined, DownOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { RightOutlined, DownOutlined, ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { History } from 'history';
 import FedTable from '@c/FedTable';
 import {
@@ -12,6 +12,7 @@ import {
     batchAuditDerate,
     voidDerate,
     cancelDerate,
+    fetchOaDetailData,
 } from '@s/derate';
 import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
 import { User, projsValue, feeItem, derateType, statusMapType, responseType, enableItemType } from '../list.d';
@@ -38,7 +39,7 @@ export const DerateTable = (props: derateTableProps) => {
     const { derateList, derateTotal, user, history, onTableSelect, selectedRowKeys } = props;
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
     const [enableList, setenableList] = useState<enableItemType[]>([]); // 减免列表
-
+    const [expandedRows, setExpandedRows] = useState<ReactText[]>([]);
     const setIsEnabledList = (json: responseType = {}, scenarioCode: string) => {
         const list = json.data || [];
         const enableList = list.map(item => ({
@@ -72,7 +73,24 @@ export const DerateTable = (props: derateTableProps) => {
 
     const handleOaAudit = (record: derateType) => {};
 
-    const fetchOaDetail = (record: derateType) => {};
+    const fetchOaDetail = async (record: derateType, e: React.MouseEvent) => {
+        e && e.stopPropagation();
+        const params = {
+            business_id: record.id,
+            scenario_code: 'derated_apply',
+            url_field: 'pc_detail_url',
+        };
+        setLoading(true);
+        const { result, data } = await fetchOaDetailData(params);
+        setLoading(false);
+        if (result) {
+            if (data && data.url) {
+                window.open(data.url, '_blank');
+            } else {
+                message.error('获取地址失败');
+            }
+        }
+    };
 
     const handleAudit = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
@@ -196,7 +214,7 @@ export const DerateTable = (props: derateTableProps) => {
     };
 
     const expandable = {
-        expandIconColumnIndex: 1,
+        expandIconColumnIndex: 0,
         expandRowByClick: true,
         expandedRowRender: (record: derateType) => {
             return <DerateSubRow record={record} />;
@@ -215,20 +233,25 @@ export const DerateTable = (props: derateTableProps) => {
                 </div>
             );
         },
+        onExpandedRowsChange: (expandedRows: ReactText[]) => {
+            setExpandedRows(expandedRows);
+        },
     };
-
     useEffect(() => {
         const projStr = props.projIds ? props.projIds.join(',') : '';
         getWorkflowStatus(projStr);
     }, [props.projIds.join(',')]);
-
     const columns: ColumnProps<derateType>[] = [
         {
             dataIndex: 'code',
             title: '减免流水号',
-            width: 168,
+            width: 200,
             render: (text: string, record: derateType, index: number) => {
-                return <span>{text}</span>;
+                return (
+                    <span className="derate-table-td" title={text || '-'}>
+                        {text}
+                    </span>
+                );
             },
         },
         {
@@ -236,7 +259,11 @@ export const DerateTable = (props: derateTableProps) => {
             title: '项目名称',
             width: 120,
             render: (text: string, record: derateType, index: number) => {
-                return <>{text || '-'}</>;
+                return (
+                    <span className="derate-table-td" title={text || '-'}>
+                        {text || '-'}
+                    </span>
+                );
             },
         },
         {
@@ -246,7 +273,12 @@ export const DerateTable = (props: derateTableProps) => {
             render: (text: string, record: derateType, index: number) => {
                 let renterOrganizationNames = record.items.map(bill => bill.renter_organization_name);
                 renterOrganizationNames = [...new Set(renterOrganizationNames)];
-                return renterOrganizationNames.join(',');
+                const names = renterOrganizationNames.join(',');
+                return (
+                    <span className="derate-table-td" title={names || '-'}>
+                        {names}
+                    </span>
+                );
             },
         },
         {
@@ -255,17 +287,57 @@ export const DerateTable = (props: derateTableProps) => {
             width: 144,
             render: (text: string, record: derateType, index: number) => {
                 const items = record.items;
-                const resource = items.length > 0 ? items[0].full_room_name : '';
-                return <>{resource || '-'}</>;
+                const roomNames = [...new Set(items.map(item => item.full_room_name))];
+                const pacakgeNames =
+                    record.package_rooms && record.package_rooms.length > 0 ? record.package_rooms : false;
+                if (pacakgeNames) {
+                    return pacakgeNames.map(packageRoom => {
+                        const rooms = packageRoom.room_names ? packageRoom.room_names.split(',') : [];
+                        const popoverContent = (
+                            <div>
+                                {rooms.map(room => {
+                                    return <p>{room}</p>;
+                                })}
+                            </div>
+                        );
+                        return (
+                            <div className="rs-td-container">
+                                <span className="derate-table-td-rs" title={packageRoom.package_name || '-'}>
+                                    {packageRoom.package_name}
+                                </span>
+                                <Popover title="打包资源列表" placement="bottom" content={popoverContent}>
+                                    <InfoCircleOutlined
+                                        style={{
+                                            color: '#BEC3C7',
+                                            marginLeft: '5px',
+                                            marginTop: '4px',
+                                        }}
+                                    />
+                                </Popover>
+                            </div>
+                        );
+                    });
+                }
+                return roomNames.map(room => {
+                    return (
+                        <span className="derate-table-td" title={room || '-'}>
+                            {room || '-'}
+                        </span>
+                    );
+                });
             },
         },
         {
             dataIndex: 'created_on',
             title: '申请日期',
-            width: 112,
+            width: 120,
             render: (text: string, record: derateType, index: number) => {
                 const createdOn = record.created_on && record.created_on.replace(/(.*)\s.*/, '$1');
-                return <>{createdOn || '-'}</>;
+                return (
+                    <span className="derate-table-td" title={createdOn || '-'}>
+                        {createdOn || '-'}
+                    </span>
+                );
             },
         },
         {
@@ -275,13 +347,17 @@ export const DerateTable = (props: derateTableProps) => {
             render: (text: string, record: derateType, index: number) => {
                 let feeName: any = Array.from(new Set(record.items.map(bill => bill.fee_name)));
                 feeName = feeName.join(',');
-                return <>{feeName || '-'}</>;
+                return (
+                    <span className="derate-table-td" title={feeName || '-'}>
+                        {feeName || '-'}
+                    </span>
+                );
             },
         },
         {
             dataIndex: 'derated_amount',
             title: '减免金额',
-            width: 162,
+            width: 112,
             render: (text: string, record: derateType, index: number) => {
                 const derated_amount = record.items.reduce((total: number, curr: any) => {
                     total += +curr.derated_amount || 0;
@@ -292,7 +368,11 @@ export const DerateTable = (props: derateTableProps) => {
                     return total;
                 }, 0);
                 const totalDerate = comma(formatNum(derated_amount + demurrage_derated_amount));
-                return <>{totalDerate || '-'}</>;
+                return (
+                    <span className="derate-table-td" title={totalDerate || '-'}>
+                        {totalDerate || '-'}
+                    </span>
+                );
             },
         },
         {
@@ -322,7 +402,7 @@ export const DerateTable = (props: derateTableProps) => {
         {
             title: '操作',
             key: 'action',
-            fixed: 'right',
+            fixed: expandedRows.length > 0 ? undefined : 'right',
             width: 128,
             render(text: string, record: derateType, index: number) {
                 const { user } = props;
@@ -362,19 +442,17 @@ export const DerateTable = (props: derateTableProps) => {
                                 type="link"
                                 className="link-btn f-hidden rental-derate-audit"
                                 onClick={handleOaAudit.bind(this, record)}
-                                style={{ marginRight: '5px' }}
                             >
                                 提交审批
                             </Button>
                         ) : null}
                         {record.workflow_instance_id && record.status !== '待审核' ? (
-                            <Link
+                            <a
                                 className="link-btn f-hidden rental-derate-view"
-                                to={`${baseAlias}/workflowApproval/detail/${record.workflow_instance_id}`}
-                                style={{ marginRight: '5px' }}
+                                href={`/${baseAlias}/workflowApproval/detail/${record.workflow_instance_id}`}
                             >
                                 审批详情
-                            </Link>
+                            </a>
                         ) : null}
                         {record.status === '审核中' && +record.show_third_detail === 1 ? (
                             <a className="operate-btn" onClick={fetchOaDetail.bind(this, record)}>
@@ -386,7 +464,6 @@ export const DerateTable = (props: derateTableProps) => {
                                 type="link"
                                 className="link-btn f-hidden rental-derate-audit"
                                 onClick={handleAudit.bind(this, record.id)}
-                                style={{ marginRight: '5px' }}
                             >
                                 审核
                             </Button>
@@ -396,7 +473,6 @@ export const DerateTable = (props: derateTableProps) => {
                                 type="link"
                                 className="link-btn f-hidden rental-derate-void"
                                 onClick={handleVoid.bind(this, record.id)}
-                                style={{ marginRight: '5px' }}
                             >
                                 作废
                             </Button>
@@ -406,7 +482,6 @@ export const DerateTable = (props: derateTableProps) => {
                                 type="link"
                                 className="link-btn f-hidden rental-derate-unaudit"
                                 onClick={handleCancelDerate.bind(this, record.id)}
-                                style={{ marginRight: '5px' }}
                             >
                                 取消减免
                             </Button>
@@ -416,6 +491,7 @@ export const DerateTable = (props: derateTableProps) => {
                                 className="operate-btn"
                                 target="_blank"
                                 href={record.wh_approval_info && record.wh_approval_info.detail_url}
+                                style={{ marginLeft: '16px' }}
                             >
                                 审批详情
                             </a>
@@ -425,9 +501,9 @@ export const DerateTable = (props: derateTableProps) => {
             },
         },
     ];
-
     return (
         <FedTable<derateType>
+            className="derate-table"
             vsides={false}
             rowKey="id"
             columns={columns}
@@ -442,5 +518,4 @@ export const DerateTable = (props: derateTableProps) => {
         />
     );
 };
-
 export default DerateTable;
