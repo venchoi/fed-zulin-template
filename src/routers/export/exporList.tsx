@@ -15,8 +15,8 @@ interface IProps {
 }
 
 const exportCard = ({ dataSource }: IProps) => {
-    const [params, setParams] = useState({
-        status: '',
+    const [params, setParams] = useState<Partial<IExportListParams>>({
+        status: Status.DEFAULT,
         page: 1,
         page_size: 20,
         keyword: '',
@@ -64,12 +64,20 @@ const exportCard = ({ dataSource }: IProps) => {
         },
     ];
 
+    const handleChangeParams = <T extends keyof IExportListParams>(key: T, value: IExportListParams[T]) => {
+        setParams({ ...params, ...{ [key]: value } });
+    };
     return (
         <Card>
             <div className="filter">
                 <div className="filter-left">
                     <span className="filter-item">
-                        <Search placeholder="操作人" style={{ width: '224px' }} value={params.keyword} />
+                        <Search
+                            placeholder="操作人"
+                            style={{ width: '224px' }}
+                            value={params.keyword}
+                            onChange={e => handleChangeParams('keyword', e.target.value)}
+                        />
                     </span>
                     <span className="filter-item">
                         <Select
