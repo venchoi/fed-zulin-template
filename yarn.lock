@@ -13232,10 +13232,10 @@ yargs@^13.3.0:
     y18n "^4.0.0"
     yargs-parser "^13.1.1"
 
-ykj-ui@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.npmjs.org/ykj-ui/-/ykj-ui-1.2.0.tgz#2e8743a7a131a2a781b4d76c70b43ffd461750b8"
-  integrity sha512-nhWyniJTH8ORyBJj71R6KCBCt4P55JEd46xl3AQCcJc/iElz1KDTzQdISQo6SsQhd0UHYVuVs8dmV1qFxFFbHw==
+ykj-ui@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.npmjs.org/ykj-ui/-/ykj-ui-1.2.4.tgz#fda9c7c074c29302f4845e106e3aa5a3b8ff9b5b"
+  integrity sha512-1sBFbp78DT3gegQXHBgeyEKsWsSVgcdTS+at1JR+LcJQvvZKZNLoT3BnlrovAJ0MrfuShlfxBTjcok4nTw4X8g==
   dependencies:
     react "^16.13.1"
     react-dom "^16.13.1"

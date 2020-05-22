@@ -11,7 +11,6 @@ import { getDerateList, batchAuditDerate } from '@s/derate';
 import { getDerateListParams } from '@/types/derateTypes';
 import { Props, projsValue, derateType } from './list.d';
 import './list.less';
-import { Demo } from 'ykj-ui';
 const baseAlias = 'static';
 const { confirm } = Modal;
 export const DerateList = (props: Props) => {
@@ -94,7 +93,6 @@ export const DerateList = (props: Props) => {
             }
         >
             <div>
-                <Demo test="测试" />
                 <SearchArea
                     selectedRowKeys={selectedRowKeys}
                     onAudit={handleBatchAudit}
