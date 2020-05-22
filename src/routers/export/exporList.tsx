@@ -40,10 +40,14 @@ const exportCard = ({ dataSource, paramsChange }: IProps) => {
             title: '状态',
         },
         {
-            dataIndex: 'id',
+            dataIndex: 'file_path',
             title: '操作',
-            render: () => {
-                return <></>;
+            render: text => {
+                return (
+                    <a href={text} target="_blank">
+                        下载
+                    </a>
+                );
             },
         },
     ];
