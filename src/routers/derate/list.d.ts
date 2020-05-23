@@ -64,3 +64,8 @@ export interface enableItemType {
     gotIsEnabled: boolean;
     projId: string;
 }
+
+export interface billFeeItemType {
+    text: string;
+    value: string;
+}

@@ -7,15 +7,16 @@ import SearchArea from './components/searchArea';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import FedPagination from './components/pagination';
 import DerateTable from './components/derateTable';
-import { getDerateList, batchAuditDerate } from '@s/derate';
+import { getDerateList, batchAuditDerate, getBillItemFee } from '@s/derate';
 import { getDerateListParams } from '@/types/derateTypes';
-import { Props, projsValue, derateType } from './list.d';
+import { Props, projsValue, derateType, billFeeItemType } from './list.d';
 import './list.less';
 const baseAlias = 'static';
 const { confirm } = Modal;
 export const DerateList = (props: Props) => {
     const { user, history } = props;
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
+    const [selectedProjectNames, setselectedProjectNames] = useState<string[]>([]); // 当前选中的项目
     const [searchParams, setsearchParams] = useState<getDerateListParams>({
         proj_id: '',
         keyword: '',
@@ -23,19 +24,31 @@ export const DerateList = (props: Props) => {
         page_size: 10,
         start_date: '',
         end_date: '',
+        fee_name: '',
+        room_id: '',
+        subdistrict_id: '',
+        building_id: '',
+        floor_id: '',
+        floor_name: '',
     }); // 减免列表搜索参数
     const [derateTotal, setderateTotal] = useState(0);
     const [derateList, setderateList] = useState([]); // 减免列表
     const [loading, setloading] = useState(false);
     const [selectedRowKeys, setselectedRowKeys] = useState<string[]>([]);
     const [selectedRows, setselectedRows] = useState<derateType[]>([]);
+    const [feeItemList, setFeeItemList] = useState<billFeeItemType[]>([]);
     const tableSetLoading = useCallback(setloading, [setloading]);
     useEffect(() => {
         getDerateListData();
     }, [searchParams]);
 
+    useEffect(() => {
+        getBillItemFeeList();
+    }, [searchParams.proj_id]);
+
     const handleTreeSelected = (selecctedProject: projsValue) => {
         setselectedProjectIds(selecctedProject.projIds);
+        setselectedProjectNames(selecctedProject.projNames);
         setsearchParams({
             ...searchParams,
             proj_id: selecctedProject.projIds.join(','),
@@ -48,6 +61,29 @@ export const DerateList = (props: Props) => {
         if (result && data) {
             setderateList(data.items || []);
             setderateTotal(data.total);
+        }
+        setloading(false);
+    };
+
+    const getBillItemFeeList = async () => {
+        console.log(searchParams.proj_id);
+        if (!searchParams.proj_id) {
+            return;
+        }
+        setloading(true);
+        const { result, data } = await getBillItemFee({
+            proj_id: searchParams.proj_id,
+        });
+        if (result) {
+            console.log(data);
+            setFeeItemList(
+                data.map((item: { fee_name: string }) => {
+                    return {
+                        text: item.fee_name,
+                        value: item.fee_name,
+                    };
+                }) || []
+            );
         }
         setloading(false);
     };
@@ -113,10 +149,12 @@ export const DerateList = (props: Props) => {
                     selectedRowKeys={selectedRowKeys}
                     onTableSelect={handleTableSelect}
                     projIds={selectedProjectIds}
+                    projNames={selectedProjectNames}
                     setLoading={tableSetLoading}
                     getDerateListData={getDerateListData}
                     searchParams={searchParams}
                     setSearchParams={setsearchParams}
+                    feeItemList={feeItemList}
                 />
                 {selectedRowKeys.length > 0 ? (
                     <div className="selected-status-bar">

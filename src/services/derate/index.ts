@@ -10,6 +10,7 @@ import {
     voidParams,
     cancelDerateParams,
     oaDetailParams,
+    billItemFeeParams,
 } from '@/types/derateTypes';
 
 export const getProjectTreeData = (data: getTreeDataParams) => {
@@ -52,6 +53,10 @@ export const voidDerate = (data: voidParams) => {
 // 取消减免
 export const cancelDerate = (data: cancelDerateParams) => {
     return ajax('/bill/derated/cancel-audited', { ...data, _csrf: '' }, 'POST');
+};
+
+export const getBillItemFee = (data: billItemFeeParams) => {
+    return ajax('/bill/derated/get-bill-item-fee', { ...data, _csrf: '' }, 'POST');
 };
 
 export const fetchOaDetailData = (data: oaDetailParams) => {

@@ -120,3 +120,54 @@ export function randomStr() {
             .slice(2) + (+new Date()).toString(16)
     );
 }
+
+/**
+ * 对于正式和中文的排序
+ * @param arr
+ * @returns []
+ */
+export function sort(arr: any[]): any[] {
+    arr.sort((x, y): number => {
+        const reg = /(\D*)?(-\d+|\d*)(\D*)?/;
+        const regFix = /(\D*)?(-\d+)(\D*)?/;
+        const xResult = reg.exec(x.name) || [];
+        const xResultFix = regFix.exec(x.name);
+        const yResult = reg.exec(y.name) || [];
+        const yResultFix = regFix.exec(y.name);
+        const xHead = xResultFix ? xResultFix[1] : xResult[1];
+        const xNum = (xResultFix && xResultFix[2]) || xResult[2];
+        const xFoot = xResult[3];
+        const yHead = yResultFix ? yResultFix[1] : yResult[1];
+        const yNum = (yResultFix && yResultFix[2]) || yResult[2];
+        const yFoot = yResult[3];
+        if (xHead && yHead) {
+            if (xHead !== yHead) {
+                return xHead > yHead ? 1 : -1;
+            }
+        }
+        if (xHead && !yHead) {
+            return 10000000000000;
+        }
+        if (!xHead && yHead) {
+            return -10000000000000;
+        }
+        if (xNum && yNum) {
+            if (xNum !== yNum) {
+                if (xHead) {
+                    return parseFloat(xNum) - parseFloat(yNum);
+                }
+                return parseFloat(yNum) - parseFloat(xNum);
+            }
+        }
+        if (xFoot && yFoot) {
+            if (xNum !== yNum) {
+                if (xHead) {
+                    return yFoot > xFoot ? 1 : -1;
+                }
+                return xFoot > yFoot ? 1 : -1;
+            }
+        }
+        return x.name > y.name ? 1 : -1;
+    });
+    return arr;
+}

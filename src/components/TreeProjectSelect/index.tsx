@@ -32,7 +32,11 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
     }
 
     componentDidMount() {
-        this.getProjectData();
+        this.getProjectData(() => {
+            if (this.state.projIds && this.state.projIds.length > 0) {
+                this.onTreeSelect && this.onTreeSelect(this.state.projIds);
+            }
+        });
         document.addEventListener('click', this.handleOutsideClick, false);
     }
 
@@ -184,7 +188,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
     }
 
     // 获取原始项目树形结构数据
-    getProjectData() {
+    getProjectData(cb: any) {
         getProjectTreeData({}).then(res => {
             if (!res.result) {
                 message.error(res.msg);
@@ -192,9 +196,14 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             }
             const originData = (res.data && res.data.company) || [];
             const treeData = this.transferOriginTreeData(originData);
-            this.setState({
-                treeData,
-            });
+            this.setState(
+                {
+                    treeData,
+                },
+                () => {
+                    cb && cb();
+                }
+            );
         });
     }
 }

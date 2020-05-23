@@ -1,5 +1,7 @@
 import React, { useState, useEffect, ReactText } from 'react';
 import { Card, Button, Table, message, Modal, Popover, DatePicker } from 'antd';
+import RoomCascader from '@c/RoomCascader';
+import { PaginationConfig } from 'antd/es/pagination';
 import DerateSubRow from './derateSubRow';
 import moment from 'moment';
 import { ColumnProps } from 'antd/es/table';
@@ -8,7 +10,8 @@ import {
     DownOutlined,
     ExclamationCircleOutlined,
     InfoCircleOutlined,
-    FilterOutlined,
+    FilterFilled,
+    CalendarFilled,
 } from '@ant-design/icons';
 import { History } from 'history';
 import FedTable from '@c/FedTable';
@@ -21,27 +24,20 @@ import {
     fetchOaDetailData,
 } from '@s/derate';
 import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
-import { User, projsValue, feeItem, derateType, statusMapType, responseType, enableItemType } from '../list.d';
+import {
+    User,
+    projsValue,
+    feeItem,
+    derateType,
+    statusMapType,
+    responseType,
+    enableItemType,
+    billFeeItemType,
+} from '../list.d';
 import { getDerateListParams } from '@/types/derateTypes';
+import { derateTableProps, selectedRowKeyType, selectedRoomConfigType, selectedConfigType } from './derateTable.d';
+import { handleOaAudit } from './derateTableFn';
 const { confirm } = Modal;
-interface derateTableProps {
-    derateList: derateType[];
-    derateTotal: number;
-    user: User;
-    history: History;
-    selectedRowKeys: string[];
-    onTableSelect?(keys: string[], rows: derateType[]): void;
-    projIds: string[];
-    setLoading(loading: boolean): void;
-    getDerateListData(): void;
-    searchParams: getDerateListParams;
-    setSearchParams(params: getDerateListParams): void;
-}
-
-interface selectedRowKeyType {
-    id: string;
-}
-
 const baseAlias = 'static';
 export const DerateTable = (props: derateTableProps) => {
     const { setLoading, getDerateListData } = props;
@@ -50,6 +46,14 @@ export const DerateTable = (props: derateTableProps) => {
     const [enableList, setenableList] = useState<enableItemType[]>([]); // 减免列表
     const [expandedRows, setExpandedRows] = useState<ReactText[]>([]);
     const [filterDropdownVisible, setFilterDropdownVisible] = useState(false);
+    const [selectedRoomConfig, setSelectedRoomConfig] = useState({
+        selectedProjId: '',
+        subdistrictId: '',
+        buildingId: '',
+        floorId: '',
+        floorName: '',
+        roomId: '',
+    });
     const setIsEnabledList = (json: responseType = {}, scenarioCode: string) => {
         const list = json.data || [];
         const enableList = list.map(item => ({
@@ -61,7 +65,6 @@ export const DerateTable = (props: derateTableProps) => {
         }));
         setenableList(enableList);
     };
-
     const getWorkflowStatus = async (projIdStr: string) => {
         const res = await fetchMuiltStageWorkflowTempIsEnabled({
             proj_id: projIdStr,
@@ -79,13 +82,6 @@ export const DerateTable = (props: derateTableProps) => {
             return match[key];
         }
         return false;
-    };
-
-    const handleOaAudit = (record: derateType, e: React.MouseEvent) => {
-        e && e.stopPropagation();
-        setTimeout(() => {
-            location.href = `${baseAlias}/workflowApproval/add/${record.proj_id}/${record.id}/derated_apply`;
-        }, 20);
     };
 
     const fetchOaDetail = async (record: derateType, e: React.MouseEvent) => {
@@ -193,7 +189,6 @@ export const DerateTable = (props: derateTableProps) => {
             }
         }
     };
-
     const rowSelection = {
         selectedRowKeys,
         onChange: (selectedRowKeys: any, selectedRows: derateType[]) => {
@@ -207,7 +202,6 @@ export const DerateTable = (props: derateTableProps) => {
             };
         },
     };
-
     const expandable = {
         expandIconColumnIndex: 0,
         expandRowByClick: true,
@@ -232,13 +226,26 @@ export const DerateTable = (props: derateTableProps) => {
             setExpandedRows(expandedRows);
         },
     };
+
     useEffect(() => {
         const projStr = props.projIds ? props.projIds.join(',') : '';
-        getWorkflowStatus(projStr);
+        // getWorkflowStatus(projStr);
     }, [props.projIds.join(',')]);
-    console.log(!!props.searchParams.start_date || !!props.searchParams.end_date);
+    const handleTableChange = (pagination: PaginationConfig, filters: any, sorter: any) => {
+        console.log(pagination, filters, sorter);
+        const fee_name = filters.fee_item && filters.fee_item.length > 0 ? filters.fee_item.join(',') : '';
+        props.setSearchParams({
+            ...props.searchParams,
+            fee_name,
+        });
+    };
     const isFiltered = !!props.searchParams.start_date || !!props.searchParams.end_date;
-    console.log(isFiltered);
+    // 资源是否过滤
+    const isRSFiltered =
+        !!props.searchParams.room_id ||
+        !!props.searchParams.building_id ||
+        !!!!props.searchParams.floor_name ||
+        !!props.searchParams.subdistrict_id;
     const columns: ColumnProps<derateType>[] = [
         {
             dataIndex: 'code',
@@ -283,6 +290,42 @@ export const DerateTable = (props: derateTableProps) => {
             dataIndex: 'items',
             title: '资源',
             width: 144,
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
+                const projIds = props.projIds ? props.projIds.join(',') : '';
+                const projNames = props.projNames ? props.projNames.join(',') : '';
+                return (
+                    <RoomCascader
+                        style={{ minWidth: 150 }}
+                        projIds={projIds}
+                        projNames={projNames}
+                        selectedConfig={selectedRoomConfig}
+                        onChange={(selectedConfig: selectedConfigType) => {
+                            const { stageId, subdistrictId, buildingId, floorId, floorName, roomId } = selectedConfig;
+                            confirm();
+                            setSelectedRoomConfig({
+                                selectedProjId: stageId,
+                                subdistrictId,
+                                buildingId,
+                                floorId,
+                                floorName,
+                                roomId,
+                            });
+                            props.setSearchParams({
+                                ...props.searchParams,
+                                room_id: roomId,
+                                subdistrict_id: subdistrictId,
+                                building_id: buildingId,
+                                floor_id: floorId,
+                                floor_name: floorName,
+                            });
+                        }}
+                    />
+                );
+            },
+            filtered: isRSFiltered,
+            filterIcon: () => {
+                return <FilterFilled style={{ color: isRSFiltered ? '#1890ff' : undefined }} />;
+            },
             render: (text: string, record: derateType, index: number) => {
                 const items = record.items;
                 const roomNames = [...new Set(items.map(item => item.full_room_name))];
@@ -337,7 +380,6 @@ export const DerateTable = (props: derateTableProps) => {
                 return (
                     <DatePicker.RangePicker
                         onChange={(values: any, formatString: [string, string]) => {
-                            console.log(values);
                             confirm();
                             props.setSearchParams({
                                 ...props.searchParams,
@@ -351,7 +393,7 @@ export const DerateTable = (props: derateTableProps) => {
             },
             filtered: isFiltered,
             filterIcon: () => {
-                return <FilterOutlined style={{ color: isFiltered ? '#1890ff' : undefined }} />;
+                return <CalendarFilled style={{ color: isFiltered ? '#1890ff' : undefined }} />;
             },
             render: (text: string, record: derateType, index: number) => {
                 const createdOn = record.created_on && record.created_on.replace(/(.*)\s.*/, '$1');
@@ -366,6 +408,7 @@ export const DerateTable = (props: derateTableProps) => {
             dataIndex: 'fee_item',
             title: '减免费项',
             width: 112,
+            filters: props.feeItemList,
             render: (text: string, record: derateType, index: number) => {
                 let feeName: any = Array.from(new Set(record.items.map(bill => bill.fee_name)));
                 feeName = feeName.join(',');
@@ -523,7 +566,7 @@ export const DerateTable = (props: derateTableProps) => {
             },
         },
     ];
-    console.log(columns);
+
     return (
         <FedTable<derateType>
             className="derate-table"
@@ -538,6 +581,7 @@ export const DerateTable = (props: derateTableProps) => {
             scroll={{
                 y: 'calc( 100vh - 340px )',
             }}
+            onChange={handleTableChange}
         />
     );
 };

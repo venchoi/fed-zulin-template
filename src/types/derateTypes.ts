@@ -14,6 +14,12 @@ export interface getDerateListParams {
     keyword?: string;
     start_date?: string;
     end_date?: string;
+    fee_name?: string;
+    room_id?: string;
+    subdistrict_id?: string;
+    building_id?: string;
+    floor_id?: string;
+    floor_name?: string;
 }
 
 export interface getDerateDetailParams {
@@ -54,4 +60,8 @@ export interface oaDetailParams {
     business_id: string;
     scenario_code: string;
     url_field: string;
+}
+
+export interface billItemFeeParams {
+    proj_id: string;
 }

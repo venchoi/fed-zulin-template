@@ -320,7 +320,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             align: 'right',
             render: (text: string, record: feeItemType, index: number) => {
                 const deratedAmount = record.isDemurrage
-                    ? comma(formatNum(record.demurrage_derated_amount || '0.00'))
+                    ? comma(formatNum(record.stayDemurrageAmount || '0.00'))
                     : comma(formatNum(record.derated_amount || '0.00'));
                 const deratedFormItem = record.isDemurrage ? (
                     <Form.Item validateStatus={record.validateStatus}>
