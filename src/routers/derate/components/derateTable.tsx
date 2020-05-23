@@ -189,6 +189,7 @@ export const DerateTable = (props: derateTableProps) => {
             }
         }
     };
+
     const rowSelection = {
         selectedRowKeys,
         onChange: (selectedRowKeys: any, selectedRows: derateType[]) => {
