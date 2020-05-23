@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ReactText } from 'react';
-import { Card, Button, Table, message, Modal, Popover, DatePicker } from 'antd';
+import { Button, Table, message, Modal, DatePicker } from 'antd';
 import RoomCascader from '@c/RoomCascader';
 import { PaginationConfig } from 'antd/es/pagination';
 import DerateSubRow from './derateSubRow';
@@ -18,25 +18,15 @@ import FedTable from '@c/FedTable';
 import {
     fetchMuiltStageWorkflowTempIsEnabled,
     auditDerate,
-    batchAuditDerate,
     voidDerate,
     cancelDerate,
     fetchOaDetailData,
 } from '@s/derate';
 import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
-import {
-    User,
-    projsValue,
-    feeItem,
-    derateType,
-    statusMapType,
-    responseType,
-    enableItemType,
-    billFeeItemType,
-} from '../list.d';
-import { getDerateListParams } from '@/types/derateTypes';
-import { derateTableProps, selectedRowKeyType, selectedRoomConfigType, selectedConfigType } from './derateTable.d';
-import { handleOaAudit } from './derateTableFn';
+import { derateType, statusMapType, responseType, enableItemType } from '../list.d';
+import { derateTableProps, selectedConfigType } from './derateTable.d';
+import { handleOaAudit, excute } from './derateTableFn';
+import rsRender, { baseColumns } from './rsRender';
 const { confirm } = Modal;
 const baseAlias = 'static';
 export const DerateTable = (props: derateTableProps) => {
@@ -161,33 +151,7 @@ export const DerateTable = (props: derateTableProps) => {
     };
 
     const run = (type: string, rowData: derateType, e?: React.MouseEvent) => {
-        e && e.stopPropagation();
-        switch (type) {
-            case 'workflow': {
-                let wx_url =
-                    (rowData.wh_new_approval_info && rowData.wh_new_approval_info.detail_url) ||
-                    (rowData.wh_renew_approval_info && rowData.wh_renew_approval_info.detail_url);
-                if (wx_url) {
-                    window.open(wx_url);
-                } else {
-                    setTimeout(
-                        () =>
-                            props.history.push(`${baseAlias}/workflowApproval/detail/${rowData.workflow_instance_id}`),
-                        20
-                    );
-                }
-                break;
-            }
-            case 'approval': {
-                let scenarioCode = 'derated_apply';
-                const params = {
-                    scenario_code: scenarioCode,
-                    project_id: rowData.proj_id,
-                    business_id: rowData.id,
-                };
-                break;
-            }
-        }
+        excute(type, rowData, e, props);
     };
 
     const rowSelection = {
@@ -233,7 +197,6 @@ export const DerateTable = (props: derateTableProps) => {
         // getWorkflowStatus(projStr);
     }, [props.projIds.join(',')]);
     const handleTableChange = (pagination: PaginationConfig, filters: any, sorter: any) => {
-        console.log(pagination, filters, sorter);
         const fee_name = filters.fee_item && filters.fee_item.length > 0 ? filters.fee_item.join(',') : '';
         props.setSearchParams({
             ...props.searchParams,
@@ -248,45 +211,7 @@ export const DerateTable = (props: derateTableProps) => {
         !!!!props.searchParams.floor_name ||
         !!props.searchParams.subdistrict_id;
     const columns: ColumnProps<derateType>[] = [
-        {
-            dataIndex: 'code',
-            title: '减免流水号',
-            width: 200,
-            render: (text: string, record: derateType, index: number) => {
-                return (
-                    <span className="derate-table-td" title={text || '-'}>
-                        {text}
-                    </span>
-                );
-            },
-        },
-        {
-            dataIndex: 'proj_name',
-            title: '项目名称',
-            width: 120,
-            render: (text: string, record: derateType, index: number) => {
-                return (
-                    <span className="derate-table-td" title={text || '-'}>
-                        {text || '-'}
-                    </span>
-                );
-            },
-        },
-        {
-            dataIndex: 'renter_organization_names',
-            title: '租客',
-            width: 136,
-            render: (text: string, record: derateType, index: number) => {
-                let renterOrganizationNames = record.items.map(bill => bill.renter_organization_name);
-                renterOrganizationNames = [...new Set(renterOrganizationNames)];
-                const names = renterOrganizationNames.join(',');
-                return (
-                    <span className="derate-table-td" title={names || '-'}>
-                        {names}
-                    </span>
-                );
-            },
-        },
+        ...baseColumns,
         {
             dataIndex: 'items',
             title: '资源',
@@ -327,47 +252,7 @@ export const DerateTable = (props: derateTableProps) => {
             filterIcon: () => {
                 return <FilterFilled style={{ color: isRSFiltered ? '#1890ff' : undefined }} />;
             },
-            render: (text: string, record: derateType, index: number) => {
-                const items = record.items;
-                const roomNames = [...new Set(items.map(item => item.full_room_name))];
-                const pacakgeNames =
-                    record.package_rooms && record.package_rooms.length > 0 ? record.package_rooms : false;
-                if (pacakgeNames) {
-                    return pacakgeNames.map(packageRoom => {
-                        const rooms = packageRoom.room_names ? packageRoom.room_names.split(',') : [];
-                        const popoverContent = (
-                            <div>
-                                {rooms.map(room => {
-                                    return <p>{room}</p>;
-                                })}
-                            </div>
-                        );
-                        return (
-                            <div className="rs-td-container">
-                                <span className="derate-table-td-rs" title={packageRoom.package_name || '-'}>
-                                    {packageRoom.package_name}
-                                </span>
-                                <Popover title="打包资源列表" placement="bottom" content={popoverContent}>
-                                    <InfoCircleOutlined
-                                        style={{
-                                            color: '#BEC3C7',
-                                            marginLeft: '5px',
-                                            marginTop: '4px',
-                                        }}
-                                    />
-                                </Popover>
-                            </div>
-                        );
-                    });
-                }
-                return roomNames.map(room => {
-                    return (
-                        <span className="derate-table-td" title={room || '-'}>
-                            {room || '-'}
-                        </span>
-                    );
-                });
-            },
+            render: rsRender,
         },
         {
             dataIndex: 'created_on',

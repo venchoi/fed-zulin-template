@@ -9,6 +9,7 @@ import {
     billFeeItemType,
 } from '../list.d';
 import History from history;
+
 export interface getDerateListParams {
     proj_id?: string;
     page: number;
@@ -59,4 +60,14 @@ export interface selectedConfigType {
     floorId: string;
     floorName: string;
     roomId: string;
+}
+
+export interface derateTableOpsType {
+    user: User;
+    stageId: string;
+    oaName: string;
+    isEnabled: boolean;
+    startApprovalPermission: boolean;
+    approvalText: string;
+    record: derateType;
 }
