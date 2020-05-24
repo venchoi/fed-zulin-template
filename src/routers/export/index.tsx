@@ -18,11 +18,12 @@ interface IProps extends RouteComponentProps {
 const exportList = ({ match: { params } }: IProps) => {
     const { type = ExportType.DEFAULT, stage_id = '' } = params;
     const [dataSource, setDataSource] = useState([]);
+    const [total, setTotal] = useState(0);
 
     const fetchExportList = async (payload: IExportCardParams = {}) => {
-        // TODO page？
         const { data, result } = await getExportList({ stage_id, type, page: 1, page_size: 10, ...payload });
         setDataSource(data?.items || []);
+        setTotal(data?.total || 0);
     };
     const routes = [
         {
@@ -43,7 +44,7 @@ const exportList = ({ match: { params } }: IProps) => {
         <>
             <PageHeader title="导出记录" breadcrumb={{ routes }} ghost={false} />
             <div className="layout-list">
-                <ExportCard dataSource={dataSource} paramsChange={payload => fetchExportList(payload)} />
+                <ExportCard dataSource={dataSource} paramsChange={payload => fetchExportList(payload)} total={total} />
             </div>
         </>
     );
