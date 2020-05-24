@@ -30,6 +30,7 @@ export const DerateList = (props: Props) => {
         building_id: '',
         floor_id: '',
         floor_name: '',
+        status: [],
     }); // 减免列表搜索参数
     const [derateTotal, setderateTotal] = useState(0);
     const [derateList, setderateList] = useState([]); // 减免列表
@@ -51,6 +52,7 @@ export const DerateList = (props: Props) => {
         setselectedProjectNames(selecctedProject.projNames);
         setsearchParams({
             ...searchParams,
+            page: 1,
             proj_id: selecctedProject.projIds.join(','),
         });
     };

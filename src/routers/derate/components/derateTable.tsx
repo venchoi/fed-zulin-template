@@ -198,9 +198,12 @@ export const DerateTable = (props: derateTableProps) => {
     }, [props.projIds.join(',')]);
     const handleTableChange = (pagination: PaginationConfig, filters: any, sorter: any) => {
         const fee_name = filters.fee_item && filters.fee_item.length > 0 ? filters.fee_item.join(',') : '';
+        const status = filters.status && filters.status.length > 0 ? filters.status : [];
         props.setSearchParams({
             ...props.searchParams,
+            page: 1,
             fee_name,
+            status,
         });
     };
     const isFiltered = !!props.searchParams.start_date || !!props.searchParams.end_date;
@@ -238,6 +241,7 @@ export const DerateTable = (props: derateTableProps) => {
                             });
                             props.setSearchParams({
                                 ...props.searchParams,
+                                page: 1,
                                 room_id: roomId,
                                 subdistrict_id: subdistrictId,
                                 building_id: buildingId,
@@ -269,6 +273,7 @@ export const DerateTable = (props: derateTableProps) => {
                             confirm();
                             props.setSearchParams({
                                 ...props.searchParams,
+                                page: 1,
                                 start_date: values && values[0] ? values[0].format('YYYY-MM-DD') : '',
                                 end_date: values && values[1] ? values[1].format('YYYY-MM-DD') : '',
                             });
@@ -335,6 +340,24 @@ export const DerateTable = (props: derateTableProps) => {
             dataIndex: 'status',
             title: '状态',
             width: 96,
+            filters: [
+                {
+                    text: '待审核',
+                    value: '待审核',
+                },
+                {
+                    text: '审核中',
+                    value: '审核中',
+                },
+                {
+                    text: '已减免',
+                    value: '已减免',
+                },
+                {
+                    text: '已作废',
+                    value: '已作废',
+                },
+            ],
             render: (text: string, record: derateType, index: number) => {
                 const statusMap: statusMapType = {
                     待审核: 'unaudit',

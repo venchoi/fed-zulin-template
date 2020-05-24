@@ -20,6 +20,7 @@ export interface getDerateListParams {
     building_id?: string;
     floor_id?: string;
     floor_name?: string;
+    status?: string[];
 }
 
 export interface getDerateDetailParams {
