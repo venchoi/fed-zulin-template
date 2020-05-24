@@ -23,7 +23,7 @@ const exportList = ({ match: { params } }: IProps) => {
     const [total, setTotal] = useState(0);
 
     const fetchExportList = async (payload: IExportCardParams = {}) => {
-        const { data, result } = await getExportList({ stage_id, type, page: 1, page_size: 10, ...payload });
+        const { data, result } = await getExportList({ stage_id, type, page: 1, page_size: 20, ...payload });
         setDataSource(data?.items || []);
         setTotal(+data?.total || 0);
     };
@@ -44,9 +44,13 @@ const exportList = ({ match: { params } }: IProps) => {
 
     const itemRender = (route: Route) => {
         if (route.path) {
-            return <a href={route.path}>{route.breadcrumbName}</a>;
+            return (
+                <a href={route.path} key={route.path}>
+                    {route.breadcrumbName}
+                </a>
+            );
         }
-        return <span>{route.breadcrumbName}</span>;
+        return <span key={route.path}>{route.breadcrumbName}</span>;
     };
 
     return (
