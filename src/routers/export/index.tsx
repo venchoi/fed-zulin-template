@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'dva/router';
 import { match } from 'react-router';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
 import { getExportList } from '@s/export';
+import { useThrottleFn } from '@/helper/customHooks';
 import ExportCard from './exporList';
 import { exportConfig } from './exportConfig';
 import { Status, ExportType, IHistoryParams, IExportCardParams } from '@/types/export';
@@ -22,11 +23,12 @@ const exportList = ({ match: { params } }: IProps) => {
     const [dataSource, setDataSource] = useState([]);
     const [total, setTotal] = useState(0);
 
-    const fetchExportList = async (payload: IExportCardParams = {}) => {
+    const { run: fetchExportList } = useThrottleFn(async (payload: IExportCardParams = {}) => {
         const { data, result } = await getExportList({ stage_id, type, page: 1, page_size: 20, ...payload });
         setDataSource(data?.items || []);
         setTotal(+data?.total || 0);
-    };
+    }, 500);
+
     const routes = [
         {
             path: exportConfig[type].backUrl,
