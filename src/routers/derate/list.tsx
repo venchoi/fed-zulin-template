@@ -9,7 +9,7 @@ import FedPagination from './components/pagination';
 import DerateTable from './components/derateTable';
 import { getDerateList, batchAuditDerate, getBillItemFee } from '@s/derate';
 import { getDerateListParams } from '@/types/derateTypes';
-import { Props, projsValue, derateType, billFeeItemType } from './list.d';
+import { Props, projsValue, derateType, billFeeItemType, callbackFn } from './list.d';
 import './list.less';
 const baseAlias = 'static';
 const { confirm } = Modal;
@@ -121,6 +121,23 @@ export const DerateList = (props: Props) => {
         });
     };
 
+    const handleKeywordChange = (): callbackFn => {
+        let tk: any;
+        return (keyword: string): void => {
+            if (!tk) {
+                tk = setTimeout(() => {
+                    setsearchParams({
+                        ...searchParams,
+                        keyword: keyword,
+                    });
+                }, 200);
+            } else {
+                clearTimeout(tk);
+                tk = null;
+            }
+        };
+    };
+
     return (
         <ContentLayout
             className="derate-list-page"
@@ -136,12 +153,7 @@ export const DerateList = (props: Props) => {
                 <SearchArea
                     selectedRowKeys={selectedRowKeys}
                     onAudit={handleBatchAudit}
-                    onKeywordChange={keyword => {
-                        setsearchParams({
-                            ...searchParams,
-                            keyword: keyword,
-                        });
-                    }}
+                    onKeywordChange={handleKeywordChange()}
                 />
                 <DerateTable
                     derateList={derateList}

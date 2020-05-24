@@ -69,3 +69,7 @@ export interface billFeeItemType {
     text: string;
     value: string;
 }
+
+export interface callbackFn {
+    (keyword: string): void;
+}

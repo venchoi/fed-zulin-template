@@ -1,5 +1,5 @@
 import React from 'react';
-import { TreeSelect, message } from 'antd';
+import { TreeSelect, message, Input } from 'antd';
 import { getProjectTreeData } from '@s/derate';
 import cloneDeep from 'lodash/cloneDeep';
 import { Local } from '@/MemoryShare';
@@ -11,7 +11,7 @@ import {
     projsValue,
     EventType,
 } from './TreeProjectSelect';
-
+import './index.less';
 interface callbackFn {
     (item: treeOriginNode): void;
 }
@@ -45,10 +45,12 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
     }
 
     render() {
-        const { width, height, dropdownStyle, maxTagCount } = this.props;
-        const { treeData, projIds } = this.state;
+        const { width, height, dropdownStyle, maxTagCount, ...otherProps } = this.props;
+        const { projIds, searchValue } = this.state;
         const projIdsArr = projIds ? projIds : [];
+        const treeData = this.getData();
         const treeProps = {
+            ...otherProps,
             treeData: treeData,
             value: treeData.length > 0 ? projIdsArr : [],
             onChange: this.onTreeSelect,
@@ -66,9 +68,39 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             treeCheckable: true,
             treeNodeFilterProp: 'title',
             maxTagCount: maxTagCount || 1,
+            searchValue,
+            showArrow: true,
+            dropdownRender: this.dropdownRender,
         };
-        return <TreeSelect {...treeProps}></TreeSelect>;
+        return <TreeSelect className="fed-tree-select" {...treeProps}></TreeSelect>;
     }
+
+    dropdownRender = (originNode: React.ElementType, props: any) => {
+        const { searchValue } = this.state;
+        return (
+            <div>
+                <Input
+                    placeholder="请输入"
+                    style={{
+                        marginLeft: '3%',
+                        width: '94%',
+                    }}
+                    size="small"
+                    value={searchValue}
+                    onChange={this.handleSearchInputChange}
+                />
+                {originNode}
+            </div>
+        );
+    };
+
+    handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        console.log(value);
+        this.setState({
+            searchValue: value,
+        });
+    };
 
     handleOutsideClick(e: any) {
         const isShowDropdown = document.body.querySelector(`.${dropdownClassName}`);
