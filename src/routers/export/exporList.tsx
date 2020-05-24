@@ -6,7 +6,7 @@ import FedPagination from '@c/FedPagination';
 
 // types
 import { ColumnProps } from 'antd/es/table';
-import IExportItemType, { IExportListParams, Status, IExportCardParams } from '@t/exportTypes';
+import IExportItemType, { IExportListParams, Status, IExportCardParams } from '@/types/export';
 
 const { Search } = Input;
 const { Option } = Select;

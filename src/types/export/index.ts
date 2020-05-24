@@ -7,7 +7,6 @@ export enum Status {
 }
 // 与后端对接时获得，如：导出企业租客、导出工商个体租客、导出个人租客等
 export enum ExportType {
-    DEFAULT = '',
     METER = '导出抄表数据',
 }
 
@@ -29,6 +28,12 @@ export interface IHistoryParams {
 
 // TODO Exclude<IExportListParams, IHistoryParams>
 export interface IExportCardParams extends Partial<IExportListParams> {}
+
+export interface IExportConfigItem {
+    name: string;
+    backUrl: string;
+}
+export interface IExportConfig extends Record<ExportType, IExportConfigItem> {}
 
 // 导出记录
 export default interface IExportItemType {
