@@ -35,6 +35,13 @@ const routes = [
             loading: loading,
         }),
     },
+    {
+        path: '/basicdata/customer',
+        component: Loadable({
+            loader: () => import('./routers/basicdata/customer'),
+            loading: loading,
+        }),
+    },
     // {
     //     path: '/derate',
     //     component: Loadable({

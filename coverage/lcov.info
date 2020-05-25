@@ -1,5 +1,5 @@
 TN:
-SF:/Users/a/Desktop/APP/src/components/button/index.tsx
+SF:/Users/a/Desktop/APP/src/components/button/routes.ts
 FN:10,(anonymous_1)
 FN:20,Button
 FNF:2
@@ -20,7 +20,7 @@ BRF:2
 BRH:1
 end_of_record
 TN:
-SF:/Users/a/Desktop/APP/src/routers/login/index.tsx
+SF:/Users/a/Desktop/APP/src/routers/login/routes.ts
 FN:11,(anonymous_1)
 FN:16,(anonymous_2)
 FN:20,(anonymous_3)
