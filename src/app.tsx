@@ -17,42 +17,42 @@ const routes = [
         path: '/ui',
         component: Loadable({
             loader: () => import('./routers/ui'),
-            loading: loading,
+            loading,
         }),
     },
     {
         path: '/export/:stage_id/:type',
         component: Loadable({
             loader: () => import('./routers/export'),
-            loading: loading,
+            loading,
         }),
     },
     {
         path: '/report',
         component: Loadable({
             loader: () => import('./routers/report'),
-            loading: loading,
+            loading,
         }),
     },
     {
         path: '/derate',
         component: Loadable({
             loader: () => import('./routers/derate'),
-            loading: loading,
+            loading,
         }),
     },
     {
         path: '/noright',
         component: Loadable({
             loader: () => import('./routers/interceptors/noRights'),
-            loading: loading,
+            loading,
         }),
     },
     {
         path: '/404',
         component: Loadable({
             loader: () => import('./routers/interceptors/notFoundPage'),
-            loading: loading,
+            loading,
         }),
     },
 ];
