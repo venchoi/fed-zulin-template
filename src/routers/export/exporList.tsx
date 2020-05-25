@@ -121,7 +121,12 @@ const exportCard = ({ dataSource, paramsChange, total }: IProps) => {
                     </span>
                 </div>
             </div>
-            <FedTable<IExportItemType> dataSource={dataSource} columns={columns} vsides={false} />
+            <FedTable<IExportItemType>
+                dataSource={dataSource}
+                columns={columns}
+                vsides={false}
+                scroll={{ y: 'calc(100vh - 400px)' }}
+            />
             {/* <FedPagination /> */}
             <FedPagination
                 onShowSizeChange={(current, page_size) => {
