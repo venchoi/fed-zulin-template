@@ -8,6 +8,7 @@ export const maps = [
      * key，菜单地址（不需把bastPath，以及它的查询参数写上，在PageMenu中会处理），value，正则表达式，用来匹配页面路由地址
      */
     { reg: '/middleground/report.*', key: 'Index', code: 'Report', name: '统计报表' },
+    { reg: '/middleground/derate/list', key: 'Finance', code: 'Derate', name: '减免管理' },
 ];
 
 export function getKey(pathName: any) {
