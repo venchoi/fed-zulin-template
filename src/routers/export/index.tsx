@@ -61,7 +61,7 @@ const exportList = ({ match: { params } }: IProps) => {
     return (
         <>
             <PageHeader title="导出记录" breadcrumb={{ routes, itemRender }} ghost={false} />
-            <div className="layout-list">
+            <div className="layout-list export-list">
                 <Spin spinning={loading}>
                     <ExportCard
                         dataSource={dataSource}

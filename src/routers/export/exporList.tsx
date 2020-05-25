@@ -128,7 +128,7 @@ const exportCard = ({ dataSource, paramsChange, total }: IProps) => {
                 dataSource={dataSource}
                 columns={columns}
                 vsides={false}
-                scroll={{ y: 'calc(100vh - 400px)' }}
+                scroll={{ y: 'calc(100vh - 363px)' }}
             />
             {/* <FedPagination /> */}
             <FedPagination
