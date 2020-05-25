@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { message, Button, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { connect } from 'dva';
+// @ts-ignore
+import * as queryString from 'query-string';
 import ContentLayout from './components/contentLayout';
 import SearchArea from './components/searchArea';
 import TreeProjectSelect from '@c/TreeProjectSelect';
@@ -46,6 +48,15 @@ export const DerateList = (props: Props) => {
     });
     const tableSetLoading = useCallback(setloading, [setloading]);
     const configWorkflow = useCallback(setWorkflow, [setWorkflow]);
+    useEffect(() => {
+        const query = queryString.parse(location.search);
+        if (query && query.keyword) {
+            setsearchParams({
+                ...searchParams,
+                keyword: query.keyword,
+            });
+        }
+    }, []);
     useEffect(() => {
         getDerateListData();
     }, [searchParams]);
