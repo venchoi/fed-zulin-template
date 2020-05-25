@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PageHeader } from 'antd';
+import { PageHeader, Spin } from 'antd';
 import { RouteComponentProps } from 'dva/router';
 import { match } from 'react-router';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
@@ -22,11 +22,14 @@ const exportList = ({ match: { params } }: IProps) => {
     const { type, stage_id = '' } = params;
     const [dataSource, setDataSource] = useState([]);
     const [total, setTotal] = useState(0);
+    const [loading, setLoading] = useState(false); // loading
 
     const { run: fetchExportList } = useThrottleFn(async (payload: IExportCardParams = {}) => {
+        setLoading(true);
         const { data, result } = await getExportList({ stage_id, type, page: 1, page_size: 20, ...payload });
         setDataSource(data?.items || []);
         setTotal(+data?.total || 0);
+        setLoading(false);
     }, 500);
 
     const routes = [
@@ -58,8 +61,14 @@ const exportList = ({ match: { params } }: IProps) => {
     return (
         <>
             <PageHeader title="导出记录" breadcrumb={{ routes, itemRender }} ghost={false} />
-            <div className="layout-list">
-                <ExportCard dataSource={dataSource} paramsChange={payload => fetchExportList(payload)} total={total} />
+            <div className="layout-list export-list">
+                <Spin spinning={loading}>
+                    <ExportCard
+                        dataSource={dataSource}
+                        paramsChange={payload => fetchExportList(payload)}
+                        total={total}
+                    />
+                </Spin>
             </div>
         </>
     );

@@ -6,7 +6,7 @@ const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: ['@babel/polyfill', path.resolve(__dirname, '../src/index.tsx')],
+        app: ['react-hot-loader/patch', '@babel/polyfill', path.resolve(__dirname, '../src/index.tsx')],
         vendor: ['react', 'react-dom'],
     },
     output: {
@@ -38,11 +38,11 @@ module.exports = {
                                     ],
                                     cacheDirectory: true,
                                     plugins: [
+                                        'react-hot-loader/babel',
                                         'lodash',
                                         '@babel/plugin-transform-runtime',
                                         //支持import 懒加载
                                         '@babel/plugin-syntax-dynamic-import',
-                                        'dva-hmr',
                                         [
                                             'import',
                                             {
@@ -114,7 +114,7 @@ module.exports = {
             template: path.resolve(__dirname, '../src/index.html'),
             // favicon: path.resolve(__dirname, '../src/assets/img/favicon.ico'),
         }),
-        new hardSourcePlugin(),
+        // new hardSourcePlugin(),
         new webpack.NamedModulesPlugin(),
         new LodashModuleReplacementPlugin({ shorthands: true }),
     ],
