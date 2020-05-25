@@ -8,7 +8,6 @@ interface searchAreaProps {
     onKeywordChange(keyword: string): void;
     onAudit(e: React.MouseEvent): void;
     selectedRowKeys: string[];
-    keyword: string;
 }
 export const SearchArea = function(props: searchAreaProps) {
     const { selectedRowKeys, onAudit } = props;
