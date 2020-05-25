@@ -259,7 +259,7 @@ export const DerateTable = (props: derateTableProps) => {
             render: rsRender,
         },
         {
-            dataIndex: 'created_on',
+            dataIndex: 'applyTime',
             title: '申请日期',
             width: 120,
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
@@ -287,10 +287,10 @@ export const DerateTable = (props: derateTableProps) => {
                 return <CalendarFilled style={{ color: isFiltered ? '#1890ff' : undefined }} />;
             },
             render: (text: string, record: derateType, index: number) => {
-                const createdOn = record.created_on && record.created_on.replace(/(.*)\s.*/, '$1');
+                const applyTime = record.apply_time && record.apply_time.replace(/(.*)\s.*/, '$1');
                 return (
-                    <span className="derate-table-td" title={createdOn || '-'}>
-                        {createdOn || '-'}
+                    <span className="derate-table-td" title={applyTime || '-'}>
+                        {applyTime || '-'}
                     </span>
                 );
             },
