@@ -19,10 +19,12 @@ interface IProps {
 }
 
 const exportCard = ({ dataSource, paramsChange, total }: IProps) => {
-    const [params, setParams] = useState<IExportCardParams>({
-        status: Status.DEFAULT,
+    const [pagination, setPagination] = useState({
         page: 1,
         page_size: 20,
+    });
+    const [params, setParams] = useState({
+        status: Status.DEFAULT,
         keyword: '',
         start_date: '',
         end_date: '',
@@ -83,10 +85,13 @@ const exportCard = ({ dataSource, paramsChange, total }: IProps) => {
     const handleChangeParams = <T extends keyof IExportListParams>(key: T, value: IExportListParams[T]) => {
         setParams(prvState => ({ ...prvState, ...{ [key]: value } }));
     };
+    useEffect(() => {
+        setPagination(prvState => ({ ...prvState, page: 1 }));
+    }, [params]);
 
     useEffect(() => {
-        paramsChange(params);
-    }, [params]);
+        paramsChange({ ...params, ...pagination });
+    }, [pagination]);
 
     return (
         <Card>
@@ -130,19 +135,16 @@ const exportCard = ({ dataSource, paramsChange, total }: IProps) => {
                 vsides={false}
                 scroll={{ y: 'calc(100vh - 363px)' }}
             />
-            {/* <FedPagination /> */}
             <FedPagination
                 onShowSizeChange={(current, page_size) => {
-                    handleChangeParams('page', 1);
-                    handleChangeParams('page_size', page_size);
+                    setPagination({ page: 1, page_size });
                 }}
-                onChange={(page_index, page_size) => {
-                    handleChangeParams('page', page_index);
-                    handleChangeParams('page_size', page_size || 20);
+                onChange={(page, page_size) => {
+                    setPagination({ page, page_size: page_size || 20 });
                 }}
-                current={params.page}
-                pageSize={params.page_size}
-                showTotal={total => `共${Math.ceil(+total / +(params.page_size || 1))}页， ${total}条记录`}
+                current={pagination.page}
+                pageSize={pagination.page_size}
+                showTotal={total => `共${Math.ceil(+total / +(pagination.page_size || 1))}页， ${total}条记录`}
                 total={+total}
             />
         </Card>
