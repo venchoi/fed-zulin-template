@@ -6,18 +6,19 @@ import FedPagination from '@c/FedPagination';
 
 // types
 import { ColumnProps } from 'antd/es/table';
-import IExportItemType, { IExportListParams, Status, IExportCardParams } from '@t/exportTypes';
+import IExportItemType, { IExportListParams, Status, IExportCardParams } from '@/types/export';
 
 const { Search } = Input;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 
 interface IProps {
+    total: number;
     dataSource: IExportItemType[];
     paramsChange: (params: IExportCardParams) => void;
 }
 
-const exportCard = ({ dataSource, paramsChange }: IProps) => {
+const exportCard = ({ dataSource, paramsChange, total }: IProps) => {
     const [params, setParams] = useState<IExportCardParams>({
         status: Status.DEFAULT,
         page: 1,
@@ -121,7 +122,21 @@ const exportCard = ({ dataSource, paramsChange }: IProps) => {
                 </div>
             </div>
             <FedTable<IExportItemType> dataSource={dataSource} columns={columns} vsides={false} />
-            <FedPagination />
+            {/* <FedPagination /> */}
+            <FedPagination
+                onShowSizeChange={(current, page_size) => {
+                    handleChangeParams('page', 1);
+                    handleChangeParams('page_size', page_size);
+                }}
+                onChange={(page_index, page_size) => {
+                    handleChangeParams('page', page_index);
+                    handleChangeParams('page_size', page_size || 20);
+                }}
+                current={params.page}
+                pageSize={params.page_size}
+                showTotal={total => `共${Math.ceil(+total / +(params.page_size || 1))}页， ${total}条记录`}
+                total={+total}
+            />
         </Card>
     );
 };

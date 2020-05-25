@@ -22,7 +22,7 @@ const routes = [
         }),
     },
     {
-        path: '/export/:stage_id/:type',
+        path: '*/export-list/:type/:stage_id',
         component: Loadable({
             loader: () => import('./routers/export'),
             loading: loading,
