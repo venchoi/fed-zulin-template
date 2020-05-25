@@ -48,6 +48,7 @@ const exportCard = ({ dataSource, paramsChange, total }: IProps) => {
         {
             dataIndex: 'file_path',
             title: '操作',
+            width: 88,
             render: text => {
                 return (
                     <a href={text} target="_blank">
