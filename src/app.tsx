@@ -5,6 +5,8 @@ import Layout from './routers/layout';
 import { RouteComponentProps } from 'dva/router';
 import ReportList from './routers/report';
 import Loadable from 'react-loadable';
+//@ts-ignore
+import { hot } from 'react-hot-loader/root';
 interface Props extends RouteComponentProps {
     getState?: any;
     dispatch?: any;
@@ -60,7 +62,7 @@ const routes = [
     },
 ];
 
-export default class App extends React.PureComponent<Props> {
+class App extends React.PureComponent<Props> {
     public render() {
         return (
             <Layout>
@@ -84,3 +86,4 @@ export default class App extends React.PureComponent<Props> {
         );
     }
 }
+export default hot(App);
