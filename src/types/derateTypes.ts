@@ -66,3 +66,17 @@ export interface oaDetailParams {
 export interface billItemFeeParams {
     proj_id: string;
 }
+
+export interface workflowTempIsEnableParams {
+    scenario_code: string;
+    project_id: string;
+}
+
+export interface createWHInstanceParams {
+    scene: string;
+    business_id: string;
+}
+
+export interface commitInfoStatusParams {
+    record_id: string;
+}

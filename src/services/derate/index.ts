@@ -11,6 +11,9 @@ import {
     cancelDerateParams,
     oaDetailParams,
     billItemFeeParams,
+    workflowTempIsEnableParams,
+    createWHInstanceParams,
+    commitInfoStatusParams,
 } from '@/types/derateTypes';
 
 export const getProjectTreeData = (data: getTreeDataParams) => {
@@ -55,10 +58,25 @@ export const cancelDerate = (data: cancelDerateParams) => {
     return ajax('/bill/derated/cancel-audited', { ...data, _csrf: '' }, 'POST');
 };
 
+// 获取筛选费项列表
 export const getBillItemFee = (data: billItemFeeParams) => {
     return ajax('/bill/derated/get-bill-item-fee', { ...data, _csrf: '' }, 'POST');
 };
 
 export const fetchOaDetailData = (data: oaDetailParams) => {
     return ajax('/third/scene/get-third-url', { ...data, _csrf: '' }, 'POST');
+};
+
+// 获取是否设置了审批流
+export const fetchWorkflowTempIsEnabled = (data: workflowTempIsEnableParams) => {
+    return ajax('/workflow/scenario/has-enabled-templates', { ...data, _csrf: '' }, 'GET');
+};
+
+// 创建武汉审批流
+export const createInstanceForWH = (data: createWHInstanceParams) => {
+    return ajax('/workflow/workflow/async-commit-approval', { ...data, _csrf: '' }, 'POST');
+};
+
+export const getCommitInfoStatusForWH = (data: commitInfoStatusParams) => {
+    return ajax('/workflow/workflow/get-commit-info', { ...data, _csrf: '' }, 'POST');
 };

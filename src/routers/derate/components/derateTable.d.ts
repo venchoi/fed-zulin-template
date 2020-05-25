@@ -25,6 +25,13 @@ export interface getDerateListParams {
     floor_name?: string;
     status?: string[];
 }
+
+export interface workflowParams {
+    showModal: boolean;
+    params: null;
+    callBack: undefined;
+}
+
 export interface derateTableProps {
     derateList: derateType[];
     derateTotal: number;
@@ -39,6 +46,7 @@ export interface derateTableProps {
     searchParams: getDerateListParams;
     setSearchParams(params: getDerateListParams): void;
     feeItemList: billFeeItemType[];
+    configWorkflow(workflow: workflowParams): void;
 }
 
 export interface selectedRowKeyType {

@@ -34,6 +34,26 @@ export const excute = (type: string, rowData: derateType, e?: React.MouseEvent, 
                 project_id: rowData.proj_id,
                 business_id: rowData.id,
             };
+            props.configWorkflow({
+                showModal: true,
+                params,
+                callBack: (json: { result: boolean; data: string }) => {
+                    props.configWorkflow({
+                        showModal: false,
+                        params: null,
+                        callBack: null,
+                    });
+                    if (json && json.data === 'original_approval') {
+                        setTimeout(
+                            () =>
+                                props.history.push(
+                                    `${baseAlias}/workflowApproval/add/${rowData.proj_id}/${rowData.id}/${scenarioCode}`
+                                ),
+                            20
+                        );
+                    }
+                },
+            });
             break;
         }
     }

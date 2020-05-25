@@ -384,7 +384,6 @@ export const DerateTable = (props: derateTableProps) => {
                     'EstablishWorkflowApproval',
                     'rental-establishworkflowapproval-start-approval'
                 );
-                console.log(startApprovalPermission, record.workflow_instance_id);
                 let approvalText = '提交审批';
                 if (record && record.wh_approval_info) {
                     if (record.wh_approval_info.status === '待重新发起') {
