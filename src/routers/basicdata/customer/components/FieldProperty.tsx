@@ -15,10 +15,8 @@ const FieldPropertyComponent = (props: IProps) => {
     const arr = ["至尊VIP客户", "VIP客户"];
     const onHandleAdd = () => {
         arr.push("");
-        console.log('arr', arr)
     }
-    const onHandleDelete = (index) => {
-        arr.splice(index, 1)
+    const onHandleDelete = () => {
     }
 
     return (

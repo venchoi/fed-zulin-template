@@ -12,23 +12,16 @@ interface IDeleteParams {
 interface IProps {
     data: Array<string>;
     onAdd: () => void;
-    onDelete: (params: IDeleteParams) => void;
+    onDelete: () => void;
 }
 const SubSelectComponent = (props: IProps) => {
     const { data, onAdd, onDelete } = props;
-    const handleAdd = () => {
-        console.log('ddddd')
-        onAdd && onAdd()
-    }
-    const handleDelete = (index) => {
-        onDelete && onDelete(index)
-    }
     return (
         <div className="sub-select-wrap">
             {
-                data && data.map((item, index) => <div className="item" key={index}><Input className="input"/> <DeleteOutlined title="删除" onClick={handleDelete.bind(null, index)}/></div>)
+                data && data.map((item, index) => <div className="item" key={index}><Input className="input"/> <DeleteOutlined title="删除" onClick={onDelete}/></div>)
             }
-            <div className="add-btn" onClick={handleAdd}>+ 添加选项</div>
+            <div className="add-btn" onClick={onAdd}>+ 添加选项</div>
         </div>
     );
 };
