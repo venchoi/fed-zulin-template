@@ -168,7 +168,11 @@ export const DerateTable = (props: derateTableProps) => {
         expandIconColumnIndex: 0,
         expandRowByClick: true,
         expandedRowRender: (record: derateType) => {
-            return <DerateSubRow record={record} />;
+            return (
+                <div className="link-btn f-hidden rental-derate-view">
+                    <DerateSubRow record={record} />
+                </div>
+            );
         },
         rowExpandable: (record: derateType) => {
             return true;

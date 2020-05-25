@@ -370,7 +370,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             <div className="derate-detail">
                 <div className="head-area">
                     <span className="title">减免详情</span>
-                    <div className="op-btns">
+                    <div className="op-btns link-btn  f-hidden rental-derate-edit">
                         {isEditMode ? (
                             <>
                                 {isShowError ? (
