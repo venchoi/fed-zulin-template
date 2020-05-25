@@ -1,13 +1,10 @@
 import React from 'react';
-import { Route, Switch, BrowserRouter, Redirect } from 'dva/router';
+import { Route, Switch, BrowserRouter, Redirect, RouteComponentProps } from 'dva/router';
 import { Spin } from 'antd';
 import Layout from './routers/layout';
-import { RouteComponentProps } from 'dva/router';
 import Loadable from 'react-loadable';
-//@ts-ignore
 import { hot } from 'react-hot-loader/root';
 import { SubscriptionAPI } from 'dva';
-interface Props extends RouteComponentProps {}
 
 function loading() {
     return <Spin />;
@@ -57,7 +54,7 @@ const routes = [
     },
 ];
 
-class App extends React.PureComponent<Props & SubscriptionAPI> {
+class App extends React.PureComponent<RouteComponentProps & SubscriptionAPI> {
     public render() {
         return (
             <Layout dispatch={this.props.dispatch}>
