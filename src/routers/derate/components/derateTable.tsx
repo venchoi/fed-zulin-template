@@ -56,6 +56,9 @@ export const DerateTable = (props: derateTableProps) => {
         setenableList(enableList);
     };
     const getWorkflowStatus = async (projIdStr: string) => {
+        if (!projIdStr) {
+            return;
+        }
         const res = await fetchMuiltStageWorkflowTempIsEnabled({
             proj_id: projIdStr,
             scenario_code: 'derated_apply',
@@ -105,8 +108,6 @@ export const DerateTable = (props: derateTableProps) => {
                 if (result) {
                     getDerateListData();
                     message.success('操作成功');
-                } else {
-                    message.error(msg);
                 }
             },
         });
@@ -124,8 +125,6 @@ export const DerateTable = (props: derateTableProps) => {
                 if (result) {
                     getDerateListData();
                     message.success('操作成功');
-                } else {
-                    message.error(msg);
                 }
             },
         });
@@ -143,8 +142,6 @@ export const DerateTable = (props: derateTableProps) => {
                 if (result) {
                     getDerateListData();
                     message.success('操作成功');
-                } else {
-                    message.error(msg);
                 }
             },
         });
@@ -194,7 +191,7 @@ export const DerateTable = (props: derateTableProps) => {
 
     useEffect(() => {
         const projStr = props.projIds ? props.projIds.join(',') : '';
-        // getWorkflowStatus(projStr);
+        getWorkflowStatus(projStr);
     }, [props.projIds.join(',')]);
     const handleTableChange = (pagination: PaginationConfig, filters: any, sorter: any) => {
         const fee_name = filters.fee_item && filters.fee_item.length > 0 ? filters.fee_item.join(',') : '';

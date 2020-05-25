@@ -143,6 +143,10 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 record.validateStatus = 'error';
                 setErrorMsg('减免金额超出可减免金额，请修改正确后提交！');
                 setIsShowError(true);
+            } else if (!!value && value * 100 === 0) {
+                record.validateStatus = 'error';
+                setErrorMsg('减免金额不能为0！');
+                setIsShowError(true);
             } else {
                 record.validateStatus = '';
                 setErrorMsg('');
@@ -322,13 +326,19 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 const deratedAmount = record.isDemurrage
                     ? comma(formatNum(record.stayDemurrageAmount || '0.00'))
                     : comma(formatNum(record.derated_amount || '0.00'));
+                const isSelectedFee = selectedRowKeys.find(key => key === record.id + '0');
+                const isSelectedDelay = selectedRowKeys.find(key => key === record.id + '1');
                 const deratedFormItem = record.isDemurrage ? (
                     <Form.Item validateStatus={record.validateStatus}>
-                        <Input disabled value={record.stayDemurrageAmount} />
+                        <Input disabled value={isSelectedDelay ? record.stayDemurrageAmount : ''} />
                     </Form.Item>
                 ) : (
                     <Form.Item validateStatus={record.validateStatus}>
-                        <Input onChange={handleDerateAmountChange(record)} value={record.derated_amount} />
+                        <Input
+                            disabled={!isSelectedFee}
+                            onChange={handleDerateAmountChange(record)}
+                            value={!isSelectedFee ? '' : record.derated_amount}
+                        />
                     </Form.Item>
                 );
                 return !isEditMode ? deratedAmount : deratedFormItem;
@@ -460,6 +470,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                 files={detail.attachment || []}
                                 onChange={handleAttachmentChange}
                                 readonly={!isEditMode}
+                                maxSize={50}
                             />
                         ) : (
                             <span>-</span>

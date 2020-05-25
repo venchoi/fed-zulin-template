@@ -7,6 +7,7 @@ import SearchArea from './components/searchArea';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import FedPagination from './components/pagination';
 import DerateTable from './components/derateTable';
+import WorkflowApprovalPopover from './components/workflowPopover';
 import { getDerateList, batchAuditDerate, getBillItemFee } from '@s/derate';
 import { getDerateListParams } from '@/types/derateTypes';
 import { Props, projsValue, derateType, billFeeItemType, callbackFn } from './list.d';
@@ -38,7 +39,13 @@ export const DerateList = (props: Props) => {
     const [selectedRowKeys, setselectedRowKeys] = useState<string[]>([]);
     const [selectedRows, setselectedRows] = useState<derateType[]>([]);
     const [feeItemList, setFeeItemList] = useState<billFeeItemType[]>([]);
+    const [workflow, setWorkflow] = useState({
+        showModal: false, //显示弹框
+        params: null, //所需参数
+        callBack: undefined, // 弹框操作回调函数
+    });
     const tableSetLoading = useCallback(setloading, [setloading]);
+    const configWorkflow = useCallback(setWorkflow, [setWorkflow]);
     useEffect(() => {
         getDerateListData();
     }, [searchParams]);
@@ -59,7 +66,11 @@ export const DerateList = (props: Props) => {
 
     const getDerateListData = async () => {
         setloading(true);
-        const { result, data } = await getDerateList(searchParams);
+        let params = Object.assign({}, searchParams);
+        if (searchParams.subdistrict_id === '未分区') {
+            params.subdistrict_id = '';
+        }
+        const { result, data } = await getDerateList(params);
         if (result && data) {
             setderateList(data.items || []);
             setderateTotal(data.total);
@@ -68,7 +79,6 @@ export const DerateList = (props: Props) => {
     };
 
     const getBillItemFeeList = async () => {
-        console.log(searchParams.proj_id);
         if (!searchParams.proj_id) {
             return;
         }
@@ -77,7 +87,6 @@ export const DerateList = (props: Props) => {
             proj_id: searchParams.proj_id,
         });
         if (result) {
-            console.log(data);
             setFeeItemList(
                 data.map((item: { fee_name: string }) => {
                     return {
@@ -129,6 +138,7 @@ export const DerateList = (props: Props) => {
                     setsearchParams({
                         ...searchParams,
                         keyword: keyword,
+                        page: 1,
                     });
                 }, 200);
             } else {
@@ -169,6 +179,7 @@ export const DerateList = (props: Props) => {
                     searchParams={searchParams}
                     setSearchParams={setsearchParams}
                     feeItemList={feeItemList}
+                    configWorkflow={configWorkflow}
                 />
                 {selectedRowKeys.length > 0 ? (
                     <div className="selected-status-bar">
@@ -192,6 +203,9 @@ export const DerateList = (props: Props) => {
                     showTotal={total => `共${Math.ceil(+total / +(searchParams.page_size || 1))}页， ${total}条记录`}
                     total={+derateTotal}
                 />
+                {workflow.showModal ? (
+                    <WorkflowApprovalPopover params={workflow.params} callBack={workflow.callBack} />
+                ) : null}
             </div>
         </ContentLayout>
     );

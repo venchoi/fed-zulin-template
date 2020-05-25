@@ -51,7 +51,15 @@ class Uploader extends React.Component<Props> {
     }
 
     render() {
-        const { files, fileLength = 30, readonly, description, ossProtected, multiple = false } = this.props;
+        const {
+            files,
+            fileLength = 30,
+            readonly,
+            description,
+            ossProtected,
+            multiple = false,
+            maxSize = 10,
+        } = this.props;
         const accept = ['docx', 'xlsx', 'pptx', 'pdf', 'rar', 'zip'];
 
         const _this = this;
@@ -242,7 +250,7 @@ class Uploader extends React.Component<Props> {
                                 <span ref={this.clickUploadRef}>上传</span>
                             </Button> */}
                             <span className="uploader-description">
-                                <span>{description ? description : '注：单个附件最大支持10M，已上传'}</span>
+                                <span>{description ? description : `注：单个附件最大支持${maxSize}M，已上传`}</span>
                                 {files.length}
                                 <span>/</span>
                                 {fileLength}
