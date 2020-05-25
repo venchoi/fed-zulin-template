@@ -6,10 +6,8 @@ import { RouteComponentProps } from 'dva/router';
 import Loadable from 'react-loadable';
 //@ts-ignore
 import { hot } from 'react-hot-loader/root';
-interface Props extends RouteComponentProps {
-    getState?: any;
-    dispatch?: any;
-}
+import { SubscriptionAPI } from 'dva';
+interface Props extends RouteComponentProps {}
 
 function loading() {
     return <Spin />;
@@ -59,7 +57,7 @@ const routes = [
     },
 ];
 
-class App extends React.PureComponent<Props> {
+class App extends React.PureComponent<Props & SubscriptionAPI> {
     public render() {
         return (
             <Layout dispatch={this.props.dispatch}>
