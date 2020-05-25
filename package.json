@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "prewatch": "rimraf ./node_modules/.cache",
-        "dev": "yarn prewatch && webpack-dev-server --config config/webpack.dev.config.js --mode development",
+        "dev": "yarn && yarn prewatch && webpack-dev-server --config config/webpack.dev.config.js --mode development",
         "build": "yarn  && webpack --config config/webpack.prod.config.js --mode production",
         "doc:server": "styleguidist server",
         "doc:build": "styleguidist build",
@@ -83,6 +83,7 @@
         "postcss-nested": "^4.2.1",
         "precss": "^4.0.0",
         "prettier": "^1.19.1",
+        "react-hot-loader": "^4.12.21",
         "react-styleguidist": "^11.0.6",
         "react-test-renderer": "^16.12.0",
         "redbox-react": "1.x",
