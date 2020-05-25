@@ -6,7 +6,7 @@ import FedPagination from '@c/FedPagination';
 
 // types
 import { ColumnProps } from 'antd/es/table';
-import IExportItemType, { IExportListParams, Status, IExportCardParams } from '@/types/export';
+import IExportItemType, { IExportListParams, Status, IExportCardParams, ExportType } from '@/types/export';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -39,6 +39,9 @@ const exportCard = ({ dataSource, paramsChange, total }: IProps) => {
         {
             dataIndex: 'status',
             title: '状态',
+            render: text => {
+                return text === Status.SUCCESS ? '成功' : text;
+            },
         },
         {
             dataIndex: 'file_path',

@@ -2,7 +2,7 @@
 export enum Status {
     DEFAULT = '', // 全部
     ING = '导出中',
-    SUCCESS = '成功',
+    SUCCESS = '已完成',
     FAILED = '失败',
 }
 // 与后端对接时获得，如：导出企业租客、导出工商个体租客、导出个人租客等
