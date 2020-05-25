@@ -114,7 +114,7 @@ module.exports = {
             template: path.resolve(__dirname, '../src/index.html'),
             // favicon: path.resolve(__dirname, '../src/assets/img/favicon.ico'),
         }),
-        new hardSourcePlugin(),
+        // new hardSourcePlugin(),
         new webpack.NamedModulesPlugin(),
         new LodashModuleReplacementPlugin({ shorthands: true }),
     ],
