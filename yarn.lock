@@ -12151,6 +12151,11 @@ tslib@^1.8.1:
   resolved "https://registry.npmjs.org/tslib/-/tslib-1.11.1.tgz#eb15d128827fbee2841549e171f45ed338ac7e35"
   integrity sha512-aZW88SY8kQbU7gpV19lN24LtXh/yD4ZZg6qieAJDDg+YBsJcSmLGK9QpnUjAKVG/xefmvJGd1WUmfpT/g6AJGA==
 
+tslint-react-hooks@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.npm.taobao.org/tslint-react-hooks/download/tslint-react-hooks-2.2.2.tgz#4dc9b3986196802d45c11cc0bf6319a8116fe2ed"
+  integrity sha1-TcmzmGGWgC1FwRzAv2MZqBFv4u0=
+
 tslint@^6.0.0:
   version "6.0.0"
   resolved "https://registry.npmjs.org/tslint/-/tslint-6.0.0.tgz#1c0148beac4779924216302f192cdaa153618310"
