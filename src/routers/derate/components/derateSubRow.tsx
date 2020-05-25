@@ -343,9 +343,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
     const totalDeratedAmount = detail.items.reduce((total: number, item) => {
         const key = item.id + (item.isDemurrage ? '1' : '0');
         if (selectedRowKeysMap[key]) {
-            total =
-                total +
-                (!item.isDemurrage ? (+item.derated_amount || 0) * 1 : (item.demurrage_derated_amount || 0) * 1);
+            total = total + (!item.isDemurrage ? (+item.derated_amount || 0) * 1 : (item.stayDemurrageAmount || 0) * 1);
         }
         return total;
     }, 0);
@@ -395,7 +393,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 </div>
                 <div className="content-area">
                     <FedSection title="基本信息" key="基本信息">
-                        <Form {...layout} form={form} name="advanced_search" className="ant-advanced-search-form">
+                        <Form {...layout} form={form} className="ant-advanced-search-form">
                             <Row gutter={24}>
                                 {basicInfoForms.map((formItem, i) => {
                                     return (
