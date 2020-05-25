@@ -44,7 +44,6 @@ module.exports = {
                                         '@babel/plugin-transform-runtime',
                                         //支持import 懒加载
                                         '@babel/plugin-syntax-dynamic-import',
-                                        'dva-hmr',
                                         [
                                             'import',
                                             {

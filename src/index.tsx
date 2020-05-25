@@ -32,13 +32,15 @@ app.model(model2);
 const render = (Component: any) => {
     app.router((obj: any) => (
         <ConfigProvider locale={zhCN}>
-            <Component
-                history={obj.history}
-                match={obj.match}
-                location={obj.location}
-                getState={obj.app._store.getState}
-                dispatch={obj.app._store.dispatch}
-            />
+            <AppContainer>
+                <Component
+                    history={obj.history}
+                    match={obj.match}
+                    location={obj.location}
+                    getState={obj.app._store.getState}
+                    dispatch={obj.app._store.dispatch}
+                />
+            </AppContainer>
         </ConfigProvider>
     ));
     app.start('#root');
