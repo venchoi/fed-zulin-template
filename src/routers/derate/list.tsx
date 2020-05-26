@@ -1,15 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
+// @ts-ignore
+import * as queryString from 'query-string';
 import { message, Button, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { connect } from 'dva';
-// @ts-ignore
-import * as queryString from 'query-string';
 import ContentLayout from './components/contentLayout';
 import SearchArea from './components/searchArea';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import FedPagination from './components/pagination';
 import DerateTable from './components/derateTable';
 import WorkflowApprovalPopover from './components/workflowPopover';
+
 import { getDerateList, batchAuditDerate, getBillItemFee } from '@s/derate';
 import { getDerateListParams } from '@/types/derateTypes';
 import { Props, projsValue, derateType, billFeeItemType, callbackFn } from './list.d';
@@ -18,11 +19,12 @@ const baseAlias = 'static';
 const { confirm } = Modal;
 export const DerateList = (props: Props) => {
     const { user, history } = props;
+    const query = queryString.parse(location.search);
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
     const [selectedProjectNames, setselectedProjectNames] = useState<string[]>([]); // 当前选中的项目
     const [searchParams, setsearchParams] = useState<getDerateListParams>({
         proj_id: '',
-        keyword: '',
+        keyword: query.keyword || '',
         page: 1,
         page_size: 10,
         start_date: '',
@@ -48,15 +50,7 @@ export const DerateList = (props: Props) => {
     });
     const tableSetLoading = useCallback(setloading, [setloading]);
     const configWorkflow = useCallback(setWorkflow, [setWorkflow]);
-    useEffect(() => {
-        const query = queryString.parse(location.search);
-        if (query && query.keyword) {
-            setsearchParams({
-                ...searchParams,
-                keyword: query.keyword,
-            });
-        }
-    }, []);
+
     useEffect(() => {
         getDerateListData();
     }, [searchParams]);
@@ -78,6 +72,9 @@ export const DerateList = (props: Props) => {
     const getDerateListData = async () => {
         setloading(true);
         let params = Object.assign({}, searchParams);
+        if (!params.proj_id) {
+            return;
+        }
         if (searchParams.subdistrict_id === '未分区') {
             params.subdistrict_id = '';
         }
@@ -175,6 +172,7 @@ export const DerateList = (props: Props) => {
                     selectedRowKeys={selectedRowKeys}
                     onAudit={handleBatchAudit}
                     onKeywordChange={handleKeywordChange()}
+                    keyword={searchParams.keyword}
                 />
                 <DerateTable
                     derateList={derateList}

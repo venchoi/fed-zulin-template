@@ -169,7 +169,7 @@ export const DerateTable = (props: derateTableProps) => {
         expandRowByClick: true,
         expandedRowRender: (record: derateType) => {
             return (
-                <div className="link-btn f-hidden rental-derate-view">
+                <div className="derate-sub-row-container link-btn f-hidden rental-derate-view">
                     <DerateSubRow record={record} />
                 </div>
             );
@@ -192,7 +192,6 @@ export const DerateTable = (props: derateTableProps) => {
             setExpandedRows(expandedRows);
         },
     };
-
     useEffect(() => {
         const projStr = props.projIds ? props.projIds.join(',') : '';
         getWorkflowStatus(projStr);
