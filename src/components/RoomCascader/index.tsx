@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { message, Cascader } from 'antd';
-import { CascaderOptionType } from 'antd/es/Cascader';
+import { CascaderOptionType } from 'antd/es/cascader';
 import forEach from 'lodash/forEach';
 import { sort } from '@/helper/commonUtils';
 import { getRoomsSimple, getAllRooms } from '@s/component/roomCascader';
