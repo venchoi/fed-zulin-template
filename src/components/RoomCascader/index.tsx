@@ -1,20 +1,30 @@
 import React, { Component } from 'react';
 import { message, Cascader } from 'antd';
+import { CascaderOptionType } from 'antd/es/Cascader';
 import forEach from 'lodash/forEach';
 import { sort } from '@/helper/commonUtils';
 import { getRoomsSimple, getAllRooms } from '@s/component/roomCascader';
 import './RoomCascader.less';
+import {
+    selectedConfigType,
+    treeDataType,
+    roomType,
+    selectedOptionType,
+    stagesType,
+    buildingType,
+    subdistrictType,
+} from './index.d';
 const isSingle = (projIds: string) => (projIds || '').split(',').length === 1;
 interface propsType {
     projIds: string;
     projNames: string;
-    selectedConfig: any;
-    noOptionalAll?: any;
-    onChange: any;
-    style: any;
+    selectedConfig: selectedConfigType;
+    noOptionalAll?: boolean;
+    onChange(selectedConfig: selectedConfigType): void;
+    style?: any;
 }
 interface stateType {
-    treeData: any;
+    treeData: treeDataType[];
 }
 class RoomCascader extends Component<propsType, stateType> {
     public noSubdistrict = false;
@@ -32,9 +42,9 @@ class RoomCascader extends Component<propsType, stateType> {
         const { selectedConfig, projIds, projNames } = this.props;
         const isSingleProj = isSingle(projIds);
         const selectedProjId = selectedConfig.selectedProjId || (isSingleProj ? projIds : '');
-        const stageOption = treeData.find((item: any) => item.value === selectedProjId);
+        const stageOption = treeData.find((item: treeDataType) => item.value === selectedProjId);
         if (isSingleProj || (!isSingleProj && selectedProjId && stageOption)) {
-            const option = isSingleProj
+            const option: any = isSingleProj
                 ? {
                       label: projNames,
                       value: projIds,
@@ -119,16 +129,16 @@ class RoomCascader extends Component<propsType, stateType> {
             value.unshift(subdistrictId);
         }
         if (!isSingleProj) {
-            value.unshift(selectedProjId);
+            selectedProjId && value.unshift(selectedProjId);
         }
         return value;
     };
 
-    createStageTree = (data = [], stageId = null) => {
+    createStageTree = (data: stagesType[] = [], stageId: string | null = null) => {
         if (data.length === 0) {
             return [];
         }
-        const stage: any = data[0];
+        const stage = data[0];
         if (stage.id !== stageId) {
             return [];
         }
@@ -137,7 +147,7 @@ class RoomCascader extends Component<propsType, stateType> {
         if (
             !Array.isArray(stage.subdistricts) ||
             stage.subdistricts.length === 0 ||
-            stage.buildings.every((item: any) => !item.parent_id)
+            stage.buildings.every((item: buildingType) => !item.parent_id)
         ) {
             this.noSubdistrict = true;
             return this.getBuildings(stage);
@@ -145,14 +155,14 @@ class RoomCascader extends Component<propsType, stateType> {
         return this.getSubdistricts(stage);
     };
 
-    getSubdistricts = (stage: any) => {
+    getSubdistricts = (stage: stagesType) => {
         const { subdistricts } = stage;
         const { noOptionalAll } = this.props;
         const buildings = this.getBuildings(stage);
         if (buildings.length === 0) {
             return [];
         }
-        const unsubdistrictBuildings = buildings.filter((item: any) => !item.parent_id && item.value);
+        const unsubdistrictBuildings = buildings.filter(item => !item.parent_id && item.value);
         const hasUnsubdistrict = unsubdistrictBuildings.length > 0;
         const options = [];
         if (!noOptionalAll) {
@@ -163,14 +173,14 @@ class RoomCascader extends Component<propsType, stateType> {
                 type: 'subdistrict',
             });
         }
-        forEach(subdistricts, subdistrict => {
-            const filterBuildings = buildings.filter((item: any) => subdistrict.id === item.parent_id);
+        forEach(subdistricts, (subdistrict: subdistrictType) => {
+            const filterBuildings = buildings.filter(item => subdistrict.id === item.parent_id);
             const hasBuildingChildren = filterBuildings.length > 0;
             if (!hasBuildingChildren) {
                 return;
             }
             const { name, id } = subdistrict;
-            const optionsSubdistrict: any = {
+            const optionsSubdistrict: treeDataType = {
                 label: name,
                 value: id,
                 isLeaf: false,
@@ -201,9 +211,9 @@ class RoomCascader extends Component<propsType, stateType> {
         return options;
     };
 
-    getBuildings = (stage: any) => {
+    getBuildings = (stage: stagesType) => {
         const { noOptionalAll } = this.props;
-        const options: any = [];
+        const options: treeDataType[] = [];
         if (!Array.isArray(stage.buildings) || stage.buildings.length === 0) {
             return options;
         }
@@ -219,7 +229,7 @@ class RoomCascader extends Component<propsType, stateType> {
         forEach(buildings, building => {
             const { name, id, floors } = building;
             const isBuildingLeaf = !Array.isArray(floors) || floors.length === 0;
-            const optionsBuilding: any = {
+            const optionsBuilding: treeDataType = {
                 label: name,
                 value: id,
                 parent_id: building.parent_id,
@@ -254,6 +264,7 @@ class RoomCascader extends Component<propsType, stateType> {
                 };
                 buildingRoomNum += roomNum;
                 if (roomNum > 0) {
+                    optionsBuilding.children = optionsBuilding.children ? optionsBuilding.children : [];
                     optionsBuilding.children.push(optionsFloor);
                 }
             });
@@ -270,14 +281,16 @@ class RoomCascader extends Component<propsType, stateType> {
         if (last.type === 'proj') {
             this.fetchStageTree(selectedOptions);
         } else if (last.type === 'floor') {
-            this.getRoomData(selectedOptions);
+            this.getRoomData(selectedOptions as any);
         }
     };
 
-    fetchStageTree = async (selectedOptions: any, isIntoAgain?: any) => {
+    fetchStageTree = async (selectedOptions: CascaderOptionType[], isIntoAgain?: boolean) => {
         const { selectedConfig, projIds } = this.props;
         const isSingleProj = isSingle(projIds);
-        const params: any = {};
+        const params: { stage_id: string } = {
+            stage_id: '',
+        };
         const targetOption = selectedOptions[0];
         const projId = targetOption.value;
         if (projId) {
@@ -301,7 +314,7 @@ class RoomCascader extends Component<propsType, stateType> {
         if (isSingleProj) {
             treeData = stage;
         } else {
-            treeData.forEach((item: any) => {
+            treeData.forEach((item: treeDataType) => {
                 if (item.value === projId) {
                     if (stage.length > 0) {
                         item.children = stage;
@@ -317,7 +330,7 @@ class RoomCascader extends Component<propsType, stateType> {
         if (isIntoAgain === true && this.noSubdistrict) {
             let activeBuilding;
             let activeFloor;
-            forEach(stage, item => {
+            forEach(stage, (item: any) => {
                 if (item.value === selectedConfig.buildingId) {
                     activeBuilding = item;
                     forEach(item.children || [], child => {
@@ -328,13 +341,13 @@ class RoomCascader extends Component<propsType, stateType> {
                 }
             });
             if (activeBuilding && activeFloor && selectedConfig.buildingId && selectedConfig.floorId) {
-                this.getRoomData([targetOption, activeBuilding, activeFloor]);
+                this.getRoomData([targetOption as any, activeBuilding, activeFloor]);
             }
         } else if (isIntoAgain === true) {
             let activeSubdistrict;
             let activeBuilding;
             let activeFloor;
-            forEach(stage, item => {
+            forEach(stage, (item: any) => {
                 if (item.value === selectedConfig.subdistrictId) {
                     activeSubdistrict = item;
                     forEach(activeSubdistrict.children || [], building => {
@@ -357,12 +370,12 @@ class RoomCascader extends Component<propsType, stateType> {
                 selectedConfig.buildingId &&
                 selectedConfig.floorId
             ) {
-                this.getRoomData([targetOption, activeSubdistrict, activeBuilding, activeFloor]);
+                this.getRoomData([targetOption as any, activeSubdistrict, activeBuilding, activeFloor]);
             }
         }
     };
 
-    getRoomData = async (selectedOptions: any) => {
+    getRoomData = async (selectedOptions: selectedOptionType[]) => {
         const { noOptionalAll, projIds } = this.props;
         const { treeData } = this.state;
         const isSingleProj = isSingle(projIds);
@@ -398,7 +411,8 @@ class RoomCascader extends Component<propsType, stateType> {
                       type: 'room',
                   },
               ];
-        items.forEach((room: any) => {
+        items.forEach((room: roomType) => {
+            targetOption.children = targetOption.children ? targetOption.children : [];
             targetOption.children.push({
                 label: `${room.room_no}${room.unit_name ? `(${room.unit_name})` : ''}`,
                 value: room.id,
@@ -410,7 +424,7 @@ class RoomCascader extends Component<propsType, stateType> {
         });
     };
 
-    isChange = (config: any) => {
+    isChange = (config: selectedConfigType) => {
         const { projIds, selectedConfig } = this.props;
         const isSingleProj = isSingle(projIds);
         return (
@@ -436,7 +450,7 @@ class RoomCascader extends Component<propsType, stateType> {
             roomId: '',
             roomName: '',
         };
-        selectedOptions.forEach((item: any) => {
+        selectedOptions.forEach((item: selectedOptionType) => {
             if (item.type === 'proj') {
                 selectedConfig.stageId = item.value;
                 selectedConfig.stageName = item.label;
