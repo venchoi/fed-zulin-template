@@ -7,7 +7,7 @@ const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: ['react-hot-loader/patch', '@babel/polyfill', path.resolve(__dirname, '../src/index.tsx')],
+        app: ['@babel/polyfill', 'react-hot-loader/patch', path.resolve(__dirname, '../src/index.tsx')],
         vendor: ['react', 'react-dom'],
     },
     output: {
