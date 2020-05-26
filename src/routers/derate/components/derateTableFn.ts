@@ -18,12 +18,9 @@ export const excute = (type: string, rowData: derateType, e?: React.MouseEvent, 
             if (wx_url) {
                 window.open(wx_url);
             } else {
-                setTimeout(
-                    () =>
-                        props &&
-                        props.history.push(`${baseAlias}/workflowApproval/detail/${rowData.workflow_instance_id}`),
-                    20
-                );
+                setTimeout(() => {
+                    location.href = `/${baseAlias}/workflowApproval/detail/${rowData.workflow_instance_id}`;
+                }, 20);
             }
             break;
         }
@@ -44,13 +41,9 @@ export const excute = (type: string, rowData: derateType, e?: React.MouseEvent, 
                         callBack: null,
                     });
                     if (json && json.data === 'original_approval') {
-                        setTimeout(
-                            () =>
-                                props.history.push(
-                                    `${baseAlias}/workflowApproval/add/${rowData.proj_id}/${rowData.id}/${scenarioCode}`
-                                ),
-                            20
-                        );
+                        setTimeout(() => {
+                            location.href = `/${baseAlias}/workflowApproval/add/${rowData.proj_id}/${rowData.id}/${scenarioCode}`;
+                        }, 20);
                     }
                 },
             });
