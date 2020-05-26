@@ -27,7 +27,7 @@ const dev_config = {
         disableHostCheck: true,
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(),
+        // new webpack.HotModuleReplacementPlugin(),
         //  new BundleAnalyzerPlugin()
     ],
 };
