@@ -21,7 +21,7 @@ interface dispatchArg {
     data: any;
 }
 interface Props {
-    children: ReactElement;
+    children: React.ReactNode;
     dispatch(data: dispatchArg): void;
 }
 

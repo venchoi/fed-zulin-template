@@ -57,8 +57,8 @@ const routes = [
 class App extends React.PureComponent<RouteComponentProps & SubscriptionAPI> {
     public render() {
         return (
-            <Layout dispatch={this.props.dispatch}>
-                <BrowserRouter basename="/middleground">
+            <BrowserRouter basename="/middleground">
+                <Layout dispatch={this.props.dispatch}>
                     {/* <Suspense fallback={<Spin size="large" tip="Loading..."></Spin>}> */}
                     <Switch>
                         {routes.map(item => {
@@ -67,8 +67,8 @@ class App extends React.PureComponent<RouteComponentProps & SubscriptionAPI> {
                         <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
                     </Switch>
                     {/* </Suspense> */}
-                </BrowserRouter>
-            </Layout>
+                </Layout>
+            </BrowserRouter>
         );
     }
 }

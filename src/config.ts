@@ -3,6 +3,7 @@ interface Config {
     DEV: boolean;
     apiDomain: string;
     serverPort: number;
+    baseAlias: string;
 }
 
 const config: Config = {
@@ -10,6 +11,7 @@ const config: Config = {
     DEV: process.env.NODE_ENV !== 'production',
     apiDomain: '/api', //代理请求前缀
     serverPort: 8807,
+    baseAlias: '/middleground',
 };
 
 export default config;
