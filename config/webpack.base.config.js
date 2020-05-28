@@ -3,11 +3,10 @@ const htmlWebpackPlugin = require('html-webpack-plugin');
 const hardSourcePlugin = require('hard-source-webpack-plugin');
 const webpack = require('webpack');
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const antOverride = require('../src/vendor/antd');
 
 module.exports = {
     entry: {
-        app: ['@babel/polyfill', path.resolve(__dirname, '../src/index.tsx')],
+        app: ['react-hot-loader/patch', '@babel/polyfill', path.resolve(__dirname, '../src/index.tsx')],
         vendor: ['react', 'react-dom'],
     },
     output: {
@@ -39,11 +38,11 @@ module.exports = {
                                     ],
                                     cacheDirectory: true,
                                     plugins: [
+                                        'react-hot-loader/babel',
                                         'lodash',
                                         '@babel/plugin-transform-runtime',
                                         //支持import 懒加载
                                         '@babel/plugin-syntax-dynamic-import',
-                                        'dva-hmr',
                                         [
                                             'import',
                                             {
@@ -85,7 +84,10 @@ module.exports = {
                                 loader: 'less-loader',
                                 options: {
                                     javascriptEnabled: true,
-                                    modifyVars: antOverride,
+                                    modifyVars: {
+                                        'hack': `true; @import "${path.resolve(__dirname, '../src/assets/less/antd/index.less')}";`,
+                                    }
+                                    // modifyVars: antOverride,
                                 },
                             },
                         ],
@@ -112,7 +114,7 @@ module.exports = {
             template: path.resolve(__dirname, '../src/index.html'),
             // favicon: path.resolve(__dirname, '../src/assets/img/favicon.ico'),
         }),
-        new hardSourcePlugin(),
+        // new hardSourcePlugin(),
         new webpack.NamedModulesPlugin(),
         new LodashModuleReplacementPlugin({ shorthands: true }),
     ],

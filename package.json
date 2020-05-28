@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "prewatch": "rimraf ./node_modules/.cache",
-        "dev": "yarn prewatch && webpack-dev-server --config config/webpack.dev.config.js --mode development",
+        "dev": "yarn && yarn prewatch && webpack-dev-server --config config/webpack.dev.config.js --mode development",
         "build": "yarn  && webpack --config config/webpack.prod.config.js --mode production",
         "doc:server": "styleguidist server",
         "doc:build": "styleguidist build",
@@ -26,7 +26,8 @@
         "lodash": "^4.17.15",
         "query-string": "5",
         "react": "^16.12.0",
-        "react-dom": "^16.12.0"
+        "react-dom": "^16.12.0",
+        "react-loadable": "^5.5.0"
     },
     "devDependencies": {
         "@babel/core": "^7.7.4",
@@ -43,8 +44,10 @@
         "@types/js-cookie": "^2.2.6",
         "@types/lodash": "^4.14.150",
         "@types/query-string": "^6.3.0",
+        "@types/raven": "^2.5.3",
         "@types/react": "^16.9.19",
         "@types/react-dom": "^16.9.5",
+        "@types/react-loadable": "^5.5.3",
         "@types/react-test-renderer": "^16.9.1",
         "autoprefixer": "^9.7.6",
         "awesome-typescript-loader": "^5.2.1",
@@ -76,6 +79,7 @@
         "postcss-nested": "^4.2.1",
         "precss": "^4.0.0",
         "prettier": "^1.19.1",
+        "react-hot-loader": "^4.12.21",
         "react-styleguidist": "^11.0.6",
         "react-test-renderer": "^16.12.0",
         "redbox-react": "1.x",

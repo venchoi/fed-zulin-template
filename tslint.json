@@ -74,7 +74,7 @@
             true,
             300
         ],
-        "no-default-export": true,
+        "no-default-export": false,
         "no-duplicate-imports": true,
         "align": [
             true,
