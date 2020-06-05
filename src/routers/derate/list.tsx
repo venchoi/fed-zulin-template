@@ -70,7 +70,6 @@ export const DerateList = (props: Props) => {
     };
 
     const getDerateListData = async () => {
-        setloading(true);
         let params = Object.assign({}, searchParams);
         if (!params.proj_id) {
             return;
@@ -78,6 +77,7 @@ export const DerateList = (props: Props) => {
         if (searchParams.subdistrict_id === '未分区') {
             params.subdistrict_id = '';
         }
+        setloading(true);
         const { result, data } = await getDerateList(params);
         if (result && data) {
             setderateList(data.items || []);

@@ -1,3 +1,0 @@
-const dateFilter = {
-    filterDropdown() {},
-};
