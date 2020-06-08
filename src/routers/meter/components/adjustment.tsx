@@ -73,7 +73,8 @@ const Adjustment = () => {
         {
             dataIndex: 'reason',
             title: '调整原因',
-            // TODO textoverflow
+            ellipsis: true,
+            // TODO tooltip
         },
         {
             dataIndex: 'status',

@@ -55,6 +55,7 @@ const Standard = () => {
         {
             dataIndex: 'remark',
             title: '说明',
+            ellipsis: true,
         },
         {
             dataIndex: 'effect_date',
