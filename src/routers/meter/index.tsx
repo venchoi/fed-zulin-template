@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Button } from 'antd';
-import Adjustment from './adjustment';
-import Standard from './standard';
+import Adjustment from './components/adjustment';
+import Standard from './components/standard';
 
 import './index.less';
 
