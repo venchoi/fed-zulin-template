@@ -38,6 +38,13 @@ const routes = [
         }),
     },
     {
+        path: '/meter',
+        component: Loadable({
+            loader: () => import('./routers/meter'),
+            loading: loading,
+        }),
+    },
+    {
         path: '/basicdata/customer',
         component: Loadable({
             loader: () => import('./routers/basicdata/customer'),

@@ -1,0 +1,50 @@
+import React, { useState } from 'react';
+import { Card, Button } from 'antd';
+import Adjustment from './adjustment';
+import Standard from './standard';
+
+import './index.less';
+
+const List = () => {
+    const [activeTabKey, setActiveTabKey] = useState('standard');
+    const tabList = [
+        {
+            key: 'standard',
+            tab: '标准单价管理',
+        },
+        {
+            key: 'adjustment',
+            tab: '单价调整单',
+        },
+    ];
+    const extra = (
+        <>
+            <Button type="primary">新建标准</Button>
+        </>
+    );
+    return (
+        <div className="layout-list meter-list">
+            <Card
+                className="report-card"
+                title="水电单价管理"
+                tabList={tabList}
+                extra={extra}
+                tabProps={{
+                    size: 'default',
+                }}
+                activeTabKey={activeTabKey}
+                onTabChange={key => {
+                    setActiveTabKey(key);
+                }}
+            >
+                <div className={`tabpane-container ${activeTabKey === 'standard' ? 'hidden' : 'visible'}`}>
+                    <Standard />
+                </div>
+                <div className={`tabpane-container ${activeTabKey === 'standard' ? 'visible' : 'hidden'}`}>
+                    <Adjustment />
+                </div>
+            </Card>
+        </div>
+    );
+};
+export default List;
