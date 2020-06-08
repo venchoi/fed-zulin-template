@@ -29,10 +29,6 @@ const Standard = () => {
             title: '说明',
         },
         {
-            dataIndex: 'name',
-            title: '名称',
-        },
-        {
             dataIndex: 'effect_date',
             title: '生效时间',
         },
