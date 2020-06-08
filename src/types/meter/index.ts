@@ -21,7 +21,7 @@ export interface IStandardPriceItem {
     is_enabled: ''; // 是否启用
 }
 
-// 【调整单】——列表 /meter/standard-price/list
+// 【调整单】—— 列表 /meter/price-adjustment/list
 export interface IAdjustmentParams {
     page: ''; //
     page_size: ''; //
