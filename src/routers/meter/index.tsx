@@ -37,10 +37,10 @@ const List = () => {
                     setActiveTabKey(key);
                 }}
             >
-                <div className={`tabpane-container ${activeTabKey === 'standard' ? 'hidden' : 'visible'}`}>
+                <div className={`tabpane-container ${activeTabKey === 'adjustment' ? 'hidden' : 'visible'}`}>
                     <Standard />
                 </div>
-                <div className={`tabpane-container ${activeTabKey === 'standard' ? 'visible' : 'hidden'}`}>
+                <div className={`tabpane-container ${activeTabKey === 'adjustment' ? 'visible' : 'hidden'}`}>
                     <Adjustment />
                 </div>
             </Card>
