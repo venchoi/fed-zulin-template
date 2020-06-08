@@ -2,16 +2,24 @@
  * 标准单价管理
  */
 import React, { useState, useEffect } from 'react';
-import { Radio, Input, Checkbox, Switch, message } from 'antd';
+import { Radio, Input, Checkbox, Switch, message, Badge } from 'antd';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
 import { ColumnProps } from 'antd/es/table';
-import { IAdjustmentItem, IAdjustmentParams, IMeterTypeItem } from '@t/meter';
+import { IAdjustmentItem, IAdjustmentParams, IStatusItem, IStatus } from '@t/meter';
 import { getPriceAdjustmentList, postPriceEnabled } from '@s/meter';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
 const { Search } = Input;
+
+const StatusColorMap = {
+    全部: '',
+    待审核: '#F27900',
+    已审核: '#0D86FF',
+    已生效: '#00AD74',
+    已作废: '#BEC3C7',
+};
 
 const Adjustment = () => {
     const [adjustmentDataSource, setAdjustmentDataSource] = useState([]);
@@ -22,19 +30,29 @@ const Adjustment = () => {
     });
     const [params, setParams] = useState({
         meter_type_id: '',
-        status: '',
+        status: IStatus.ALL,
         keyword: '',
     });
-    const [meterTypeList, setMeterTypeList] = useState<IMeterTypeItem[]>([
+    const [meterTypeList, setMeterTypeList] = useState<IStatusItem[]>([
         {
-            meter_type_id: '1',
+            status: IStatus.ALL,
             value: '12',
-            meter_type_name: '水表',
         },
         {
-            meter_type_id: '1234',
+            status: IStatus.AUDITLESS,
+            value: '12',
+        },
+        {
+            status: IStatus.AUDITED,
+            value: '12',
+        },
+        {
+            status: IStatus.EFFECTED,
+            value: '12',
+        },
+        {
+            status: IStatus.CANCELED,
             value: '182',
-            meter_type_name: '电表',
         },
     ]);
     const columns: ColumnProps<IAdjustmentItem>[] = [
@@ -45,22 +63,30 @@ const Adjustment = () => {
         {
             dataIndex: 'meter_type_name',
             title: '类型',
+            width: 106,
         },
         {
             dataIndex: 'price',
             title: '调整后单价',
+            width: 132,
         },
         {
             dataIndex: 'reason',
             title: '调整原因',
+            // TODO textoverflow
         },
         {
             dataIndex: 'status',
             title: '生效时间',
+            width: 220,
         },
         {
             dataIndex: 'status',
             title: '状态',
+            width: 90,
+            render: (text: IStatus) => {
+                return <Badge color={StatusColorMap[text]} text={text} />;
+            },
         },
         {
             dataIndex: 'created_on',
@@ -69,6 +95,7 @@ const Adjustment = () => {
         {
             dataIndex: 'id',
             title: '操作',
+            width: 163,
         },
     ];
     const handlePriceEnabled = async (rowData: IAdjustmentItem) => {
@@ -99,12 +126,12 @@ const Adjustment = () => {
                 <div className="filter-left">
                     <RadioGroup
                         className="filter-item"
-                        value={params.meter_type_id}
-                        onChange={e => handleChangeParams('meter_type_id', e.target.value)}
+                        value={params.status}
+                        onChange={e => handleChangeParams('status', e.target.value)}
                     >
                         {meterTypeList.map(item => (
-                            <RadioButton key={item.meter_type_id} value={item.meter_type_id}>
-                                {item.meter_type_name}
+                            <RadioButton key={item.status} value={item.status}>
+                                {item.status}
                                 {+item.value > 0 ? `·${item.value}` : null}
                             </RadioButton>
                         ))}

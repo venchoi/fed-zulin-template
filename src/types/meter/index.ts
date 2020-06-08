@@ -1,3 +1,11 @@
+export enum IStatus {
+    ALL = '全部',
+    AUDITLESS = '待审核',
+    AUDITED = '已审核',
+    EFFECTED = '已生效',
+    CANCELED = '已作废',
+}
+
 // 【单价标准】——列表 /meter/standard-price/list
 export interface IStandardPriceParams {
     page: number; //
@@ -25,7 +33,7 @@ export interface IStandardPriceItem {
 export interface IAdjustmentParams {
     page: number; //
     page_size: number; //
-    status: string; //
+    status?: IStatus; //
     meter_type_id?: string; //
     keyword?: string; //
 }
@@ -42,7 +50,7 @@ export interface IAdjustmentItem {
     start_date: string; //
     end_date: string; //
     created_on: string; // 提交时间
-    status: string; //
+    status: IStatus; //
     standard_name: string; // 调整单名称
     meter_type_name: string; // 类型名称
 }
@@ -51,5 +59,10 @@ export interface IAdjustmentItem {
 export interface IMeterTypeItem {
     meter_type_id: string; // 类型id
     meter_type_name: string; // 类型名称
+    value: string;
+}
+
+export interface IStatusItem {
+    status: IStatus;
     value: string;
 }

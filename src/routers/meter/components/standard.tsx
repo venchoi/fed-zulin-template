@@ -45,10 +45,12 @@ const Standard = () => {
         {
             dataIndex: 'meter_type_name',
             title: '类型',
+            width: 106,
         },
         {
             dataIndex: 'price',
             title: '单价',
+            width: 132,
         },
         {
             dataIndex: 'remark',
@@ -57,10 +59,12 @@ const Standard = () => {
         {
             dataIndex: 'effect_date',
             title: '生效时间',
+            width: 220,
         },
         {
             dataIndex: 'is_enabled',
             title: '是否启用',
+            width: 90,
             render: (text, rowData) => {
                 return <Switch checked={!!+text} onChange={e => handlePriceEnabled(rowData)} />;
             },
@@ -68,6 +72,7 @@ const Standard = () => {
         {
             dataIndex: 'id',
             title: '操作',
+            width: 163,
         },
     ];
     const handlePriceEnabled = async (rowData: IStandardPriceItem) => {
