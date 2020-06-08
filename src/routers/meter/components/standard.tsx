@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Radio } from 'antd';
 import FedTable from '@c/FedTable';
 import { ColumnProps } from 'antd/es/table';
-import { IStandardPriceItem } from '../../../types/meter';
+import { IStandardPriceItem } from '@t/meter';
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
 
