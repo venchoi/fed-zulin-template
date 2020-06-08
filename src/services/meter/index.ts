@@ -10,7 +10,7 @@ export const getStandardPriceList = (params: IStandardPriceParams) => {
 };
 // 单价标准】—— 启用禁用
 export const postPriceEnabled = (params: ICURDParams) => {
-    return ajax('/meter/standard-price/handle-enabled', params, 'GET');
+    return ajax('/meter/standard-price/handle-enabled', params, 'POST');
 };
 // 【调整单】—— 列表
 export const getPriceAdjustmentList = (params: IAdjustmentParams) => {
@@ -18,13 +18,13 @@ export const getPriceAdjustmentList = (params: IAdjustmentParams) => {
 };
 // 【调整单】—— 审核
 export const postAdjustmentAudit = (params: ICURDParams) => {
-    return ajax('/meter/price-adjustment/audit', params, 'GET');
+    return ajax('/meter/price-adjustment/audit', params, 'POST');
 };
 // 【调整单】—— 取消审核
 export const postAdjustmentCancelAudit = (params: ICURDParams) => {
-    return ajax('/meter/price-adjustment/cancel-audit', params, 'GET');
+    return ajax('/meter/price-adjustment/cancel-audit', params, 'POST');
 };
 // 【调整单】—— 作废
 export const postAdjustmentVoid = (params: ICURDParams) => {
-    return ajax('/meter/price-adjustment/void', params, 'GET');
+    return ajax('/meter/price-adjustment/void', params, 'POST');
 };

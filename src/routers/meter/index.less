@@ -9,3 +9,24 @@
         }
     }
 }
+// TODO
+.filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    &-left {
+        display: flex;
+        align-items: center; 
+        & > .filter-item {
+            &:not(:first-of-type) {
+                margin-left: 16px;
+            }
+        }
+    }
+    &-right {
+        .ant-btn:not(:first-of-type) {
+            margin-left: 16px;
+        }
+    }
+}
