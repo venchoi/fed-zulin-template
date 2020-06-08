@@ -46,3 +46,10 @@ export interface IAdjustmentItem {
     standard_name: string; // 调整单名称
     meter_type_name: string; // 类型名称
 }
+
+// 标准单价类型
+export interface IMeterTypeItem {
+    meter_type_id: string; // 类型id
+    meter_type_name: string; // 类型名称
+    value: string;
+}

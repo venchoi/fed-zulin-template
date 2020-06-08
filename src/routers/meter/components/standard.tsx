@@ -4,8 +4,9 @@
 import React, { useState, useEffect } from 'react';
 import { Radio, Input, Checkbox, Switch, message } from 'antd';
 import FedTable from '@c/FedTable';
+import FedPagination from '@c/FedPagination';
 import { ColumnProps } from 'antd/es/table';
-import { IStandardPriceItem, IStandardPriceParams } from '@t/meter';
+import { IStandardPriceItem, IStandardPriceParams, IMeterTypeItem } from '@t/meter';
 import { getStandardPriceList, postPriceEnabled } from '@s/meter';
 // import Filter from './adjustmentFilter'
 
@@ -24,6 +25,18 @@ const Standard = () => {
         is_enabled: '',
         keyword: '',
     });
+    const [meterTypeList, setMeterTypeList] = useState<IMeterTypeItem[]>([
+        {
+            meter_type_id: '1',
+            value: '12',
+            meter_type_name: '水表',
+        },
+        {
+            meter_type_id: '1234',
+            value: '182',
+            meter_type_name: '电表',
+        },
+    ]);
     const columns: ColumnProps<IStandardPriceItem>[] = [
         {
             dataIndex: 'name',
@@ -83,7 +96,20 @@ const Standard = () => {
             {/* TODO filter component */}
             <div className="filter">
                 <div className="filter-left">
+                    <RadioGroup
+                        className="filter-item"
+                        value={params.meter_type_id}
+                        onChange={e => handleChangeParams('meter_type_id', e.target.value)}
+                    >
+                        {meterTypeList.map(item => (
+                            <RadioButton key={item.meter_type_id} value={item.meter_type_id}>
+                                {item.meter_type_name}
+                                {+item.value > 0 ? `·${item.value}` : null}
+                            </RadioButton>
+                        ))}
+                    </RadioGroup>
                     <Search
+                        className="filter-item"
                         placeholder="名称、说明"
                         value={params.keyword}
                         onChange={e => handleChangeParams('keyword', e.target.value)}
@@ -95,7 +121,19 @@ const Standard = () => {
                     </Checkbox>
                 </div>
             </div>
-            <FedTable columns={columns} dataSource={standardDataSource} />
+            <FedTable columns={columns} dataSource={standardDataSource} vsides />
+            <FedPagination
+                onShowSizeChange={(current, page_size) => {
+                    setPageObj({ page: 1, page_size });
+                }}
+                onChange={(page, page_size) => {
+                    setPageObj({ page, page_size: page_size || 20 });
+                }}
+                current={pageObj.page_size}
+                pageSize={pageObj.page_size}
+                showTotal={total => `共${Math.ceil(+total / +(pageObj.page_size || 1))}页， ${total}条记录`}
+                total={+total}
+            />
         </>
     );
 };

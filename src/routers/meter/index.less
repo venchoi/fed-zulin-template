@@ -17,11 +17,10 @@
     padding: 16px;
     &-left {
         display: flex;
-        align-items: center; 
+        align-items: center;
         & > .filter-item {
-            &:not(:first-of-type) {
-                margin-left: 16px;
-            }
+            flex-shrink: 0;
+            margin-right: 16px;
         }
     }
     &-right {
