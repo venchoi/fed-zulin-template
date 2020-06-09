@@ -6,7 +6,7 @@ import { Radio, Input, Checkbox, Switch, message, Button } from 'antd';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
 import { ColumnProps } from 'antd/es/table';
-import { IStandardPriceItem, IStandardPriceParams, IMeterTypeItem, StandardHandleType } from '@t/meter';
+import { IStandardPriceItem, IStandardPriceParams, IMeterTypeStatisticItem, StandardHandleType } from '@t/meter';
 import { getStandardPriceList, postStandardPrice } from '@s/meter';
 // import Filter from './adjustmentFilter'
 
@@ -25,7 +25,7 @@ const Standard = () => {
         is_enabled: '',
         keyword: '',
     });
-    const [meterTypeList, setMeterTypeList] = useState<IMeterTypeItem[]>([
+    const [meterTypeList, setMeterTypeList] = useState<IMeterTypeStatisticItem[]>([
         {
             meter_type_id: '1',
             value: '12',

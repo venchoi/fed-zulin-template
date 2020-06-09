@@ -34,20 +34,29 @@ export interface IStandardPriceParams {
     keyword?: string; //
 }
 
-// 【单价标准】—— 列表 —— 返回items /meter/standard-price/list
-export interface IStandardPriceItem {
-    id: string;
+export interface IStandardPriceAddItem {
     name: string; // 名称
-    meter_type_id: string; // 类型id
-    meter_type_name: string; // 类型名称
+    meter_type_id?: string; // 类型id
     is_step: string; // 是否阶梯价
     step_data: string; //
     price: string; // 单价
     unit: string; // 单位
     remark: string; // 说明
     effect_date: string; // 生效时间
+}
+
+export interface IStandardPriceEditItem {
+    id: string,
+    name: string; // 名称
+    remark: string; // 说明
+}
+// 【单价标准】—— 列表 —— 返回items /meter/standard-price/list
+export interface IStandardPriceItem extends IStandardPriceAddItem {
+    id: string;
+    meter_type_name: string; // 类型名称
     is_enabled: string; // 是否启用
 }
+
 
 // 【调整单】—— 列表 —— 参数 /meter/price-adjustment/list
 export interface IAdjustmentParams {
@@ -76,14 +85,22 @@ export interface IAdjustmentItem {
     meter_type_name: string; // 类型名称
 }
 
-// 标准单价类型
-export interface IMeterTypeItem {
+// 标准单价统计item
+export interface IMeterTypeStatisticItem {
     meter_type_id: string; // 类型id
     meter_type_name: string; // 类型名称
     value: string;
+}
+
+// 标准单价类型item
+export interface IMeterTypeItem {
+    id: string,
+    value: string,
+    unit: string,
 }
 
 export interface IStatusItem {
     status: IStatus;
     value: string;
 }
+

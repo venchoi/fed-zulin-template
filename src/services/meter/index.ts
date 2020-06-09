@@ -13,6 +13,11 @@ export const postStandardPrice = ({ type, id }: IStandardICURDParams) => {
     } 
     return ajax(map[type], { id }, 'POST');
 };
+// 【单价标准】—— 类型列表
+export const getMeterTypeList = () => {
+    return ajax('/meter/standard-price/get-support-meter-types', {}, 'GET');
+};
+
 // 【调整单】—— 列表
 export const getPriceAdjustmentList = (params: IAdjustmentParams) => {
     return ajax('/meter/price-adjustment/list', params, 'GET');
