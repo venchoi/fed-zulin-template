@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Radio, Select, DatePicker, Modal } from 'antd';
-import { find } from 'lodash'
-import { IStandardPriceItem, IMeterTypeItem } from '@t/meter'
-import { getMeterTypeList } from '@s/meter'
+import { find, pick } from 'lodash'
+import { IStandardPriceItem, IMeterTypeItem, IStandardPriceAddItem } from '@t/meter'
+import { getMeterTypeList, postStandardAdd, postStandardEdit } from '@s/meter'
 import { unitTransfer } from '@/helper/sringUtils'
+import moment from 'moment';
 
 const { Item: FormItem } = Form;
 const { TextArea } = Input;
@@ -54,12 +55,27 @@ const EditModal = ({ editItem, onCancel }: IProps) => {
     })
   }
 
-  const handleSubmit = () => {
-    
+  const submit = async (values: IStandardPriceAddItem) => {
+    const { data, result } = await postStandardAdd({ ...values })
+
   }
 
-  return <Modal visible={true} onCancel={() => onCancel()} onOk={() => handleSubmit()}>
-    <Form form={form} >
+  const handleSubmit = async () => {
+    form.validateFields().then(values => {
+      const params = pick(values, ['name', 'meter_type_id', 'unit', 'is_step', 'step_data', 'price', 'remark', 'effect_date'])
+      submit({ ...params, unit: selectedMeterType.unit })
+    })
+  }
+
+  return <Modal visible={true} onCancel={() => onCancel()} onOk={() => handleSubmit()} title={isEdit ? '编辑标准' : '新建标准'}>
+    <Form form={form} labelCol={{ span: 5 }} labelAlign="right" initialValues={{
+      name: '',
+      meter_type_id: '',
+      is_step: '0',
+      price: '',
+      // effect_date: moment().format('YYYY-MM-DD'),
+      remark: ''
+    }}>
       <FormItem name="name" label="标准名称" rules={[{ required: true, max: 20 }]}>
         <Input placeholder="请输入名称（限20字）" style={{ width: 240 }} />
       </FormItem>
@@ -78,7 +94,7 @@ const EditModal = ({ editItem, onCancel }: IProps) => {
       </FormItem>
       {/* TODO 阶梯价 */}
       <FormItem name="price" label="标准单价" rules={[{ required: true }]}>
-        <Input placeholder="请输入名称（限20字）" addonAfter={<>{unitTransfer(selectedMeterType.unit)}</>} style={{ width: 240 }} />
+        <Input placeholder="请输入单价" addonAfter={<>{unitTransfer(selectedMeterType.unit)}</>} style={{ width: 240 }} />
       </FormItem>
       <FormItem name="effect_date" label="生效日期" rules={[{ required: true }]}>
         <DatePicker
@@ -88,7 +104,7 @@ const EditModal = ({ editItem, onCancel }: IProps) => {
         />
       </FormItem>
       <FormItem name="remark" label="标准说明" rules={[{ required: true }]}>
-        <TextArea style={{ width: 458 }} />
+        <TextArea />
       </FormItem>
     </Form>
   </Modal> 
