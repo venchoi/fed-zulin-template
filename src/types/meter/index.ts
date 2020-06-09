@@ -25,7 +25,7 @@ export interface IAdjustmentICURDParams {
     id: string;
     type: PriceAdjustHandleType;
 }
-// 【单价标准】——列表 /meter/standard-price/list
+// 【单价标准】—— 列表 —— 参数 /meter/standard-price/list
 export interface IStandardPriceParams {
     page: number; //
     page_size: number; //
@@ -34,6 +34,7 @@ export interface IStandardPriceParams {
     keyword?: string; //
 }
 
+// 【单价标准】—— 列表 —— 返回items /meter/standard-price/list
 export interface IStandardPriceItem {
     id: string;
     name: string; // 名称
@@ -48,7 +49,7 @@ export interface IStandardPriceItem {
     is_enabled: string; // 是否启用
 }
 
-// 【调整单】—— 列表 /meter/price-adjustment/list
+// 【调整单】—— 列表 —— 参数 /meter/price-adjustment/list
 export interface IAdjustmentParams {
     page: number; //
     page_size: number; //
@@ -57,6 +58,7 @@ export interface IAdjustmentParams {
     keyword?: string; //
 }
 
+// 【调整单】—— 列表 —— 返回items /meter/price-adjustment/list
 export interface IAdjustmentItem {
     id: string; //
     meter_standard_price_id: string; //
