@@ -6,7 +6,7 @@ import { RouteComponentProps } from 'dva/router';
 import ReportList from './routers/report';
 import Loadable from 'react-loadable';
 //@ts-ignore
-import { hot } from 'react-hot-loader/root';
+import { hot } from 'react-hot-loader';
 interface Props extends RouteComponentProps {
     getState?: any;
     dispatch?: any;
@@ -100,4 +100,4 @@ class App extends React.PureComponent<Props> {
         );
     }
 }
-export default hot(App);
+export default hot(module)(App);

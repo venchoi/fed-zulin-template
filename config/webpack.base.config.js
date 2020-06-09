@@ -6,8 +6,7 @@ const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: ['react-hot-loader/patch', '@babel/polyfill', path.resolve(__dirname, '../src/index.tsx')],
-        vendor: ['react', 'react-dom'],
+        app: ['@babel/polyfill', 'react-hot-loader/patch', path.resolve(__dirname, '../src/index.tsx')],
     },
     output: {
         filename: '[name].[hash:8].js',
@@ -38,7 +37,6 @@ module.exports = {
                                     ],
                                     cacheDirectory: true,
                                     plugins: [
-                                        'react-hot-loader/babel',
                                         'lodash',
                                         '@babel/plugin-transform-runtime',
                                         //支持import 懒加载
@@ -51,6 +49,7 @@ module.exports = {
                                                 style: true, // or 'css'
                                             },
                                         ],
+                                        'react-hot-loader/babel',
                                     ],
                                 },
                             },
@@ -85,8 +84,11 @@ module.exports = {
                                 options: {
                                     javascriptEnabled: true,
                                     modifyVars: {
-                                        'hack': `true; @import "${path.resolve(__dirname, '../src/assets/less/antd/index.less')}";`,
-                                    }
+                                        hack: `true; @import "${path.resolve(
+                                            __dirname,
+                                            '../src/assets/less/antd/index.less'
+                                        )}";`,
+                                    },
                                     // modifyVars: antOverride,
                                 },
                             },
@@ -126,6 +128,7 @@ module.exports = {
             '@m': path.resolve(__dirname, '../src/model'),
             '@s': path.resolve(__dirname, '../src/services'),
             '@t': path.resolve(__dirname, '../src/types'),
+            'react-dom': '@hot-loader/react-dom',
         },
     },
     optimization: {
