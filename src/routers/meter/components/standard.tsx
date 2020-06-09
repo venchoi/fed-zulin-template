@@ -2,12 +2,12 @@
  * 标准单价管理
  */
 import React, { useState, useEffect } from 'react';
-import { Radio, Input, Checkbox, Switch, message } from 'antd';
+import { Radio, Input, Checkbox, Switch, message, Button } from 'antd';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
 import { ColumnProps } from 'antd/es/table';
-import { IStandardPriceItem, IStandardPriceParams, IMeterTypeItem } from '@t/meter';
-import { getStandardPriceList, postPriceEnabled } from '@s/meter';
+import { IStandardPriceItem, IStandardPriceParams, IMeterTypeItem, StandardHandleType } from '@t/meter';
+import { getStandardPriceList, postStandardPrice } from '@s/meter';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
@@ -74,10 +74,31 @@ const Standard = () => {
             dataIndex: 'id',
             title: '操作',
             width: 163,
+            render: (text, rowData) => {
+                return (<>
+                    <Button type="link" onClick={() => handleEditPrice(rowData)}>调整价格</Button>
+                    <Button type="link" href={"/"} target="">详情</Button>
+                    <Button type="link" onClick={() => handleEdit(rowData)}>编辑</Button>
+                    <Button type="link" onClick={() => handleDelete(rowData)}>删除</Button>
+                </>)
+            }
         },
     ];
+    
+
+    const handleEditPrice = (rowData: IStandardPriceItem) => {}
+    const handleEdit = (rowData: IStandardPriceItem) => {}
+
+    const handleDelete = async (rowData: IStandardPriceItem) => {
+        const { result } = await postStandardPrice({ type: StandardHandleType.DELETE, id: rowData.id });
+        if (result) {
+            message.success('操作成功');
+            fetchList();
+        }
+    };
+
     const handlePriceEnabled = async (rowData: IStandardPriceItem) => {
-        const { result } = await postPriceEnabled({ id: rowData.id });
+        const { result } = await postStandardPrice({ type: StandardHandleType.ENABLED, id: rowData.id });
         if (result) {
             message.success('操作成功');
             fetchList();

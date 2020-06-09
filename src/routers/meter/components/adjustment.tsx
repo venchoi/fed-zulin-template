@@ -2,12 +2,12 @@
  * 标准单价管理
  */
 import React, { useState, useEffect } from 'react';
-import { Radio, Input, Checkbox, Switch, message, Badge } from 'antd';
+import { Radio, Input, Button, Switch, message, Badge } from 'antd';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
 import { ColumnProps } from 'antd/es/table';
-import { IAdjustmentItem, IAdjustmentParams, IStatusItem, IStatus } from '@t/meter';
-import { getPriceAdjustmentList, postPriceEnabled } from '@s/meter';
+import { IAdjustmentItem, IAdjustmentParams, IStatusItem, IStatus, PriceAdjustHandleType, IAdjustmentICURDParams } from '@t/meter';
+import { getPriceAdjustmentList, postPrice } from '@s/meter';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
@@ -97,15 +97,25 @@ const Adjustment = () => {
             dataIndex: 'id',
             title: '操作',
             width: 163,
+            render: (text, rowData) => {
+                return <>
+                    <Button type="link" onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id: rowData.id})}>审核</Button>
+                    <Button type="link" href={"/"} target="">详情</Button>
+                    <Button type="link" onClick={() => actionHandler({ type: PriceAdjustHandleType.VOID, id: rowData.id})}>作废</Button>
+                    <Button type="link" onClick={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id: rowData.id})}>取消审核</Button>
+                </>
+            }
         },
     ];
-    const handlePriceEnabled = async (rowData: IAdjustmentItem) => {
-        const { result } = await postPriceEnabled({ id: rowData.id });
+
+
+    const actionHandler = async (params: IAdjustmentICURDParams) => {
+        const { result } = await postPrice(params);
         if (result) {
             message.success('操作成功');
             fetchList();
         }
-    };
+    }
     const fetchList = async () => {
         const { data } = await getPriceAdjustmentList({ ...pageObj, ...params });
         setAdjustmentDataSource(data?.items || []);

@@ -1,30 +1,29 @@
 import ajax from '@/api/utils/ajax';
-import { IStandardPriceParams, IAdjustmentParams } from '@t/meter';
+import { IStandardPriceParams, IAdjustmentParams, StandardHandleType, PriceAdjustHandleType, IStandardICURDParams, IAdjustmentICURDParams } from '@t/meter';
 
-interface ICURDParams {
-    id: string;
-}
 // 【单价标准】—— 列表
 export const getStandardPriceList = (params: IStandardPriceParams) => {
     return ajax('/meter/standard-price/list', params, 'GET');
 };
-// 单价标准】—— 启用禁用
-export const postPriceEnabled = (params: ICURDParams) => {
-    return ajax('/meter/standard-price/handle-enabled', params, 'POST');
+// 【单价标准】 —— 启用禁用 、删除
+export const postStandardPrice = ({ type, id }: IStandardICURDParams) => {
+    const map: Record<StandardHandleType, string> = {
+        [StandardHandleType.DELETE]: '/meter/standard-price/delete',
+        [StandardHandleType.ENABLED]: '/meter/standard-price/handle-enabled',
+    } 
+    return ajax(map[type], { id }, 'POST');
 };
 // 【调整单】—— 列表
 export const getPriceAdjustmentList = (params: IAdjustmentParams) => {
     return ajax('/meter/price-adjustment/list', params, 'GET');
 };
-// 【调整单】—— 审核
-export const postAdjustmentAudit = (params: ICURDParams) => {
-    return ajax('/meter/price-adjustment/audit', params, 'POST');
-};
-// 【调整单】—— 取消审核
-export const postAdjustmentCancelAudit = (params: ICURDParams) => {
-    return ajax('/meter/price-adjustment/cancel-audit', params, 'POST');
-};
-// 【调整单】—— 作废
-export const postAdjustmentVoid = (params: ICURDParams) => {
-    return ajax('/meter/price-adjustment/void', params, 'POST');
+// TODO confirm
+// 【调整单】—— 审核、取消审核、作废
+export const postPrice = ({ type, id }: IAdjustmentICURDParams) => {
+    const map: Record<PriceAdjustHandleType, string> = {
+        [PriceAdjustHandleType.AUDIT]: '/meter/price-adjustment/audit',
+        [PriceAdjustHandleType.CANCELAUDIT]: '/meter/price-adjustment/cancel-audit',
+        [PriceAdjustHandleType.VOID]: '/meter/price-adjustment/void',
+    } 
+    return ajax(map[type], { id }, 'POST');
 };

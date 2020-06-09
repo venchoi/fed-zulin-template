@@ -6,6 +6,25 @@ export enum IStatus {
     CANCELED = '已作废',
 }
 
+export enum StandardHandleType {
+    DELETE = 'DELETE',
+    ENABLED = 'ENABLED',
+}
+
+export enum PriceAdjustHandleType {
+    AUDIT = 'AUDIT',
+    CANCELAUDIT = 'CANCELAUDIT',
+    VOID = 'VOID'
+}
+
+export interface IStandardICURDParams {
+    id: string;
+    type: StandardHandleType;
+}
+export interface IAdjustmentICURDParams {
+    id: string;
+    type: PriceAdjustHandleType;
+}
 // 【单价标准】——列表 /meter/standard-price/list
 export interface IStandardPriceParams {
     page: number; //
