@@ -1,9 +1,9 @@
-export enum IStatus {
+export enum Status {
     ALL = '全部',
-    AUDITLESS = '待审核',
+    PENDING = '待审核',
     AUDITED = '已审核',
     EFFECTED = '已生效',
-    CANCELED = '已作废',
+    VOID = '已作废',
 }
 
 export enum StandardHandleType {
@@ -14,7 +14,7 @@ export enum StandardHandleType {
 export enum PriceAdjustHandleType {
     AUDIT = 'AUDIT',
     CANCELAUDIT = 'CANCELAUDIT',
-    VOID = 'VOID'
+    VOID = 'VOID',
 }
 
 export interface IStandardICURDParams {
@@ -46,7 +46,7 @@ export interface IStandardPriceAddItem {
 }
 
 export interface IStandardPriceEditItem {
-    id: string,
+    id: string;
     name: string; // 名称
     remark: string; // 说明
 }
@@ -57,12 +57,11 @@ export interface IStandardPriceItem extends IStandardPriceAddItem {
     is_enabled: string; // 是否启用
 }
 
-
 // 【调整单】—— 列表 —— 参数 /meter/price-adjustment/list
 export interface IAdjustmentParams {
     page: number; //
     page_size: number; //
-    status?: IStatus; //
+    status?: Status; //
     meter_type_id?: string; //
     keyword?: string; //
 }
@@ -80,7 +79,7 @@ export interface IAdjustmentItem {
     start_date: string; //
     end_date: string; //
     created_on: string; // 提交时间
-    status: IStatus; //
+    status: Status; //
     standard_name: string; // 调整单名称
     meter_type_name: string; // 类型名称
 }
@@ -91,16 +90,21 @@ export interface IMeterTypeStatisticItem {
     meter_type_name: string; // 类型名称
     value: string;
 }
+// 标准单价类型
+export interface IStatisticsItem {
+    id: string; // 类型id
+    value: string; // 类型名称
+    num: string | number;
+}
 
 // 标准单价类型item
 export interface IMeterTypeItem {
-    id: string,
-    value: string,
-    unit: string,
+    id: string;
+    value: string;
+    unit: string;
 }
 
 export interface IStatusItem {
-    status: IStatus;
+    status: Status;
     value: string;
 }
-

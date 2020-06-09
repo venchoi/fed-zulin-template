@@ -3,10 +3,17 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Radio, Input, Checkbox, Switch, message, Button } from 'antd';
+import { sumBy } from 'lodash';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
 import { ColumnProps } from 'antd/es/table';
-import { IStandardPriceItem, IStandardPriceParams, IMeterTypeStatisticItem, StandardHandleType } from '@t/meter';
+import {
+    IStandardPriceItem,
+    IStandardPriceParams,
+    IStatisticsItem,
+    IMeterTypeStatisticItem,
+    StandardHandleType,
+} from '@t/meter';
 import { getStandardPriceList, postStandardPrice } from '@s/meter';
 // import Filter from './adjustmentFilter'
 
@@ -25,16 +32,26 @@ const Standard = () => {
         is_enabled: '',
         keyword: '',
     });
-    const [meterTypeList, setMeterTypeList] = useState<IMeterTypeStatisticItem[]>([
+    const [statisticsInfo, setStatisticsInfo] = useState<IStatisticsItem[]>([
         {
-            meter_type_id: '1',
-            value: '12',
-            meter_type_name: '水表',
+            id: '',
+            num: '',
+            value: '全部',
         },
         {
-            meter_type_id: '1234',
-            value: '182',
-            meter_type_name: '电表',
+            id: '',
+            num: '',
+            value: '水表(系统)',
+        },
+        {
+            id: '',
+            num: '',
+            value: '电表(系统)',
+        },
+        {
+            id: '',
+            num: '',
+            value: '燃气表(系统)',
         },
     ]);
     const columns: ColumnProps<IStandardPriceItem>[] = [
@@ -75,19 +92,27 @@ const Standard = () => {
             title: '操作',
             width: 163,
             render: (text, rowData) => {
-                return (<>
-                    <Button type="link" onClick={() => handleEditPrice(rowData)}>调整价格</Button>
-                    <Button type="link" href={"/"} target="">详情</Button>
-                    <Button type="link" onClick={() => handleEdit(rowData)}>编辑</Button>
-                    <Button type="link" onClick={() => handleDelete(rowData)}>删除</Button>
-                </>)
-            }
+                return (
+                    <>
+                        <Button type="link" onClick={() => handleEditPrice(rowData)}>
+                            调整价格
+                        </Button>
+                        <Button type="link" href={'/'} target="">
+                            详情
+                        </Button>
+                        <Button type="link" onClick={() => handleEdit(rowData)}>
+                            编辑
+                        </Button>
+                        <Button type="link" onClick={() => handleDelete(rowData)}>
+                            删除
+                        </Button>
+                    </>
+                );
+            },
         },
     ];
-    
-
-    const handleEditPrice = (rowData: IStandardPriceItem) => {}
-    const handleEdit = (rowData: IStandardPriceItem) => {}
+    const handleEditPrice = (rowData: IStandardPriceItem) => {};
+    const handleEdit = (rowData: IStandardPriceItem) => {};
 
     const handleDelete = async (rowData: IStandardPriceItem) => {
         const { result } = await postStandardPrice({ type: StandardHandleType.DELETE, id: rowData.id });
@@ -107,6 +132,18 @@ const Standard = () => {
     const fetchList = async () => {
         const { data } = await getStandardPriceList({ ...pageObj, ...params });
         setStandardDataSource(data?.items || []);
+        setTotal(data?.total || 0);
+        const statistics = data?.statistics_info || [];
+        const sum = sumBy(statistics, (item: IStatisticsItem) => +item.num);
+        setStatisticsInfo(
+            [
+                {
+                    id: '',
+                    num: sum,
+                    value: '全部',
+                },
+            ].concat(statistics)
+        );
     };
     const handleChangeParams = <T extends keyof IStandardPriceParams>(key: T, value: IStandardPriceParams[T]) => {
         setParams(prvState => ({ ...prvState, ...{ [key]: value } }));
@@ -128,10 +165,10 @@ const Standard = () => {
                         value={params.meter_type_id}
                         onChange={e => handleChangeParams('meter_type_id', e.target.value)}
                     >
-                        {meterTypeList.map(item => (
-                            <RadioButton key={item.meter_type_id} value={item.meter_type_id}>
-                                {item.meter_type_name}
-                                {+item.value > 0 ? `·${item.value}` : null}
+                        {statisticsInfo.map(item => (
+                            <RadioButton key={item.value} value={item.id}>
+                                {item.value}
+                                {+item.num > 0 ? `·${item.num}` : null}
                             </RadioButton>
                         ))}
                     </RadioGroup>

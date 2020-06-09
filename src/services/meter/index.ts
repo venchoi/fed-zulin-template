@@ -1,5 +1,14 @@
 import ajax from '@/api/utils/ajax';
-import { IStandardPriceParams, IAdjustmentParams, StandardHandleType, PriceAdjustHandleType, IStandardICURDParams, IAdjustmentICURDParams, IStandardPriceAddItem, IStandardPriceEditItem } from '@t/meter';
+import {
+    IStandardPriceParams,
+    IAdjustmentParams,
+    StandardHandleType,
+    PriceAdjustHandleType,
+    IStandardICURDParams,
+    IAdjustmentICURDParams,
+    IStandardPriceAddItem,
+    IStandardPriceEditItem,
+} from '@t/meter';
 
 // 【单价标准】—— 列表
 export const getStandardPriceList = (params: IStandardPriceParams) => {
@@ -10,7 +19,7 @@ export const postStandardPrice = ({ type, id }: IStandardICURDParams) => {
     const map: Record<StandardHandleType, string> = {
         [StandardHandleType.DELETE]: '/meter/standard-price/delete',
         [StandardHandleType.ENABLED]: '/meter/standard-price/handle-enabled',
-    } 
+    };
     return ajax(map[type], { id }, 'POST');
 };
 // 【单价标准】 —— 新增
@@ -37,6 +46,6 @@ export const postPrice = ({ type, id }: IAdjustmentICURDParams) => {
         [PriceAdjustHandleType.AUDIT]: '/meter/price-adjustment/audit',
         [PriceAdjustHandleType.CANCELAUDIT]: '/meter/price-adjustment/cancel-audit',
         [PriceAdjustHandleType.VOID]: '/meter/price-adjustment/void',
-    } 
+    };
     return ajax(map[type], { id }, 'POST');
 };

@@ -2,24 +2,61 @@
  * 标准单价管理
  */
 import React, { useState, useEffect } from 'react';
-import { Radio, Input, Button, Switch, message, Badge } from 'antd';
+import { Radio, Input, Button, Checkbox, Switch, message, Badge } from 'antd';
+import { find, map, pick } from 'lodash';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
 import { ColumnProps } from 'antd/es/table';
-import { IAdjustmentItem, IAdjustmentParams, IStatusItem, IStatus, PriceAdjustHandleType, IAdjustmentICURDParams } from '@t/meter';
+import {
+    IAdjustmentItem,
+    IAdjustmentParams,
+    IStatusItem,
+    Status,
+    PriceAdjustHandleType,
+    IAdjustmentICURDParams,
+} from '@t/meter';
 import { getPriceAdjustmentList, postPrice } from '@s/meter';
+import Item from 'antd/lib/list/Item';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
 const { Search } = Input;
 
-const StatusColorMap = {
-    全部: '',
-    待审核: '#F27900',
-    已审核: '#0D86FF',
-    已生效: '#00AD74',
-    已作废: '#BEC3C7',
-};
+const enum Statistics {
+    ALL = 'total',
+    PENDING = 'pending_num',
+    AUDITED = 'audited_num',
+    EFFECTED = 'effect_num',
+    VOID = 'void_num',
+}
+
+const statusItem = [
+    {
+        title: Status.ALL,
+        key: Statistics.ALL,
+        color: '',
+    },
+    {
+        title: Status.PENDING,
+        key: Statistics.PENDING,
+        color: '#F27900',
+    },
+    {
+        title: Status.AUDITED,
+        key: Statistics.AUDITED,
+        color: '#0D86FF',
+    },
+    {
+        title: Status.EFFECTED,
+        key: Statistics.EFFECTED,
+        color: '#00AD74',
+    },
+    {
+        title: Status.VOID,
+        key: Statistics.VOID,
+        color: '#BEC3C7',
+    },
+];
 
 const Adjustment = () => {
     const [adjustmentDataSource, setAdjustmentDataSource] = useState([]);
@@ -30,31 +67,16 @@ const Adjustment = () => {
     });
     const [params, setParams] = useState({
         meter_type_id: '',
-        status: IStatus.ALL,
+        status: Status.ALL,
         keyword: '',
     });
-    const [meterTypeList, setMeterTypeList] = useState<IStatusItem[]>([
-        {
-            status: IStatus.ALL,
-            value: '12',
-        },
-        {
-            status: IStatus.AUDITLESS,
-            value: '12',
-        },
-        {
-            status: IStatus.AUDITED,
-            value: '12',
-        },
-        {
-            status: IStatus.EFFECTED,
-            value: '12',
-        },
-        {
-            status: IStatus.CANCELED,
-            value: '182',
-        },
-    ]);
+    const [statistics, setStatistics] = useState<Record<Statistics, string>>({
+        [Statistics.ALL]: '',
+        [Statistics.AUDITED]: '',
+        [Statistics.EFFECTED]: '',
+        [Statistics.PENDING]: '',
+        [Statistics.VOID]: '',
+    });
     const columns: ColumnProps<IAdjustmentItem>[] = [
         {
             dataIndex: 'standard_name',
@@ -85,8 +107,8 @@ const Adjustment = () => {
             dataIndex: 'status',
             title: '状态',
             width: 90,
-            render: (text: IStatus) => {
-                return <Badge color={StatusColorMap[text]} text={text} />;
+            render: (text: Status) => {
+                return <Badge color={find(statusItem, ['title', text])?.color} text={text} />;
             },
         },
         {
@@ -98,16 +120,34 @@ const Adjustment = () => {
             title: '操作',
             width: 163,
             render: (text, rowData) => {
-                return <>
-                    <Button type="link" onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id: rowData.id})}>审核</Button>
-                    <Button type="link" href={"/"} target="">详情</Button>
-                    <Button type="link" onClick={() => actionHandler({ type: PriceAdjustHandleType.VOID, id: rowData.id})}>作废</Button>
-                    <Button type="link" onClick={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id: rowData.id})}>取消审核</Button>
-                </>
-            }
+                return (
+                    <>
+                        <Button
+                            type="link"
+                            onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id: rowData.id })}
+                        >
+                            审核
+                        </Button>
+                        <Button type="link" href={'/'} target="">
+                            详情
+                        </Button>
+                        <Button
+                            type="link"
+                            onClick={() => actionHandler({ type: PriceAdjustHandleType.VOID, id: rowData.id })}
+                        >
+                            作废
+                        </Button>
+                        <Button
+                            type="link"
+                            onClick={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id: rowData.id })}
+                        >
+                            取消审核
+                        </Button>
+                    </>
+                );
+            },
         },
     ];
-
 
     const actionHandler = async (params: IAdjustmentICURDParams) => {
         const { result } = await postPrice(params);
@@ -115,10 +155,14 @@ const Adjustment = () => {
             message.success('操作成功');
             fetchList();
         }
-    }
+    };
     const fetchList = async () => {
         const { data } = await getPriceAdjustmentList({ ...pageObj, ...params });
         setAdjustmentDataSource(data?.items || []);
+        setTotal(data?.total || 0);
+        const keys = map(statusItem, (item: { key: string }) => item.key);
+        const values = pick(data, keys);
+        setStatistics(values as Record<Statistics, string>);
     };
     const handleChangeParams = <T extends keyof IAdjustmentParams>(key: T, value: IAdjustmentParams[T]) => {
         setParams(prvState => ({ ...prvState, ...{ [key]: value } }));
@@ -140,10 +184,10 @@ const Adjustment = () => {
                         value={params.status}
                         onChange={e => handleChangeParams('status', e.target.value)}
                     >
-                        {meterTypeList.map(item => (
-                            <RadioButton key={item.status} value={item.status}>
-                                {item.status}
-                                {+item.value > 0 ? `·${item.value}` : null}
+                        {statusItem.map(item => (
+                            <RadioButton key={item.title} value={item.title}>
+                                {item.title}
+                                {+statistics[item.key] > 0 ? `·${statistics[item.key]}` : null}
                             </RadioButton>
                         ))}
                     </RadioGroup>
