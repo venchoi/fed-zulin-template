@@ -158,7 +158,7 @@ const Adjustment = () => {
                         ))}
                     </RadioGroup>
                     <Search
-                        className="filter-item"
+                        style={{ width: '312px' }}
                         placeholder="名称、说明"
                         value={params.keyword}
                         onChange={e => handleChangeParams('keyword', e.target.value)}
