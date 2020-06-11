@@ -115,8 +115,8 @@ const Adjustment = () => {
         },
     ];
 
-    const actionHandler = async (params: IAdjustmentICURDParams) => {
-        const { result } = await postPrice(params);
+    const actionHandler = async (payload: IAdjustmentICURDParams) => {
+        const { result } = await postPrice(payload);
         if (result) {
             message.success('操作成功');
             fetchList();
