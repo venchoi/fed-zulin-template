@@ -79,7 +79,7 @@ export interface IAdjustmentParams {
 export interface IAdjustmentItem {
     id: string; //
     meter_standard_price_id: string; //
-    code: string; //
+    code: string; // 调整单号
     is_step: string; //
     step_data: string; //
     price: string; //
@@ -88,23 +88,23 @@ export interface IAdjustmentItem {
     start_date: string; //
     end_date: string; //
     created_on: string; // 提交时间
-    status: Status; //
-    standard_name: string; // 调整单名称
+    status: Status; // 状态
+    standard_name: string; // 单价名称
     meter_type_name: string; // 类型名称
 }
 
 // 【调整单】—— 详情 /meter/price-adjustment/detail
 export interface IAdjustmentDetail extends IAdjustmentItem {
-    type: string;
+    type: string; // 类型
     attachment: string;
-    audit_date: string;
-    auditor_id: string;
-    created_by: string;
+    audit_date: string; // 审核时间
+    auditor_id: string; // 审核人id
+    created_by: string; // 发起时间
     modified_on: string;
     modified_by: string;
     is_deleted: string;
-    created_by_name: string;
-    auditor_id_name: string;
+    created_by_name: string; // 发起人
+    auditor_id_name: string; // 审核人
   }
 
 // 标准单价统计item
