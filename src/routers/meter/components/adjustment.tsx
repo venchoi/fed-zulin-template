@@ -2,7 +2,7 @@
  * 标准单价管理
  */
 import React, { useState, useEffect } from 'react';
-import { Link } from 'dva/router'
+import { Link } from 'dva/router';
 import { Radio, Input, Button, Checkbox, Switch, message, Badge } from 'antd';
 import { find, map, pick } from 'lodash';
 import FedTable from '@c/FedTable';
@@ -18,46 +18,11 @@ import {
 } from '@t/meter';
 import { getPriceAdjustmentList, postPrice } from '@s/meter';
 import Item from 'antd/lib/list/Item';
+import { Statistics, statusItem } from '../config';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
 const { Search } = Input;
-
-const enum Statistics {
-    ALL = 'total',
-    PENDING = 'pending_num',
-    AUDITED = 'audited_num',
-    EFFECTED = 'effect_num',
-    VOID = 'void_num',
-}
-
-const statusItem = [
-    {
-        title: Status.ALL,
-        key: Statistics.ALL,
-        color: '',
-    },
-    {
-        title: Status.PENDING,
-        key: Statistics.PENDING,
-        color: '#F27900',
-    },
-    {
-        title: Status.AUDITED,
-        key: Statistics.AUDITED,
-        color: '#0D86FF',
-    },
-    {
-        title: Status.EFFECTED,
-        key: Statistics.EFFECTED,
-        color: '#00AD74',
-    },
-    {
-        title: Status.VOID,
-        key: Statistics.VOID,
-        color: '#BEC3C7',
-    },
-];
 
 const Adjustment = () => {
     const [adjustmentDataSource, setAdjustmentDataSource] = useState([]);
@@ -129,7 +94,7 @@ const Adjustment = () => {
                         >
                             审核
                         </Button>
-                        <Button type="link" >
+                        <Button type="link">
                             <Link to={`/meter/detail/${rowData.id}`}>详情</Link>
                         </Button>
                         <Button
