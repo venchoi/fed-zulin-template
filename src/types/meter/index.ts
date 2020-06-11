@@ -1,4 +1,4 @@
-import { ENABLE } from '../common'
+import { ENABLE } from '../common';
 export enum Status {
     ALL = '全部',
     PENDING = '待审核',
@@ -60,12 +60,12 @@ export interface IStandardPriceItem extends IStandardPriceAddItem {
 
 // 【单价管理】——详情
 export interface IStandardPriceDetail extends IStandardPriceItem {
-  created_on: string; // 创建时间
-  created_by: string; // 创建人
-  modified_on: string; // 修改时间
-  modified_by: string; // 修改人
-  is_deleted: string;
-  created_by_name: string;
+    created_on: string; // 创建时间
+    created_by: string; // 创建人
+    modified_on: string; // 修改时间
+    modified_by: string; // 修改人
+    is_deleted: string;
+    created_by_name: string;
 }
 // 【调整单】—— 列表 —— 参数 /meter/price-adjustment/list
 export interface IAdjustmentParams {
@@ -76,22 +76,24 @@ export interface IAdjustmentParams {
     keyword?: string; //
 }
 
+export interface IStandardPriceAdjustmentItem {
+    id: string;
+    start_date: string;
+    end_date: string;
+    is_step: string;
+    step_data: string;
+    price: string;
+    unit: string;
+    status: string;
+    created_on: string;
+}
 // 【调整单】—— 列表 —— 返回items /meter/price-adjustment/list
-export interface IAdjustmentItem {
-    id: string; //
-    meter_standard_price_id: string; //
+export interface IAdjustmentItem extends IStandardPriceAdjustmentItem {
     code: string; // 调整单号
-    is_step: string; //
-    step_data: string; //
-    price: string; //
-    unit: string; //
     reason: string; // 调整原因
-    start_date: string; //
-    end_date: string; //
-    created_on: string; // 提交时间
-    status: Status; // 状态
     standard_name: string; // 单价名称
     meter_type_name: string; // 类型名称
+    meter_standard_price_id: string; //
 }
 
 // 【调整单】—— 详情 /meter/price-adjustment/detail
@@ -106,7 +108,7 @@ export interface IAdjustmentDetail extends IAdjustmentItem {
     is_deleted: string;
     created_by_name: string; // 发起人
     auditor_id_name: string; // 审核人
-  }
+}
 
 // 标准单价统计item
 export interface IMeterTypeStatisticItem {
