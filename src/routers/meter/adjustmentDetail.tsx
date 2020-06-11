@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PageHeader, Card, Button, Divider } from 'antd';
+import { PageHeader, Card, Button, Divider, Space } from 'antd';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
 import { IAdjustmentDetail } from '@t/meter';
 import { match } from 'react-router';
@@ -90,10 +90,10 @@ const AdjustmentDetail = ({
                     </div>
                     <Divider style={{ marginTop: '16px' }} />
                     <footer className="footer">
-                        <div className="footer-left">
+                        <Space>
                             <Button type="primary">审核</Button>
                             <Button>作废</Button>
-                        </div>
+                        </Space>
                     </footer>
                 </Card>
             </div>
