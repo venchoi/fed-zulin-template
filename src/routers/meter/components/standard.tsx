@@ -2,6 +2,7 @@
  * 标准单价管理
  */
 import React, { useState, useEffect } from 'react';
+import { Link } from 'dva/router';
 import { Radio, Input, Checkbox, Switch, message, Button } from 'antd';
 import { sumBy } from 'lodash';
 import FedTable from '@c/FedTable';
@@ -97,8 +98,8 @@ const Standard = () => {
                         <Button type="link" onClick={() => handleEditPrice(rowData)}>
                             调整价格
                         </Button>
-                        <Button type="link" href={'/'} target="">
-                            详情
+                        <Button type="link" >
+                            <Link to={`/meter/detail/${rowData.id}`}>详情</Link>
                         </Button>
                         <Button type="link" onClick={() => handleEdit(rowData)}>
                             编辑

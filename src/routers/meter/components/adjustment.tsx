@@ -2,6 +2,7 @@
  * 标准单价管理
  */
 import React, { useState, useEffect } from 'react';
+import { Link } from 'dva/router'
 import { Radio, Input, Button, Checkbox, Switch, message, Badge } from 'antd';
 import { find, map, pick } from 'lodash';
 import FedTable from '@c/FedTable';
@@ -128,8 +129,8 @@ const Adjustment = () => {
                         >
                             审核
                         </Button>
-                        <Button type="link" href={'/'} target="">
-                            详情
+                        <Button type="link" >
+                            <Link to={`/meter/detail/${rowData.id}`}>详情</Link>
                         </Button>
                         <Button
                             type="link"

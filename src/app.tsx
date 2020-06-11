@@ -37,6 +37,14 @@ const routes = [
             loading: loading,
         }),
     },
+    // TODO children route
+    {
+        path: '/meter/detail/:id',
+        component: Loadable({
+            loader: () => import('./routers/meter/detail'),
+            loading: loading,
+        }),
+    },
     {
         path: '/meter',
         component: Loadable({
