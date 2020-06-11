@@ -78,7 +78,11 @@ const AdjustmentDetail = ({
     }, []);
     return (
         <>
-            <PageHeader title={detail.code || '标准详情'} breadcrumb={{ routes, itemRender }} ghost={false} />
+            <PageHeader
+                title={detail.standard_name || '调整单详情'}
+                breadcrumb={{ routes, itemRender }}
+                ghost={false}
+            />
             <div className="layout-list">
                 <Card>
                     <div style={{ padding: '16px 24px 0  24px' }}>

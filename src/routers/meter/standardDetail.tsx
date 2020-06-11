@@ -70,7 +70,7 @@ const Detail = ({
     };
     const fetchDetail = async () => {
         const { data } = await getStandardPriceDetail({ id });
-        setDetail(data || initDetail);
+        setDetail((data.id && data) || initDetail);
     };
     useEffect(() => {
         fetchDetail();
@@ -87,14 +87,14 @@ const Detail = ({
             <div className="layout-list">
                 <Tabs type="card">
                     <TabPane tab="基本信息" key="1">
-                        <div className="tab-pane-content">
+                        <Card bordered={false} style={{ padding: '20px 16px' }}>
                             <BaseInfo detail={detail} />
-                        </div>
+                        </Card>
                     </TabPane>
                     <TabPane tab="调整记录" key="2">
-                        <div className="tab-pane-content">
+                        <Card bordered={false} style={{ padding: '20px 16px' }}>
                             <AdjustmentRecord />
-                        </div>
+                        </Card>
                     </TabPane>
                 </Tabs>
             </div>

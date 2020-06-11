@@ -6,14 +6,14 @@ const MyComponents = {
     CheckCircleFilled(props: Pick<AntdIconProps, 'color'>) {
         return (
             <>
-                <CheckCircleFilled {...props} />
+                <CheckCircleFilled style={{ color: '#00AD74' }} />
             </>
         );
     },
     MinusCircleFilled(props: Pick<AntdIconProps, 'color'>) {
         return (
             <>
-                <MinusCircleFilled {...props} />
+                <MinusCircleFilled color="#868B8F" />
             </>
         );
     },

@@ -51,6 +51,8 @@ const BaseInfo = ({ detail }: { detail: IAdjustmentDetail }) => {
             {
                 label: '调整附件',
                 value: detail.attachment,
+                // TODO attachment
+                render: () => <></>,
             },
         ],
     ];
