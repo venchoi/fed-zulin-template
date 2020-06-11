@@ -12,7 +12,7 @@ interface IProps {
         label: string;
         value: any; // TODO T
         labelAlign?: boolean;
-        render?: () => ReactNode
+        render?: () => ReactNode;
     };
     layout?: string;
     labelWidth?: string;
@@ -23,12 +23,12 @@ function FedDataRow(props: IProps) {
     return (
         <div className={`fed-data-row ${layout}`}>
             <div
-                className={
-                    `fed-data-row-label  ${rowData.labelAlign ? `fed-data-row-label-align-${rowData.labelAlign}` : ''}`
-                }
+                className={`fed-data-row-label  ${
+                    rowData.labelAlign ? `fed-data-row-label-align-${rowData.labelAlign}` : ''
+                }`}
                 style={{ width: labelWidth || '98px' }}
             >
-                {rowData.label} :
+                {rowData.label}:
             </div>
             <div className="fed-data-row-value" style={{ width: valueWidth || '264px' }}>
                 {rowData.render ? rowData.render() : rowData.value || '--'}
