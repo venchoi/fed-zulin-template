@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
-import { PageHeader } from 'antd'
+import React, { useState, useEffect } from 'react';
+import { PageHeader, Tabs, Card } from 'antd'
+import { RouteComponentProps } from 'dva/router';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
 import { IStandardPriceDetail } from '@t/meter'
 import { ENABLE } from '@t/common'
+import { match } from 'react-router';
 import StatusComponent from './components/statusComponent';
+import BaseInfo from './components/baseInfo';
+import AdjustmentRecord from './components/adjustmentRecord';
+import { getStandardPriceDetail } from '@/services/meter';
+import './detail.less';
 
-const Detail = () => {
+const { TabPane } = Tabs
+interface IMatch extends match {
+  params: {
+    id: string
+  };
+}
+
+interface IProps extends RouteComponentProps {
+  match: IMatch;
+}
+
+const Detail = ({ match: { params: { id } } }: IProps) => {
   const initDetail = {
     id: '',
     meter_type_name: '', // 类型名称
@@ -47,10 +64,30 @@ const Detail = () => {
       }
       return <span key={route.path}>{route.breadcrumbName}</span>;
   };
-
+  const fetchDetail = async () => {
+    const { data } = await getStandardPriceDetail({ id })
+    setDetail(data || initDetail);
+  }
+  useEffect(() => {
+    fetchDetail()
+  }, [])
   
   return (<>
     <PageHeader title={detail.name || '标准详情'} breadcrumb={{ routes, itemRender }} ghost={false} subTitle={<StatusComponent is_enabled={detail.is_enabled} />} />
-  </>)
+    <div className="layout-list">
+      <Tabs type="card">
+        <TabPane tab="基本信息" key="1">
+          <div className="tab-pane-content">
+            <BaseInfo detail={detail}/>
+          </div>
+        </TabPane>
+        <TabPane tab="调整记录" key="2">
+        <div className="tab-pane-content">
+          <AdjustmentRecord />
+        </div>
+        </TabPane>
+      </Tabs>
+    </div>
+    </>)
 }
 export default Detail;
