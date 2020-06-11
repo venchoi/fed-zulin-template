@@ -15,7 +15,7 @@ import {
     IMeterTypeStatisticItem,
     StandardHandleType,
 } from '@t/meter';
-import { ENABLE } from '@t/common'
+import { ENABLE } from '@t/common';
 import { getStandardPriceList, postStandardPrice } from '@s/meter';
 // import Filter from './adjustmentFilter'
 
@@ -99,8 +99,8 @@ const Standard = () => {
                         <Button type="link" onClick={() => handleEditPrice(rowData)}>
                             调整价格
                         </Button>
-                        <Button type="link" >
-                            <Link to={`/meter/detail/${rowData.id}`}>详情</Link>
+                        <Button type="link">
+                            <Link to={`/meter/detail-standard/${rowData.id}`}>详情</Link>
                         </Button>
                         <Button type="link" onClick={() => handleEdit(rowData)}>
                             编辑

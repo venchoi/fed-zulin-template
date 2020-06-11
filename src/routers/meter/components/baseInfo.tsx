@@ -23,8 +23,13 @@ const BaseInfo = ({ detail }: { detail: IStandardPriceDetail }) => {
             {
                 label: '单价',
                 render: () => {
-                return <span style={{ color: '#F24F18'}}>{(+detail.price).toFixed(2)}{detail.unit}/月</span>
-                }
+                    return (
+                        <span style={{ color: '#F24F18' }}>
+                            {(+detail.price).toFixed(2)}
+                            {detail.unit}/月
+                        </span>
+                    );
+                },
             },
             {
                 label: '说明',
@@ -37,17 +42,17 @@ const BaseInfo = ({ detail }: { detail: IStandardPriceDetail }) => {
         ],
     ];
     const systematicallyData = [
-      [
-          {
-              label: '创建时间',
-              value: detail.created_by,
-          },
-          {
-              label: '创建人',
-              value: detail.created_by_name,
-          },
-      ],
-  ];
+        [
+            {
+                label: '创建时间',
+                value: detail.created_on,
+            },
+            {
+                label: '创建人',
+                value: detail.created_by_name,
+            },
+        ],
+    ];
     const renderFedDataSection = (data: IDataSection[][]) => (
         <div className="baseinfo-content">
             {data.map((itemList, index) => (
