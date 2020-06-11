@@ -1,4 +1,4 @@
-import { ENABLED } from '../common'
+import { ENABLE } from '../common'
 export enum Status {
     ALL = '全部',
     PENDING = '待审核',
@@ -31,7 +31,7 @@ export interface IStandardPriceParams {
     page: number; //
     page_size: number; //
     meter_type_id?: string; //
-    is_enabled?: ENABLED; //
+    is_enabled?: ENABLE; //
     keyword?: string; //
 }
 
@@ -55,7 +55,7 @@ export interface IStandardPriceEditItem {
 export interface IStandardPriceItem extends IStandardPriceAddItem {
     id: string;
     meter_type_name: string; // 类型名称
-    is_enabled: ENABLED; // 是否启用
+    is_enabled: ENABLE; // 是否启用
 }
 
 // 【单价管理】——详情

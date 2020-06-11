@@ -15,7 +15,7 @@ import {
     IMeterTypeStatisticItem,
     StandardHandleType,
 } from '@t/meter';
-import { ENABLED } from '@t/common'
+import { ENABLE } from '@t/common'
 import { getStandardPriceList, postStandardPrice } from '@s/meter';
 // import Filter from './adjustmentFilter'
 
@@ -31,7 +31,7 @@ const Standard = () => {
     });
     const [params, setParams] = useState({
         meter_type_id: '',
-        is_enabled: ENABLED.NOTENABLED,
+        is_enabled: ENABLE.NOTENABLED,
         keyword: '',
     });
     const [statisticsInfo, setStatisticsInfo] = useState<IStatisticsItem[]>([
@@ -182,7 +182,7 @@ const Standard = () => {
                     />
                 </div>
                 <div className="filter-right">
-                    <Checkbox onChange={e => handleChangeParams('is_enabled', `${+e.target.checked}` as ENABLED)}>
+                    <Checkbox onChange={e => handleChangeParams('is_enabled', `${+e.target.checked}` as ENABLE)}>
                         只看已启用内容
                     </Checkbox>
                 </div>

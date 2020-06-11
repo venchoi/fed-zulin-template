@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { PageHeader } from 'antd'
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
-import { CheckCircleFilled, MinusCircleFilled } from '@ant-design/icons'
 import { IStandardPriceDetail } from '@t/meter'
-import { ENABLED } from '@t/common'
+import { ENABLE } from '@t/common'
+import StatusComponent from './components/statusComponent';
 
 const Detail = () => {
   const initDetail = {
     id: '',
     meter_type_name: '', // 类型名称
-    is_enabled: ENABLED.NOTENABLED, // 是否启用
+    is_enabled: ENABLE.NOTENABLED, // 是否启用
     name: '', // 名称
     meter_type_id: '', // 类型id
     is_step: '', // 是否阶梯价
@@ -47,12 +47,10 @@ const Detail = () => {
       }
       return <span key={route.path}>{route.breadcrumbName}</span>;
   };
-  const colorMap = {
 
-  }
-  const subTitle = (<><CheckCircleFilled style={{ color: '#00AD74' }} /><span style={{ color: '#00AD74' }}>启用中</span></>)
+  
   return (<>
-    <PageHeader title={detail.name || '标准详情'} breadcrumb={{ routes, itemRender }} ghost={false} subTitle={subTitle} />
+    <PageHeader title={detail.name || '标准详情'} breadcrumb={{ routes, itemRender }} ghost={false} subTitle={<StatusComponent is_enabled={detail.is_enabled} />} />
   </>)
 }
 export default Detail;
