@@ -17,6 +17,11 @@ export enum PriceAdjustHandleType {
     VOID = 'VOID',
 }
 
+export enum ENABLED {
+    NOTENABLED = '0',
+    ENABLED = '1',
+}
+
 export interface IStandardICURDParams {
     id: string;
     type: StandardHandleType;
@@ -30,7 +35,7 @@ export interface IStandardPriceParams {
     page: number; //
     page_size: number; //
     meter_type_id?: string; //
-    is_enabled?: string; //
+    is_enabled?: ENABLED; //
     keyword?: string; //
 }
 
@@ -54,7 +59,7 @@ export interface IStandardPriceEditItem {
 export interface IStandardPriceItem extends IStandardPriceAddItem {
     id: string;
     meter_type_name: string; // 类型名称
-    is_enabled: string; // 是否启用
+    is_enabled: ENABLED; // 是否启用
 }
 
 // 【单价管理】——详情
