@@ -95,7 +95,7 @@ const Adjustment = () => {
                             审核
                         </Button>
                         <Button type="link">
-                            <Link to={`/meter/detail/${rowData.id}`}>详情</Link>
+                            <Link to={`/meter/adjustment/detail/${rowData.id}`}>详情</Link>
                         </Button>
                         <Button
                             type="link"
