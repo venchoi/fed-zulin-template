@@ -39,16 +39,16 @@ const routes = [
     },
     // TODO children route
     {
-        path: '/meter/adjustment/detail/:id',
+        path: '/meter/detail-adjust/:id',
         component: Loadable({
             loader: () => import('./routers/meter/adjustmentDetail'),
             loading: loading,
         }),
     },
     {
-        path: '/meter/detail/:id',
+        path: '/meter/detail-standard/:id',
         component: Loadable({
-            loader: () => import('./routers/meter/detail'),
+            loader: () => import('./routers/meter/standardDetail'),
             loading: loading,
         }),
     },
