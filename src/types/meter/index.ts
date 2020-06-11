@@ -1,3 +1,4 @@
+import { ENABLED } from '../common'
 export enum Status {
     ALL = '全部',
     PENDING = '待审核',
@@ -15,11 +16,6 @@ export enum PriceAdjustHandleType {
     AUDIT = 'AUDIT',
     CANCELAUDIT = 'CANCELAUDIT',
     VOID = 'VOID',
-}
-
-export enum ENABLED {
-    NOTENABLED = '0',
-    ENABLED = '1',
 }
 
 export interface IStandardICURDParams {

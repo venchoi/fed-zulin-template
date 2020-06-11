@@ -14,8 +14,8 @@ import {
     IStatisticsItem,
     IMeterTypeStatisticItem,
     StandardHandleType,
-    ENABLED,
 } from '@t/meter';
+import { ENABLED } from '@t/common'
 import { getStandardPriceList, postStandardPrice } from '@s/meter';
 // import Filter from './adjustmentFilter'
 

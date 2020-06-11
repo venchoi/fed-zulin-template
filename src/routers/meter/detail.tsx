@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { PageHeader } from 'antd'
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
 import { CheckCircleFilled, MinusCircleFilled } from '@ant-design/icons'
-import { IStandardPriceDetail, ENABLED } from '@t/meter'
+import { IStandardPriceDetail } from '@t/meter'
+import { ENABLED } from '@t/common'
 
 const Detail = () => {
   const initDetail = {
