@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { PageHeader, Card, Button, Divider, Space } from 'antd';
+import { PageHeader, Card, Button, Divider, Space, message } from 'antd';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
-import { IAdjustmentDetail } from '@t/meter';
+import { IAdjustmentDetail, IAdjustmentICURDParams, PriceAdjustHandleType } from '@t/meter';
 import { match } from 'react-router';
 import { RouteComponentProps } from 'dva/router';
-import { getPriceAdjustmentDetail } from '@/services/meter';
+import { getPriceAdjustmentDetail, postPrice } from '@/services/meter';
 import BaseInfo from './components/baseInfoAdjustment';
 import './adjustmentDetail.less';
 interface IMatch extends match {
@@ -73,6 +73,13 @@ const AdjustmentDetail = ({
         const { data } = await getPriceAdjustmentDetail({ id });
         setDetail(data || initDetail);
     };
+    const actionHandler = async (payload: IAdjustmentICURDParams) => {
+        const { result } = await postPrice(payload);
+        if (result) {
+            message.success('操作成功');
+            fetchDetail();
+        }
+    };
     useEffect(() => {
         fetchDetail();
     }, []);
@@ -91,8 +98,18 @@ const AdjustmentDetail = ({
                     <Divider style={{ marginTop: '16px' }} />
                     <footer className="footer">
                         <Space>
-                            <Button type="primary">审核</Button>
-                            <Button>作废</Button>
+                            <Button
+                                type="primary"
+                                onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id })}
+                            >
+                                审核
+                            </Button>
+                            <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id })}>
+                                作废
+                            </Button>
+                            <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id })}>
+                                取消审核
+                            </Button>
                         </Space>
                     </footer>
                 </Card>
