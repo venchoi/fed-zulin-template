@@ -38,6 +38,13 @@ const routes = [
         }),
     },
     // TODO children route
+    // {
+    //     path: '/meter/adjustment/detail/:id',
+    //     component: Loadable({
+    //         loader: () => import('./routers/meter/adjustmentDetail'),
+    //         loading: loading,
+    //     }),
+    // },
     {
         path: '/meter/detail/:id',
         component: Loadable({
