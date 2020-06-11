@@ -14,6 +14,10 @@ import {
 export const getStandardPriceList = (params: IStandardPriceParams) => {
     return ajax('/meter/standard-price/list', params, 'GET');
 };
+// 【单价管理】——详情
+export const getStandardPriceDetail = (params: { id: string }) => {
+    return ajax('/meter/standard-price/detail', params, 'GET');
+};
 // 【单价标准】 —— 启用禁用 、删除
 export const postStandardPrice = ({ type, id }: IStandardICURDParams) => {
     const map: Record<StandardHandleType, string> = {
@@ -38,6 +42,10 @@ export const getMeterTypeList = () => {
 // 【调整单】—— 列表
 export const getPriceAdjustmentList = (params: IAdjustmentParams) => {
     return ajax('/meter/price-adjustment/list', params, 'GET');
+};
+// 【调整单】—— 详情
+export const getPriceAdjustmentDetail = (params: { id: string }) => {
+    return ajax('/meter/price-adjustment/detail', params, 'GET');
 };
 // TODO confirm
 // 【调整单】—— 审核、取消审核、作废

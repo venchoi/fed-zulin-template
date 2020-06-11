@@ -50,13 +50,22 @@ export interface IStandardPriceEditItem {
     name: string; // 名称
     remark: string; // 说明
 }
-// 【单价标准】—— 列表 —— 返回items /meter/standard-price/list
+// 【单价标准】—— 列表items /meter/standard-price/list
 export interface IStandardPriceItem extends IStandardPriceAddItem {
     id: string;
     meter_type_name: string; // 类型名称
     is_enabled: string; // 是否启用
 }
 
+// 【单价管理】——详情
+export interface IStandardPriceDetail extends IStandardPriceItem {
+  created_on: string; // 创建时间
+  created_by: string; // 创建人
+  modified_on: string; // 修改时间
+  modified_by: string; // 修改人
+  is_deleted: string;
+  created_by_name: string;
+}
 // 【调整单】—— 列表 —— 参数 /meter/price-adjustment/list
 export interface IAdjustmentParams {
     page: number; //
@@ -83,6 +92,20 @@ export interface IAdjustmentItem {
     standard_name: string; // 调整单名称
     meter_type_name: string; // 类型名称
 }
+
+// 【调整单】—— 详情 /meter/price-adjustment/detail
+export interface IAdjustmentDetail extends IAdjustmentItem {
+    type: string;
+    attachment: string;
+    audit_date: string;
+    auditor_id: string;
+    created_by: string;
+    modified_on: string;
+    modified_by: string;
+    is_deleted: string;
+    created_by_name: string;
+    auditor_id_name: string;
+  }
 
 // 标准单价统计item
 export interface IMeterTypeStatisticItem {
