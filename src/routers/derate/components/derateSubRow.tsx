@@ -464,7 +464,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                             <InputWithCount
                                                 defaultValue={detail.remark}
                                                 placeholder="请输入"
-                                                maxLength={255}
+                                                maxLength={2000}
                                                 onChange={handleRemarkChange}
                                             />
                                         ) : (
