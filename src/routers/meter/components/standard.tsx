@@ -17,6 +17,7 @@ import {
 } from '@t/meter';
 import { ENABLE } from '@t/common';
 import { getStandardPriceList, postStandardPrice } from '@s/meter';
+import EditModal from './editModal';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
@@ -29,6 +30,8 @@ const Standard = () => {
         page: 1,
         page_size: 20,
     });
+    const [addModalVisible, setAddModalVisible] = useState(false);
+    const [editItem, setEditItem] = useState({});
     const [params, setParams] = useState({
         meter_type_id: '',
         is_enabled: ENABLE.NOTENABLED,
@@ -114,7 +117,10 @@ const Standard = () => {
         },
     ];
     const handleEditPrice = (rowData: IStandardPriceItem) => {};
-    const handleEdit = (rowData: IStandardPriceItem) => {};
+    const handleEdit = (rowData: IStandardPriceItem) => {
+        setEditItem(rowData);
+        setAddModalVisible(true);
+    };
 
     const handleDelete = async (rowData: IStandardPriceItem) => {
         const { result } = await postStandardPrice({ type: StandardHandleType.DELETE, id: rowData.id });
@@ -146,6 +152,10 @@ const Standard = () => {
                 },
             ].concat(statistics)
         );
+    };
+    const handleOk = () => {
+        setAddModalVisible(false);
+        fetchList();
     };
     const handleChangeParams = <T extends keyof IStandardPriceParams>(key: T, value: IStandardPriceParams[T]) => {
         setParams(prvState => ({ ...prvState, ...{ [key]: value } }));
@@ -200,6 +210,13 @@ const Standard = () => {
                 showTotal={total => `共${Math.ceil(+total / +(pageObj.page_size || 1))}页， ${total}条记录`}
                 total={+total}
             />
+            {addModalVisible ? (
+                <EditModal
+                    onCancel={() => setAddModalVisible(false)}
+                    editItem={editItem as IStandardPriceItem}
+                    onOk={() => handleOk()}
+                />
+            ) : null}
         </>
     );
 };

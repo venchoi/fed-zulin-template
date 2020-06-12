@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Card, Button } from 'antd';
 import Adjustment from './components/adjustment';
 import Standard from './components/standard';
-import EditModal from './components/editModal'
+import EditModal from './components/editModal';
 
 import './index.less';
 
 const List = () => {
     const [activeTabKey, setActiveTabKey] = useState('standard');
-    const [addModalVisible, setAddModalVisible] = useState(false)
+    const [addModalVisible, setAddModalVisible] = useState(false);
     const tabList = [
         {
             key: 'standard',
@@ -21,7 +21,9 @@ const List = () => {
     ];
     const extra = (
         <>
-            <Button type="primary" onClick={() => setAddModalVisible(true)}>新建标准</Button>
+            <Button type="primary" onClick={() => setAddModalVisible(true)}>
+                新建标准
+            </Button>
         </>
     );
     return (
@@ -48,7 +50,9 @@ const List = () => {
                     </div>
                 </Card>
             </div>
-            { addModalVisible ? <EditModal onCancel={() => setAddModalVisible(false)} /> : null}
+            {addModalVisible ? (
+                <EditModal onCancel={() => setAddModalVisible(false)} onOk={() => setAddModalVisible(false)} />
+            ) : null}
         </>
     );
 };

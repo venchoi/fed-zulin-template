@@ -18,6 +18,12 @@ export enum PriceAdjustHandleType {
     VOID = 'VOID',
 }
 
+export interface IStepData {
+    min: number | string;
+    max: number | string;
+    price: number | string;
+}
+
 export interface IStandardICURDParams {
     id: string;
     type: StandardHandleType;
