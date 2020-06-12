@@ -14,10 +14,12 @@ import {
     IStatisticsItem,
     IMeterTypeStatisticItem,
     StandardHandleType,
+    IAdjustmentItem,
 } from '@t/meter';
 import { ENABLE } from '@t/common';
 import { getStandardPriceList, postStandardPrice } from '@s/meter';
-import EditModal from './standardEditModal';
+import EditStandardModal from './standardEditModal';
+import EditAdjustmentModal from './adjustmentEditModal'
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
@@ -30,8 +32,9 @@ const Standard = () => {
         page: 1,
         page_size: 20,
     });
-    const [addModalVisible, setAddModalVisible] = useState(false);
-    const [editItem, setEditItem] = useState({});
+    const [addStandardVisible, setAddStandardVisible] = useState(false);
+    const [addAdjustmentVisible, setAddAdjustmentVisible] = useState(false);
+    const [editItem, setEditItem] = useState({}); // IStandardPriceItem | IAdjustmentItem
     const [params, setParams] = useState({
         meter_type_id: '',
         is_enabled: ENABLE.NOTENABLED,
@@ -116,10 +119,13 @@ const Standard = () => {
             },
         },
     ];
-    const handleEditPrice = (rowData: IStandardPriceItem) => {};
+    const handleEditPrice = (rowData: IStandardPriceItem) => {
+        setEditItem(rowData);
+        setAddAdjustmentVisible(true);
+    };
     const handleEdit = (rowData: IStandardPriceItem) => {
         setEditItem(rowData);
-        setAddModalVisible(true);
+        setAddStandardVisible(true);
     };
 
     const handleDelete = async (rowData: IStandardPriceItem) => {
@@ -154,7 +160,7 @@ const Standard = () => {
         );
     };
     const handleOk = () => {
-        setAddModalVisible(false);
+        setAddStandardVisible(false);
         fetchList();
     };
     const handleChangeParams = <T extends keyof IStandardPriceParams>(key: T, value: IStandardPriceParams[T]) => {
@@ -210,10 +216,17 @@ const Standard = () => {
                 showTotal={total => `共${Math.ceil(+total / +(pageObj.page_size || 1))}页， ${total}条记录`}
                 total={+total}
             />
-            {addModalVisible ? (
-                <EditModal
-                    onCancel={() => setAddModalVisible(false)}
+            {addStandardVisible ? (
+                <EditStandardModal
+                    onCancel={() => setAddStandardVisible(false)}
                     editItem={editItem as IStandardPriceItem}
+                    onOk={() => handleOk()}
+                />
+            ) : null}
+            {addAdjustmentVisible ? (
+                <EditAdjustmentModal
+                    onCancel={() => setAddAdjustmentVisible(false)}
+                    editItem={editItem as IAdjustmentItem}
                     onOk={() => handleOk()}
                 />
             ) : null}

@@ -1,4 +1,4 @@
-import { ENABLE } from '../common';
+import { ENABLE, fileType } from '../common';
 export enum Status {
     ALL = '',
     PENDING = '待审核',
@@ -100,6 +100,17 @@ export interface IAdjustmentItem extends IStandardPriceAdjustmentItem {
     standard_name: string; // 单价名称
     meter_type_name: string; // 类型名称
     meter_standard_price_id: string; //
+}
+export interface IAdjustmentAddItem {
+    meter_standard_price_id: string;
+    type: string;
+    start_date: string;
+    end_date: string;
+    is_step: string,
+    price: string,
+    unit: string,
+    reason: string; // 调整原因
+    attachment: fileType;
 }
 
 // 【调整单】—— 详情 /meter/price-adjustment/detail
