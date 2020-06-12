@@ -5,7 +5,7 @@ import { IAdjustmentDetail, IAdjustmentICURDParams, PriceAdjustHandleType } from
 import { match } from 'react-router';
 import { RouteComponentProps } from 'dva/router';
 import { getPriceAdjustmentDetail, postPrice } from '@/services/meter';
-import BaseInfo from './components/baseInfoAdjustment';
+import BaseInfo from './components/adjustmentbaseInfo';
 import './adjustmentDetail.less';
 interface IMatch extends match {
     params: {

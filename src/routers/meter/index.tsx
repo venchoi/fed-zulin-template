@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Card, Button } from 'antd';
 import Adjustment from './components/adjustment';
 import Standard from './components/standard';
-import EditModal from './components/editModal';
+import EditModal from './components/standardEditModal';
 
 import './index.less';
 

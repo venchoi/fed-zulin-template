@@ -17,7 +17,7 @@ import {
 } from '@t/meter';
 import { ENABLE } from '@t/common';
 import { getStandardPriceList, postStandardPrice } from '@s/meter';
-import EditModal from './editModal';
+import EditModal from './standardEditModal';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;

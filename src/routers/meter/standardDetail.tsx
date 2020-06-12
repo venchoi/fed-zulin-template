@@ -6,7 +6,7 @@ import { IStandardPriceDetail } from '@t/meter';
 import { ENABLE } from '@t/common';
 import { match } from 'react-router';
 import StatusComponent from './components/statusComponent';
-import BaseInfo from './components/baseInfo';
+import BaseInfo from './components/standardBaseInfo';
 import AdjustmentRecord from './components/adjustmentRecord';
 import { getStandardPriceDetail } from '@/services/meter';
 import './standardDetail.less';
