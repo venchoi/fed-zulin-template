@@ -71,6 +71,8 @@ export const DerateList = (props: Props) => {
 
     const getDerateListData = async () => {
         let params = Object.assign({}, searchParams);
+        console.log('search', params);
+
         if (!params.proj_id) {
             return;
         }
@@ -138,23 +140,13 @@ export const DerateList = (props: Props) => {
         });
     };
 
-    const handleKeywordChange = (): callbackFn => {
-        let tk: any;
-        return (keyword: string): void => {
-            if (!tk) {
-                tk = setTimeout(() => {
-                    setsearchParams({
-                        ...searchParams,
-                        keyword: keyword,
-                        page: 1,
-                    });
-                }, 200);
-            } else {
-                clearTimeout(tk);
-                tk = null;
-            }
-        };
-    };
+    const handleKeywordSearch = (value: string) => {
+        setsearchParams({
+            ...searchParams,
+            keyword: value,
+            page: 1,
+        });
+    }
 
     return (
         <ContentLayout
@@ -171,8 +163,7 @@ export const DerateList = (props: Props) => {
                 <SearchArea
                     selectedRowKeys={selectedRowKeys}
                     onAudit={handleBatchAudit}
-                    onKeywordChange={handleKeywordChange()}
-                    keyword={searchParams.keyword}
+                    onKeywordSearch={handleKeywordSearch}
                 />
                 <DerateTable
                     derateList={derateList}

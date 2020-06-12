@@ -243,6 +243,7 @@ export const DerateTable = (props: derateTableProps) => {
                                 ...props.searchParams,
                                 page: 1,
                                 room_id: roomId,
+                                proj_id: stageId,
                                 subdistrict_id: subdistrictId,
                                 building_id: buildingId,
                                 floor_id: floorId,
