@@ -96,7 +96,6 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
 
     handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        console.log(value);
         this.setState({
             searchValue: value,
         });
