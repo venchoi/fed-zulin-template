@@ -4,8 +4,10 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { find, pick } from 'lodash';
 import { IAdjustmentItem, IMeterTypeItem, IAdjustmentAddItem, IStepData, AdjustmentType } from '@t/meter';
 import { getMeterTypeList, postAdjustmentAdd } from '@s/meter';
+import FedUpload from '@c/FedUpload';
 import { unitTransfer } from '@/helper/sringUtils';
 import moment from 'moment';
+import { fileType } from '@/types/common';
 
 const { Item: FormItem } = Form;
 const { TextArea } = Input;
@@ -27,6 +29,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
         value: '',
         unit: '',
     }); // 选中的类型
+    const [attachment, setAttachment] = useState<fileType[]>([])
 
     // 获取类型列表 - 数据返回后，设置第一个类型为选中的类型
     const fetchMeterTypeList = async () => {
@@ -124,6 +127,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                     <TextArea />
                 </FormItem>
             </Form>
+            <FedUpload files={attachment}/>
         </Modal>
     );
 };
