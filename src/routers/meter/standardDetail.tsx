@@ -93,7 +93,7 @@ const Detail = ({
                     </TabPane>
                     <TabPane tab="调整记录" key="2">
                         <Card bordered={false} style={{ padding: '20px 16px' }}>
-                            <AdjustmentRecord />
+                            <AdjustmentRecord id={detail.id} />
                         </Card>
                     </TabPane>
                 </Tabs>
