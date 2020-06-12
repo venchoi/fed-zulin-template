@@ -134,7 +134,7 @@ const Adjustment = () => {
         setParams(prvState => ({ ...prvState, ...{ [key]: value } }));
     };
     useEffect(() => {
-        setPageObj({ ...pageObj, page_size: 1 });
+        setPageObj({ ...pageObj, page: 1 });
     }, [params]);
 
     useEffect(() => {
@@ -165,7 +165,7 @@ const Adjustment = () => {
                     />
                 </div>
             </div>
-            <FedTable columns={columns} dataSource={adjustmentDataSource} vsides />
+            <FedTable<IAdjustmentItem> columns={columns} dataSource={adjustmentDataSource} vsides rowKey="id" />
             <FedPagination
                 onShowSizeChange={(current, page_size) => {
                     setPageObj({ page: 1, page_size });

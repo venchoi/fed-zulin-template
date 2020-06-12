@@ -161,7 +161,7 @@ const Standard = () => {
         setParams(prvState => ({ ...prvState, ...{ [key]: value } }));
     };
     useEffect(() => {
-        setPageObj({ ...pageObj, page_size: 1 });
+        setPageObj({ ...pageObj, page: 1 });
     }, [params]);
 
     useEffect(() => {
@@ -197,7 +197,7 @@ const Standard = () => {
                     </Checkbox>
                 </div>
             </div>
-            <FedTable columns={columns} dataSource={standardDataSource} vsides />
+            <FedTable<IStandardPriceItem> columns={columns} dataSource={standardDataSource} vsides rowKey="id"/>
             <FedPagination
                 onShowSizeChange={(current, page_size) => {
                     setPageObj({ page: 1, page_size });
