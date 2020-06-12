@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Radio, Select, DatePicker, Modal, message, Button } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { find, pick } from 'lodash';
-import { IAdjustmentItem, IMeterTypeItem, IAdjustmentAddItem, IStepData } from '@t/meter';
+import { IAdjustmentItem, IMeterTypeItem, IAdjustmentAddItem, IStepData, AdjustmentType } from '@t/meter';
 import { getMeterTypeList, postAdjustmentAdd } from '@s/meter';
 import { unitTransfer } from '@/helper/sringUtils';
 import moment from 'moment';
@@ -11,6 +11,7 @@ const { Item: FormItem } = Form;
 const { TextArea } = Input;
 const { Option } = Select;
 const { Group: RadioGroup } = Radio;
+const { RangePicker } = DatePicker
 
 interface IProps {
     editItem: IAdjustmentItem;
@@ -73,6 +74,14 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
           // add({ ...params, unit: selectedMeterType.unit });
         });
     };
+    
+    const adjustmentType = [{
+        name: AdjustmentType.PRICE,
+        value: AdjustmentType.PRICE,
+    }, {
+        name: AdjustmentType.FUTUREPRICE,
+        value: AdjustmentType.FUTUREPRICE,
+    }]
 
     return (
         <Modal
@@ -87,6 +96,33 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                 labelAlign="right"
                 initialValues={editItem}
             >
+                <FormItem name="type" label="调整类型">
+                    <Select
+                        onChange={(value: string) => handleMeterTypeChange(value)}
+                        style={{ width: 240 }}
+                    >
+                        {adjustmentType.map(item => (
+                            <Option value={item.value} key={item.value}>
+                                {item.name}
+                            </Option>
+                        ))}
+                    </Select>
+                </FormItem>
+                <FormItem name="start_date" label="生效日期">
+                    <DatePicker />
+                </FormItem>
+                <FormItem name="start_date" label="有效日期">
+                    <RangePicker />
+                </FormItem>
+                <FormItem name="is_step" label="启用阶梯价">
+                    <RadioGroup style={{ width: 240 }}>
+                        <Radio value={'1'}>是</Radio>
+                        <Radio value={'0'}>否</Radio>
+                    </RadioGroup>
+                </FormItem>
+                <FormItem name="reason" label="调整原因" rules={[{ max: 200 }]}>
+                    <TextArea />
+                </FormItem>
             </Form>
         </Modal>
     );

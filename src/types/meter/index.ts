@@ -18,6 +18,11 @@ export enum PriceAdjustHandleType {
     VOID = 'VOID',
 }
 
+export enum AdjustmentType {
+    PRICE = '单价调整',
+    FUTUREPRICE = '历史单价调整'
+}
+
 export interface IStepData {
     min: number | string;
     max: number | string;
@@ -103,7 +108,7 @@ export interface IAdjustmentItem extends IStandardPriceAdjustmentItem {
 }
 export interface IAdjustmentAddItem {
     meter_standard_price_id: string;
-    type: string;
+    type: AdjustmentType;
     start_date: string;
     end_date: string;
     is_step: string,
