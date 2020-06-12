@@ -1,6 +1,6 @@
 import { ENABLE } from '../common';
 export enum Status {
-    ALL = '全部',
+    ALL = '',
     PENDING = '待审核',
     AUDITED = '已审核',
     EFFECTED = '已生效',

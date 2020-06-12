@@ -8,7 +8,7 @@ export const enum Statistics {
 }
 export const statusItem = [
     {
-        title: Status.ALL,
+        title: '全部', // 只有全部是需要单独写文案，全部的参数是'' ，展示是全部
         key: Statistics.ALL,
         color: '',
     },
