@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'dva/router';
 import { Radio, Input, Checkbox, Switch, message, Button } from 'antd';
-import { sumBy } from 'lodash';
+import { sumBy, omit } from 'lodash';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
 import { ColumnProps } from 'antd/es/table';
@@ -37,7 +37,7 @@ const Standard = () => {
     const [editItem, setEditItem] = useState({}); // IStandardPriceItem | IAdjustmentItem
     const [params, setParams] = useState({
         meter_type_id: '',
-        is_enabled: ENABLE.NOTENABLED,
+        is_enabled: '',
         keyword: '',
     });
     const [statisticsInfo, setStatisticsInfo] = useState<IStatisticsItem[]>([
@@ -144,7 +144,9 @@ const Standard = () => {
         }
     };
     const fetchList = async () => {
-        const { data } = await getStandardPriceList({ ...pageObj, ...params });
+        const apiParams: Partial<IStandardPriceParams> = omit(params, 'is_enabled')
+        params.is_enabled === ENABLE.ENABLED && (apiParams.is_enabled = params.is_enabled)
+        const { data } = await getStandardPriceList({ ...pageObj, ...apiParams });
         setStandardDataSource(data?.items || []);
         setTotal(data?.total || 0);
         const statistics = data?.statistics_info || [];
