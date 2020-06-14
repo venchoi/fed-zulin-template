@@ -98,7 +98,7 @@ const Adjustment = () => {
                             </Button>
                         ) : null}
                         <Button type="link" className="f-hidden meter-adjustment-view">
-                            <Link to={`/meter/detail-adjust/${rowData.id}`}>详情</Link>
+                            <Link to={`/metermg/detail-adjust/${rowData.id}`}>详情</Link>
                         </Button>
                         {[Status.EFFECTED].includes(rowData.status) ? (
                             <Button

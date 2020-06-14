@@ -111,7 +111,7 @@ const Standard = () => {
                             调整价格
                         </Button>
                         <Button type="link" className="f-hidden meter-standard-view">
-                            <Link to={`/meter/detail-standard/${rowData.id}`}>详情</Link>
+                            <Link to={`/metermg/detail-standard/${rowData.id}`}>详情</Link>
                         </Button>
                         <Dropdown
                             overlay={
