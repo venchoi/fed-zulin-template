@@ -6,7 +6,7 @@ import { IStandardPriceDetail } from '@t/meter';
 import { ENABLE } from '@t/common';
 import { match } from 'react-router';
 import StatusComponent from './components/statusComponent';
-import BaseInfo from './components/baseInfo';
+import BaseInfo from './components/standardBaseInfo';
 import AdjustmentRecord from './components/adjustmentRecord';
 import { getStandardPriceDetail } from '@/services/meter';
 import './standardDetail.less';
@@ -93,7 +93,7 @@ const Detail = ({
                     </TabPane>
                     <TabPane tab="调整记录" key="2">
                         <Card bordered={false} style={{ padding: '20px 16px' }}>
-                            <AdjustmentRecord />
+                            <AdjustmentRecord id={detail.id} />
                         </Card>
                     </TabPane>
                 </Tabs>

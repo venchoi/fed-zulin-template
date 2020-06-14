@@ -1,6 +1,6 @@
-import { ENABLE } from '../common';
+import { ENABLE, fileType } from '../common';
 export enum Status {
-    ALL = '全部',
+    ALL = '',
     PENDING = '待审核',
     AUDITED = '已审核',
     EFFECTED = '已生效',
@@ -16,6 +16,11 @@ export enum PriceAdjustHandleType {
     AUDIT = 'AUDIT',
     CANCELAUDIT = 'CANCELAUDIT',
     VOID = 'VOID',
+}
+
+export enum AdjustmentType {
+    PRICE = '单价调整',
+    FUTUREPRICE = '历史单价调整'
 }
 
 export interface IStepData {
@@ -100,6 +105,17 @@ export interface IAdjustmentItem extends IStandardPriceAdjustmentItem {
     standard_name: string; // 单价名称
     meter_type_name: string; // 类型名称
     meter_standard_price_id: string; //
+}
+export interface IAdjustmentAddItem {
+    meter_standard_price_id: string;
+    type: AdjustmentType;
+    start_date: string;
+    end_date: string;
+    is_step: string,
+    price: string,
+    unit: string,
+    reason: string; // 调整原因
+    attachment: fileType;
 }
 
 // 【调整单】—— 详情 /meter/price-adjustment/detail

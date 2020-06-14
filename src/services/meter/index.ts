@@ -8,6 +8,7 @@ import {
     IAdjustmentICURDParams,
     IStandardPriceAddItem,
     IStandardPriceEditItem,
+    IAdjustmentAddItem,
 } from '@t/meter';
 
 // 【单价标准】—— 列表
@@ -54,6 +55,11 @@ export const getPriceAdjustmentList = (params: IAdjustmentParams) => {
 // 【调整单】—— 详情
 export const getPriceAdjustmentDetail = (params: { id: string }) => {
     return ajax('/meter/price-adjustment/detail', params, 'GET');
+};
+
+// 【调整单】—— —— 新增
+export const postAdjustmentAdd = (params: IAdjustmentAddItem) => {
+    return ajax('/meter/price-adjustment/add', params, 'POST');
 };
 // TODO confirm
 // 【调整单】—— 审核、取消审核、作废

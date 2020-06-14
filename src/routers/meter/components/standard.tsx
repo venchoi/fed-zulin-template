@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'dva/router';
 import { Radio, Input, Checkbox, Switch, message, Button } from 'antd';
-import { sumBy } from 'lodash';
+import { sumBy, omit } from 'lodash';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
 import { ColumnProps } from 'antd/es/table';
@@ -14,10 +14,12 @@ import {
     IStatisticsItem,
     IMeterTypeStatisticItem,
     StandardHandleType,
+    IAdjustmentItem,
 } from '@t/meter';
 import { ENABLE } from '@t/common';
 import { getStandardPriceList, postStandardPrice } from '@s/meter';
-import EditModal from './editModal';
+import EditStandardModal from './standardEditModal';
+import EditAdjustmentModal from './adjustmentEditModal'
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
@@ -30,11 +32,12 @@ const Standard = () => {
         page: 1,
         page_size: 20,
     });
-    const [addModalVisible, setAddModalVisible] = useState(false);
-    const [editItem, setEditItem] = useState({});
+    const [addStandardVisible, setAddStandardVisible] = useState(false);
+    const [addAdjustmentVisible, setAddAdjustmentVisible] = useState(false);
+    const [editItem, setEditItem] = useState({}); // IStandardPriceItem | IAdjustmentItem
     const [params, setParams] = useState({
         meter_type_id: '',
-        is_enabled: ENABLE.NOTENABLED,
+        is_enabled: '',
         keyword: '',
     });
     const [statisticsInfo, setStatisticsInfo] = useState<IStatisticsItem[]>([
@@ -128,10 +131,13 @@ const Standard = () => {
             },
         },
     ];
-    const handleEditPrice = (rowData: IStandardPriceItem) => {};
+    const handleEditPrice = (rowData: IStandardPriceItem) => {
+        setEditItem(rowData);
+        setAddAdjustmentVisible(true);
+    };
     const handleEdit = (rowData: IStandardPriceItem) => {
         setEditItem(rowData);
-        setAddModalVisible(true);
+        setAddStandardVisible(true);
     };
 
     const handleDelete = async (rowData: IStandardPriceItem) => {
@@ -150,7 +156,9 @@ const Standard = () => {
         }
     };
     const fetchList = async () => {
-        const { data } = await getStandardPriceList({ ...pageObj, ...params });
+        const apiParams: Partial<IStandardPriceParams> = omit(params, 'is_enabled')
+        params.is_enabled === ENABLE.ENABLED && (apiParams.is_enabled = params.is_enabled)
+        const { data } = await getStandardPriceList({ ...pageObj, ...apiParams });
         setStandardDataSource(data?.items || []);
         setTotal(data?.total || 0);
         const statistics = data?.statistics_info || [];
@@ -166,14 +174,14 @@ const Standard = () => {
         );
     };
     const handleOk = () => {
-        setAddModalVisible(false);
+        setAddStandardVisible(false);
         fetchList();
     };
     const handleChangeParams = <T extends keyof IStandardPriceParams>(key: T, value: IStandardPriceParams[T]) => {
         setParams(prvState => ({ ...prvState, ...{ [key]: value } }));
     };
     useEffect(() => {
-        setPageObj({ ...pageObj, page_size: 1 });
+        setPageObj({ ...pageObj, page: 1 });
     }, [params]);
 
     useEffect(() => {
@@ -209,7 +217,7 @@ const Standard = () => {
                     </Checkbox>
                 </div>
             </div>
-            <FedTable columns={columns} dataSource={standardDataSource} vsides />
+            <FedTable<IStandardPriceItem> columns={columns} dataSource={standardDataSource} vsides rowKey="id"/>
             <FedPagination
                 onShowSizeChange={(current, page_size) => {
                     setPageObj({ page: 1, page_size });
@@ -222,10 +230,17 @@ const Standard = () => {
                 showTotal={total => `共${Math.ceil(+total / +(pageObj.page_size || 1))}页， ${total}条记录`}
                 total={+total}
             />
-            {addModalVisible ? (
-                <EditModal
-                    onCancel={() => setAddModalVisible(false)}
+            {addStandardVisible ? (
+                <EditStandardModal
+                    onCancel={() => setAddStandardVisible(false)}
                     editItem={editItem as IStandardPriceItem}
+                    onOk={() => handleOk()}
+                />
+            ) : null}
+            {addAdjustmentVisible ? (
+                <EditAdjustmentModal
+                    onCancel={() => setAddAdjustmentVisible(false)}
+                    editItem={editItem as IAdjustmentItem}
                     onOk={() => handleOk()}
                 />
             ) : null}
