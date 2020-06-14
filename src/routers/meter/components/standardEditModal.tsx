@@ -168,6 +168,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                 </FormItem>
                 {/* TODO 阶梯价 */}
                 <Form.Item
+                    required
                     noStyle
                     shouldUpdate={(prevValues, currentValues) => prevValues.is_step !== currentValues.is_step}
                 >
@@ -181,7 +182,53 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                                     style={{ width: 240 }}
                                 />
                             </FormItem>
-                        ) : null;
+                        ) : (
+                            <Form.List name="step_data">
+                                {(fields, { add, remove }) => (
+                                    <Form.Item label="标准单价" rules={[{ required: true }]}>
+                                        <Form.Item noStyle>
+                                            <table className="step-edit-container" style={{ width: '100%' }}>
+                                                <thead className="step-edit-thead ant-table-thead">
+                                                    <tr>
+                                                        <th className="ant-table-cell">范围下限(>)</th>
+                                                        <th className="ant-table-cell">范围上限(≤)</th>
+                                                        <th className="ant-table-cell">单价</th>
+                                                        <th className="ant-table-cell">操作</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="step-edit-tbody ant-table-tbody">
+                                                    {(form.getFieldValue('step_data') || []).map((item: IStepData) => {
+                                                        return (
+                                                            <tr>
+                                                                <td className="ant-table-cell">
+                                                                    <Input value={item.min} />
+                                                                </td>
+                                                                <td className="ant-table-cell">
+                                                                    <Input value={item.max} />
+                                                                </td>
+                                                                <td className="ant-table-cell">
+                                                                    <Input value={item.price} />
+                                                                </td>
+                                                                {/* TODO */}
+                                                                <td className="ant-table-cell">
+                                                                    <DeleteOutlined onClick={() => {}} />
+                                                                </td>
+                                                            </tr>
+                                                        );
+                                                    })}
+                                                </tbody>
+                                            </table>
+                                        </Form.Item>
+                                        <Form.Item>
+                                            <Button type="dashed" block className="add-button" onClick={() => add()}>
+                                                <PlusOutlined />
+                                                新增
+                                            </Button>
+                                        </Form.Item>
+                                    </Form.Item>
+                                )}
+                            </Form.List>
+                        );
                     }}
                 </Form.Item>
                 <FormItem name="effect_date" label="生效日期">
