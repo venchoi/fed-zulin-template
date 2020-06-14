@@ -91,7 +91,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                     'remark',
                     'effect_date',
                 ]);
-                add({ ...params, unit: selectedMeterType.unit });
+                add({ ...params, unit: selectedMeterType.unit, step_data: JSON.stringify(params.step_data) });
             }
         });
     };

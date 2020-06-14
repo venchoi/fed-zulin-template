@@ -11,7 +11,7 @@ const { Item: FormItem } = Form;
 const { TextArea } = Input;
 const { Option } = Select;
 const { Group: RadioGroup } = Radio;
-const { RangePicker } = DatePicker
+const { RangePicker } = DatePicker;
 
 interface IProps {
     editItem: IAdjustmentItem;
@@ -67,40 +67,28 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
 
     const handleSubmit = async () => {
         form.validateFields().then(values => {
-          const params = pick(values, [
-              'meter_standard_price_id',
-          ]);
-          // TODO unit
-          // add({ ...params, unit: selectedMeterType.unit });
+            const params = pick(values, ['meter_standard_price_id']);
+            // TODO unit
+            // add({ ...params, unit: selectedMeterType.unit });
         });
     };
-    
-    const adjustmentType = [{
-        name: AdjustmentType.PRICE,
-        value: AdjustmentType.PRICE,
-    }, {
-        name: AdjustmentType.FUTUREPRICE,
-        value: AdjustmentType.FUTUREPRICE,
-    }]
+
+    const adjustmentType = [
+        {
+            name: AdjustmentType.PRICE,
+            value: AdjustmentType.PRICE,
+        },
+        {
+            name: AdjustmentType.FUTUREPRICE,
+            value: AdjustmentType.FUTUREPRICE,
+        },
+    ];
 
     return (
-        <Modal
-            visible={true}
-            onCancel={() => onCancel()}
-            onOk={() => handleSubmit()}
-            title='发起调整'
-        >
-            <Form
-                form={form}
-                labelCol={{ span: 5 }}
-                labelAlign="right"
-                initialValues={editItem}
-            >
+        <Modal visible={true} onCancel={() => onCancel()} onOk={() => handleSubmit()} title="发起调整">
+            <Form form={form} labelCol={{ span: 5 }} labelAlign="right" initialValues={editItem}>
                 <FormItem name="type" label="调整类型">
-                    <Select
-                        onChange={(value: string) => handleMeterTypeChange(value)}
-                        style={{ width: 240 }}
-                    >
+                    <Select onChange={(value: string) => handleMeterTypeChange(value)} style={{ width: 240 }}>
                         {adjustmentType.map(item => (
                             <Option value={item.value} key={item.value}>
                                 {item.name}

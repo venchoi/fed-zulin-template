@@ -173,7 +173,11 @@ const Standard = () => {
         const apiParams: Partial<IStandardPriceParams> = omit(params, 'is_enabled');
         params.is_enabled === ENABLE.ENABLED && (apiParams.is_enabled = params.is_enabled);
         const { data } = await getStandardPriceList({ ...pageObj, ...apiParams });
-        setStandardDataSource(data?.items || []);
+        const result = (data?.items || []).map((item: IStandardPriceItem) => {
+            item.step_data = item.step_data ? JSON.parse(item.step_data) : [];
+            return item;
+        });
+        setStandardDataSource(result);
         setTotal(data?.total || 0);
         const statistics = data?.statistics_info || [];
         const sum = sumBy(statistics, (item: IStatisticsItem) => +item.num);
