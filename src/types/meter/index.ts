@@ -111,6 +111,7 @@ export interface IAdjustmentAddItem {
     type: AdjustmentType;
     start_date: string;
     end_date: string;
+    step_data: string;
     is_step: string;
     price: string;
     unit: string;

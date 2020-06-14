@@ -76,12 +76,30 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
     const handleSubmit = () => {
         form.validateFields()
             .then(values => {
-                const params = pick(values, ['meter_standard_price_id']);
-                // TODO unit
-                // add({ ...params, unit: selectedMeterType.unit });
+                const params = pick(values, [
+                    'meter_standard_price_id',
+                    'type',
+                    'start_date',
+                    'end_date',
+                    'is_step',
+                    'price',
+                    'unit',
+                    'reason',
+                    'step_data',
+                    'range_time',
+                ]);
+                if (params.type === AdjustmentType.FUTUREPRICE) {
+                    params.start_date = params.range_time[0].format('YYYY-MM-DD');
+                    params.end_date = params.range_time[1].format('YYYY-MM-DD');
+                } else {
+                    params.start_date = params.start_date.format('YYYY-MM-DD');
+                }
+                delete params.range_time;
+                // TODO attachment
+                add({ ...params, attachment: [], step_data: JSON.stringify(params.step_data) });
             })
             .catch(errorInfo => {
-                console.log(errorInfo);
+                console.error(errorInfo);
             });
     };
 
@@ -139,11 +157,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                                 <DatePicker />
                             </FormItem>
                         ) : (
-                            <FormItem
-                                name="range-time-picker"
-                                label="有效日期"
-                                rules={[{ type: 'array', required: true }]}
-                            >
+                            <FormItem name="range_time" label="有效日期" rules={[{ type: 'array', required: true }]}>
                                 <RangePicker />
                             </FormItem>
                         );

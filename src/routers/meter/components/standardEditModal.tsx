@@ -96,7 +96,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                 }
             })
             .catch(errorInfo => {
-                console.log(errorInfo);
+                console.error(errorInfo);
             });
     };
 
