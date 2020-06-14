@@ -86,7 +86,21 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
 
     return (
         <Modal visible={true} onCancel={() => onCancel()} onOk={() => handleSubmit()} title="发起调整">
-            <Form form={form} labelCol={{ span: 5 }} labelAlign="right" initialValues={editItem}>
+            <Form
+                form={form}
+                labelCol={{ span: 5 }}
+                labelAlign="right"
+                initialValues={{
+                    meter_standard_price_id: '',
+                    type: AdjustmentType.PRICE,
+                    start_date: moment(),
+                    is_step: '0',
+                    price: '',
+                    unit: '',
+                    reason: '',
+                    attachment: [],
+                }}
+            >
                 <FormItem name="type" label="调整类型">
                     <Select onChange={(value: string) => handleMeterTypeChange(value)} style={{ width: 240 }}>
                         {adjustmentType.map(item => (
@@ -96,18 +110,107 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                         ))}
                     </Select>
                 </FormItem>
-                <FormItem name="start_date" label="生效日期">
-                    <DatePicker />
-                </FormItem>
-                <FormItem name="start_date" label="有效日期">
-                    <RangePicker />
-                </FormItem>
+                <Form.Item
+                    required
+                    noStyle
+                    shouldUpdate={(prevValues, currentValues) => prevValues.is_step !== currentValues.is_step}
+                >
+                    {({ getFieldValue }) => {
+                        return getFieldValue('type') === AdjustmentType.PRICE ? (
+                            <FormItem name="start_date" label="生效日期" rules={[{ type: 'object', required: true }]}>
+                                <DatePicker />
+                            </FormItem>
+                        ) : (
+                            <FormItem
+                                name="range-time-picker"
+                                label="有效日期"
+                                rules={[{ type: 'array', required: true }]}
+                            >
+                                <RangePicker />
+                            </FormItem>
+                        );
+                    }}
+                </Form.Item>
                 <FormItem name="is_step" label="启用阶梯价">
                     <RadioGroup style={{ width: 240 }}>
                         <Radio value={'1'}>是</Radio>
                         <Radio value={'0'}>否</Radio>
                     </RadioGroup>
                 </FormItem>
+                <Form.Item
+                    required
+                    noStyle
+                    shouldUpdate={(prevValues, currentValues) => prevValues.is_step !== currentValues.is_step}
+                >
+                    {({ getFieldValue }) => {
+                        return getFieldValue('is_step') === '0' ? (
+                            <FormItem name="price" label="标准单价" rules={[{ required: true }]}>
+                                <Input
+                                    placeholder="请输入单价"
+                                    addonAfter={<>{unitTransfer(editItem.unit)}</>}
+                                    style={{ width: 240 }}
+                                />
+                            </FormItem>
+                        ) : (
+                            <Form.List name="step_data">
+                                {(fields, { add, remove }) => (
+                                    <Form.Item label="标准单价" rules={[{ required: true }]}>
+                                        <table className="step-edit-container" style={{ width: '100%' }}>
+                                            <thead className="step-edit-thead ant-table-thead">
+                                                <tr>
+                                                    <th className="ant-table-cell">
+                                                        阶梯下限({selectedMeterType.unit})
+                                                    </th>
+                                                    <th className="ant-table-cell">
+                                                        阶梯上限({selectedMeterType.unit})
+                                                    </th>
+                                                    <th className="ant-table-cell">
+                                                        单价(元/{selectedMeterType.unit})
+                                                    </th>
+                                                    <th className="ant-table-cell">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="step-edit-tbody ant-table-tbody">
+                                                {fields.map((field, index) => (
+                                                    <tr key={index}>
+                                                        <td className="ant-table-cell">
+                                                            <Form.Item {...field} name={[field.name, 'min']}>
+                                                                <Input />
+                                                            </Form.Item>
+                                                        </td>
+                                                        <td className="ant-table-cell">
+                                                            <Form.Item {...field} name={[field.name, 'max']}>
+                                                                <Input />
+                                                            </Form.Item>
+                                                        </td>
+                                                        <td className="ant-table-cell">
+                                                            <Form.Item {...field} name={[field.name, 'price']}>
+                                                                <Input />
+                                                            </Form.Item>
+                                                        </td>
+                                                        <td className="ant-table-cell">
+                                                            <DeleteOutlined
+                                                                onClick={() => {
+                                                                    remove(field.name);
+                                                                }}
+                                                            />
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                        <Form.Item>
+                                            <Button type="dashed" block className="add-button" onClick={() => add()}>
+                                                <PlusOutlined />
+                                                新增
+                                            </Button>
+                                        </Form.Item>
+                                    </Form.Item>
+                                )}
+                            </Form.List>
+                        );
+                    }}
+                </Form.Item>
                 <FormItem name="reason" label="调整原因" rules={[{ max: 200 }]}>
                     <TextArea />
                 </FormItem>

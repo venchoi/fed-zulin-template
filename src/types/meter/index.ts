@@ -115,7 +115,7 @@ export interface IAdjustmentAddItem {
     price: string;
     unit: string;
     reason: string; // 调整原因
-    attachment: fileType;
+    attachment: fileType[];
 }
 
 // 【调整单】—— 详情 /meter/price-adjustment/detail
