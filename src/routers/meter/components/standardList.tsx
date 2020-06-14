@@ -258,7 +258,7 @@ const Standard = () => {
             {addAdjustmentVisible ? (
                 <EditAdjustmentModal
                     onCancel={() => setAddAdjustmentVisible(false)}
-                    editItem={editItem as IAdjustmentItem}
+                    editItem={editItem as IStandardPriceItem}
                     onOk={() => handleOk()}
                 />
             ) : null}

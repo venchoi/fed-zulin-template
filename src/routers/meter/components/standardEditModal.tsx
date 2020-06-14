@@ -75,25 +75,29 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
         }
     };
 
-    const handleSubmit = async () => {
-        form.validateFields().then(values => {
-            if (isEdit) {
-                const params = pick(values, ['id', 'name', 'remark']);
-                edit({ ...params });
-            } else {
-                const params = pick(values, [
-                    'name',
-                    'meter_type_id',
-                    'unit',
-                    'is_step',
-                    'step_data',
-                    'price',
-                    'remark',
-                    'effect_date',
-                ]);
-                add({ ...params, unit: selectedMeterType.unit, step_data: JSON.stringify(params.step_data) });
-            }
-        });
+    const handleSubmit = () => {
+        form.validateFields()
+            .then(values => {
+                if (isEdit) {
+                    const params = pick(values, ['id', 'name', 'remark']);
+                    edit({ ...params });
+                } else {
+                    const params = pick(values, [
+                        'name',
+                        'meter_type_id',
+                        'unit',
+                        'is_step',
+                        'step_data',
+                        'price',
+                        'remark',
+                        'effect_date',
+                    ]);
+                    add({ ...params, unit: selectedMeterType.unit, step_data: JSON.stringify(params.step_data) });
+                }
+            })
+            .catch(errorInfo => {
+                console.log(errorInfo);
+            });
     };
 
     return (
@@ -167,10 +171,10 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                                             <thead className="step-edit-thead ant-table-thead">
                                                 <tr>
                                                     <th className="ant-table-cell">
-                                                        阶梯下限({unitTransfer(selectedMeterType.unit)})
+                                                        阶梯上限({unitTransfer(selectedMeterType.unit)})
                                                     </th>
                                                     <th className="ant-table-cell">
-                                                        阶梯上限({unitTransfer(selectedMeterType.unit)})
+                                                        阶梯下限({unitTransfer(selectedMeterType.unit)})
                                                     </th>
                                                     <th className="ant-table-cell">
                                                         单价(元/{unitTransfer(selectedMeterType.unit)})
@@ -185,32 +189,112 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                                                     <tr key={index}>
                                                         <td className="ant-table-cell">
                                                             <Form.Item {...field} name={[field.name, 'min']}>
-                                                                <Input />
+                                                                <Input
+                                                                    placeholder={index === 0 ? '不限' : '请输入'}
+                                                                    disabled
+                                                                />
                                                             </Form.Item>
                                                         </td>
                                                         <td className="ant-table-cell">
-                                                            <Form.Item {...field} name={[field.name, 'max']}>
-                                                                <Input />
+                                                            <Form.Item
+                                                                {...field}
+                                                                name={[field.name, 'max']}
+                                                                rules={[
+                                                                    {
+                                                                        required: index !== fields.length - 1,
+                                                                        message: '请输入阶梯下限',
+                                                                    },
+                                                                    {
+                                                                        validator: (rule, value) => {
+                                                                            if (index === fields.length - 1) {
+                                                                                return Promise.resolve();
+                                                                            }
+                                                                            const after = getFieldValue('step_data')[
+                                                                                index + 1
+                                                                            ];
+                                                                            if (!/^(\-|\+)?\d+(\.\d+)?$/.test(value)) {
+                                                                                return Promise.reject('请输入数字类型');
+                                                                            }
+                                                                            if (
+                                                                                after &&
+                                                                                after.max &&
+                                                                                +value > after.max
+                                                                            ) {
+                                                                                return Promise.reject(
+                                                                                    '不可大于下一等级的上限'
+                                                                                );
+                                                                            }
+                                                                            if (index > 0) {
+                                                                                const before = getFieldValue(
+                                                                                    'step_data'
+                                                                                )[index - 1];
+                                                                                if (
+                                                                                    before &&
+                                                                                    before.max &&
+                                                                                    +value < before.max
+                                                                                ) {
+                                                                                    return Promise.reject(
+                                                                                        '不可小于上一等级的下限'
+                                                                                    );
+                                                                                }
+                                                                            }
+                                                                            return Promise.resolve();
+                                                                        },
+                                                                    },
+                                                                ]}
+                                                            >
+                                                                <Input
+                                                                    placeholder={
+                                                                        index === fields.length - 1 ? '不限' : '请输入'
+                                                                    }
+                                                                    disabled={index === fields.length - 1 || isEdit}
+                                                                    onChange={e => {
+                                                                        const before = getFieldValue('step_data');
+                                                                        const value = e.target.value;
+                                                                        before[index + 1]
+                                                                            ? (before[index + 1].min = value)
+                                                                            : (before[index + 1] = {
+                                                                                  min: value,
+                                                                                  max: '',
+                                                                                  price: '',
+                                                                              });
+                                                                        form.setFieldsValue({ step_data: before });
+                                                                    }}
+                                                                />
                                                             </Form.Item>
                                                         </td>
                                                         <td className="ant-table-cell">
-                                                            <Form.Item {...field} name={[field.name, 'price']}>
-                                                                <Input />
+                                                            <Form.Item
+                                                                {...field}
+                                                                name={[field.name, 'price']}
+                                                                rules={[{ required: true, message: '请输入单价' }]}
+                                                            >
+                                                                <Input disabled={isEdit} />
                                                             </Form.Item>
                                                         </td>
                                                         <td className="ant-table-cell">
-                                                            <DeleteOutlined
+                                                            <Button
+                                                                type="link"
+                                                                disabled={isEdit}
                                                                 onClick={() => {
                                                                     remove(field.name);
                                                                 }}
-                                                            />
+                                                            >
+                                                                <DeleteOutlined />
+                                                            </Button>
                                                         </td>
                                                     </tr>
                                                 ))}
                                             </tbody>
                                         </table>
                                         <Form.Item>
-                                            <Button type="dashed" block className="add-button" onClick={() => add()}>
+                                            <Button
+                                                type="dashed"
+                                                block
+                                                className="add-button"
+                                                onClick={() => add()}
+                                                disabled={isEdit}
+                                            >
                                                 <PlusOutlined />
                                                 新增
                                             </Button>
