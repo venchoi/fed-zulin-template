@@ -86,7 +86,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
     ];
 
     return (
-        <Modal visible={true} onCancel={() => onCancel()} onOk={() => handleSubmit()} title="发起调整">
+        <Modal visible={true} width={720} onCancel={() => onCancel()} onOk={() => handleSubmit()} title="发起调整">
             <Form
                 form={form}
                 labelCol={{ span: 5 }}
@@ -168,7 +168,9 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                                                     <th className="ant-table-cell">
                                                         单价(元/{unitTransfer(editItem.unit)})
                                                     </th>
-                                                    <th className="ant-table-cell">操作</th>
+                                                    <th className="ant-table-cell" style={{ width: '64px' }}>
+                                                        操作
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody className="step-edit-tbody ant-table-tbody">

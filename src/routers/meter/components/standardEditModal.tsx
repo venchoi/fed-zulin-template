@@ -99,6 +99,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
     return (
         <Modal
             visible={true}
+            width={720}
             onCancel={() => onCancel()}
             onOk={() => handleSubmit()}
             title={isEdit ? '编辑标准' : '新建标准'}
@@ -166,15 +167,17 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                                             <thead className="step-edit-thead ant-table-thead">
                                                 <tr>
                                                     <th className="ant-table-cell">
-                                                        阶梯下限({selectedMeterType.unit})
+                                                        阶梯下限({unitTransfer(selectedMeterType.unit)})
                                                     </th>
                                                     <th className="ant-table-cell">
-                                                        阶梯上限({selectedMeterType.unit})
+                                                        阶梯上限({unitTransfer(selectedMeterType.unit)})
                                                     </th>
                                                     <th className="ant-table-cell">
-                                                        单价(元/{selectedMeterType.unit})
+                                                        单价(元/{unitTransfer(selectedMeterType.unit)})
                                                     </th>
-                                                    <th className="ant-table-cell">操作</th>
+                                                    <th className="ant-table-cell" style={{ width: '64px' }}>
+                                                        操作
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody className="step-edit-tbody ant-table-tbody">
