@@ -95,30 +95,6 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
             }
         });
     };
-    // const StepPriceEdit = (form) => {
-    //     return (
-    //         <table className="step-edit-container">
-    //             <thead className="step-edit-thead">
-    //                 <tr>
-    //                     <td className="">范围下限(>)</td>
-    //                     <td className="">范围上限(≤)</td>
-    //                     <td className="">单价</td>
-    //                     <td className="">操作</td>
-    //                 </tr>
-    //             </thead>
-    //             <tbody className="step-edit-tbody">
-    //                 {form.getFieldValue('step_data').map((item: IStepData) => {
-    //                     return (<tr>
-    //                         <td><Input value={item.min}/></td>
-    //                         <td><Input value={item.max}/></td>
-    //                         <td><Input value={item.price}/></td>
-    //                         <td></td>
-    //                     </tr>)
-    //                 })}
-    //             </tbody>
-    //         </table>
-    //     )
-    // };
 
     return (
         <Modal
@@ -186,39 +162,50 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                             <Form.List name="step_data">
                                 {(fields, { add, remove }) => (
                                     <Form.Item label="标准单价" rules={[{ required: true }]}>
-                                        <Form.Item noStyle>
-                                            <table className="step-edit-container" style={{ width: '100%' }}>
-                                                <thead className="step-edit-thead ant-table-thead">
-                                                    <tr>
-                                                        <th className="ant-table-cell">范围下限(>)</th>
-                                                        <th className="ant-table-cell">范围上限(≤)</th>
-                                                        <th className="ant-table-cell">单价</th>
-                                                        <th className="ant-table-cell">操作</th>
+                                        <table className="step-edit-container" style={{ width: '100%' }}>
+                                            <thead className="step-edit-thead ant-table-thead">
+                                                <tr>
+                                                    <th className="ant-table-cell">
+                                                        阶梯下限({selectedMeterType.unit})
+                                                    </th>
+                                                    <th className="ant-table-cell">
+                                                        阶梯上限({selectedMeterType.unit})
+                                                    </th>
+                                                    <th className="ant-table-cell">
+                                                        单价(元/{selectedMeterType.unit})
+                                                    </th>
+                                                    <th className="ant-table-cell">操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="step-edit-tbody ant-table-tbody">
+                                                {fields.map((field, index) => (
+                                                    <tr key={index}>
+                                                        <td className="ant-table-cell">
+                                                            <Form.Item {...field} name={[field.name, 'min']}>
+                                                                <Input />
+                                                            </Form.Item>
+                                                        </td>
+                                                        <td className="ant-table-cell">
+                                                            <Form.Item {...field} name={[field.name, 'max']}>
+                                                                <Input />
+                                                            </Form.Item>
+                                                        </td>
+                                                        <td className="ant-table-cell">
+                                                            <Form.Item {...field} name={[field.name, 'price']}>
+                                                                <Input />
+                                                            </Form.Item>
+                                                        </td>
+                                                        <td className="ant-table-cell">
+                                                            <DeleteOutlined
+                                                                onClick={() => {
+                                                                    remove(field.name);
+                                                                }}
+                                                            />
+                                                        </td>
                                                     </tr>
-                                                </thead>
-                                                <tbody className="step-edit-tbody ant-table-tbody">
-                                                    {(form.getFieldValue('step_data') || []).map((item: IStepData) => {
-                                                        return (
-                                                            <tr>
-                                                                <td className="ant-table-cell">
-                                                                    <Input value={item.min} />
-                                                                </td>
-                                                                <td className="ant-table-cell">
-                                                                    <Input value={item.max} />
-                                                                </td>
-                                                                <td className="ant-table-cell">
-                                                                    <Input value={item.price} />
-                                                                </td>
-                                                                {/* TODO */}
-                                                                <td className="ant-table-cell">
-                                                                    <DeleteOutlined onClick={() => {}} />
-                                                                </td>
-                                                            </tr>
-                                                        );
-                                                    })}
-                                                </tbody>
-                                            </table>
-                                        </Form.Item>
+                                                ))}
+                                            </tbody>
+                                        </table>
                                         <Form.Item>
                                             <Button type="dashed" block className="add-button" onClick={() => add()}>
                                                 <PlusOutlined />
