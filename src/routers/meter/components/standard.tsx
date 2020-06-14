@@ -99,16 +99,28 @@ const Standard = () => {
             render: (text, rowData) => {
                 return (
                     <>
-                        <Button type="link" onClick={() => handleEditPrice(rowData)}>
+                        <Button
+                            type="link"
+                            onClick={() => handleEditPrice(rowData)}
+                            className="f-hidden meter-adjustment-add"
+                        >
                             调整价格
                         </Button>
-                        <Button type="link">
+                        <Button type="link" className="f-hidden meter-standard-view">
                             <Link to={`/meter/detail-standard/${rowData.id}`}>详情</Link>
                         </Button>
-                        <Button type="link" onClick={() => handleEdit(rowData)}>
+                        <Button
+                            type="link"
+                            onClick={() => handleEdit(rowData)}
+                            className="f-hidden meter-standard-edit"
+                        >
                             编辑
                         </Button>
-                        <Button type="link" onClick={() => handleDelete(rowData)}>
+                        <Button
+                            type="link"
+                            onClick={() => handleDelete(rowData)}
+                            className="f-hidden meter-standard-delete"
+                        >
                             删除
                         </Button>
                     </>

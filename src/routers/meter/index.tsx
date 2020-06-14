@@ -21,7 +21,7 @@ const List = () => {
     ];
     const extra = (
         <>
-            <Button type="primary" onClick={() => setAddModalVisible(true)}>
+            <Button type="primary" onClick={() => setAddModalVisible(true)} className="f-hidden meter-standard-add">
                 新建标准
             </Button>
         </>

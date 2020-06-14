@@ -91,21 +91,24 @@ const Adjustment = () => {
                         <Button
                             type="link"
                             onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id: rowData.id })}
+                            className="f-hidden meter-adjustment-audit"
                         >
                             审核
                         </Button>
-                        <Button type="link">
+                        <Button type="link" className="f-hidden meter-adjustment-view">
                             <Link to={`/meter/detail-adjust/${rowData.id}`}>详情</Link>
                         </Button>
                         <Button
                             type="link"
                             onClick={() => actionHandler({ type: PriceAdjustHandleType.VOID, id: rowData.id })}
+                            className="f-hidden meter-adjustment-void"
                         >
                             作废
                         </Button>
                         <Button
                             type="link"
                             onClick={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id: rowData.id })}
+                            className="f-hidden meter-adjustment-cancel-audit"
                         >
                             取消审核
                         </Button>
