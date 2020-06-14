@@ -159,13 +159,13 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                                             <thead className="step-edit-thead ant-table-thead">
                                                 <tr>
                                                     <th className="ant-table-cell">
-                                                        阶梯下限({selectedMeterType.unit})
+                                                        阶梯下限({unitTransfer(editItem.unit)})
                                                     </th>
                                                     <th className="ant-table-cell">
-                                                        阶梯上限({selectedMeterType.unit})
+                                                        阶梯上限({unitTransfer(editItem.unit)})
                                                     </th>
                                                     <th className="ant-table-cell">
-                                                        单价(元/{selectedMeterType.unit})
+                                                        单价(元/{unitTransfer(editItem.unit)})
                                                     </th>
                                                     <th className="ant-table-cell">操作</th>
                                                 </tr>
