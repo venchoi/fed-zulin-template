@@ -6,6 +6,7 @@ import { IAdjustmentItem, IMeterTypeItem, IAdjustmentAddItem, IStepData, Adjustm
 import { getMeterTypeList, postAdjustmentAdd } from '@s/meter';
 import { unitTransfer } from '@/helper/sringUtils';
 import moment from 'moment';
+import FedUpload from '@/components/FedUpload';
 
 const { Item: FormItem } = Form;
 const { TextArea } = Input;
@@ -213,6 +214,9 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                 </Form.Item>
                 <FormItem name="reason" label="调整原因" rules={[{ max: 200 }]}>
                     <TextArea />
+                </FormItem>
+                <FormItem label="调整附件">
+                    <FedUpload />
                 </FormItem>
             </Form>
         </Modal>
