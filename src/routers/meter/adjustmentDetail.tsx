@@ -7,6 +7,7 @@ import { RouteComponentProps } from 'dva/router';
 import { getPriceAdjustmentDetail, postPrice } from '@/services/meter';
 import BaseInfo from './components/adjustmentbaseInfo';
 import './adjustmentDetail.less';
+import { Status } from '@/types/meter';
 interface IMatch extends match {
     params: {
         id: string;
@@ -29,7 +30,7 @@ const AdjustmentDetail = ({
         step_data: '',
         price: '',
         unit: '',
-        status: '',
+        status: Status.PENDING,
         created_on: '',
         code: '', // 调整单号
         reason: '', // 调整原因
