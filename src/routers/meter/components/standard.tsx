@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'dva/router';
-import { Radio, Input, Checkbox, Switch, message, Button } from 'antd';
+import { Radio, Input, Checkbox, Switch, message, Button, Dropdown, Menu, Space } from 'antd';
 import { sumBy, omit } from 'lodash';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
@@ -19,7 +19,8 @@ import {
 import { ENABLE } from '@t/common';
 import { getStandardPriceList, postStandardPrice } from '@s/meter';
 import EditStandardModal from './standardEditModal';
-import EditAdjustmentModal from './adjustmentEditModal'
+import EditAdjustmentModal from './adjustmentEditModal';
+import { MoreOutlined } from '@ant-design/icons';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
@@ -101,7 +102,7 @@ const Standard = () => {
             width: 163,
             render: (text, rowData) => {
                 return (
-                    <>
+                    <Space>
                         <Button
                             type="link"
                             onClick={() => handleEditPrice(rowData)}
@@ -112,21 +113,34 @@ const Standard = () => {
                         <Button type="link" className="f-hidden meter-standard-view">
                             <Link to={`/meter/detail-standard/${rowData.id}`}>详情</Link>
                         </Button>
-                        <Button
-                            type="link"
-                            onClick={() => handleEdit(rowData)}
-                            className="f-hidden meter-standard-edit"
+                        <Dropdown
+                            overlay={
+                                <Menu>
+                                    <Menu.Item>
+                                        <Button
+                                            type="link"
+                                            onClick={() => handleEdit(rowData)}
+                                            className="f-hidden meter-standard-edit"
+                                        >
+                                            编辑
+                                        </Button>
+                                    </Menu.Item>
+                                    <Menu.Item>
+                                        <Button
+                                            type="link"
+                                            onClick={() => handleDelete(rowData)}
+                                            className="f-hidden meter-standard-delete"
+                                        >
+                                            删除
+                                        </Button>
+                                    </Menu.Item>
+                                </Menu>
+                            }
                         >
-                            编辑
-                        </Button>
-                        <Button
-                            type="link"
-                            onClick={() => handleDelete(rowData)}
-                            className="f-hidden meter-standard-delete"
-                        >
-                            删除
-                        </Button>
-                    </>
+                            {/* TODO color  primary  */}
+                            <MoreOutlined rotate={90} style={{ color: '#0D86FF' }} />
+                        </Dropdown>
+                    </Space>
                 );
             },
         },
@@ -156,8 +170,8 @@ const Standard = () => {
         }
     };
     const fetchList = async () => {
-        const apiParams: Partial<IStandardPriceParams> = omit(params, 'is_enabled')
-        params.is_enabled === ENABLE.ENABLED && (apiParams.is_enabled = params.is_enabled)
+        const apiParams: Partial<IStandardPriceParams> = omit(params, 'is_enabled');
+        params.is_enabled === ENABLE.ENABLED && (apiParams.is_enabled = params.is_enabled);
         const { data } = await getStandardPriceList({ ...pageObj, ...apiParams });
         setStandardDataSource(data?.items || []);
         setTotal(data?.total || 0);
@@ -217,7 +231,7 @@ const Standard = () => {
                     </Checkbox>
                 </div>
             </div>
-            <FedTable<IStandardPriceItem> columns={columns} dataSource={standardDataSource} vsides rowKey="id"/>
+            <FedTable<IStandardPriceItem> columns={columns} dataSource={standardDataSource} vsides rowKey="id" />
             <FedPagination
                 onShowSizeChange={(current, page_size) => {
                     setPageObj({ page: 1, page_size });

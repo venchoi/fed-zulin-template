@@ -20,7 +20,7 @@ export enum PriceAdjustHandleType {
 
 export enum AdjustmentType {
     PRICE = '单价调整',
-    FUTUREPRICE = '历史单价调整'
+    FUTUREPRICE = '历史单价调整',
 }
 
 export interface IStepData {
@@ -95,7 +95,7 @@ export interface IStandardPriceAdjustmentItem {
     step_data: string;
     price: string;
     unit: string;
-    status: string;
+    status: Status;
     created_on: string;
 }
 // 【调整单】—— 列表 —— 返回items /meter/price-adjustment/list
@@ -111,9 +111,9 @@ export interface IAdjustmentAddItem {
     type: AdjustmentType;
     start_date: string;
     end_date: string;
-    is_step: string,
-    price: string,
-    unit: string,
+    is_step: string;
+    price: string;
+    unit: string;
     reason: string; // 调整原因
     attachment: fileType;
 }

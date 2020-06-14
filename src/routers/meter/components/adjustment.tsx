@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'dva/router';
-import { Radio, Input, Button, Checkbox, Switch, message, Badge } from 'antd';
+import { Radio, Input, Button, Checkbox, Switch, message, Badge, Space } from 'antd';
 import { find, map, pick } from 'lodash';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
@@ -87,32 +87,40 @@ const Adjustment = () => {
             width: 163,
             render: (text, rowData) => {
                 return (
-                    <>
-                        <Button
-                            type="link"
-                            onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id: rowData.id })}
-                            className="f-hidden meter-adjustment-audit"
-                        >
-                            审核
-                        </Button>
+                    <Space>
+                        {[Status.PENDING].includes(rowData.status) ? (
+                            <Button
+                                type="link"
+                                onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id: rowData.id })}
+                                className="f-hidden meter-adjustment-audit"
+                            >
+                                审核
+                            </Button>
+                        ) : null}
                         <Button type="link" className="f-hidden meter-adjustment-view">
                             <Link to={`/meter/detail-adjust/${rowData.id}`}>详情</Link>
                         </Button>
-                        <Button
-                            type="link"
-                            onClick={() => actionHandler({ type: PriceAdjustHandleType.VOID, id: rowData.id })}
-                            className="f-hidden meter-adjustment-void"
-                        >
-                            作废
-                        </Button>
-                        <Button
-                            type="link"
-                            onClick={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id: rowData.id })}
-                            className="f-hidden meter-adjustment-cancel-audit"
-                        >
-                            取消审核
-                        </Button>
-                    </>
+                        {[Status.EFFECTED].includes(rowData.status) ? (
+                            <Button
+                                type="link"
+                                onClick={() => actionHandler({ type: PriceAdjustHandleType.VOID, id: rowData.id })}
+                                className="f-hidden meter-adjustment-void"
+                            >
+                                作废
+                            </Button>
+                        ) : null}
+                        {[Status.AUDITED].includes(rowData.status) ? (
+                            <Button
+                                type="link"
+                                onClick={() =>
+                                    actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id: rowData.id })
+                                }
+                                className="f-hidden meter-adjustment-cancel-audit"
+                            >
+                                取消审核
+                            </Button>
+                        ) : null}
+                    </Space>
                 );
             },
         },
