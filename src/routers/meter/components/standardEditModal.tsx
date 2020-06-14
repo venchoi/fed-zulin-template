@@ -137,7 +137,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                         : {
                               name: '',
                               meter_type_id: '',
-                              is_step: '1',
+                              is_step: '0',
                               price: '',
                               effect_date: moment(),
                               remark: '',
@@ -167,67 +167,23 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                     </RadioGroup>
                 </FormItem>
                 {/* TODO 阶梯价 */}
-                <FormItem name="price" label="标准单价" rules={[{ required: true }]}>
-                    {form.getFieldValue('is_step') === '0' ? (
-                        <Input
-                            disabled={isEdit}
-                            placeholder="请输入单价"
-                            addonAfter={<>{unitTransfer(selectedMeterType.unit)}</>}
-                            style={{ width: 240 }}
-                        />
-                    ) : (
-                        <>
-                            <table className="step-edit-container" style={{ width: '100%' }}>
-                                <thead className="step-edit-thead ant-table-thead">
-                                    <tr>
-                                        <th className="ant-table-cell">范围下限(>)</th>
-                                        <th className="ant-table-cell">范围上限(≤)</th>
-                                        <th className="ant-table-cell">单价</th>
-                                        <th className="ant-table-cell">操作</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="step-edit-tbody ant-table-tbody">
-                                    {(form.getFieldValue('step_data') || []).map((item: IStepData) => {
-                                        return (
-                                            <tr>
-                                                <td className="ant-table-cell">
-                                                    <Input value={item.min} />
-                                                </td>
-                                                <td className="ant-table-cell">
-                                                    <Input value={item.max} />
-                                                </td>
-                                                <td className="ant-table-cell">
-                                                    <Input value={item.price} />
-                                                </td>
-                                                {/* TODO */}
-                                                <td className="ant-table-cell">
-                                                    <DeleteOutlined onClick={() => {}} />
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
-                            {/* TODO */}
-                            <Button
-                                type="dashed"
-                                block
-                                className="add-button"
-                                onClick={() =>
-                                    form.setFieldsValue({
-                                        step_data: (form.getFieldValue('step_data') &&
-                                            form.getFieldValue('step_data').push({ min: '', max: '', price: '' })) || [
-                                            { min: 0, max: 0, price: '' },
-                                        ],
-                                    })
-                                }
-                            >
-                                <PlusOutlined />
-                                新增
-                            </Button>
-                        </>
-                    )}
-                </FormItem>
+                <Form.Item
+                    noStyle
+                    shouldUpdate={(prevValues, currentValues) => prevValues.is_step !== currentValues.is_step}
+                >
+                    {({ getFieldValue }) => {
+                        return getFieldValue('is_step') === '0' ? (
+                            <FormItem name="price" label="标准单价" rules={[{ required: true }]}>
+                                <Input
+                                    disabled={isEdit}
+                                    placeholder="请输入单价"
+                                    addonAfter={<>{unitTransfer(selectedMeterType.unit)}</>}
+                                    style={{ width: 240 }}
+                                />
+                            </FormItem>
+                        ) : null;
+                    }}
+                </Form.Item>
                 <FormItem name="effect_date" label="生效日期">
                     <DatePicker
                         disabled={isEdit}
