@@ -181,7 +181,7 @@ const Adjustment = () => {
                     </RadioGroup>
                     <Search
                         style={{ width: '312px' }}
-                        placeholder="名称、说明"
+                        placeholder="名称、说明、调整单编号"
                         value={params.keyword}
                         onChange={e => handleChangeParams('keyword', e.target.value)}
                     />
