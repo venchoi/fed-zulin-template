@@ -35,7 +35,6 @@ class AdjustmentChart extends React.Component<IProps, IState> {
         const durationMonths = duration.months();
         const fillList = Array(durationYears * 12 + durationMonths);
         for (let i = 0; i < fillList.length; i++) {
-            console.log('i startDate', startDate)
             fillList[i] = {
                 price: price,
                 date: startDate.add(1, 'M').format('YYYY-MM-DD'),
