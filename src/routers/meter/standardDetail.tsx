@@ -85,7 +85,7 @@ const Detail = ({
                 ghost={false}
                 subTitle={<StatusComponent is_enabled={detail.is_enabled} />}
             />
-            <div className="layout-list">
+            <div className="layout-list standard-detail">
                 <Tabs type="card">
                     <TabPane tab="基本信息" key="1">
                         <Card bordered={false} style={{ padding: '20px 16px' }}>
