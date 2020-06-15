@@ -324,7 +324,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                     <TextArea />
                 </FormItem>
                 <FormItem label="调整附件">
-                    <FedUpload />
+                    {/* <FedUpload /> */}
                 </FormItem>
             </Form>
             <FedUpload files={attachment}/>
