@@ -179,7 +179,7 @@ const Standard = () => {
         }
     };
     const fetchList = async () => {
-        const apiParams: Partial<IStandardPriceParams> = omit(params, 'is_enabled');
+        const apiParams: Partial<IStandardPriceParams> = omit(params, ['is_enabled']);
         params.is_enabled === ENABLE.ENABLED && (apiParams.is_enabled = params.is_enabled);
         const { data } = await getStandardPriceList({ ...pageObj, ...apiParams });
         const result = (data?.items || []).map((item: IStandardPriceItem) => {
