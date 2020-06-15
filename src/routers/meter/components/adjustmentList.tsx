@@ -187,7 +187,7 @@ const Adjustment = () => {
                     />
                 </div>
             </div>
-            <FedTable<IAdjustmentItem> columns={columns} dataSource={adjustmentDataSource} vsides rowKey="id" />
+            <FedTable<IAdjustmentItem> columns={columns} dataSource={adjustmentDataSource} vsides rowKey="id" scroll={{ y: 'calc(100vh - 354px)' }}  />
             <FedPagination
                 onShowSizeChange={(current, page_size) => {
                     setPageObj({ page: 1, page_size });

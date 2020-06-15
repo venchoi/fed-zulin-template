@@ -244,7 +244,7 @@ const Standard = () => {
                     </Checkbox>
                 </div>
             </div>
-            <FedTable<IStandardPriceItem> columns={columns} dataSource={standardDataSource} vsides rowKey="id" />
+            <FedTable<IStandardPriceItem> columns={columns} dataSource={standardDataSource} vsides rowKey="id" scroll={{ y: 'calc(100vh - 354px)' }} />
             <FedPagination
                 onShowSizeChange={(current, page_size) => {
                     setPageObj({ page: 1, page_size });
