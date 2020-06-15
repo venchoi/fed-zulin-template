@@ -26,14 +26,16 @@ export const SearchArea = function(props: searchAreaProps) {
 
     return (
         <div className="derate-search-area">
-            <Button 
-                type="primary" 
-                className="f-hidden rental-derate-audit"
-                disabled={selectedRowKeys.length === 0} 
-                onClick={onAudit}
-            >
-                审核
-            </Button>
+            <div>
+                <Button 
+                    type="primary" 
+                    className="f-hidden rental-derate-audit"
+                    disabled={selectedRowKeys.length === 0} 
+                    onClick={onAudit}
+                >
+                    审核
+                </Button>
+            </div>
             <Input.Search
                 placeholder="减免流水号、租客、资源、合同、意向书、发起人"
                 onChange={handleKeywordChange}
