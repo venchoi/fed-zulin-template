@@ -1,6 +1,6 @@
 import { Status } from '@t/meter';
 export const enum Statistics {
-    ALL = 'total',
+    ALL = 'total_num',
     PENDING = 'pending_num',
     AUDITED = 'audited_num',
     EFFECTED = 'effect_num',
