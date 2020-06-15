@@ -88,7 +88,7 @@ const AdjustmentRecord = ({ id = '' }) => {
     return (
         <>
             <div>
-                {dataSource.length > 0 ? <AdjustmentChart id={id} /> : null}
+                <AdjustmentChart id={id} />
                 <Select
                     style={{ width: '176px' }}
                     value={selectedStatus}
