@@ -99,18 +99,23 @@ const AdjustmentDetail = ({
                     <Divider style={{ marginTop: '16px' }} />
                     <footer className="footer">
                         <Space>
-                            <Button
+                            {[Status.PENDING].includes(detail.status) ? (<Button
                                 type="primary"
                                 onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id })}
                             >
                                 审核
-                            </Button>
-                            <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id })}>
-                                作废
-                            </Button>
-                            <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id })}>
-                                取消审核
-                            </Button>
+                            </Button>) : null }
+                            {[Status.EFFECTED].includes(detail.status) ? (
+                                <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id })}>
+                                    作废
+                                </Button>
+                            ) : null }
+                            {[Status.AUDITED].includes(detail.status) ? (
+                                <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id })}>
+                                    取消审核
+                                </Button>
+                            ) : null}
+                            
                         </Space>
                     </footer>
                 </Card>
