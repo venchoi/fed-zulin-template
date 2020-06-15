@@ -19,7 +19,7 @@ export enum PriceAdjustHandleType {
 }
 
 export enum AdjustmentType {
-    PRICE = '单价调整',
+    PRICE = '未来单价调整',
     FUTUREPRICE = '历史单价调整',
 }
 
