@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PageHeader, Tabs, Card } from 'antd';
-import { RouteComponentProps } from 'dva/router';
+import { RouteComponentProps, Link } from 'dva/router';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
 import { IStandardPriceDetail } from '@t/meter';
 import { ENABLE } from '@t/common';
@@ -49,7 +49,7 @@ const Detail = ({
     const [detail, setDetail] = useState<IStandardPriceDetail>(initDetail);
     const routes = [
         {
-            path: '',
+            path: '/metermg',
             breadcrumbName: '标准单价管理',
         },
         {
@@ -61,17 +61,17 @@ const Detail = ({
     const itemRender = (route: Route) => {
         if (route.path) {
             return (
-                <a href={route.path} key={route.path}>
+                <Link to={route.path} key={route.path}>
                     {route.breadcrumbName}
-                </a>
+                </Link>
             );
         }
         return <span key={route.path}>{route.breadcrumbName}</span>;
     };
     const fetchDetail = async () => {
         const { data } = await getStandardPriceDetail({ id });
-        const result = (data.id && data) || initDetail
-        setDetail({...result, step_data: JSON.parse(result.step_data || '[]')});
+        const result = (data.id && data) || initDetail;
+        setDetail({ ...result, step_data: JSON.parse(result.step_data || '[]') });
     };
     useEffect(() => {
         fetchDetail();

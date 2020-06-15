@@ -3,7 +3,7 @@ import { PageHeader, Card, Button, Divider, Space, message } from 'antd';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
 import { IAdjustmentDetail, IAdjustmentICURDParams, PriceAdjustHandleType } from '@t/meter';
 import { match } from 'react-router';
-import { RouteComponentProps } from 'dva/router';
+import { RouteComponentProps, Link } from 'dva/router';
 import { getPriceAdjustmentDetail, postPrice } from '@/services/meter';
 import BaseInfo from './components/adjustmentbaseInfo';
 import './adjustmentDetail.less';
@@ -50,7 +50,7 @@ const AdjustmentDetail = ({
     };
     const routes = [
         {
-            path: '',
+            path: '/metermg',
             breadcrumbName: '单价调整单',
         },
         {
@@ -62,9 +62,9 @@ const AdjustmentDetail = ({
     const itemRender = (route: Route) => {
         if (route.path) {
             return (
-                <a href={route.path} key={route.path}>
+                <Link to={route.path} key={route.path}>
                     {route.breadcrumbName}
-                </a>
+                </Link>
             );
         }
         return <span key={route.path}>{route.breadcrumbName}</span>;
