@@ -105,7 +105,7 @@ const AdjustmentDetail = ({
                             >
                                 审核
                             </Button>) : null }
-                            {[Status.EFFECTED].includes(detail.status) ? (
+                            {[Status.PENDING].includes(detail.status) ? (
                                 <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id })}>
                                     作废
                                 </Button>

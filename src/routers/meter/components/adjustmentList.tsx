@@ -107,7 +107,7 @@ const Adjustment = () => {
                         <Button type="link" className="f-hidden meter-adjustment-view">
                             <Link to={`/metermg/detail-adjust/${rowData.id}`}>详情</Link>
                         </Button>
-                        {[Status.EFFECTED].includes(rowData.status) ? (
+                        {[Status.PENDING].includes(rowData.status) ? (
                             <Button
                                 type="link"
                                 onClick={() => actionHandler({ type: PriceAdjustHandleType.VOID, id: rowData.id })}
