@@ -72,7 +72,7 @@ const Adjustment = () => {
             // TODO tooltip
         },
         {
-            dataIndex: 'status',
+            dataIndex: 'start_date',
             title: '生效时间',
             width: 220,
         },
