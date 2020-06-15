@@ -18,7 +18,7 @@ interface IState {
 interface ITimeItem {
     price: number;
     date: string;
-    [key: string]: string | number;
+    [key: string]: string | number | IStepData;
 }
 class AdjustmentChart extends React.Component<IProps, IState> {
     constructor(props: IProps) {
@@ -37,26 +37,31 @@ class AdjustmentChart extends React.Component<IProps, IState> {
         while(start.isBefore(end, 'day')) {
             if (item.is_step === '1') {
                 // @ts-ignore
-                const stepResult = this.handleStepData(item.step_data, start)
-                console.log(stepResult)
+                const stepResult = this.handleStepData(item.step_data, start, item)
                 result = result.concat(stepResult);
             } else {
                 result.push({
                     date: start.format('YYYY-MM-DD'),
                     price: +item.price,
-                    series: `series1`
+                    series: `series1`,
+                    // series: `${item.price}元/${item.unit}/月`
                 })
             }
             start.add(1, 'd');
         }
         return result
     }
-    public handleStepData = (stepData: IStepData[], date: Moment) => {
+    // 阶梯价将会生成多个线上的点，date和price不变，series为阶梯的标识
+    public handleStepData = (stepData: IStepData[], date: Moment, standardPriceItem: IStandardPriceRecord) => {
         let result: ITimeItem[] = []
         stepData.map((item, index) => {
+            const isFirst = !item.min
+            const isEnd = !item.max
             result.push({
                 date: date.format('YYYY-MM-DD'),
                 price: +item.price,
+                step_data: item,
+                // series: isFirst ? `≤ ${item.max}` : (isEnd ? `大于${item.min}` : `${item.price}元/${standardPriceItem.unit}/月`) 
                 series: `series${index + 1}`
             })
         })
@@ -71,18 +76,16 @@ class AdjustmentChart extends React.Component<IProps, IState> {
             const end = item.end_date // 第一个区间的结束时间
             const momentStart = moment(start, 'YYYY-MM-DD')
             if (start === end) {
-                // 起始时间 === 结束时间时，为一个点，直接推
+                // 点： 起始时间 === 结束时间时，为一个点，直接推
                 flatTimeLine.push({
                     date: start,
                     price: +item.price,
-                    series: `series1`
+                    series: `series1`,
+                    // series: `${item.price}元/${item.unit}/月`
                 })
-            } else if (!end) {
-                // 最后一个点，未来的区间
-                const result = this.fillTimeLine(momentStart, rangeDate[1], item)
-                flatTimeLine =  flatTimeLine.concat(result)
             } else {
-                const result = this.fillTimeLine(momentStart, end, item)
+                // 区间：如果有调整单的结束时间取调整单的结束时间，没有的话去筛选条件（默认）的结束时间
+                const result = this.fillTimeLine(momentStart, end || rangeDate[1], item)
                 flatTimeLine =  flatTimeLine.concat(result)
             }
         })
@@ -117,9 +120,15 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                     <Legend />
                     <Axis name="date" />
                     <Axis name="price" />
-                    <Tooltip
+                    <Tooltip shared useHtml
                         crosshairs={{
                             type: 'y',
+                        }}
+                        g2-tooltip={{
+                            fill: 'rgba(0,0,0,0.75)'
+                        }}
+                        htmlContent={(title: string, items: []) => {
+                            return  `<div class="g2-tooltip" style='position:absolute;'><div class="g2-tooltip-title">${title}33 </div><ul><li>${JSON.stringify(items)}</li></ul></div>`
                         }}
                     />
                     <Geom
