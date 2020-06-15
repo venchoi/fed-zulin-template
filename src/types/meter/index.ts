@@ -93,11 +93,23 @@ export interface IStandardPriceAdjustmentItem {
     end_date: string;
     is_step: string;
     step_data: string;
-    price: string;
+    price: string | number;
     unit: string;
     status: Status;
     created_on: string;
 }
+// 【单价标准】 - 调整记录时间轴
+export interface IStandardPriceRecord {
+    id: string;
+    start_date: string;
+    end_date: string;
+    is_step: string;
+    step_data: string;
+    price: string | number;
+    unit: string;
+    status: Status;
+}
+
 // 【调整单】—— 列表 —— 返回items /meter/price-adjustment/list
 export interface IAdjustmentItem extends IStandardPriceAdjustmentItem {
     code: string; // 调整单号

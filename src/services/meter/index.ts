@@ -27,6 +27,15 @@ export const getStandardPriceAdjustment = (params: {
 }) => {
     return ajax('/meter/standard-price/get-adjustment-list', params, 'GET');
 };
+
+// 【单价管理】—— 获取时间轴数据
+export const getStandardPriceRecord = (params: {
+    meter_standard_price_id: string;
+    start_date: string;
+    end_date: string;
+}) => {
+    return ajax('/meter/standard-price/get-time-line', params, 'GET');
+};
 // 【单价标准】 —— 启用禁用 、删除
 export const postStandardPrice = ({ type, id }: IStandardICURDParams) => {
     const map: Record<StandardHandleType, string> = {

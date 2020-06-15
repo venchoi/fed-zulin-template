@@ -7,6 +7,7 @@ import { IStandardPriceAdjustmentItem, Status } from '@t/meter';
 import { getStandardPriceAdjustment } from '@s/meter';
 import { ColumnProps } from 'antd/lib/table';
 import { statusItem, Statistics } from '../config';
+import AdjustmentChart from './adjustmentTimeLine';
 
 const { Option } = Select;
 
@@ -21,7 +22,7 @@ const AdjustmentRecord = ({ id = '' }) => {
     const columns: ColumnProps<IStandardPriceAdjustmentItem>[] = [
         {
             title: '序号',
-            width: 60,
+            width: 65,
             dataIndex: 'number',
             render: (text, record, index) => index + 1,
             align: 'center',
@@ -84,6 +85,7 @@ const AdjustmentRecord = ({ id = '' }) => {
     return (
         <>
             <div>
+                {dataSource.length > 0 ? <AdjustmentChart id={id} /> : null}
                 <Select
                     style={{ width: '176px' }}
                     value={selectedStatus}
@@ -96,7 +98,7 @@ const AdjustmentRecord = ({ id = '' }) => {
                     ))}
                 </Select>
             </div>
-            <FedTable columns={columns} dataSource={dataSource} />
+            <FedTable columns={columns} dataSource={dataSource} rowKey="id" />
         </>
     );
 };
