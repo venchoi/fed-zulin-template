@@ -27,7 +27,7 @@ const AdjustmentDetail = ({
         start_date: '',
         end_date: '',
         is_step: '',
-        step_data: '',
+        step_data: '[]',
         price: '',
         unit: '',
         status: Status.PENDING,
@@ -72,7 +72,8 @@ const AdjustmentDetail = ({
     const [detail, setDetail] = useState<IAdjustmentDetail>(initDetail);
     const fetchDetail = async () => {
         const { data } = await getPriceAdjustmentDetail({ id });
-        setDetail(data || initDetail);
+        const result = data || initDetail
+        setDetail({...result, step_data: JSON.parse(result.step_data)});
     };
     const actionHandler = async (payload: IAdjustmentICURDParams) => {
         const { result } = await postPrice(payload);
