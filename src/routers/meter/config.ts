@@ -9,26 +9,31 @@ export const enum Statistics {
 export const statusItem = [
     {
         title: '全部', // 只有全部是需要单独写文案，全部的参数是'' ，展示是全部
+        value: Status.ALL,
         key: Statistics.ALL,
         color: '',
     },
     {
         title: Status.PENDING,
+        value: Status.PENDING,
         key: Statistics.PENDING,
         color: '#F27900',
     },
     {
         title: Status.AUDITED,
+        value: Status.AUDITED,
         key: Statistics.AUDITED,
         color: '#0D86FF',
     },
     {
         title: Status.EFFECTED,
+        value: Status.EFFECTED,
         key: Statistics.EFFECTED,
         color: '#00AD74',
     },
     {
         title: Status.VOID,
+        value: Status.VOID,
         key: Statistics.VOID,
         color: '#BEC3C7',
     },

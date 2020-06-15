@@ -174,7 +174,7 @@ const Adjustment = () => {
                         onChange={e => handleChangeParams('status', e.target.value)}
                     >
                         {statusItem.map(item => (
-                            <RadioButton key={item.title} value={item.title}>
+                            <RadioButton key={item.title} value={item.value}>
                                 {item.title}
                                 {+statistics[item.key] > 0 ? `·${statistics[item.key]}` : null}
                             </RadioButton>
