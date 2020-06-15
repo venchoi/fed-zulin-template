@@ -285,8 +285,8 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                         })}
                     </div>
                 );
-                const tempObj = {
-                    children: <div className="rs-td-container">
+                const children = record.package_name ? (
+                    <div className="rs-td-container">
                         <span className="derate-table-td-rs" title={record.package_name || '-'}>
                             {record.package_name}
                         </span>
@@ -299,7 +299,10 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                 }}
                             />
                         </Popover>
-                    </div>,
+                    </div>
+                ) : record.full_room_name;
+                const tempObj = {
+                    children: children,
                     props: {
                         rowSpan: record.rowSpan,
                     },
