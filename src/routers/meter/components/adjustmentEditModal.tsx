@@ -327,7 +327,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                     {/* <FedUpload /> */}
                 </FormItem>
             </Form>
-            <FedUpload files={attachment}/>
+            {/* <FedUpload files={attachment}/> */}
         </Modal>
     );
 };
