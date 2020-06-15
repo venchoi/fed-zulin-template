@@ -19,6 +19,7 @@ import {
 import { getPriceAdjustmentList, postPrice } from '@s/meter';
 import Item from 'antd/lib/list/Item';
 import { Statistics, statusItem } from '../config';
+import PriceItem from './price';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
@@ -56,7 +57,13 @@ const Adjustment = () => {
         {
             dataIndex: 'price',
             title: '调整后单价',
-            width: 132,
+            width: 220,
+            render: (text, rowData) => {
+                const { is_step, price, unit, step_data } = rowData
+                // @ts-ignore
+                let stepArr: IStepData[] = step_data
+                return <PriceItem {...rowData} step_data={stepArr}/>
+            }
         },
         {
             dataIndex: 'reason',
@@ -135,7 +142,11 @@ const Adjustment = () => {
     };
     const fetchList = async () => {
         const { data } = await getPriceAdjustmentList({ ...pageObj, ...params });
-        setAdjustmentDataSource(data?.items || []);
+        const result = (data?.items || []).map((item: IAdjustmentItem) => {
+            item.step_data = item.step_data ? JSON.parse(item.step_data) : [];
+            return item;
+        });
+        setAdjustmentDataSource(result || []);
         setTotal(data?.total || 0);
         const keys = map(statusItem, (item: { key: string }) => item.key);
         const values = pick(data, keys);

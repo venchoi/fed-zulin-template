@@ -70,7 +70,8 @@ const Detail = ({
     };
     const fetchDetail = async () => {
         const { data } = await getStandardPriceDetail({ id });
-        setDetail((data.id && data) || initDetail);
+        const result = (data.id && data) || initDetail
+        setDetail({...result, step_data: JSON.parse(result.step_data || '[]')});
     };
     useEffect(() => {
         fetchDetail();

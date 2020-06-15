@@ -3,6 +3,7 @@ import { IStandardICURDParams, IStandardPriceDetail } from '@/types/meter';
 import FedDataSection from '@c/FedDataSection/FedDataSection';
 import FedDataRow from '@c/FedDataSection/FedDataRow';
 import { valueOf } from '@/types/global';
+import PriceItem from './price';
 
 interface IDataSection {
     label: '';
@@ -23,11 +24,12 @@ const BaseInfo = ({ detail }: { detail: IStandardPriceDetail }) => {
             {
                 label: '单价',
                 render: () => {
+                    // @ts-ignore
+                    const stepArr: IStepData[] = detail.step_data
                     return (
-                        <span style={{ color: '#F24F18' }}>
-                            {(+detail.price).toFixed(2)}
-                            {detail.unit}/月
-                        </span>
+                        <div style={{ color: '#F24F18' }}>
+                            <PriceItem {...detail} step_data={stepArr}/>
+                        </div>
                     );
                 },
             },

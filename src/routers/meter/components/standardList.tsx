@@ -15,12 +15,14 @@ import {
     IMeterTypeStatisticItem,
     StandardHandleType,
     IAdjustmentItem,
+    IStepData,
 } from '@t/meter';
 import { ENABLE } from '@t/common';
 import { getStandardPriceList, postStandardPrice } from '@s/meter';
 import EditStandardModal from './standardEditModal';
 import EditAdjustmentModal from './adjustmentEditModal';
 import { MoreOutlined } from '@ant-design/icons';
+import PriceItem from './price';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
@@ -76,7 +78,13 @@ const Standard = () => {
         {
             dataIndex: 'price',
             title: '单价',
-            width: 132,
+            width: 220,
+            render: (text, rowData) => {
+                const { is_step, price, unit, step_data } = rowData
+                // @ts-ignore
+                let stepArr: IStepData[] = step_data
+                return <PriceItem {...rowData} step_data={stepArr}/>
+            }
             // TODO step
         },
         {

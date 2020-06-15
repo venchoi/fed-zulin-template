@@ -50,7 +50,7 @@ export interface IStandardPriceAddItem {
     name: string; // 名称
     meter_type_id?: string; // 类型id
     is_step: string; // 是否阶梯价
-    step_data: string; //
+    step_data: string; //  TODO Serialize
     price: string; // 单价
     unit: string; // 单位
     remark: string; // 说明
