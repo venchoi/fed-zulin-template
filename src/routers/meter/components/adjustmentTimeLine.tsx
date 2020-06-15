@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // import { Slider } from 'antd'
 import { Chart, Geom, Axis, Tooltip, Legend, Interaction } from 'bizcharts';
-import DataSet from "@antv/data-set";
 import { cloneDeep } from 'lodash';
 import moment, { Moment } from 'moment';
 import { IStandardPriceRecord, IStepData, IAdjustmentItem } from '@t/meter';
