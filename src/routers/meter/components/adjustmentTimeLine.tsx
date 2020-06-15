@@ -33,27 +33,34 @@ class AdjustmentChart extends React.Component<IProps, IState> {
     }
     //  从 start 到 end , 每天都填充一个点 price
     public fillTimeLine = (start: Moment, end: Moment | string, item: IStandardPriceRecord) => {
-        const result: ITimeItem[] = []
+        let result: ITimeItem[] = []
         while(start.isBefore(end, 'day')) {
-            result.push({
-                date: start.format('YYYY-MM-DD'),
-                price: +item.price,
-                series: `series1`
-            })
+            if (item.is_step === '1') {
+                // @ts-ignore
+                const stepResult = this.handleStepData(item.step_data, start)
+                console.log(stepResult)
+                result = result.concat(stepResult);
+            } else {
+                result.push({
+                    date: start.format('YYYY-MM-DD'),
+                    price: +item.price,
+                    series: `series1`
+                })
+            }
             start.add(1, 'd');
         }
         return result
     }
-    public handleStepData = (stepData: IStepData[], date: string) => {
-        let result = []
+    public handleStepData = (stepData: IStepData[], date: Moment) => {
+        let result: ITimeItem[] = []
         stepData.map((item, index) => {
             result.push({
-                date,
-                price: item.price,
+                date: date.format('YYYY-MM-DD'),
+                price: +item.price,
                 series: `series${index + 1}`
             })
         })
-        return stepData
+        return result
     }
     public handleTimeLine = (timeLine: IStandardPriceRecord[]): ITimeItem[] => {
         let flatTimeLine: ITimeItem[] = []; //  填充后的点的数据
@@ -87,6 +94,10 @@ class AdjustmentChart extends React.Component<IProps, IState> {
         const start_date = rangeDate[0].format('YYYY-MM-DD');
         const end_date = rangeDate[1].format('YYYY-MM-DD');
         let { data = [] } = await getStandardPriceRecord({ meter_standard_price_id: id, start_date, end_date });
+        data.map((item: IStandardPriceRecord) => {
+            item.step_data = JSON.parse(item.step_data)
+            return item
+        })
         let timeLine: ITimeItem[] = this.handleTimeLine(data)
         this.setState({
             data: timeLine,
@@ -115,7 +126,7 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                         type="line"
                         position="date*price"
                         size={2}
-                        color={['price', colorPlatte]}
+                        color={['series', colorPlatte]}
                         shape={'hv'}
                     />
                     <Interaction type="legend-filter"/>
