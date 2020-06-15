@@ -97,7 +97,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                 }
                 delete params.range_time;
                 // TODO attachment
-                add({ ...params, attachment: [], meter_standard_price_id:editItem.id, step_data: JSON.stringify(params.step_data) });
+                add({ ...params, attachment: [], meter_standard_price_id:editItem.id, step_data: JSON.stringify(params.step_data), unit: editItem.unit });
             })
             .catch(errorInfo => {
                 console.error(errorInfo);
