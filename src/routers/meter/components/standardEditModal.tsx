@@ -305,7 +305,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                         );
                     }}
                 </Form.Item>
-                <FormItem name="effect_date" label="生效日期">
+                <FormItem name="effect_date" label="生效日期"  rules={[{ type: 'object', required: true }]}>
                     <DatePicker
                         disabled={isEdit}
                         placeholder="请选择生效日期"
