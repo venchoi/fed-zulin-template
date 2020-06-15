@@ -79,8 +79,8 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
         form.validateFields()
             .then(values => {
                 if (isEdit) {
-                    const params = pick(values, ['id', 'name', 'remark']);
-                    edit({ ...params });
+                    const params = pick(values, ['name', 'remark']);
+                    edit({ ...params, id: editItem?.id || '' });
                 } else {
                     const params = pick(values, [
                         'name',
