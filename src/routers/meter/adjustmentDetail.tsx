@@ -92,7 +92,7 @@ const AdjustmentDetail = ({
                 breadcrumb={{ routes, itemRender }}
                 ghost={false}
             />
-            <div className="layout-list">
+            <div className="layout-list adjustment-detail">
                 <Card>
                     <div style={{ padding: '16px 24px 0  24px' }}>
                         <BaseInfo detail={detail} />
