@@ -36,7 +36,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
         value: '',
         unit: '',
     }); // 选中的类型
-    const [attachment, setAttachment] = useState<fileType[]>([])
+    const [attachment, setAttachment] = useState<fileType[]>([]);
 
     // 获取类型列表 - 数据返回后，设置第一个类型为选中的类型
     const fetchMeterTypeList = async () => {
@@ -96,12 +96,20 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                     params.start_date = params.start_date.format('YYYY-MM-DD');
                 }
                 delete params.range_time;
-                // TODO attachment
-                add({ ...params, attachment: [], meter_standard_price_id:editItem.id, step_data: JSON.stringify(params.step_data), unit: editItem.unit });
+                add({
+                    ...params,
+                    attachment: JSON.stringify(attachment),
+                    meter_standard_price_id: editItem.id,
+                    step_data: JSON.stringify(params.step_data),
+                    unit: editItem.unit,
+                });
             })
             .catch(errorInfo => {
                 console.error(errorInfo);
             });
+    };
+    const attachChange = (file: fileType, files: fileType[]) => {
+        setAttachment(files);
     };
 
     const adjustmentType = [
@@ -323,10 +331,14 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                     <TextArea />
                 </FormItem>
                 <FormItem label="调整附件">
-                    {/* <FedUpload /> */}
+                    <FedUpload
+                        files={attachment}
+                        maxSize={15}
+                        onChange={attachChange}
+                        description="注：单个附件最大支持50M，支持png/jpg/jpeg/gif/pdf/zip/rar/xls/xlsx/docx/doc格式，已上传"
+                    />
                 </FormItem>
             </Form>
-            {/* <FedUpload files={attachment}/> */}
         </Modal>
     );
 };

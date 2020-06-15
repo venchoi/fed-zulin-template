@@ -2,6 +2,7 @@ import React from 'react';
 import { IAdjustmentDetail, IStepData } from '@/types/meter';
 import FedDataSection from '@c/FedDataSection/FedDataSection';
 import FedDataRow from '@c/FedDataSection/FedDataRow';
+import FedUpload from '@c/FedUpload';
 import { valueOf } from '@/types/global';
 import { Badge } from 'antd';
 import { find } from 'lodash';
@@ -54,8 +55,11 @@ const BaseInfo = ({ detail }: { detail: IAdjustmentDetail }) => {
             {
                 label: '调整附件',
                 value: detail.attachment,
-                // TODO attachment
-                render: () => <></>,
+                render: (text: string) => (
+                    <>
+                        <FedUpload readonly files={JSON.parse(text)} />
+                    </>
+                ),
             },
         ],
     ];

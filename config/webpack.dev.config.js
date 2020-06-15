@@ -10,7 +10,8 @@ const dev_config = {
         open: true,
         port: 8807,
         hot: true,
-        host: 'rental-dev.mysoft.com.cn',
+        https: true,
+        host: 'rental-dev.myfuwu.com.cn',
         headers: {
             'Access-Control-Allow-Origin': '*',
         },
