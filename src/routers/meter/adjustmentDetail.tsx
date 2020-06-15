@@ -72,8 +72,8 @@ const AdjustmentDetail = ({
     const [detail, setDetail] = useState<IAdjustmentDetail>(initDetail);
     const fetchDetail = async () => {
         const { data } = await getPriceAdjustmentDetail({ id });
-        const result = data || initDetail
-        setDetail({...result, step_data: JSON.parse(result.step_data)});
+        const result = data || initDetail;
+        setDetail({ ...result, step_data: JSON.parse(result.step_data) });
     };
     const actionHandler = async (payload: IAdjustmentICURDParams) => {
         const { result } = await postPrice(payload);
@@ -100,23 +100,24 @@ const AdjustmentDetail = ({
                     <Divider style={{ marginTop: '16px' }} />
                     <footer className="footer">
                         <Space>
-                            {[Status.PENDING].includes(detail.status) ? (<Button
-                                type="primary"
-                                onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id })}
-                            >
-                                审核
-                            </Button>) : null }
+                            {[Status.PENDING].includes(detail.status) ? (
+                                <Button
+                                    type="primary"
+                                    onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id })}
+                                >
+                                    审核
+                                </Button>
+                            ) : null}
                             {[Status.PENDING].includes(detail.status) ? (
                                 <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.VOID, id })}>
                                     作废
                                 </Button>
-                            ) : null }
+                            ) : null}
                             {[Status.AUDITED].includes(detail.status) ? (
                                 <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id })}>
                                     取消审核
                                 </Button>
                             ) : null}
-                            
                         </Space>
                     </footer>
                 </Card>

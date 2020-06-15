@@ -43,12 +43,13 @@ const AdjustmentRecord = ({ id = '' }) => {
         {
             title: '调整单价',
             dataIndex: 'price',
+            align: 'right',
             render: (text, rowData) => {
-                const { is_step, price, unit, step_data } = rowData
+                const { is_step, price, unit, step_data } = rowData;
                 // @ts-ignore
-                let stepArr: IStepData[] = step_data
-                return <PriceItem {...rowData} step_data={stepArr}/>
-            }
+                let stepArr: IStepData[] = step_data;
+                return <PriceItem {...rowData} step_data={stepArr} />;
+            },
         },
         {
             title: '状态',

@@ -23,12 +23,13 @@ const BaseInfo = ({ detail }: { detail: IStandardPriceDetail }) => {
             },
             {
                 label: '单价',
+                align: 'right',
                 render: () => {
                     // @ts-ignore
-                    const stepArr: IStepData[] = detail.step_data
+                    const stepArr: IStepData[] = detail.step_data;
                     return (
-                        <div style={{ color: '#F24F18' }}>
-                            <PriceItem {...detail} step_data={stepArr}/>
+                        <div>
+                            <PriceItem {...detail} step_data={stepArr} highlight />
                         </div>
                     );
                 },

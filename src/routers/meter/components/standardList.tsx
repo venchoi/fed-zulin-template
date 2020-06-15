@@ -79,12 +79,13 @@ const Standard = () => {
             dataIndex: 'price',
             title: '单价',
             width: 220,
+            align: 'right',
             render: (text, rowData) => {
-                const { is_step, price, unit, step_data } = rowData
+                const { is_step, price, unit, step_data } = rowData;
                 // @ts-ignore
-                let stepArr: IStepData[] = step_data
-                return <PriceItem {...rowData} step_data={stepArr}/>
-            }
+                let stepArr: IStepData[] = step_data;
+                return <PriceItem {...rowData} step_data={stepArr} />;
+            },
             // TODO step
         },
         {
@@ -244,7 +245,13 @@ const Standard = () => {
                     </Checkbox>
                 </div>
             </div>
-            <FedTable<IStandardPriceItem> columns={columns} dataSource={standardDataSource} vsides rowKey="id" scroll={{ y: 'calc(100vh - 354px)' }} />
+            <FedTable<IStandardPriceItem>
+                columns={columns}
+                dataSource={standardDataSource}
+                vsides
+                rowKey="id"
+                scroll={{ y: 'calc(100vh - 354px)' }}
+            />
             <FedPagination
                 onShowSizeChange={(current, page_size) => {
                     setPageObj({ page: 1, page_size });

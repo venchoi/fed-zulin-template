@@ -57,13 +57,14 @@ const Adjustment = () => {
         {
             dataIndex: 'price',
             title: '调整后单价',
+            align: 'right',
             width: 220,
             render: (text, rowData) => {
-                const { is_step, price, unit, step_data } = rowData
+                const { is_step, price, unit, step_data } = rowData;
                 // @ts-ignore
-                let stepArr: IStepData[] = step_data
-                return <PriceItem {...rowData} step_data={stepArr}/>
-            }
+                let stepArr: IStepData[] = step_data;
+                return <PriceItem {...rowData} step_data={stepArr} />;
+            },
         },
         {
             dataIndex: 'reason',
@@ -187,7 +188,13 @@ const Adjustment = () => {
                     />
                 </div>
             </div>
-            <FedTable<IAdjustmentItem> columns={columns} dataSource={adjustmentDataSource} vsides rowKey="id" scroll={{ y: 'calc(100vh - 354px)' }}  />
+            <FedTable<IAdjustmentItem>
+                columns={columns}
+                dataSource={adjustmentDataSource}
+                vsides
+                rowKey="id"
+                scroll={{ y: 'calc(100vh - 354px)' }}
+            />
             <FedPagination
                 onShowSizeChange={(current, page_size) => {
                     setPageObj({ page: 1, page_size });
