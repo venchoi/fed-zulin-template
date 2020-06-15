@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 // import { Slider } from 'antd'
 import { Chart, Geom, Axis, Tooltip, Legend, Interaction } from 'bizcharts';
+import DataSet from "@antv/data-set";
 import { cloneDeep } from 'lodash';
 import moment, { Moment } from 'moment';
-import { IStandardPriceRecord } from '@t/meter';
+import { IStandardPriceRecord, IStepData, IAdjustmentItem } from '@t/meter';
 import { getStandardPriceRecord } from '@s/meter';
+const colorPlatte = ['#5EB9FF', '#36A1FF', '#0D86FF', '#0065D9', '#004DB3', '#00388C'];
 
 interface IProps {
     id: string;
@@ -15,7 +17,8 @@ interface IState {
 }
 interface ITimeItem {
     price: number;
-    date: string
+    date: string;
+    [key: string]: string | number;
 }
 class AdjustmentChart extends React.Component<IProps, IState> {
     constructor(props: IProps) {
@@ -28,8 +31,32 @@ class AdjustmentChart extends React.Component<IProps, IState> {
     public componentDidMount() {
         this.fetchData();
     }
+    //  从 start 到 end , 每天都填充一个点 price
+    public fillTimeLine = (start: Moment, end: Moment | string, item: IStandardPriceRecord) => {
+        const result: ITimeItem[] = []
+        while(start.isBefore(end, 'day')) {
+            result.push({
+                date: start.format('YYYY-MM-DD'),
+                price: +item.price,
+                series: `series1`
+            })
+            start.add(1, 'd');
+        }
+        return result
+    }
+    public handleStepData = (stepData: IStepData[], date: string) => {
+        let result = []
+        stepData.map((item, index) => {
+            result.push({
+                date,
+                price: item.price,
+                series: `series${index + 1}`
+            })
+        })
+        return stepData
+    }
     public handleTimeLine = (timeLine: IStandardPriceRecord[]): ITimeItem[] => {
-        const flatTimeLine: ITimeItem[] = []; //  填充后的点的数据
+        let flatTimeLine: ITimeItem[] = []; //  填充后的点的数据
         const { rangeDate } = this.state
         timeLine.map(item => {
             // item区间数据，可能为点
@@ -40,25 +67,16 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                 // 起始时间 === 结束时间时，为一个点，直接推
                 flatTimeLine.push({
                     date: start,
-                    price: +item.price
+                    price: +item.price,
+                    series: `series1`
                 })
             } else if (!end) {
                 // 最后一个点，未来的区间
-                while(momentStart.isBefore(rangeDate[1], 'day')) {
-                    flatTimeLine.push({
-                        date: momentStart.format('YYYY-MM-DD'),
-                        price: +item.price
-                    })
-                    momentStart.add(1, 'd');
-                }
+                const result = this.fillTimeLine(momentStart, rangeDate[1], item)
+                flatTimeLine =  flatTimeLine.concat(result)
             } else {
-                while(momentStart.isBefore(end, 'day')) {
-                    flatTimeLine.push({
-                        date: momentStart.format('YYYY-MM-DD'),
-                        price: +item.price
-                    })
-                    momentStart.add(1, 'd');
-                }
+                const result = this.fillTimeLine(momentStart, end, item)
+                flatTimeLine =  flatTimeLine.concat(result)
             }
         })
         return flatTimeLine;
@@ -97,7 +115,7 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                         type="line"
                         position="date*price"
                         size={2}
-                        color={['price', ['#0D86FF']]}
+                        color={['price', colorPlatte]}
                         shape={'hv'}
                     />
                     <Interaction type="legend-filter"/>
