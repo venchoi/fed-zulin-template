@@ -8,8 +8,8 @@ interface IProps {
 }
 const PriceItem = ({ unit, is_step, price, step_data }: IProps) => {
   return (<>
-    {!+is_step ? <div>{price}元{unit}</div> : <>
-      {step_data.map((item, index) => (<div key={index}>{item.min ?? '0'}{unit}-{item.max ?? '不限'}{unit} {item.price}/{unit}</div>))}
+    {!+is_step ? <div>{price}元/{unit}</div> : <>
+  {step_data.map((item, index) => (<div key={index}>{index === step_data.length - 1 ? '大于' : ''}{item.min ?? '0'}{ index === step_data.length - 1 ? '' : '-' }{item.max ?? '不限'}{unit} {item.price}元/{unit}</div>))}
     </>}
   </>)
 }
