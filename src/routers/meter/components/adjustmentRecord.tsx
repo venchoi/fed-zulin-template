@@ -3,11 +3,12 @@ import { Badge, Button, Select, Statistic } from 'antd';
 import { find } from 'lodash';
 import { Link } from 'dva/router';
 import FedTable from '@/components/FedTable';
-import { IStandardPriceAdjustmentItem, Status } from '@t/meter';
+import { IStandardPriceAdjustmentItem, Status, IAdjustmentAddItem } from '@t/meter';
 import { getStandardPriceAdjustment } from '@s/meter';
 import { ColumnProps } from 'antd/lib/table';
 import { statusItem, Statistics } from '../config';
 import AdjustmentChart from './adjustmentTimeLine';
+import PriceItem from './price';
 
 const { Option } = Select;
 
@@ -43,17 +44,15 @@ const AdjustmentRecord = ({ id = '' }) => {
             title: '调整单价',
             dataIndex: 'price',
             render: (text, rowData) => {
-                return (
-                    <>
-                        {text}
-                        {rowData.unit}/月
-                    </>
-                );
-            },
+                const { is_step, price, unit, step_data } = rowData
+                // @ts-ignore
+                let stepArr: IStepData[] = step_data
+                return <PriceItem {...rowData} step_data={stepArr}/>
+            }
         },
         {
             title: '状态',
-            dataIndex: 'number',
+            dataIndex: 'status',
             render: (text: Status) => {
                 return <Badge color={find(statusItem, ['title', text])?.color} text={text} />;
             },
@@ -76,7 +75,11 @@ const AdjustmentRecord = ({ id = '' }) => {
     ];
     const fetchList = async () => {
         const { data } = await getStandardPriceAdjustment({ ...pageObj, meter_standard_price_id: id });
-        setDataSource(data?.items || []);
+        const result = (data?.items || []).map((item: IAdjustmentAddItem) => {
+            item.step_data = item.step_data ? JSON.parse(item.step_data) : [];
+            return item;
+        });
+        setDataSource(result);
         setTotal(data?.total || 0);
     };
     useEffect(() => {
