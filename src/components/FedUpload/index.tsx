@@ -8,7 +8,6 @@
  */
 import React, { Fragment } from 'react';
 import { Upload, message, Button, Dropdown, Menu, Progress } from 'antd';
-import { randomStr } from '@/helper/commonUtils';
 import { getFileType, getOssDirectDomain } from '@/helper/OssHelper';
 import config from '@/config';
 import { UploadOutlined, MoreOutlined, DownloadOutlined } from '@ant-design/icons';
@@ -22,6 +21,13 @@ message.config({
     maxCount: 3,
     rtl: true,
 });
+const randomStr  = () => {
+    return (
+        Math.random()
+            .toString(32)
+            .slice(2) + (+new Date()).toString(16)
+    );
+}
 
 interface Props {
     files: any;
