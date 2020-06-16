@@ -10,6 +10,7 @@ import { statusItem, Statistics } from '../config';
 import AdjustmentChart from './adjustmentTimeLine';
 import PriceItem from './price';
 import FedDataSection from '@/components/FedDataSection/FedDataSection';
+import FedPagination from '@/components/FedPagination';
 
 const { Option } = Select;
 
@@ -92,7 +93,7 @@ const AdjustmentRecord = ({ id = '' }) => {
             return item;
         });
         setDataSource(result);
-        setTotal(data?.total || 0);
+        setTotal(+data?.total || 0);
     };
     useEffect(() => {
         fetchList();
@@ -109,7 +110,20 @@ const AdjustmentRecord = ({ id = '' }) => {
                 </Option>
             ))}
         </Select>
-        <FedTable columns={columns} dataSource={dataSource} rowKey="id" />
+        {/* 719 */}
+        <FedTable columns={columns} dataSource={dataSource} rowKey="id" scroll={{ y: 'calc(100vh - 820px)' }} />
+        <FedPagination
+            onShowSizeChange={(current, page_size) => {
+                setPageObj({ page: 1, page_size });
+            }}
+            onChange={(page, page_size) => {
+                setPageObj({ page, page_size: page_size || 20 });
+            }}
+            current={pageObj.page_size}
+            pageSize={pageObj.page_size}
+            showTotal={total => `共${Math.ceil(+total / +(pageObj.page_size || 1))}页， ${total}条记录`}
+            total={+total}
+        />
     </>)
     return (
         <>
