@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // import { Slider } from 'antd'
-import { Chart, Geom, Axis, Tooltip, Legend, Interaction, StepLineChart } from 'bizcharts';
+import { Chart, Geom, Axis, Tooltip, Legend, Interaction, StepLineChart, Slider } from 'bizcharts';
 import { cloneDeep } from 'lodash';
 import moment, { Moment } from 'moment';
 import { IStandardPriceRecord, IStepData, IAdjustmentItem } from '@t/meter';
@@ -105,6 +105,7 @@ class AdjustmentChart extends React.Component<IProps, IState> {
             data: timeLine,
         });
     };
+    public handleSliderChange = () => {}
     public render() {
         const { data } = this.state;
         const cols = {
@@ -121,10 +122,14 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                         visible: false,
                         text: '单价变动折线图',
                     }}
+                    color={colorPlatte}
                     xField='date'
                     yField='price'
                     step="vh"
                     seriesField="series"
+                    interactions={[{
+                        type: 'slider'
+                    }]}
                 />
             </>
         );
