@@ -5,7 +5,8 @@ import { cloneDeep } from 'lodash';
 import moment, { Moment } from 'moment';
 import { IStandardPriceRecord, IStepData, IAdjustmentItem } from '@t/meter';
 import { getStandardPriceRecord } from '@s/meter';
-const colorPlatte = ['#5EB9FF', '#36A1FF', '#0D86FF', '#0065D9', '#004DB3', '#00388C'];
+import { unitTransfer } from '@/helper/sringUtils';
+const colorPlatte = ['#5EB9FF', '#36A1FF', '#0D86FF', '#0065D9', '#004DB3', '#00388C', '#00388C', '#00388C', '#00388C'];
 
 interface IProps {
     id: string;
@@ -17,7 +18,9 @@ interface IState {
 interface ITimeItem {
     price: number;
     date: string;
-    [key: string]: string | number;
+    unit: string,
+    is_step: string, // 是否阶梯价
+    [key: string]: string | number | undefined;
 }
 class AdjustmentChart extends React.Component<IProps, IState> {
     constructor(props: IProps) {
@@ -42,8 +45,10 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                 result.push({
                     date: start.format('YYYY-MM-DD'),
                     price: +item.price,
-                    series: `series1`,
-                    // series: `${item.price}元/${item.unit}/月`
+                    unit: unitTransfer(item.unit),
+                    is_step: item.is_step,
+                    // series: `series1`,
+                    series: `${item.price}${unitTransfer(item.unit)}`
                 })
             }
             start.add(1, 'd');
@@ -59,9 +64,10 @@ class AdjustmentChart extends React.Component<IProps, IState> {
             result.push({
                 date: date.format('YYYY-MM-DD'),
                 price: +item.price,
-                // step_data: item,
-                // series: isFirst ? `≤ ${item.max}` : (isEnd ? `大于${item.min}` : `${item.price}元/${standardPriceItem.unit}/月`) 
-                series: `series${index + 1}`
+                is_step: '1',
+                unit: unitTransfer(standardPriceItem.unit),
+                series: isFirst ? `≤ ${item.max}${unitTransfer(standardPriceItem.unit)}` : (isEnd ? `＞${item.min}${unitTransfer(standardPriceItem.unit)}` : `${item.min}~${item.max}${unitTransfer(standardPriceItem.unit)}`) 
+                // series: `series${index + 1}`
             })
         })
         return result
@@ -79,8 +85,10 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                 flatTimeLine.push({
                     date: start,
                     price: +item.price,
-                    series: `series1`,
-                    // series: `${item.price}元/${item.unit}/月`
+                    is_step: item.is_step,
+                    unit: unitTransfer(item.unit),
+                    // series: `series1`,
+                    series: `${item.price}元/${unitTransfer(item.unit)}/月`
                 })
             } else {
                 // 区间：如果有调整单的结束时间取调整单的结束时间，没有的话去筛选条件（默认）的结束时间
@@ -118,18 +126,47 @@ class AdjustmentChart extends React.Component<IProps, IState> {
             <>
                 <StepLineChart
                     data={data}
+                    // 标题 这里不需要展示title
                     title={{
                         visible: false,
                         text: '单价变动折线图',
                     }}
+                    // 描述
+                    description={{
+                        visible: true,
+                        text: '单位:(元/月)',
+                    }}
+                    // 图例
+                    legend={{
+                        visible: false,
+                    }}
+                    // 线的配色板
                     color={colorPlatte}
+                    // x轴字段
                     xField='date'
+                    // y轴字段
                     yField='price'
-                    step="vh"
                     seriesField="series"
+                    // 交互: slider 底部滑动条
                     interactions={[{
                         type: 'slider'
                     }]}
+                    tooltip={{
+                        formatter: (date, price, series, is_step, unit) => {
+                            console.log(is_step)
+                            return {
+                                name: !!+is_step ? series : `每${unit}`,
+                                value: price
+                            }
+                        },
+                        fields: ['date', 'price', 'series', 'is_step', 'unit'],
+                        domStyles: {
+                            'g2-tooltop': {
+                                background: 'rgba(0, 0, 0, 0.75)'
+                            }
+                        }
+                    }}
+                    step="vh"
                 />
             </>
         );
