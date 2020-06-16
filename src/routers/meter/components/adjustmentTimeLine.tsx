@@ -59,7 +59,7 @@ class AdjustmentChart extends React.Component<IProps, IState> {
             result.push({
                 date: date.format('YYYY-MM-DD'),
                 price: +item.price,
-                step_data: item,
+                // step_data: item,
                 // series: isFirst ? `≤ ${item.max}` : (isEnd ? `大于${item.min}` : `${item.price}元/${standardPriceItem.unit}/月`) 
                 series: `series${index + 1}`
             })
