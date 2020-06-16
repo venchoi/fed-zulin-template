@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Row, Col, Table, message, Input, Spin, Popover } from 'antd';
-import { CloseCircleFilled } from '@ant-design/icons';
+import { CloseCircleFilled, InfoCircleOutlined } from '@ant-design/icons';
 import FedButton from '@c/FedButton';
 import FedSection from '@c/FedSection';
 import Uploader from '@c/Uploader';
@@ -226,6 +226,13 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         }
         const billsMap: { [index: string]: feeItemType[] } = {};
         items.forEach((item: feeItemType) => {
+            const isSelected = selectedRowKeys.find(id => {
+                const itemId = item.id + (item.isDemurrage ? '1' : '0');
+                return itemId === id;
+            });
+            if (!isSelected) {
+                return;
+            }
             if (!billsMap[item.bill_item_id]) {
                 billsMap[item.bill_item_id] = [];
             }
@@ -270,8 +277,32 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             title: '资源',
             width: 192,
             render: (text: string, record: feeItemType, index: number) => {
+                const rooms = record.full_room_name ? record.full_room_name.split(',') : [];
+                const popoverContent = (
+                    <div>
+                        {rooms.map(room => {
+                            return <p>{room}</p>;
+                        })}
+                    </div>
+                );
+                const children = record.package_name ? (
+                    <div className="rs-td-container">
+                        <span className="derate-table-td-rs" title={record.package_name || '-'}>
+                            {record.package_name}
+                        </span>
+                        <Popover title="打包资源列表" placement="bottom" content={popoverContent}>
+                            <InfoCircleOutlined
+                                style={{
+                                    color: '#BEC3C7',
+                                    marginLeft: '5px',
+                                    marginTop: '4px',
+                                }}
+                            />
+                        </Popover>
+                    </div>
+                ) : record.full_room_name;
                 const tempObj = {
-                    children: record.full_room_name,
+                    children: children,
                     props: {
                         rowSpan: record.rowSpan,
                     },
@@ -436,7 +467,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                             <InputWithCount
                                                 defaultValue={detail.remark}
                                                 placeholder="请输入"
-                                                maxLength={255}
+                                                maxLength={2000}
                                                 onChange={handleRemarkChange}
                                             />
                                         ) : (

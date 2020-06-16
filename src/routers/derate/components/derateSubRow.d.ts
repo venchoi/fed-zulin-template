@@ -28,6 +28,7 @@ export interface feeItemType {
     validateStatus?: status;
     isDemurrage: boolean;
     bill_item_id: string;
+    package_name?: string;
 }
 
 interface derateDetail {
