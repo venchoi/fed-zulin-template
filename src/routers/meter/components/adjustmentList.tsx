@@ -20,6 +20,7 @@ import { getPriceAdjustmentList, postPrice } from '@s/meter';
 import Item from 'antd/lib/list/Item';
 import { Statistics, statusItem } from '../config';
 import PriceItem from './price';
+import moment from 'moment';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
@@ -49,6 +50,13 @@ const Adjustment = () => {
         {
             dataIndex: 'standard_name',
             title: '调整单',
+            width: 200,
+            render: (text, rowData) => {
+                return <>
+                    <div>{text}</div>
+                    <div style={{ color: '#959799', fontSize: '12px' }}>{rowData.code}</div>
+                </>
+            }
         },
         {
             dataIndex: 'meter_type_name',
@@ -77,6 +85,13 @@ const Adjustment = () => {
             dataIndex: 'start_date',
             title: '生效时间',
             width: 220,
+            render: (text) => {
+                return (
+                    <>
+                        {moment(text).format('YYYY-MM-DD')}
+                    </>
+                )
+            }
         },
         {
             dataIndex: 'status',

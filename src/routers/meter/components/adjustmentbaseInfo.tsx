@@ -8,6 +8,7 @@ import { Badge } from 'antd';
 import { find } from 'lodash';
 import { statusItem } from '../config';
 import PriceItem from './price';
+import moment from 'moment';
 
 interface IDataSection {
     label: '';
@@ -50,7 +51,7 @@ const BaseInfo = ({ detail }: { detail: IAdjustmentDetail }) => {
             },
             {
                 label: '生效时间',
-                value: `${detail.start_date}${detail.end_date ? ` 至 ${detail.end_date}` : ''}`,
+                value: `${moment(detail.start_date).format('YYYY-MM-DD')}${detail.end_date ? ` 至 ${moment(detail.end_date).format('YYYY-MM-DD')}` : ''}`,
             },
             {
                 label: '调整附件',
