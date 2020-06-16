@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // import { Slider } from 'antd'
-import { Chart, Geom, Axis, Tooltip, Legend, Interaction } from 'bizcharts';
+import { Chart, Geom, Axis, Tooltip, Legend, Interaction, StepLineChart } from 'bizcharts';
 import { cloneDeep } from 'lodash';
 import moment, { Moment } from 'moment';
 import { IStandardPriceRecord, IStepData, IAdjustmentItem } from '@t/meter';
@@ -17,7 +17,7 @@ interface IState {
 interface ITimeItem {
     price: number;
     date: string;
-    [key: string]: string | number | IStepData;
+    [key: string]: string | number;
 }
 class AdjustmentChart extends React.Component<IProps, IState> {
     constructor(props: IProps) {
@@ -115,30 +115,17 @@ class AdjustmentChart extends React.Component<IProps, IState> {
         };
         return (
             <>
-                <Chart height={300} data={data} scale={cols} autoFit>
-                    <Legend />
-                    <Axis name="date" />
-                    <Axis name="price" />
-                    <Tooltip shared useHtml
-                        crosshairs={{
-                            type: 'y',
-                        }}
-                        g2-tooltip={{
-                            fill: 'rgba(0,0,0,0.75)'
-                        }}
-                        htmlContent={(title: string, items: []) => {
-                            return  `<div class="g2-tooltip" style='position:absolute;'><div class="g2-tooltip-title">${title}33 </div><ul><li>${JSON.stringify(items)}</li></ul></div>`
-                        }}
-                    />
-                    <Geom
-                        type="line"
-                        position="date*price"
-                        size={2}
-                        color={['series', colorPlatte]}
-                        shape={'hv'}
-                    />
-                    <Interaction type="legend-filter"/>
-                </Chart>
+                <StepLineChart
+                    data={data}
+                    title={{
+                        visible: false,
+                        text: '单价变动折线图',
+                    }}
+                    xField='date'
+                    yField='price'
+                    step="vh"
+                    seriesField="series"
+                />
             </>
         );
     }
