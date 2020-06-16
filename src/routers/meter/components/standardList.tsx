@@ -205,6 +205,7 @@ const Standard = () => {
         );
     };
     const handleOk = () => {
+        setAddAdjustmentVisible(false)
         setAddStandardVisible(false);
         fetchList();
     };
