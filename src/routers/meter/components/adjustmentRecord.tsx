@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Badge, Button, Select, Statistic } from 'antd';
+import { Badge, Button, Select, Statistic, Space } from 'antd';
 import { find } from 'lodash';
 import { Link } from 'dva/router';
 import FedTable from '@/components/FedTable';
@@ -9,6 +9,7 @@ import { ColumnProps } from 'antd/lib/table';
 import { statusItem, Statistics } from '../config';
 import AdjustmentChart from './adjustmentTimeLine';
 import PriceItem from './price';
+import FedDataSection from '@/components/FedDataSection/FedDataSection';
 
 const { Option } = Select;
 
@@ -96,23 +97,24 @@ const AdjustmentRecord = ({ id = '' }) => {
     useEffect(() => {
         fetchList();
     }, [pageObj, selectedStatus]);
+    const recordContent = (<Space direction="vertical" size="middle">
+        <Select
+            style={{ width: '176px' }}
+            value={selectedStatus}
+            onChange={(value: Status) => setSelectedStatus(value)}
+        >
+            {filter.map(item => (
+                <Option key={item.value} value={item.value}>
+                    {item.title}
+                </Option>
+            ))}
+        </Select>
+        <FedTable columns={columns} dataSource={dataSource} rowKey="id" />
+    </Space >)
     return (
         <>
-            <div>
-                <AdjustmentChart id={id} />
-                <Select
-                    style={{ width: '176px' }}
-                    value={selectedStatus}
-                    onChange={(value: Status) => setSelectedStatus(value)}
-                >
-                    {filter.map(item => (
-                        <Option key={item.value} value={item.value}>
-                            {item.title}
-                        </Option>
-                    ))}
-                </Select>
-            </div>
-            <FedTable columns={columns} dataSource={dataSource} rowKey="id" />
+            <FedDataSection section={{ title:"单价变动折线图", content: <AdjustmentChart id={id} />}}/>
+            <FedDataSection section={{ title:"调整记录", content: recordContent}} />
         </>
     );
 };
