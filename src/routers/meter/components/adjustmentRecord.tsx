@@ -20,6 +20,16 @@ const AdjustmentRecord = ({ id = '' }) => {
         page: 1,
         page_size: 20,
     });
+    const filter =  [{
+        title: '全部记录', // 只有全部是需要单独写文案，全部的参数是'' ，展示是全部
+        value: Status.ALL,
+    }, {
+        title: Status.EFFECTED, // 只有全部是需要单独写文案，全部的参数是'' ，展示是全部
+        value: Status.EFFECTED,
+    }, {
+        title: Status.AUDITED, // 只有全部是需要单独写文案，全部的参数是'' ，展示是全部
+        value: Status.AUDITED,
+    }]
     const columns: ColumnProps<IStandardPriceAdjustmentItem>[] = [
         {
             title: '序号',
@@ -75,7 +85,7 @@ const AdjustmentRecord = ({ id = '' }) => {
         },
     ];
     const fetchList = async () => {
-        const { data } = await getStandardPriceAdjustment({ ...pageObj, meter_standard_price_id: id });
+        const { data } = await getStandardPriceAdjustment({ ...pageObj, meter_standard_price_id: id, status: selectedStatus });
         const result = (data?.items || []).map((item: IAdjustmentAddItem) => {
             item.step_data = item.step_data ? JSON.parse(item.step_data) : [];
             return item;
@@ -85,7 +95,7 @@ const AdjustmentRecord = ({ id = '' }) => {
     };
     useEffect(() => {
         fetchList();
-    }, [pageObj]);
+    }, [pageObj, selectedStatus]);
     return (
         <>
             <div>
@@ -95,8 +105,8 @@ const AdjustmentRecord = ({ id = '' }) => {
                     value={selectedStatus}
                     onChange={(value: Status) => setSelectedStatus(value)}
                 >
-                    {statusItem.map(item => (
-                        <Option key={item.key} value={item.key}>
+                    {filter.map(item => (
+                        <Option key={item.value} value={item.value}>
                             {item.title}
                         </Option>
                     ))}
