@@ -1,6 +1,7 @@
 import React from 'react';
 import { IStepData } from '@/types/meter';
 import './price.less';
+import { unitTransfer } from '@/helper/sringUtils';
 interface IProps {
     unit: string;
     is_step: string; // TODO '0' | '1',
@@ -13,7 +14,7 @@ const PriceItem = ({ unit, is_step, price, step_data, highlight }: IProps) => {
         <div className="price-item-container">
             {!+is_step ? (
                 <div className={`price ${highlight ? 'highlight' : ''}`}>
-                    {price}元/{unit}
+                    {price}元/{unitTransfer(unit)}
                 </div>
             ) : (
                 <>
@@ -24,10 +25,10 @@ const PriceItem = ({ unit, is_step, price, step_data, highlight }: IProps) => {
                                 {item.min ?? '≤'}
                                 {item.min && index !== step_data.length - 1 ? '-' : ''}
                                 {item.max ?? '不限'}
-                                {unit}:
+                                {unitTransfer(unit)}:
                             </span>
                             <span className={`price ${highlight ? 'highlight' : ''}`}>
-                                {item.price}元/{unit}/月
+                                {item.price}元/{unitTransfer(unit)}/月
                             </span>
                         </div>
                     ))}
