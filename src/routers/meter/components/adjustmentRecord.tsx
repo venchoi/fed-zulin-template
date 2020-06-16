@@ -97,9 +97,9 @@ const AdjustmentRecord = ({ id = '' }) => {
     useEffect(() => {
         fetchList();
     }, [pageObj, selectedStatus]);
-    const recordContent = (<Space direction="vertical" size="middle">
+    const recordContent = (<>
         <Select
-            style={{ width: '176px' }}
+            style={{ width: '176px', marginBottom: '16px' }}
             value={selectedStatus}
             onChange={(value: Status) => setSelectedStatus(value)}
         >
@@ -110,7 +110,7 @@ const AdjustmentRecord = ({ id = '' }) => {
             ))}
         </Select>
         <FedTable columns={columns} dataSource={dataSource} rowKey="id" />
-    </Space >)
+    </>)
     return (
         <>
             <FedDataSection section={{ title:"单价变动折线图", content: <AdjustmentChart id={id} />}}/>
