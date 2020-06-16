@@ -126,14 +126,9 @@ class AdjustmentChart extends React.Component<IProps, IState> {
             },
         };
         return (
-            <>
+            <div style={{ height: '262px'}}>
                 <StepLineChart
                     data={data}
-                    // 标题 这里不需要展示title
-                    title={{
-                        visible: false,
-                        text: '单价变动折线图',
-                    }}
                     // 描述
                     description={{
                         visible: true,
@@ -143,17 +138,19 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                     legend={{
                         visible: false,
                     }}
-                    // 线的配色板
-                    color={colorPlatte}
-                    // x轴字段
-                    xField='date'
-                    // y轴字段
-                    yField='price'
+                    color={colorPlatte} // 线的配色板
+                    xField='date' // x轴字段
+                    yField='price' // y轴字段
                     seriesField="series"
                     // 交互: slider 底部滑动条
                     interactions={[{
-                        type: 'slider'
+                        type: 'slider',
                     }]}
+                    theme={{
+                        slider: {
+                            height: 24
+                        }
+                    }}
                     tooltip={{
                         formatter: (date, price, series, is_step, unit, index) => {
                             const originName = !!+is_step ? series : `每${unit}`
@@ -163,15 +160,21 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                             }
                         },
                         fields: ['date', 'price', 'series', 'is_step', 'unit', 'index'],
-                        domStyles: {
-                            'g2-tooltop': {
-                                background: 'rgba(0, 0, 0, 0.75)'
-                            }
-                        }
+                        // domStyles: {
+                        //     'g2-tooltop': {
+                        //         background: 'rgba(0, 0, 0, 0.75)'
+                        //     },
+                        //     'g2-tooltip-list': {
+                        //         background: 'rgba(0, 0, 0, 0.75)',
+                        //     },
+                        //     'g2-tooltip-value': {
+                        //         color: '#fff'
+                        //     }
+                        // }
                     }}
                     step="vh"
                 />
-            </>
+            </div>
         );
     }
 }
