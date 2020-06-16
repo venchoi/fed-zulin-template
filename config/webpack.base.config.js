@@ -26,46 +26,9 @@ module.exports = {
                                 loader: 'babel-loader',
                                 options: {
                                     exclude: ['node_modules'],
-                                    //jsx语法
-                                    presets: [
-                                        [
-                                            '@babel/preset-env',
-                                            {
-                                                modules: false,
-                                                useBuiltIns: 'entry',
-                                                corejs: 2, // 这里需要注意：是根据你的版本来写
-                                            },
-                                        ],
-                                    ],
+                                    //jsx语法   
                                     cacheDirectory: true,
-                                    plugins: [
-                                        'react-hot-loader/babel',
-                                        'lodash',
-                                        '@babel/plugin-transform-runtime',
-                                        //支持import 懒加载
-                                        '@babel/plugin-syntax-dynamic-import',
-                                        [
-                                            'import',
-                                            {
-                                                libraryName: 'antd',
-                                                libraryDirectory: 'es',
-                                                style: true, // or 'css'
-                                            },
-                                            'antd',
-                                        ],
-                                        [
-                                            'import',
-                                            {
-                                                libraryName: 'ykj-ui',
-                                                libraryDirectory: 'es/components',
-                                            },
-                                            'ykj-ui',
-                                        ],
-                                    ],
                                 },
-                            },
-                            {
-                                loader: 'awesome-typescript-loader',
                             },
                             {
                                 loader: 'thread-loader',
