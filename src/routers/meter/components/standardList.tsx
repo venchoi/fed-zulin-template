@@ -29,8 +29,13 @@ import moment from 'moment';
 const { Group: RadioGroup, Button: RadioButton } = Radio;
 const { Search } = Input;
 
-const Standard = () => {
-    const [loading, setLoading] = useState(true)
+interface IProps {
+    refresh: boolean;
+}
+
+const Standard = (props: IProps) => {
+    const { refresh } = props;
+    const [loading, setLoading] = useState(true);
     const [standardDataSource, setStandardDataSource] = useState([]);
     const [total, setTotal] = useState(0);
     const [pageObj, setPageObj] = useState({
@@ -100,8 +105,8 @@ const Standard = () => {
             title: '生效时间',
             width: 220,
             render: (text, rowData) => {
-                return <>{moment(text).format('YYYY-MM-DD')}</>
-            }
+                return <>{moment(text).format('YYYY-MM-DD')}</>;
+            },
         },
         {
             dataIndex: 'is_enabled',
@@ -187,9 +192,9 @@ const Standard = () => {
     const fetchList = async () => {
         const apiParams: Partial<IStandardPriceParams> = omit(params, ['is_enabled']);
         params.is_enabled === ENABLE.ENABLED && (apiParams.is_enabled = params.is_enabled);
-        setLoading(true)
+        setLoading(true);
         const { data } = await getStandardPriceList({ ...pageObj, ...apiParams });
-        setLoading(false)
+        setLoading(false);
         const result = (data?.items || []).map((item: IStandardPriceItem) => {
             item.step_data = item.step_data ? JSON.parse(item.step_data) : [];
             return item;
@@ -209,7 +214,7 @@ const Standard = () => {
         );
     };
     const handleOk = () => {
-        setAddAdjustmentVisible(false)
+        setAddAdjustmentVisible(false);
         setAddStandardVisible(false);
         fetchList();
     };
@@ -222,7 +227,7 @@ const Standard = () => {
 
     useEffect(() => {
         fetchList();
-    }, [pageObj]);
+    }, [pageObj, refresh]);
     return (
         <>
             {/* TODO filter component */}

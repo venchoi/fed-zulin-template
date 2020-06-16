@@ -9,6 +9,7 @@ import './index.less';
 const List = () => {
     const [activeTabKey, setActiveTabKey] = useState('standard');
     const [addModalVisible, setAddModalVisible] = useState(false);
+    const [refreshStanderList, setRefreshStanderList] = useState(false); // 刷新标准单价列表
     const tabList = [
         {
             key: 'standard',
@@ -43,7 +44,7 @@ const List = () => {
                     }}
                 >
                     <div className={`tabpane-container ${activeTabKey === 'adjustment' ? 'hidden' : 'visible'}`}>
-                        <Standard />
+                        <Standard refresh={refreshStanderList} />
                     </div>
                     <div className={`tabpane-container ${activeTabKey === 'adjustment' ? 'visible' : 'hidden'}`}>
                         <Adjustment />
@@ -51,7 +52,13 @@ const List = () => {
                 </Card>
             </div>
             {addModalVisible ? (
-                <EditModal onCancel={() => setAddModalVisible(false)} onOk={() => setAddModalVisible(false)} />
+                <EditModal
+                    onCancel={() => setAddModalVisible(false)}
+                    onOk={() => {
+                        setAddModalVisible(false);
+                        setRefreshStanderList(true);
+                    }}
+                />
             ) : null}
         </>
     );
