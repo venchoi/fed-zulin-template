@@ -23,6 +23,7 @@ import EditStandardModal from './standardEditModal';
 import EditAdjustmentModal from './adjustmentEditModal';
 import { MoreOutlined } from '@ant-design/icons';
 import PriceItem from './price';
+import moment from 'moment';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
@@ -98,6 +99,9 @@ const Standard = () => {
             dataIndex: 'effect_date',
             title: '生效时间',
             width: 220,
+            render: (text, rowData) => {
+                return <>{moment(text).format('YYYY-MM-DD')}</>
+            }
         },
         {
             dataIndex: 'is_enabled',

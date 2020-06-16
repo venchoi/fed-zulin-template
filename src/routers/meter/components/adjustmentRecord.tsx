@@ -11,6 +11,7 @@ import AdjustmentChart from './adjustmentTimeLine';
 import PriceItem from './price';
 import FedDataSection from '@/components/FedDataSection/FedDataSection';
 import FedPagination from '@/components/FedPagination';
+import moment from 'moment';
 
 const { Option } = Select;
 
@@ -46,8 +47,8 @@ const AdjustmentRecord = ({ id = '' }) => {
             render: (text, rowData) => {
                 return (
                     <>
-                        {text}
-                        {rowData.end_date ? ` 至 ${rowData.end_date}` : ''}
+                        {moment(text).format('YYYY-MM-DD')}
+                        {rowData.end_date ? ` 至 ${moment(rowData.end_date).format('YYYY-MM-DD')}` : ''}
                     </>
                 );
             },
