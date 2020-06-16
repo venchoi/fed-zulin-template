@@ -29,6 +29,7 @@ const { Group: RadioGroup, Button: RadioButton } = Radio;
 const { Search } = Input;
 
 const Standard = () => {
+    const [loading, setLoading] = useState(true)
     const [standardDataSource, setStandardDataSource] = useState([]);
     const [total, setTotal] = useState(0);
     const [pageObj, setPageObj] = useState({
@@ -182,7 +183,9 @@ const Standard = () => {
     const fetchList = async () => {
         const apiParams: Partial<IStandardPriceParams> = omit(params, ['is_enabled']);
         params.is_enabled === ENABLE.ENABLED && (apiParams.is_enabled = params.is_enabled);
+        setLoading(true)
         const { data } = await getStandardPriceList({ ...pageObj, ...apiParams });
+        setLoading(false)
         const result = (data?.items || []).map((item: IStandardPriceItem) => {
             item.step_data = item.step_data ? JSON.parse(item.step_data) : [];
             return item;
@@ -246,6 +249,7 @@ const Standard = () => {
                 </div>
             </div>
             <FedTable<IStandardPriceItem>
+                loading={loading}
                 columns={columns}
                 dataSource={standardDataSource}
                 vsides

@@ -26,6 +26,7 @@ const { Group: RadioGroup, Button: RadioButton } = Radio;
 const { Search } = Input;
 
 const Adjustment = () => {
+    const [loading, setLoading] = useState(true)
     const [adjustmentDataSource, setAdjustmentDataSource] = useState([]);
     const [total, setTotal] = useState(0);
     const [pageObj, setPageObj] = useState({
@@ -142,7 +143,9 @@ const Adjustment = () => {
         }
     };
     const fetchList = async () => {
+        setLoading(true)
         const { data } = await getPriceAdjustmentList({ ...pageObj, ...params });
+        setLoading(false)
         const result = (data?.items || []).map((item: IAdjustmentItem) => {
             item.step_data = item.step_data ? JSON.parse(item.step_data) : [];
             return item;
@@ -189,6 +192,7 @@ const Adjustment = () => {
                 </div>
             </div>
             <FedTable<IAdjustmentItem>
+                loading={loading}
                 columns={columns}
                 dataSource={adjustmentDataSource}
                 vsides

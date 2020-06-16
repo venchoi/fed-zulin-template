@@ -69,9 +69,12 @@ const AdjustmentDetail = ({
         }
         return <span key={route.path}>{route.breadcrumbName}</span>;
     };
+    const [loading, setLoading] = useState(true)
     const [detail, setDetail] = useState<IAdjustmentDetail>(initDetail);
     const fetchDetail = async () => {
+        setLoading(true)
         const { data } = await getPriceAdjustmentDetail({ id });
+        setLoading(false)
         const result = data || initDetail;
         setDetail({ ...result, step_data: JSON.parse(result.step_data) });
     };
@@ -93,7 +96,7 @@ const AdjustmentDetail = ({
                 ghost={false}
             />
             <div className="layout-list adjustment-detail">
-                <Card>
+                <Card loading={loading}>
                     <div style={{ padding: '16px 24px 0  24px' }}>
                         <BaseInfo detail={detail} />
                     </div>

@@ -46,6 +46,7 @@ const Detail = ({
         is_deleted: '',
         created_by_name: '',
     };
+    const [loading, setLoading] = useState(true)
     const [detail, setDetail] = useState<IStandardPriceDetail>(initDetail);
     const routes = [
         {
@@ -69,7 +70,9 @@ const Detail = ({
         return <span key={route.path}>{route.breadcrumbName}</span>;
     };
     const fetchDetail = async () => {
+        setLoading(true)
         const { data } = await getStandardPriceDetail({ id });
+        setLoading(false)
         const result = (data.id && data) || initDetail;
         setDetail({ ...result, step_data: JSON.parse(result.step_data || '[]') });
     };
@@ -88,12 +91,12 @@ const Detail = ({
             <div className="layout-list standard-detail">
                 <Tabs type="card">
                     <TabPane tab="基本信息" key="1">
-                        <Card bordered={false} style={{ padding: '20px 16px' }}>
+                        <Card bordered={false} style={{ padding: '20px 16px' }} loading={loading}>
                             <BaseInfo detail={detail} />
                         </Card>
                     </TabPane>
                     <TabPane tab="调整记录" key="2">
-                        <Card bordered={false} style={{ padding: '20px 16px' }}>
+                        <Card bordered={false} style={{ padding: '20px 16px' }} loading={loading}>
                             <AdjustmentRecord id={detail.id} />
                         </Card>
                     </TabPane>
