@@ -10,6 +10,7 @@ const List = () => {
     const [activeTabKey, setActiveTabKey] = useState('standard');
     const [addModalVisible, setAddModalVisible] = useState(false);
     const [refreshStanderList, setRefreshStanderList] = useState(false); // 刷新标准单价列表
+    const [refreshAdjustList, setRefreshAdjustList] = useState(false); // 刷新单价调整列表
     const tabList = [
         {
             key: 'standard',
@@ -27,6 +28,12 @@ const List = () => {
             </Button>
         </>
     );
+
+    const adjustOKCB = (result: boolean) => {
+        if (result) {
+            setRefreshAdjustList(true);
+        }
+    };
     return (
         <>
             <div className="layout-list meter-list">
@@ -44,10 +51,10 @@ const List = () => {
                     }}
                 >
                     <div className={`tabpane-container ${activeTabKey === 'adjustment' ? 'hidden' : 'visible'}`}>
-                        <Standard refresh={refreshStanderList} />
+                        <Standard refresh={refreshStanderList} adjustOk={adjustOKCB} />
                     </div>
                     <div className={`tabpane-container ${activeTabKey === 'adjustment' ? 'visible' : 'hidden'}`}>
-                        <Adjustment />
+                        <Adjustment refresh={refreshAdjustList} />
                     </div>
                 </Card>
             </div>

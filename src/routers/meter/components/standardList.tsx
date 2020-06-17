@@ -31,10 +31,11 @@ const { Search } = Input;
 
 interface IProps {
     refresh: boolean;
+    adjustOk: (result: boolean) => void;
 }
 
 const Standard = (props: IProps) => {
-    const { refresh } = props;
+    const { refresh, adjustOk } = props;
     const [loading, setLoading] = useState(true);
     const [standardDataSource, setStandardDataSource] = useState([]);
     const [total, setTotal] = useState(0);
@@ -217,6 +218,8 @@ const Standard = (props: IProps) => {
         setAddAdjustmentVisible(false);
         setAddStandardVisible(false);
         fetchList();
+        // 通知外部进行相应刷新等动作
+        adjustOk(true);
     };
     const handleChangeParams = <T extends keyof IStandardPriceParams>(key: T, value: IStandardPriceParams[T]) => {
         setParams(prvState => ({ ...prvState, ...{ [key]: value } }));

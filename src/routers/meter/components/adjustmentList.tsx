@@ -25,9 +25,12 @@ import moment from 'moment';
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
 const { Search } = Input;
-
-const Adjustment = () => {
-    const [loading, setLoading] = useState(true)
+interface IProps {
+    refresh: boolean;
+}
+const Adjustment = (props: IProps) => {
+    const { refresh } = props;
+    const [loading, setLoading] = useState(true);
     const [adjustmentDataSource, setAdjustmentDataSource] = useState([]);
     const [total, setTotal] = useState(0);
     const [pageObj, setPageObj] = useState({
@@ -52,11 +55,13 @@ const Adjustment = () => {
             title: '调整单',
             width: 200,
             render: (text, rowData) => {
-                return <>
-                    <div>{text}</div>
-                    <div style={{ color: '#959799', fontSize: '12px' }}>{rowData.code}</div>
-                </>
-            }
+                return (
+                    <>
+                        <div>{text}</div>
+                        <div style={{ color: '#959799', fontSize: '12px' }}>{rowData.code}</div>
+                    </>
+                );
+            },
         },
         {
             dataIndex: 'meter_type_name',
@@ -85,13 +90,9 @@ const Adjustment = () => {
             dataIndex: 'start_date',
             title: '生效时间',
             width: 220,
-            render: (text) => {
-                return (
-                    <>
-                        {moment(text).format('YYYY-MM-DD')}
-                    </>
-                )
-            }
+            render: text => {
+                return <>{moment(text).format('YYYY-MM-DD')}</>;
+            },
         },
         {
             dataIndex: 'status',
@@ -158,9 +159,9 @@ const Adjustment = () => {
         }
     };
     const fetchList = async () => {
-        setLoading(true)
+        setLoading(true);
         const { data } = await getPriceAdjustmentList({ ...pageObj, ...params });
-        setLoading(false)
+        setLoading(false);
         const result = (data?.items || []).map((item: IAdjustmentItem) => {
             item.step_data = item.step_data ? JSON.parse(item.step_data) : [];
             return item;
@@ -180,7 +181,7 @@ const Adjustment = () => {
 
     useEffect(() => {
         fetchList();
-    }, [pageObj]);
+    }, [pageObj, refresh]);
     return (
         <>
             {/* TODO filter component */}
