@@ -24,6 +24,11 @@ const dev_config = {
                     '^/api': '',
                 },
             },
+            // 增加 本地附件上传代理设置
+            '/auth': {
+                target: proxyConfig.target,
+                changeOrigin: true,
+            },
         },
         disableHostCheck: true,
     },

@@ -109,7 +109,14 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
             });
     };
     const attachChange = (file: fileType, files: fileType[]) => {
-        setAttachment(files);
+        let fileArr = [];
+        try {
+            // 处理 上传了附件数据变化了不重新render的问题
+            fileArr = JSON.parse(JSON.stringify(files));
+        } catch (e) {
+            fileArr = [];
+        }
+        setAttachment(fileArr);
     };
 
     const adjustmentType = [
