@@ -50,7 +50,7 @@ const Detail = ({
     const [detail, setDetail] = useState<IStandardPriceDetail>(initDetail);
     const routes = [
         {
-            path: '/metermg',
+            path: '/metermg?tab=standard',
             breadcrumbName: '标准单价管理',
         },
         {

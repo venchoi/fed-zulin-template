@@ -50,7 +50,7 @@ const AdjustmentDetail = ({
     };
     const routes = [
         {
-            path: '/metermg',
+            path: '/metermg?tab=adjustment',
             breadcrumbName: '单价调整单',
         },
         {

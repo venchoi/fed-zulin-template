@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Button } from 'antd';
+import { match } from 'react-router';
+import qs from 'querystring'
+import { RouteComponentProps, Link } from 'dva/router';
 import Adjustment from './components/adjustmentList';
 import Standard from './components/standardList';
 import EditModal from './components/standardEditModal';
 
 import './index.less';
 
-const List = () => {
+const List = ({ location }: RouteComponentProps) => {
     const [activeTabKey, setActiveTabKey] = useState('standard');
     const [addModalVisible, setAddModalVisible] = useState(false);
     const [refreshStanderList, setRefreshStanderList] = useState(false); // 刷新标准单价列表
@@ -34,6 +37,11 @@ const List = () => {
             setRefreshAdjustList(true);
         }
     };
+    useEffect(() => {
+        const query = location.search.replace('?', '')
+        const parseQuery = qs.parse(query)
+        setActiveTabKey(parseQuery.tab as string)
+    }, [location])
     return (
         <>
             <div className="layout-list meter-list">
