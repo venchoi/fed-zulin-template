@@ -14,6 +14,7 @@ import { UploadOutlined, MoreOutlined, DownloadOutlined } from '@ant-design/icon
 import './index.less';
 //@ts-ignore
 import { ObjectUpload } from 'fedtoolgroup';
+import FedIcon from '@c/FedIcon';
 const { DEV } = config;
 message.config({
     top: 100,
@@ -21,13 +22,13 @@ message.config({
     maxCount: 3,
     rtl: true,
 });
-const randomStr  = () => {
+const randomStr = () => {
     return (
         Math.random()
             .toString(32)
             .slice(2) + (+new Date()).toString(16)
     );
-}
+};
 
 interface Props {
     files: any;
@@ -292,10 +293,11 @@ class Uploader extends React.Component<Props> {
                                                 />
                                             )}
                                             <div className="delete-img-mask" />
-                                            <i
-                                                className="iconfont icon-shanchu2 delete-icon"
-                                                title="删除"
+                                            <FedIcon
                                                 onClick={this.delete.bind(this, item)}
+                                                title="删除"
+                                                className="iconfont delete-icon"
+                                                type="icon-icn_message_error"
                                             />
                                         </div>
                                     ) : (
