@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PageHeader, Card, Button, Divider, Space, message } from 'antd';
+import { PageHeader, Card, Button, Divider, Space, message, Spin } from 'antd';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
 import { IAdjustmentDetail, IAdjustmentICURDParams, PriceAdjustHandleType } from '@t/meter';
 import { match } from 'react-router';
@@ -96,34 +96,36 @@ const AdjustmentDetail = ({
                 ghost={false}
             />
             <div className="layout-list adjustment-detail">
-                <Card loading={loading}>
-                    <div style={{ padding: '16px 24px 0  24px' }}>
-                        <BaseInfo detail={detail} />
-                    </div>
-                    <Divider style={{ marginTop: '16px' }} />
-                    <footer className="footer">
-                        <Space>
-                            {[Status.PENDING].includes(detail.status) ? (
-                                <Button
-                                    type="primary"
-                                    onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id })}
-                                >
-                                    审核
-                                </Button>
-                            ) : null}
-                            {[Status.PENDING].includes(detail.status) ? (
-                                <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.VOID, id })}>
-                                    作废
-                                </Button>
-                            ) : null}
-                            {[Status.AUDITED].includes(detail.status) ? (
-                                <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id })}>
-                                    取消审核
-                                </Button>
-                            ) : null}
-                        </Space>
-                    </footer>
-                </Card>
+                <Spin spinning={loading}>
+                    <Card style={{ height: 'calc(100vh - 212px)', overflowY: 'auto' }}>
+                        <div style={{ padding: '16px 24px 0  24px' }}>
+                            <BaseInfo detail={detail} />
+                        </div>
+                        <Divider style={{ marginTop: '16px' }} />
+                        <footer className="footer">
+                            <Space>
+                                {[Status.PENDING].includes(detail.status) ? (
+                                    <Button
+                                        type="primary"
+                                        onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id })}
+                                    >
+                                        审核
+                                    </Button>
+                                ) : null}
+                                {[Status.PENDING].includes(detail.status) ? (
+                                    <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.VOID, id })}>
+                                        作废
+                                    </Button>
+                                ) : null}
+                                {[Status.AUDITED].includes(detail.status) ? (
+                                    <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id })}>
+                                        取消审核
+                                    </Button>
+                                ) : null}
+                            </Space>
+                        </footer>
+                    </Card>
+                </Spin>
             </div>
         </>
     );

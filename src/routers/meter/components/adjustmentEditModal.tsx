@@ -131,7 +131,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
     ];
 
     return (
-        <Modal visible={true} width={720} onCancel={() => onCancel()} onOk={() => handleSubmit()} title="发起调整">
+        <Modal visible={true} width={720} onCancel={() => onCancel()} onOk={() => handleSubmit()} title="发起调整" centered>
             <Form
                 form={form}
                 labelCol={{ span: 5 }}
@@ -342,7 +342,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                         files={attachment}
                         maxSize={15}
                         onChange={attachChange}
-                        description="注：单个附件最大支持50M，支持png/jpg/jpeg/gif/pdf/zip/rar/xls/xlsx/docx/doc格式，已上传"
+                        // description="注：单个附件最大支持50M，支持png/jpg/jpeg/gif/pdf/zip/rar/xls/xlsx/docx/doc格式，已上传"
                     />
                 </FormItem>
             </Form>

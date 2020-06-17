@@ -102,6 +102,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
 
     return (
         <Modal
+            centered
             visible={true}
             width={720}
             onCancel={() => onCancel()}
