@@ -96,7 +96,7 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                         is_step: item.is_step,
                         unit: unitTransfer(item.unit),
                         index: timeIndex,
-                        series: `${item.price}元/${unitTransfer(item.unit)}/月__${timeIndex}`
+                        series: `${item.price}元/${unitTransfer(item.unit)}__${timeIndex}`
                     })
                 }
             } else {
@@ -138,7 +138,7 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                     // 描述
                     description={{
                         visible: true,
-                        text: '单位:(元/月)',
+                        text: '单位:(元)',
                     }}
                     // 图例
                     legend={{

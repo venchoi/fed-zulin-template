@@ -195,7 +195,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                             <FormItem name="price" label="标准单价" rules={[{ required: true }, { pattern: /^\d+(\.{0,1}\d+){0,1}$/, message: '请输入数字'}]}>
                                 <Input
                                     placeholder="请输入单价"
-                                    addonAfter={<>元/{unitTransfer(editItem.unit)}/月</>}
+                                    addonAfter={<>元/{unitTransfer(editItem.unit)}</>}
                                     style={{ width: 240 }}
                                 />
                             </FormItem>

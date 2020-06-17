@@ -14,7 +14,7 @@ const PriceItem = ({ unit, is_step, price, step_data, highlight }: IProps) => {
         <div className="price-item-container">
             {!+is_step ? (
                 <div className={`price ${highlight ? 'highlight' : ''}`}>
-                    {price}元/{unitTransfer(unit)}/月
+                    {price}元/{unitTransfer(unit)}
                 </div>
             ) : (
                 <>
@@ -28,7 +28,7 @@ const PriceItem = ({ unit, is_step, price, step_data, highlight }: IProps) => {
                                 {unitTransfer(unit)}:
                             </span>
                             <span className={`price ${highlight ? 'highlight' : ''}`}>
-                                {item.price}元/{unitTransfer(unit)}/月
+                                {item.price}元/{unitTransfer(unit)}
                             </span>
                         </div>
                     ))}
