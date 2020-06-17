@@ -155,7 +155,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                 >
                     {({ getFieldValue }) => {
                         return getFieldValue('is_step') === '0' ? (
-                            <FormItem name="price" label="标准单价" rules={[{ required: true }]}>
+                            <FormItem name="price" label="标准单价" rules={[{ required: true }, { pattern: /^\d+(\.{0,1}\d+){0,1}$/, message: '请输入数字'}]}>
                                 <Input
                                     disabled={isEdit}
                                     placeholder="请输入单价"
@@ -267,7 +267,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                                                             <Form.Item
                                                                 {...field}
                                                                 name={[field.name, 'price']}
-                                                                rules={[{ required: true, message: '请输入单价' }]}
+                                                                rules={[{ required: true, message: '请输入单价' }, { pattern: /^\d+(\.{0,1}\d+){0,1}$/, message: '请输入数字'}]}
                                                             >
                                                                 <Input disabled={isEdit} />
                                                             </Form.Item>
