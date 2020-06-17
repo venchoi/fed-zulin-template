@@ -159,7 +159,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                                 <Input
                                     disabled={isEdit}
                                     placeholder="请输入单价"
-                                    addonAfter={<>{unitTransfer(selectedMeterType.unit)}</>}
+                                    addonAfter={<>元/{unitTransfer(selectedMeterType.unit)}</>}
                                     style={{ width: 240 }}
                                 />
                             </FormItem>

@@ -85,14 +85,20 @@ class AdjustmentChart extends React.Component<IProps, IState> {
             const momentStart = moment(start, 'YYYY-MM-DD')
             if (start === end) {
                 // 点： 起始时间 === 结束时间时，为一个点，直接推
-                flatTimeLine.push({
-                    date: start,
-                    price: +item.price,
-                    is_step: item.is_step,
-                    unit: unitTransfer(item.unit),
-                    index: timeIndex,
-                    series: `${item.price}元/${unitTransfer(item.unit)}/月__${timeIndex}`
-                })
+                if (item.is_step === '1') {
+                    // @ts-ignore
+                    const stepResult = this.handleStepData(item.step_data, momentStart, item, timeIndex)
+                    flatTimeLine = flatTimeLine.concat(stepResult)
+                } else {
+                    flatTimeLine.push({
+                        date: start,
+                        price: +item.price,
+                        is_step: item.is_step,
+                        unit: unitTransfer(item.unit),
+                        index: timeIndex,
+                        series: `${item.price}元/${unitTransfer(item.unit)}/月__${timeIndex}`
+                    })
+                }
             } else {
                 // 区间：如果有调整单的结束时间取调整单的结束时间，没有的话去筛选条件（默认）的结束时间
                 const result = this.fillTimeLine(momentStart, end || rangeDate[1], item, timeIndex)
