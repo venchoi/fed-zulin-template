@@ -342,7 +342,7 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                         files={attachment}
                         maxSize={15}
                         onChange={attachChange}
-                        // description="注：单个附件最大支持50M，支持png/jpg/jpeg/gif/pdf/zip/rar/xls/xlsx/docx/doc格式，已上传"
+                        description="注：单个附件最大支持15M，支持png/jpg/jpeg/gif/pdf/zip/rar/xls/xlsx/docx/doc格式，已上传"
                     />
                 </FormItem>
             </Form>
