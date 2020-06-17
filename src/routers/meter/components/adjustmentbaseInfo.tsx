@@ -56,9 +56,9 @@ const BaseInfo = ({ detail }: { detail: IAdjustmentDetail }) => {
             {
                 label: '调整附件',
                 value: detail.attachment,
-                render: (text: string) => (
+                render: () => (
                     <>
-                        <FedUpload readonly files={text ? JSON.parse(text) : []} />
+                        <FedUpload readonly files={detail.attachment ? JSON.parse(detail.attachment) : []} />
                     </>
                 ),
             },
