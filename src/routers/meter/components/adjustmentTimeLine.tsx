@@ -157,6 +157,15 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                             height: 24
                         }
                     }}
+                    // 如果没有连成线，只有一个点时，那个点不会展示出来，所以需要配置点
+                    point={{
+                        visible: true,
+                        shape: 'circle',
+                        size: 1,
+                        style: {
+                            stroke: colorPlatte[0],
+                        },
+                    }}
                     tooltip={{
                         formatter: (date, price, series, is_step, unit, index) => {
                             const originName = !!+is_step ? series : `每${unit}`
