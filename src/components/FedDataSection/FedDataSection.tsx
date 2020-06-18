@@ -7,16 +7,16 @@ import './FedDataSection.less';
  */
 interface IProps {
     section: {
-        title: string | ReactNode;
-        content: string | ReactNode
+        title?: string | ReactNode;
+        content?: string | ReactNode
     }
 }
 function FedDataSection(props: IProps) {
     const { section } = props;
     return (
         <div className="fed-data-section">
-            <div className="fed-data-section-title">{section.title}</div>
-            <div className="fed-data-section-content">{section.content}</div>
+            {section.title ? (<div className="fed-data-section-title">{section.title}</div>) : null}
+            {section.content ? (<div className="fed-data-section-content">{section.content}</div>) : null}
         </div>
     );
 }
