@@ -34,7 +34,7 @@ const List = ({ location }: RouteComponentProps) => {
 
     const adjustOKCB = (result: boolean) => {
         if (result) {
-            setRefreshAdjustList(true);
+            setRefreshAdjustList(prev => !prev);
         }
     };
     useEffect(() => {
@@ -71,7 +71,7 @@ const List = ({ location }: RouteComponentProps) => {
                     onCancel={() => setAddModalVisible(false)}
                     onOk={() => {
                         setAddModalVisible(false);
-                        setRefreshStanderList(true);
+                        setRefreshStanderList(prev => !prev);
                     }}
                 />
             ) : null}
