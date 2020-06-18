@@ -39,8 +39,8 @@ class AdjustmentChart extends React.Component<IProps, IState> {
     }
     //  从 start 到 end , 每天都填充一个点 price
     public fillTimeLine = (start: Moment, end: Moment | string, item: IStandardPriceRecord, timeIndex: number) => {
-        let result: ITimeItem[] = []
-        while(start.isBefore(end, 'day')) {
+        let result: ITimeItem[] = [];
+        do {
             if (item.is_step === '1') {
                 // @ts-ignore
                 const stepResult = this.handleStepData(item.step_data, start, item, timeIndex)
@@ -56,9 +56,9 @@ class AdjustmentChart extends React.Component<IProps, IState> {
                 })
             }
             start.add(1, 'd');
-        }
-        return result
-    }
+        } while (!start.isAfter(end, 'day'));
+        return result;
+    };
     // 阶梯价将会生成多个线上的点，date和price不变，series为阶梯的标识
     public handleStepData = (stepData: IStepData[], date: Moment, standardPriceItem: IStandardPriceRecord, timeIndex: number) => {
         let result: ITimeItem[] = []
