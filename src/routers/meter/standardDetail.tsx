@@ -91,15 +91,15 @@ const Detail = ({
                 ghost={false}
                 subTitle={<StatusComponent is_enabled={detail.is_enabled} />}
             />
-            <div className="layout-list standard-detail">
+            <div className="layout-detail standard-detail">
                 <Tabs type="card">
                     <TabPane tab="基本信息" key="1">
-                        <Card bordered={false} style={{ padding: '20px 16px' }} loading={loading}>
-                            <BaseInfo detail={detail} />
+                        <Card bordered={false} loading={loading} className="layout-detail-tab-content">
+                            <BaseInfo detail={detail}/>
                         </Card>
                     </TabPane>
                     <TabPane tab="调整记录" key="2">
-                        <Card bordered={false} style={{ padding: '20px 16px' }} loading={loading}>
+                        <Card bordered={false} loading={loading} className="layout-detail-tab-content">
                             <AdjustmentRecord id={detail.id} />
                         </Card>
                     </TabPane>

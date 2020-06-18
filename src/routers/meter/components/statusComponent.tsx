@@ -5,6 +5,7 @@ import React from 'react';
 import { CheckCircleFilled, MinusCircleFilled } from '@ant-design/icons';
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
 import { ENABLE } from '@t/common';
+import { Space } from 'antd';
 const MyComponents = {
     CheckCircleFilled(props: Pick<AntdIconProps, 'color'>) {
         return (
@@ -37,9 +38,9 @@ export default ({ is_enabled }: { is_enabled: ENABLE }) => {
     const enabledItem = enabledMap[is_enabled];
     const StatusComponent = enabledItem?.icon;
     return (
-        <>
+        <Space size={4}>
             <StatusComponent color={enabledItem?.color} />
             <span style={{ color: enabledItem?.color }}>{enabledItem?.text}</span>
-        </>
+        </Space>
     );
 };

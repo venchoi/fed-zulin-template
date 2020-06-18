@@ -98,7 +98,7 @@ const AdjustmentDetail = ({
                 breadcrumb={{ routes, itemRender }}
                 ghost={false}
             />
-            <div className="layout-list adjustment-detail">
+            <div className="layout-detail adjustment-detail">
                 <Spin spinning={loading}>
                     <Card style={{ height: 'calc(100vh - 212px)', overflowY: 'auto' }}>
                         <div style={{ padding: '16px 24px 0  24px' }}>
