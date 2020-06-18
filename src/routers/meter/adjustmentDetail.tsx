@@ -95,7 +95,7 @@ const AdjustmentDetail = ({
         <>
             <PageHeader
                 title={detail.standard_name || '调整单详情'}
-                breadcrumb={{ routes, itemRender }}
+                breadcrumb={{ routes, itemRender, separator: ">" }}
                 ghost={false}
             />
             <div className="layout-detail adjustment-detail">

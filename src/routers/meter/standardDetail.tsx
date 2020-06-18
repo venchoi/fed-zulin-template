@@ -87,7 +87,7 @@ const Detail = ({
         <>
             <PageHeader
                 title={detail.name || '标准详情'}
-                breadcrumb={{ routes, itemRender }}
+                breadcrumb={{ routes, itemRender, separator: ">" }}
                 ghost={false}
                 subTitle={<StatusComponent is_enabled={detail.is_enabled} />}
             />

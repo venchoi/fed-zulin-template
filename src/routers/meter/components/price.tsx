@@ -28,7 +28,7 @@ const PriceItem = ({ unit, is_step, price, step_data, highlight }: IProps) => {
                                 {index === step_data.length - 1 ? '>' : ''}
                                 {item.min ?? '≤'}
                                 {item.min && index !== step_data.length - 1 ? '-' : ''}
-                                {item.max ?? '不限'}
+                                {item.max}
                                 {unitTransfer(unit)}:
                             </span>
                             <span className={`price ${highlight ? 'highlight' : ''}`}>
