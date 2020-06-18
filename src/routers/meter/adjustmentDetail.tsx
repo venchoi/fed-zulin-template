@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PageHeader, Card, Button, Divider, Space, message, Spin } from 'antd';
+import { PageHeader, Card, Button, Divider, Space, message, Spin, Popconfirm } from 'antd';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
 import { IAdjustmentDetail, IAdjustmentICURDParams, PriceAdjustHandleType } from '@t/meter';
 import { match } from 'react-router';
@@ -105,22 +105,19 @@ const AdjustmentDetail = ({
                         <footer className="footer">
                             <Space>
                                 {[Status.PENDING].includes(detail.status) ? (
-                                    <Button
-                                        type="primary"
-                                        onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id })}
-                                    >
-                                        审核
-                                    </Button>
+                                    <Popconfirm title="确认审核该调整单?" onConfirm={() => { actionHandler({ type: PriceAdjustHandleType.AUDIT, id }) }}>
+                                        <Button type="primary">审核</Button>
+                                    </Popconfirm>
                                 ) : null}
                                 {[Status.PENDING].includes(detail.status) ? (
-                                    <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.VOID, id })}>
-                                        作废
-                                    </Button>
+                                    <Popconfirm title="确认作废该调整单？" onConfirm={() => actionHandler({ type: PriceAdjustHandleType.VOID, id })}>
+                                        <Button>作废</Button>
+                                    </Popconfirm>
                                 ) : null}
                                 {[Status.AUDITED].includes(detail.status) ? (
-                                    <Button onClick={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id })}>
-                                        取消审核
-                                    </Button>
+                                    <Popconfirm title="确认取消审核该调整单？" onConfirm={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id })}>
+                                        <Button>取消审核</Button>
+                                    </Popconfirm>
                                 ) : null}
                             </Space>
                         </footer>

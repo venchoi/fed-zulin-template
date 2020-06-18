@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'dva/router';
-import { Radio, Input, Checkbox, Switch, message, Button, Dropdown, Menu, Space } from 'antd';
+import { Radio, Input, Checkbox, Switch, message, Button, Dropdown, Menu, Space, Modal } from 'antd';
 import { sumBy, omit } from 'lodash';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
@@ -21,7 +21,7 @@ import { ENABLE } from '@t/common';
 import { getStandardPriceList, postStandardPrice } from '@s/meter';
 import EditStandardModal from './standardEditModal';
 import EditAdjustmentModal from './adjustmentEditModal';
-import { MoreOutlined } from '@ant-design/icons';
+import { MoreOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import PriceItem from './price';
 import moment from 'moment';
 // import Filter from './adjustmentFilter'
@@ -174,12 +174,19 @@ const Standard = (props: IProps) => {
         setAddStandardVisible(true);
     };
 
-    const handleDelete = async (rowData: IStandardPriceItem) => {
-        const { result } = await postStandardPrice({ type: StandardHandleType.DELETE, id: rowData.id });
-        if (result) {
-            message.success('操作成功');
-            fetchList();
-        }
+    const handleDelete = (rowData: IStandardPriceItem) => {
+        Modal.confirm({
+            title: '确认删除该标准单价？',
+            content: '删除后不可撤回',
+            icon: <ExclamationCircleOutlined />,
+            onOk: async () => {
+                const { result } = await postStandardPrice({ type: StandardHandleType.DELETE, id: rowData.id });
+                if (result) {
+                    message.success('操作成功');
+                    fetchList();
+                }
+            },
+        })
     };
 
     const handlePriceEnabled = async (rowData: IStandardPriceItem) => {

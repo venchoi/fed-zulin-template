@@ -3,7 +3,7 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'dva/router';
-import { Radio, Input, Button, Checkbox, Switch, message, Badge, Space } from 'antd';
+import { Radio, Input, Button, Checkbox, Switch, message, Badge, Space, Popconfirm } from 'antd';
 import { find, map, pick } from 'lodash';
 import FedTable from '@c/FedTable';
 import FedPagination from '@c/FedPagination';
@@ -114,36 +114,28 @@ const Adjustment = (props: IProps) => {
                 return (
                     <Space>
                         {[Status.PENDING].includes(rowData.status) ? (
-                            <Button
-                                type="link"
-                                onClick={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id: rowData.id })}
-                                className="f-hidden meter-adjustment-audit"
-                            >
-                                审核
-                            </Button>
+                            <Popconfirm title="确认审核该调整单？" onConfirm={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id: rowData.id })}>
+                                <Button type="link" className="f-hidden meter-adjustment-audit">
+                                    审核
+                                </Button>
+                            </Popconfirm>
                         ) : null}
                         <Button type="link" className="f-hidden meter-adjustment-view">
                             <Link to={`/metermg/detail-adjust/${rowData.id}`}>详情</Link>
                         </Button>
                         {[Status.PENDING].includes(rowData.status) ? (
-                            <Button
-                                type="link"
-                                onClick={() => actionHandler({ type: PriceAdjustHandleType.VOID, id: rowData.id })}
-                                className="f-hidden meter-adjustment-void"
-                            >
-                                作废
-                            </Button>
+                            <Popconfirm title="确认作废该调整单？" onConfirm={() => actionHandler({ type: PriceAdjustHandleType.VOID, id: rowData.id })}>
+                                <Button type="link" className="f-hidden meter-adjustment-void">
+                                    作废
+                                </Button>
+                            </Popconfirm>
                         ) : null}
                         {[Status.AUDITED].includes(rowData.status) ? (
-                            <Button
-                                type="link"
-                                onClick={() =>
-                                    actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id: rowData.id })
-                                }
-                                className="f-hidden meter-adjustment-cancel-audit"
-                            >
-                                取消审核
-                            </Button>
+                            <Popconfirm title="确认取消审核该调整单？" onConfirm={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id: rowData.id })}>
+                                <Button type="link" className="f-hidden meter-adjustment-cancel-audit">
+                                    取消审核
+                                </Button>
+                            </Popconfirm>
                         ) : null}
                     </Space>
                 );
