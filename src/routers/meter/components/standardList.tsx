@@ -94,7 +94,6 @@ const Standard = (props: IProps) => {
                 let stepArr: IStepData[] = step_data;
                 return <PriceItem {...rowData} step_data={stepArr} />;
             },
-            // TODO step
         },
         {
             dataIndex: 'remark',

@@ -148,7 +148,6 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                         <Radio value={'0'}>否</Radio>
                     </RadioGroup>
                 </FormItem>
-                {/* TODO 阶梯价 */}
                 <Form.Item
                     required
                     noStyle
