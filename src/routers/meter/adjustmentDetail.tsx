@@ -100,12 +100,10 @@ const AdjustmentDetail = ({
             />
             <div className="layout-detail adjustment-detail">
                 <Spin spinning={loading}>
-                    <Card style={{ height: 'calc(100vh - 212px)', overflowY: 'auto' }}>
-                        <div style={{ padding: '16px 24px 0  24px' }}>
-                            <BaseInfo detail={detail} />
-                        </div>
-                        <Divider style={{ marginTop: '16px' }} />
-                        <footer className="footer">
+                    <Card className="layout-detail-tab-content">
+                        <BaseInfo detail={detail} />
+                        <Divider style={{ marginTop: '16px', padding: '0 16px' }} />
+                        <footer style={{ padding: '16px 0' }}>
                             <Space>
                                 {[Status.PENDING].includes(detail.status) ? (
                                     <Popconfirm title="确认审核该调整单?" onConfirm={() => { actionHandler({ type: PriceAdjustHandleType.AUDIT, id }) }}>
