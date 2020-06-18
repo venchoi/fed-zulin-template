@@ -81,7 +81,6 @@ const Standard = (props: IProps) => {
         {
             dataIndex: 'meter_type_name',
             title: '类型',
-            width: 106,
         },
         {
             dataIndex: 'price',
