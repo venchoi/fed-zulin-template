@@ -1,3 +1,6 @@
+/**
+ * 标准单价详情页 —— 基本信息
+ */
 import React from 'react';
 import { IStandardICURDParams, IStandardPriceDetail } from '@/types/meter';
 import FedDataSection from '@c/FedDataSection/FedDataSection';

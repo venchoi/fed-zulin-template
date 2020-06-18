@@ -1,5 +1,5 @@
 /**
- * 标准单价管理
+ * 标准单价管理 —— 列表tab
  */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'dva/router';

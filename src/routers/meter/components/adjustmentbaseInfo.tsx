@@ -1,3 +1,6 @@
+/**
+ * 单价调整单详情页 —— 基本信息
+ */
 import React from 'react';
 import { IAdjustmentDetail, IStepData } from '@/types/meter';
 import FedDataSection from '@c/FedDataSection/FedDataSection';

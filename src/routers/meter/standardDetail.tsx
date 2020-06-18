@@ -1,3 +1,6 @@
+/**
+ * 标准单价详情页
+ */
 import React, { useState, useEffect } from 'react';
 import { PageHeader, Tabs, Card } from 'antd';
 import { RouteComponentProps, Link } from 'dva/router';

@@ -1,3 +1,6 @@
+/**
+ * 标准单价 —— 新建标准
+ */
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Radio, Select, DatePicker, Modal, message, Table, Button } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';

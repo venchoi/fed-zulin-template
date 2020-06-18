@@ -1,13 +1,17 @@
+/**
+ * 单价价格显示component
+ * 列表页 详情页等都有用到
+ */
 import React from 'react';
 import { IStepData } from '@/types/meter';
 import './price.less';
 import { unitTransfer } from '@/helper/sringUtils';
 interface IProps {
-    unit: string;
-    is_step: string; // TODO '0' | '1',
-    price: string | number;
-    step_data: IStepData[];
-    highlight?: boolean;
+    unit: string; // 单位
+    is_step: string; // TODO '0' | '1', // 是否阶梯价
+    price: string | number; // 标准单价
+    step_data: IStepData[]; // 阶梯价
+    highlight?: boolean; // 价格颜色
 }
 const PriceItem = ({ unit, is_step, price, step_data, highlight }: IProps) => {
     return (

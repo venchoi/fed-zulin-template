@@ -1,3 +1,6 @@
+/**
+ * 标准单价状态
+ */
 import React from 'react';
 import { CheckCircleFilled, MinusCircleFilled } from '@ant-design/icons';
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
