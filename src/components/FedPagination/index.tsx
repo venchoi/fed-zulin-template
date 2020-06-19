@@ -4,7 +4,7 @@ import { PaginationProps } from 'antd/es/pagination';
 import './index.less';
 
 const FedPagination = ({
-    hideOnSinglePage = true,
+    hideOnSinglePage = false,
     showSizeChanger = true,
     pageSizeOptions = ['10', '20', '30', '50'],
     defaultCurrent = 1,
