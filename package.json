@@ -23,6 +23,7 @@
         "bizcharts": "^4.0.6",
         "dva": "^2.4.1",
         "dva-loading": "^3.0.20",
+        "fast-tracker": "^2.2.9",
         "fedtoolgroup": "^1.1.13",
         "js-cookie": "^2.2.1",
         "lodash": "^4.17.15",

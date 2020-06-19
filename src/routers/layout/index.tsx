@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react';
 import { message, Spin } from 'antd';
 // @ts-ignore
+import myWebLogTracker from 'fast-tracker';
+// @ts-ignore
 import * as queryString from 'query-string';
 import { Layout as AntLayout } from 'antd';
 import FedIcon from '../../components/FedIcon';
@@ -127,11 +129,22 @@ class Layout extends React.Component<Props, State> {
         );
     }
 
+    // 注册天眼
+    initTracker = (user: User) => {
+        const trackerInstance = myWebLogTracker({
+            app_code: 'rental_web',
+            product_code: location.href.indexOf("https://rental.myfuwu.com.cn") > -1 ? 'rental' : 'rental_test',
+            include_search: true, // 上报search参数
+        });
+        trackerInstance.registUser({ tenant_code: user.tenant_code, user_account: user.account });
+    }
+
     getBaseInfo = async () => {
         const query = queryString.parse((location as any).search);
         const { data } = await getHomeBaseInfo(query);
         const props: any = handleBaseInfo(data);
         this.setState({ ...props, inited: true });
+        this.initTracker(props.user)
         const { data: workflowData } = await getWorkflowTodo();
         this.setState({ ...workflowData });
     };
