@@ -75,8 +75,11 @@ export default class Menus extends React.Component<Props, State> {
                                 count = workflow.total_todo || 0;
                             }
 
-                            const url = childItem.func_url || '';
+                            let url = childItem.func_url || '';
                             // 后台返回的菜单栏地址截取掉。便于前端路由做判断
+                            if (/rental\d?-ykj-test/.test(location.host)) {
+                                url = url.replace(/(https?\:\/\/)rental\d?-ykj-test[^\/]+\//, `$1${location.host}/`)
+                            }
                             return (
                                 <Menu.Item key={key} className={navClass}>
                                     <a href={url}>
