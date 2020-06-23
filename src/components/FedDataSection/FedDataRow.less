@@ -1,0 +1,28 @@
+.fed-data-row {
+  display: flex;
+  line-height: 18px;
+  font-size: 14px;
+  &.vertical {
+    flex-direction: column;
+    &-value {
+      margin-top: 16px;
+    }
+  }
+  &.horizontal:not(:first-of-type) {
+    margin-top: 16px;
+  }
+  &-label {
+    flex-shrink: 0;
+    margin-right: 8px;
+    color: #949799;
+    &-align {
+      &-right {
+        text-align: right;
+      }
+    }
+  }
+  &-value {
+    margin-right: 16px;
+    color: #636466;
+  }
+}

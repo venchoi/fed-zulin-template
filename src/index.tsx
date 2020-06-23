@@ -21,14 +21,14 @@ import createLoading from 'dva-loading';
 //             : 'https://776429be7af64d219068e7acf74d6bbd@sentry.myfuwu.com.cn/65'
 //     ).install();
 
-//@ts-ignore
 import { AppContainer, setConfig } from 'react-hot-loader';
 setConfig({
     ignoreSFC: true,
     //@ts-ignore
-    ignoreClases: true,
+    ignoreClases: false,
     // optional
     disableHotRenderer: true,
+    reloadHooks: false,
 });
 const app = dva({
     history: createHistory(),
@@ -36,11 +36,12 @@ const app = dva({
 app.use(createLoading());
 app.model(model1);
 app.model(model2);
-const render = (Component: any) => {
+
+function renderWithHotReload(C: any) {
     app.router((obj: any) => (
         <ConfigProvider locale={zhCN}>
             <AppContainer>
-                <Component
+                <C
                     history={obj.history}
                     match={obj.match}
                     location={obj.location}
@@ -51,16 +52,16 @@ const render = (Component: any) => {
         </ConfigProvider>
     ));
     app.start('#root');
-};
-render(App);
-
-//@ts-ignore
-if (module.hot) {
-    //@ts-ignore
-    module.hot.accept('./app.tsx', () => {
-        //因为在App里使用的是export default语法，这里使用的是require,默认不会加载default的，所以需要手动加上
-        const NextApp = require('./app.tsx').default;
-        // 重新渲染到 document 里面
-        render(NextApp);
-    });
 }
+
+// /*热更新*/
+// //@ts-ignore
+// if (module.hot) {
+//     //@ts-ignore
+//     module.hot.accept(['./app'], () => {
+//         const getRouter = require('./app').default;
+//         renderWithHotReload(getRouter());
+//     });
+// }
+
+renderWithHotReload(App);

@@ -77,7 +77,7 @@
         "no-default-export": false,
         "no-duplicate-imports": true,
         "align": [
-            true,
+            // true,
             "parameters",
             "arguments",
             "statements",

@@ -10,7 +10,8 @@ const dev_config = {
         open: true,
         port: 8807,
         hot: true,
-        host: 'rental-dev.mysoft.com.cn',
+        https: true,
+        host: 'rental-dev.myfuwu.com.cn',
         headers: {
             'Access-Control-Allow-Origin': '*',
         },
@@ -22,6 +23,11 @@ const dev_config = {
                 pathRewrite: {
                     '^/api': '',
                 },
+            },
+            // 增加 本地附件上传代理设置
+            '/auth': {
+                target: proxyConfig.target,
+                changeOrigin: true,
             },
         },
         disableHostCheck: true,
