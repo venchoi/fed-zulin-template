@@ -4705,10 +4705,10 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "2.1.1"
 
-fed-finance-component@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/fed-finance-component/-/fed-finance-component-3.0.3.tgz#4def426af45521ae6a75b8d8a4f00b702f5cc672"
-  integrity sha512-zMwcD+x7QVPtVFnpPNDmSGMd6jqENtHkX6coq/1WalU6DdRI3QJySQfSkj6pV4xtTYfXwLx7sniH2SM8sKrsDA==
+fed-finance-component@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/fed-finance-component/-/fed-finance-component-3.0.5.tgz#778895d5e73fead06b8e1b22d04576dddb822c2d"
+  integrity sha512-icHIkEstQ6Vl+YlL3k+qkgHA6SNhN+zIQqm1Y0wNXvQJ1tkdY9Op4lGauVU+2bdV5eeungVaILE1x1b5cyMFoQ==
   dependencies:
     "@ant-design/icons" "^4.0.0"
     antd "^4.3.2"
