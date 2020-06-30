@@ -44,6 +44,13 @@ const routes = [
             loading: loading,
         }),
     },
+    {
+        path: '/basicfee',
+        component: Loadable({
+            loader: () => import('./routers/basicfee/index'),
+            loading: loading,
+        }),
+    },
     // {
     //     path: '/derate',
     //     component: Loadable({
