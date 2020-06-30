@@ -51,7 +51,7 @@ export default class Menus extends React.Component<Props, State> {
                         key={menuItem.func_code}
                         title={
                             <span>
-                                <Badge dot={menuItem.func_code === 'Index' && workflow.total_todo} className="anticon">
+                                <Badge dot={menuItem.func_code === 'Index' && workflow.total_todo}>
                                     <FedIcon type={menuItem.icon} />
                                 </Badge>
                                 <span>{menuItem.func_name}</span>
@@ -78,7 +78,7 @@ export default class Menus extends React.Component<Props, State> {
                             let url = childItem.func_url || '';
                             // 后台返回的菜单栏地址截取掉。便于前端路由做判断
                             if (/rental\d?-ykj-test/.test(location.host)) {
-                                url = url.replace(/(https?\:\/\/)rental\d?-ykj-test[^\/]+\//, `$1${location.host}/`)
+                                url = url.replace(/(https?\:\/\/)rental\d?-ykj-test[^\/]+\//, `$1${location.host}/`);
                             }
                             return (
                                 <Menu.Item key={key} className={navClass}>
