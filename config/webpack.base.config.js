@@ -129,6 +129,7 @@ module.exports = {
             '@m': path.resolve(__dirname, '../src/model'),
             '@s': path.resolve(__dirname, '../src/services'),
             '@t': path.resolve(__dirname, '../src/types'),
+            '@track': path.resolve(__dirname, '../src/track'),
             'react-dom': '@hot-loader/react-dom',
         },
     },
