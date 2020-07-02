@@ -24,6 +24,7 @@ import EditAdjustmentModal from './adjustmentEditModal';
 import { MoreOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import PriceItem from './price';
 import moment from 'moment';
+import { MeterTracker } from '@/track';
 // import Filter from './adjustmentFilter'
 
 const { Group: RadioGroup, Button: RadioButton } = Radio;
@@ -124,12 +125,13 @@ const Standard = (props: IProps) => {
                     <Space>
                         <Button
                             type="link"
+                            data-event={MeterTracker['meter-adjustment-add']}
                             onClick={() => handleEditPrice(rowData)}
                             className="f-hidden meter-adjustment-add"
                         >
                             调整价格
                         </Button>
-                        <Button type="link" className="f-hidden meter-standard-view">
+                        <Button type="link" data-event={MeterTracker['meter-standard-view']} className="f-hidden meter-standard-view">
                             <Link to={`/metermg/detail-standard/${rowData.id}`}>详情</Link>
                         </Button>
                         <Dropdown
@@ -138,6 +140,7 @@ const Standard = (props: IProps) => {
                                     <Menu.Item>
                                         <Button
                                             type="link"
+                                            data-event={MeterTracker['meter-standard-edit']}
                                             onClick={() => handleEdit(rowData)}
                                             className="f-hidden meter-standard-edit"
                                         >
@@ -147,6 +150,7 @@ const Standard = (props: IProps) => {
                                     <Menu.Item>
                                         <Button
                                             type="link"
+                                            data-event={MeterTracker['meter-standard-delete']}
                                             onClick={() => handleDelete(rowData)}
                                             className="f-hidden meter-standard-delete"
                                         >

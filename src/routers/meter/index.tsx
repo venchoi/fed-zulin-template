@@ -8,6 +8,7 @@ import Standard from './components/standardList';
 import EditModal from './components/standardEditModal';
 
 import './index.less';
+import { MeterTracker } from '@/track';
 
 const List = ({ location }: RouteComponentProps) => {
     const [activeTabKey, setActiveTabKey] = useState('standard');
@@ -26,7 +27,7 @@ const List = ({ location }: RouteComponentProps) => {
     ];
     const extra = (
         <>
-            <Button type="primary" onClick={() => setAddModalVisible(true)} className="f-hidden meter-standard-add">
+            <Button type="primary"  data-event={MeterTracker['meter-standard-add']} onClick={() => setAddModalVisible(true)} className="f-hidden meter-standard-add">
                 新建标准
             </Button>
         </>
@@ -44,7 +45,7 @@ const List = ({ location }: RouteComponentProps) => {
     }, [location])
     return (
         <>
-            <div className="layout-list meter-list">
+            <div className="layout-list meter-list" data-module="水电单价管理">
                 <Card
                     className="report-card"
                     title="水电单价管理"
