@@ -8,13 +8,13 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 // const WorkboxPlugin = require('workbox-webpack-plugin');
-
+const baseOrigin = process.env.cdn ? '//cdn-rental.myfuwu.com.cn' : '';
 const prod_config = {
     mode: 'production',
     output: {
         filename: '[name].[contenthash:8].js',
         path: path.resolve(__dirname, '../middleground/assets/'),
-        publicPath: '/middleground/assets/',
+        publicPath: `${baseOrigin}/middleground/assets/`,
     },
     module: {
         rules: [
