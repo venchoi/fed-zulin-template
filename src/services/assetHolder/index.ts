@@ -40,5 +40,5 @@ export const postAddAssetHolderBank = (data: IAddAssetHolderBank) => {
 
 // 资产银行账户列表
 export const getAssetHolderBankList = (data: IAssetHolderBankList) => {
-    return ajax('/asset/bank/list', { ...data, _csrf: '' }, 'GET');
+    return ajax('/asset/bank/account-list', { ...data, _csrf: '' }, 'GET');
 };

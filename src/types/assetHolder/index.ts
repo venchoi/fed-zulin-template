@@ -28,9 +28,8 @@ export interface IAddAssetHolder {
     contacter: string; // 联系人
     mobile: string; // 电话号码
     address: string; // 地址
-    project_id: string; // 关联项目
+    project_id: string; // 关联项目 多个项目用,分隔
     manager: string; // 负责人  【与产品经理确认过，此处的负责人为单选】
-    accounts: IAddAssetHolderBank[]; // 银行账号
 }
 
 // 添加银行账号
