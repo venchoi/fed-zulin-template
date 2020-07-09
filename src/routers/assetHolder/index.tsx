@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, Link } from 'dva/router';
 import './index.less';
-import { Button, Card, PageHeader, Modal } from 'antd';
+import { Button, Card, PageHeader, Modal, Dropdown } from 'antd';
 import AddBaseForm from './components/addBaseForm';
 import { ResizeTable, DragSelect, MaxHeightTable } from 'ykj-ui';
 import AddBankForm from '@/routers/assetHolder/components/addBankForm';
 import { IAddAssetHolderBank } from '@t/assetHolder';
-import { MeterTracker } from '@/track';
+import { getAssetHolderList } from '@/services/assetHolder';
+import { CloseCircleFilled, DownloadOutlined, EyeOutlined, SettingOutlined } from '@ant-design/icons';
 
 const Table = ResizeTable;
 
@@ -16,7 +17,17 @@ const List = ({ location }: RouteComponentProps) => {
     const [columns, setColumns] = useState([]);
     const [list, setList] = useState([]);
 
-    useEffect(() => {}, [location]);
+    useEffect(() => {
+        fetchList();
+    }, [location]);
+
+    const fetchList = async () => {
+        const params = {
+            page: 1,
+            page_size: 20,
+        };
+        const { data } = await getAssetHolderList(params);
+    };
 
     // 新增、筛选区域
     const extra = (

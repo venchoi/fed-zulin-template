@@ -5,6 +5,17 @@ export interface IIdCardType {
     code: string; // 类型
 }
 
+export interface IManageList {
+    project_id: string; // 项目Id
+}
+
+// 资产持有人 列表
+export interface IAssetHolderList {
+    page: number; // 当前页码
+    page_size: number; // 每个大小
+    keyword?: string; //  搜索关键字
+}
+
 // 添加资产持有人
 export interface IAddAssetHolder {
     name: string; // 姓名
