@@ -15,7 +15,6 @@ import './index.less';
 import MyReportList from './components/MyReportList';
 import StandReportList from './components/StandReportList';
 import { History } from 'history';
-import { DragSelect } from 'ykj-ui';
 interface IProps {
     history: History;
 }
@@ -93,11 +92,45 @@ const ReportList = (props: IProps) => {
             },
         },
     ];
+    const dataSource = [
+        {
+            key: '1',
+            name: '胡彦斌',
+            age: 32,
+            address: '西湖区湖底公园1号',
+        },
+        {
+            key: '2',
+            name: '胡彦祖',
+            age: 42,
+            address: '西湖区湖底公园1号',
+        },
+    ];
+
+    const column = [
+        {
+            title: '姓名',
+            dataIndex: 'name',
+            key: 'name',
+            width: 100,
+        },
+        {
+            title: '年龄',
+            dataIndex: 'age',
+            key: 'age',
+            width: 100,
+        },
+        {
+            title: '住址',
+            dataIndex: 'address',
+            key: 'address',
+            width: 100,
+        },
+    ];
 
     return (
         <div className="report layout-list">
-            <DragSelect options={[{ key: '1', name: '2' }]} />
-            {/* <Card
+            <Card
                 className="report-card"
                 title="统计报表"
                 tabList={tabList}
@@ -115,7 +148,7 @@ const ReportList = (props: IProps) => {
                 <div className={`tabpane-container ${activeTabKey === 'myreport' ? 'hidden' : 'visible'}`}>
                     <StandReportList columns={columns} />
                 </div>
-            </Card> */}
+            </Card>
         </div>
     );
 };
