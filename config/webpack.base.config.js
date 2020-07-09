@@ -93,7 +93,7 @@ module.exports = {
         new LodashModuleReplacementPlugin({ shorthands: true }),
     ],
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx'],
+        extensions: ['.ts', '.tsx', '.js', '.jsx','.less','.css'],
         alias: {
             '@': path.resolve(__dirname, '../src'),
             '@c': path.resolve(__dirname, '../src/components'),

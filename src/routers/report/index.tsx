@@ -15,10 +15,11 @@ import './index.less';
 import MyReportList from './components/MyReportList';
 import StandReportList from './components/StandReportList';
 import { History } from 'history';
-
+import { DragSelect } from 'ykj-ui';
 interface IProps {
     history: History;
 }
+
 const ReportList = (props: IProps) => {
     const [activeTabKey, setActiveTabKey] = useState('myreport'); // 当前激活的tab: 我的报表myreport 或 标准报表库basicreport
 
@@ -95,7 +96,8 @@ const ReportList = (props: IProps) => {
 
     return (
         <div className="report layout-list">
-            <Card
+            <DragSelect options={[{ key: '1', name: '2' }]} />
+            {/* <Card
                 className="report-card"
                 title="统计报表"
                 tabList={tabList}
@@ -113,7 +115,7 @@ const ReportList = (props: IProps) => {
                 <div className={`tabpane-container ${activeTabKey === 'myreport' ? 'hidden' : 'visible'}`}>
                     <StandReportList columns={columns} />
                 </div>
-            </Card>
+            </Card> */}
         </div>
     );
 };

@@ -12,6 +12,12 @@
         "@babel/preset-typescript"
     ],
     "plugins": [
+        [
+            "const-enum",
+            {
+                "transform": "constObject"
+            }
+        ],
         "lodash",
         "@babel/plugin-transform-runtime",
         //支持import 懒加载
