@@ -21,8 +21,12 @@ const dropdownClassName = 'multi-project-tree-select';
 class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProjectSelectState> {
     constructor(props: treeProjectSelectProps) {
         super(props);
-        const projIdsStr = Local.get('stageIds');
-        const projNamesStr = Local.get('stageNames');
+        let projIdsStr = Local.get('stageIds');
+        let projNamesStr = Local.get('stageNames');
+        if (props.notInitSelect) {
+            projIdsStr = null;
+            projNamesStr = null;
+        }
         this.state = {
             treeData: [],
             searchValue: '',

@@ -3,8 +3,8 @@ import { Form, Input, Radio, Select, DatePicker, Modal, message, Table, Button }
 import { getIdCardList, postAddAssetHolder, postAddAssetHolderBank, getManageList } from '@/services/assetHolder';
 import { IAddAssetHolder, IAddAssetHolderBank } from '@t/assetHolder';
 import TreeProjectSelect from '@c/TreeProjectSelect';
+import { projsValue } from '@t/project';
 import './addBaseForm.less';
-import { projsValue } from '@/routers/derate/list';
 
 interface IProps {
     id?: string;
@@ -53,7 +53,7 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
         form.setFieldsValue({ project_id: selecctedProject.projIds.join(',') });
     };
     const num = 6;
-
+    const title = id ? '编辑基本信息' : '新增基本信息';
     const handleSubmit = () => {
         form.validateFields().then(async values => {
             if (id) {
@@ -85,7 +85,7 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
 
     return (
         <>
-            <Modal visible={true} width={480} title="新增账户" centered onCancel={() => onCancel()} onOk={handleSubmit}>
+            <Modal visible={true} width={480} title={title} centered onCancel={() => onCancel()} onOk={handleSubmit}>
                 <div className="add-base-form-wrap">
                     <Form form={form}>
                         <Form.Item
@@ -150,7 +150,12 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
                             labelAlign="right"
                             rules={[{ required: true, whitespace: true, message: '请选择关联项目!' }]}
                         >
-                            <TreeProjectSelect onTreeSelected={handleTreeSelected} width={324} isJustSelect />
+                            <TreeProjectSelect
+                                onTreeSelected={handleTreeSelected}
+                                width={324}
+                                isJustSelect
+                                notInitSelect
+                            />
                         </Form.Item>
                         <Form.Item
                             name="id_code_type"
@@ -217,7 +222,7 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
                                 placeholder="请选择"
                                 optionFilterProp="children"
                                 filterOption={(input, option) =>
-                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                    option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                 }
                             >
                                 {managerList.map(user => (

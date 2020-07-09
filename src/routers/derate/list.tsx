@@ -13,7 +13,8 @@ import WorkflowApprovalPopover from './components/workflowPopover';
 
 import { getDerateList, batchAuditDerate, getBillItemFee } from '@s/derate';
 import { getDerateListParams } from '@/types/derateTypes';
-import { Props, projsValue, derateType, billFeeItemType, callbackFn } from './list.d';
+import { Props, derateType, billFeeItemType, callbackFn } from './list.d';
+import { projsValue } from '@t/project';
 import './list.less';
 const baseAlias = 'static';
 const { confirm } = Modal;

@@ -4,7 +4,6 @@ import './index.less';
 import { Button, Card, PageHeader } from 'antd';
 import qs from 'querystring';
 import EditModal from '@/routers/meter/components/standardEditModal';
-import { exportConfig } from '@/routers/export/exportConfig';
 
 const Detail = ({ location }: RouteComponentProps) => {
     const [activeTabKey, setActiveTabKey] = useState('standard');

@@ -18,11 +18,6 @@ export interface Props {
     user: User;
 }
 
-export interface projsValue {
-    projIds: Array<string>;
-    projNames: Array<string>;
-}
-
 export interface feeItem {
     full_room_name: string;
     fee_name: string;

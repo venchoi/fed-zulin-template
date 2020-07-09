@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps, Link } from 'dva/router';
-import './index.less';
-import { Button, Card, PageHeader, Modal, Dropdown } from 'antd';
-import AddBaseForm from './components/addBaseForm';
-import { ResizeTable, DragSelect, MaxHeightTable } from 'ykj-ui';
-import AddBankForm from '@/routers/assetHolder/components/addBankForm';
-import { IAddAssetHolderBank } from '@t/assetHolder';
-import { getAssetHolderList } from '@/services/assetHolder';
+import { Button, Card, PageHeader, Modal, Dropdown, Input } from 'antd';
 import { CloseCircleFilled, DownloadOutlined, EyeOutlined, SettingOutlined } from '@ant-design/icons';
+import { ResizeTable, DragSelect, MaxHeightTable } from 'ykj-ui';
+import { getAssetHolderList } from '@/services/assetHolder';
+import TreeProjectSelect from '@c/TreeProjectSelect';
+import { IAddAssetHolderBank } from '@t/assetHolder';
+import AddBaseForm from './components/addBaseForm';
+import './index.less';
 
 const Table = ResizeTable;
-
+const { Search } = Input;
 const List = ({ location }: RouteComponentProps) => {
     const [isTableLoading, setIsTableLoading] = useState(false);
     const [showBaseInfoModal, setShowBaseInfoModal] = useState(false);
@@ -32,6 +32,8 @@ const List = ({ location }: RouteComponentProps) => {
     // 新增、筛选区域
     const extra = (
         <>
+            <TreeProjectSelect width={324} isJustSelect />
+            &nbsp;
             <Button type="primary" onClick={() => setShowBaseInfoModal(true)} className="f-hidden meter-standard-add">
                 新增
             </Button>
@@ -53,6 +55,15 @@ const List = ({ location }: RouteComponentProps) => {
             <div className="layout-list">
                 <Card className="asset-holder-card" title="资产持有人管理" bordered={false} extra={extra}>
                     <div className="table-list-wrap no-table-border-left no-table-border-right">
+                        <div className="filter">
+                            <div className="filter-left">
+                                <Search style={{ width: '312px' }} placeholder="计划名称" />
+                            </div>
+                            <div className="filter-right">
+                                <SettingOutlined />
+                            </div>
+                        </div>
+
                         <Table
                             rowKey="id"
                             align="left"

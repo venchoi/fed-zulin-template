@@ -30,6 +30,7 @@ export interface treeProjectSelectProps {
     maxTagCount?: number;
     isJustSelect?: boolean;
     isCompanySelect?: boolean;
+    notInitSelect?: boolean; // 不初始展示选中值
     onTreeSelected?: (value: projsValue) => void;
     value?: string[];
 }
