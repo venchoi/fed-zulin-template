@@ -17,6 +17,41 @@ function loading() {
 }
 const routes = [
     {
+        path: '/asset-holder/add',
+        component: Loadable({
+            loader: () => import('./routers/assetHolder/add'),
+            loading,
+        }),
+    },
+    {
+        path: '/asset-holder/edit/:id',
+        component: Loadable({
+            loader: () => import('./routers/assetHolder/add'),
+            loading,
+        }),
+    },
+    {
+        path: '/asset-holder/detail/:id',
+        component: Loadable({
+            loader: () => import('./routers/assetHolder/detail'),
+            loading,
+        }),
+    },
+    {
+        path: '/asset-holder/list',
+        component: Loadable({
+            loader: () => import('./routers/assetHolder/index'),
+            loading,
+        }),
+    },
+    {
+        path: '/asset-holder',
+        component: Loadable({
+            loader: () => import('./routers/assetHolder/index'),
+            loading,
+        }),
+    },
+    {
         path: '/ui',
         component: Loadable({
             loader: () => import('./routers/ui'),
