@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Radio, Select, DatePicker, Modal, message, Table, Button } from 'antd';
-import './addBaseForm.less';
 import { getIdCardList, postAddAssetHolder, postAddAssetHolderBank, getManageList } from '@/services/assetHolder';
 import { IAddAssetHolder, IAddAssetHolderBank } from '@t/assetHolder';
+import TreeProjectSelect from '@c/TreeProjectSelect';
+import './addBaseForm.less';
+import { projsValue } from '@/routers/derate/list';
 
 interface IProps {
     id?: string;
@@ -47,6 +49,9 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
     const handleManagerChange = (value: string) => {
         // form.setFieldsValue({ manager: value });
     };
+    const handleTreeSelected = (selecctedProject: projsValue) => {
+        form.setFieldsValue({ project_id: selecctedProject.projIds.join(',') });
+    };
     const num = 6;
 
     const handleSubmit = () => {
@@ -85,12 +90,67 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
                     <Form form={form}>
                         <Form.Item
                             name="name"
-                            label="持有人姓名"
+                            label="持有人名称"
                             labelCol={{ span: num }}
                             labelAlign="right"
-                            rules={[{ required: true, max: 20, whitespace: true, message: '请输入持有人姓名!' }]}
+                            rules={[{ required: true, whitespace: true, message: '请输入持有人名称!' }]}
                         >
                             <Input placeholder="请输入" />
+                        </Form.Item>
+                        <Form.Item
+                            name="short_name"
+                            label="持有人简称"
+                            labelCol={{ span: num }}
+                            labelAlign="right"
+                            rules={[{ required: false, whitespace: true }]}
+                        >
+                            <Input placeholder="请输入" style={{ width: 104 }} />
+                        </Form.Item>
+                        <Form.Item
+                            name="english_name"
+                            label="英文名称"
+                            labelCol={{ span: num }}
+                            labelAlign="right"
+                            rules={[{ required: false, whitespace: true }]}
+                        >
+                            <Input placeholder="请输入" />
+                        </Form.Item>
+                        <Form.Item
+                            name="english_short_name"
+                            label="英文简称"
+                            labelCol={{ span: num }}
+                            labelAlign="right"
+                            rules={[{ required: false, whitespace: true }]}
+                        >
+                            <Input placeholder="请输入" style={{ width: 104 }} />
+                        </Form.Item>
+                        <Form.Item
+                            name="type"
+                            label="客户类型"
+                            labelCol={{ span: num }}
+                            labelAlign="right"
+                            rules={[{ required: true, whitespace: true }]}
+                        >
+                            <Select placeholder="请选择">
+                                <Option value="企业" key="企业">
+                                    企业
+                                </Option>
+                                <Option value="工商个体" key="工商个体">
+                                    工商个体
+                                </Option>
+                                <Option value="个人" key="个人">
+                                    个人
+                                </Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            name="project_id"
+                            label="关联项目"
+                            labelCol={{ span: num }}
+                            labelAlign="right"
+                            rules={[{ required: true, whitespace: true, message: '请选择关联项目!' }]}
+                        >
+                            <TreeProjectSelect onTreeSelected={handleTreeSelected} width={324} isJustSelect />
                         </Form.Item>
                         <Form.Item
                             name="id_code_type"
@@ -99,7 +159,7 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
                             labelAlign="right"
                             rules={[{ required: true, max: 100, whitespace: true, message: '请选择证件类型!' }]}
                         >
-                            <Select style={{ width: 240 }}>
+                            <Select style={{ width: 240 }} placeholder="请选择">
                                 {idCardTypeList.map(item => (
                                     <Option value={item.id} key={item.id}>
                                         {item.value}
@@ -108,29 +168,11 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
                             </Select>
                         </Form.Item>
                         <Form.Item
-                            name="short_name"
-                            label="持有人简称"
-                            labelCol={{ span: num }}
-                            labelAlign="right"
-                            rules={[{ required: false, max: 20, whitespace: true }]}
-                        >
-                            <Input placeholder="请输入" style={{ width: 104 }} />
-                        </Form.Item>
-                        <Form.Item
                             name="id_code"
                             label="证件号码"
                             labelCol={{ span: num }}
                             labelAlign="right"
                             rules={[{ required: true, max: 20, whitespace: true, message: '请输入证件号码!' }]}
-                        >
-                            <Input placeholder="请输入" />
-                        </Form.Item>
-                        <Form.Item
-                            name="english_name"
-                            label="英文名称"
-                            labelCol={{ span: num }}
-                            labelAlign="right"
-                            rules={[{ required: false, max: 20, whitespace: true }]}
                         >
                             <Input placeholder="请输入" />
                         </Form.Item>
@@ -144,15 +186,6 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
                             <Input placeholder="请输入" style={{ width: 104 }} />
                         </Form.Item>
                         <Form.Item
-                            name="english_short_name"
-                            label="英文简称"
-                            labelCol={{ span: num }}
-                            labelAlign="right"
-                            rules={[{ required: false, max: 20, whitespace: true }]}
-                        >
-                            <Input placeholder="请输入" style={{ width: 104 }} />
-                        </Form.Item>
-                        <Form.Item
                             name="mobile"
                             label="电话号码"
                             labelCol={{ span: num }}
@@ -161,15 +194,7 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
                         >
                             <Input placeholder="请输入" />
                         </Form.Item>
-                        <Form.Item
-                            name="type"
-                            label="客户类型"
-                            labelCol={{ span: num }}
-                            labelAlign="right"
-                            rules={[{ required: false, max: 20, whitespace: true }]}
-                        >
-                            <Input placeholder="请输入" />
-                        </Form.Item>
+
                         <Form.Item
                             name="address"
                             label="联系地址"
@@ -179,15 +204,7 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
                         >
                             <Input placeholder="请输入" />
                         </Form.Item>
-                        <Form.Item
-                            name="project_id"
-                            label="关联项目"
-                            labelCol={{ span: num }}
-                            labelAlign="right"
-                            rules={[{ required: true, max: 20, whitespace: true, message: '请选择关联项目!' }]}
-                        >
-                            <Input placeholder="请输入" />
-                        </Form.Item>
+
                         <Form.Item
                             name="manager"
                             label="负责人"
