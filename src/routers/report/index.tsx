@@ -14,12 +14,8 @@ import IRecordType from './types';
 import './index.less';
 import MyReportList from './components/MyReportList';
 import StandReportList from './components/StandReportList';
-import { History } from 'history';
-interface IProps {
-    history: History;
-}
 
-const ReportList = (props: IProps) => {
+const ReportList = () => {
     const [activeTabKey, setActiveTabKey] = useState('myreport'); // 当前激活的tab: 我的报表myreport 或 标准报表库basicreport
 
     const tabList = [
