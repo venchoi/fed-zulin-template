@@ -5,12 +5,13 @@ import AddBaseForm from './components/addBaseForm';
 import AddBankForm from './components/addBankForm';
 import BankTable from './components/bankTable';
 import { postAddAssetHolder } from '@s/assetHolder';
-import { IAddAssetHolder } from '@t/assetHolder';
+import { IAddAssetHolder, IAddAssetHolderBank } from '@t/assetHolder';
 import './index.less';
 
 const Add = ({ location }: RouteComponentProps) => {
     const [form] = Form.useForm();
     const [showAddBankAccount, setShowAddBankAccount] = useState(false);
+    const [bankList, setBankList] = useState<IAddAssetHolderBank[]>([]);
     const finishHandle = (values: IAddAssetHolder) => {
         // console.log(values)
         // async (values: IAddAssetHolder) => {
@@ -30,8 +31,9 @@ const Add = ({ location }: RouteComponentProps) => {
     const handleShowModal = () => {
         setShowAddBankAccount(true);
     };
-    const onSave = values => {
-        console.log('values:', values);
+    const onSave = (values: IAddAssetHolderBank) => {
+        setShowAddBankAccount(false);
+        setBankList([...bankList, values]);
     };
     // console.log('showAddBankAccount', showAddBankAccount)
     return (
@@ -42,7 +44,7 @@ const Add = ({ location }: RouteComponentProps) => {
                         <AddBaseForm id="" />
                     </Card>
                     <Card className="report-card" title="收款账户" bordered={false}>
-                        <BankTable />
+                        <BankTable data={bankList} isCanOperate />
                     </Card>
                     <Button className="add-button" htmlType="submit">
                         新增

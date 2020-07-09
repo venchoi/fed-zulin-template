@@ -17,13 +17,18 @@ const AddBankForm = ({ onCancel, onOk, isSubmit = false, assetHolderId = '' }: I
                 values.id = assetHolderId;
                 const { data, result, msg } = await postAddAssetHolderBank(values as IAddAssetHolderBank);
                 if (result) {
-                    onOk && onOk(data);
+                    if (onOk) {
+                        onOk(data);
+                    }
                     message.success('操作成功');
                 } else {
                     message.error(msg || '操作成功');
                 }
             } else {
-                onOk && onOk(values);
+                const obj = Object.assign({}, values, { id: `${Math.random()}` });
+                if (onOk) {
+                    onOk(obj as IAddAssetHolderBank);
+                }
             }
         });
     };
