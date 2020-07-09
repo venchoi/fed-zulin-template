@@ -4,6 +4,7 @@ interface Config {
     TEST: boolean;
     apiDomain: string;
     serverPort: number;
+    baseAlias: string;
 }
 
 const config: Config = {
@@ -12,6 +13,7 @@ const config: Config = {
     TEST: window.location.hostname.indexOf('test') !== -1, //测试环境
     apiDomain: '/api', //代理请求前缀
     serverPort: 8807,
+    baseAlias: '/middleground',
 };
 
 export default config;

@@ -10,7 +10,7 @@ import FedHeader from './components/FedHeader';
 import FedMenu from './components/FedMenu';
 import CollapseItem from './components/CollapseItem';
 import Logo from './components/Logo';
-import { getHomeBaseInfo, getWorkflowTodo } from '../../services/app';
+import { getHomeBaseInfo, getWorkflowTodo } from '@s/app';
 import { find } from 'lodash';
 import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
@@ -21,8 +21,13 @@ import './index.less';
 const { Header, Sider, Content, Footer } = AntLayout;
 
 const { DEV } = config;
+interface dispatchArg {
+    type: string;
+    data: any;
+}
 interface Props {
-    children: ReactElement;
+    children: React.ReactNode;
+    dispatch(data: dispatchArg): void;
 }
 
 interface LogoInfo {
@@ -133,18 +138,18 @@ class Layout extends React.Component<Props, State> {
     initTracker = (user: User) => {
         const trackerInstance = myWebLogTracker({
             app_code: 'rental_web',
-            product_code: location.href.indexOf("https://rental.myfuwu.com.cn") > -1 ? 'rental' : 'rental_test',
+            product_code: location.href.indexOf('https://rental.myfuwu.com.cn') > -1 ? 'rental' : 'rental_test',
             include_search: true, // 上报search参数
         });
         trackerInstance.registUser({ tenant_code: user.tenant_code, user_account: user.account });
-    }
+    };
 
     getBaseInfo = async () => {
         const query = queryString.parse((location as any).search);
         const { data } = await getHomeBaseInfo(query);
         const props: any = handleBaseInfo(data);
         this.setState({ ...props, inited: true });
-        this.initTracker(props.user)
+        this.initTracker(props.user);
         const { data: workflowData } = await getWorkflowTodo();
         this.setState({ ...workflowData });
     };

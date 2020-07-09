@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import { UploadOutlined } from '@ant-design/icons';
 import { Form, Input, Button, Select, Upload, Modal } from 'antd';
-import FedUpload from '../../components/FedUpload';
 import FedIcon from '../../components/FedIcon';
 import './Edit.less';
-import { FormInstance } from 'antd/lib/form';
 import { ModalProps } from 'antd/lib/modal';
-
-// const unknowFile = require('../../assets/img/icon-file/icon-file-unknown.png')
-// import unknowFile from '../../assets/img/icon-file/icon-file-unknown.png';
 
 import IRecordType from './types';
 
