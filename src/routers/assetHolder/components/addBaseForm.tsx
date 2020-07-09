@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Radio, Select, DatePicker, Modal, message, Table, Button } from 'antd';
 import './addBaseForm.less';
-import { getIdCardList, postAddAssetHolder, postAddAssetHolderBank } from '@/services/assetHolder';
+import { getIdCardList, postAddAssetHolder, postAddAssetHolderBank, getManageList } from '@/services/assetHolder';
 import { IAddAssetHolder, IAddAssetHolderBank } from '@t/assetHolder';
 
 interface IProps {
@@ -13,24 +13,39 @@ interface IIdCardTypeList {
     id: string;
     value: string;
 }
+interface IManagerList {
+    id: string;
+    name: string;
+}
 const { Option } = Select;
 const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(true);
     const [idCardTypeList, setIdCardTypeList] = useState<IIdCardTypeList[]>([]);
+    const [managerList, setManagerList] = useState<IManagerList[]>([]);
     const fetchIdCardDetail = async () => {
         setLoading(true);
         const { data } = await getIdCardList({ code: 'IdType' });
-        setLoading(false);
         const result = data || [];
         setIdCardTypeList(result);
     };
+    const fetchManagerList = async () => {
+        const { data } = await getManageList({ project_id: '39f3ace2-129e-6ea0-7ef6-863a44172b52' });
+        setLoading(false);
+        const result = data || [];
+        setManagerList(result);
+    };
+
     useEffect(() => {
         fetchIdCardDetail();
+        fetchManagerList();
     }, []);
 
     const handleIdCodeTypeChange = (value: string) => {
         //form.setFieldsValue({ id_code_type: value });
+    };
+    const handleManagerChange = (value: string) => {
+        // form.setFieldsValue({ manager: value });
     };
     const num = 6;
 
@@ -84,7 +99,7 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
                             labelAlign="right"
                             rules={[{ required: true, max: 100, whitespace: true, message: '请选择证件类型!' }]}
                         >
-                            <Select style={{ width: 240 }} onChange={(value: string) => handleIdCodeTypeChange(value)}>
+                            <Select style={{ width: 240 }}>
                                 {idCardTypeList.map(item => (
                                     <Option value={item.id} key={item.id}>
                                         {item.value}
@@ -178,9 +193,22 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
                             label="负责人"
                             labelCol={{ span: num }}
                             labelAlign="right"
-                            rules={[{ required: true, max: 20, whitespace: true, message: '请选择负责人!' }]}
+                            rules={[{ required: true, whitespace: true, message: '请选择负责人!' }]}
                         >
-                            <Input placeholder="请输入" />
+                            <Select
+                                showSearch
+                                placeholder="请选择"
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
+                            >
+                                {managerList.map(user => (
+                                    <Option key={user.id} value={user.id}>
+                                        {user.name}
+                                    </Option>
+                                ))}
+                            </Select>
                         </Form.Item>
                     </Form>
                 </div>
