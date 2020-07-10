@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, Radio, Select, DatePicker, Modal, message, Table, Button } from 'antd';
 import { getIdCardList, postAddAssetHolder, postAddAssetHolderBank, getManageList } from '@/services/assetHolder';
 import { IAddAssetHolder, IAddAssetHolderBank } from '@t/assetHolder';
+import { customType } from '../../../constants/index';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import { projsValue } from '@t/project';
 import './addBaseForm.less';
@@ -132,15 +133,11 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
                             rules={[{ required: true, whitespace: true }]}
                         >
                             <Select placeholder="请选择">
-                                <Option value="企业" key="企业">
-                                    企业
-                                </Option>
-                                <Option value="工商个体" key="工商个体">
-                                    工商个体
-                                </Option>
-                                <Option value="个人" key="个人">
-                                    个人
-                                </Option>
+                                {customType.map(cType => (
+                                    <Option value={cType.value} key={cType.value}>
+                                        {cType.name}
+                                    </Option>
+                                ))}
                             </Select>
                         </Form.Item>
                         <Form.Item

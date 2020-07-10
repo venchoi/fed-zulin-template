@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { RouteComponentProps, Link } from 'dva/router';
-import { Button, Card, PageHeader, Modal, Dropdown, Input } from 'antd';
-import { CloseCircleFilled, DownloadOutlined, EyeOutlined, SettingOutlined } from '@ant-design/icons';
+import { RouteComponentProps } from 'dva/router';
+import { Button, Card, Input, Select } from 'antd';
+import { SettingOutlined } from '@ant-design/icons';
 import { ResizeTable, DragSelect, MaxHeightTable } from 'ykj-ui';
-import { getAssetHolderList } from '@/services/assetHolder';
+import { getAssetHolderList, getCustomLayout, getFiles } from '@/services/assetHolder';
 import TreeProjectSelect from '@c/TreeProjectSelect';
-import { IAddAssetHolderBank } from '@t/assetHolder';
+import { IAddAssetHolderBank, IGetCustomLayout, IField } from '@t/assetHolder';
+import { IHeader } from '../../constants/layoutConfig';
+import { customType, cooperateStatus } from '../../constants/index';
 import AddBaseForm from './components/addBaseForm';
 import './index.less';
 
@@ -15,18 +17,69 @@ const List = ({ location }: RouteComponentProps) => {
     const [isTableLoading, setIsTableLoading] = useState(false);
     const [showBaseInfoModal, setShowBaseInfoModal] = useState(false);
     const [columns, setColumns] = useState([]);
+    const [fieldData, setFieldData] = useState<IField[]>([]);
     const [list, setList] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [layoutData, setLayoutData] = useState<IGetCustomLayout[]>([]);
 
     useEffect(() => {
-        fetchList();
+        getAll();
     }, [location]);
 
+    const fetchCustomLayOut = async () => {
+        const { data } = await getCustomLayout({ key: 'asset_holder_layout' });
+        const result: IGetCustomLayout[] = (data && data.asset_holder_layout) || [];
+        setLayoutData(result);
+    };
+    const fetchFields = async () => {
+        const { data } = await getFiles({ type: '资产持有人列表' });
+        const result: IField[] = data || [];
+        setFieldData(result);
+    };
     const fetchList = async () => {
         const params = {
+            advanced_select_fields: fieldData.filter(field => field.is_default) || [],
             page: 1,
             page_size: 20,
         };
         const { data } = await getAssetHolderList(params);
+        const { head, items } = data;
+        const head2TableHeader = (head: IField[]) => {
+            const arr: IHeader[] = [];
+            head.map(it => {
+                arr.push({
+                    title: it.name,
+                    dataIndex: it.field,
+                    key: it.field,
+                    sort: true,
+                });
+            });
+            arr.push({
+                title: '操作',
+                width: 120,
+                align: 'center',
+                fixed: 'right',
+                isNoResize: true,
+                render: text => (
+                    <>
+                        <span className="text-link">查看</span>&nbsp;
+                        <span className="text-link">删除</span>
+                    </>
+                ),
+            });
+            return arr;
+        };
+        setColumns(head2TableHeader(head));
+        setList(items);
+        console.log(data);
+    };
+
+    const getAll = () => {
+        fetchFields().then(() => {
+            fetchCustomLayOut().then(() => {
+                fetchList();
+            });
+        });
     };
 
     // 新增、筛选区域
@@ -58,6 +111,20 @@ const List = ({ location }: RouteComponentProps) => {
                         <div className="filter">
                             <div className="filter-left">
                                 <Search style={{ width: '312px' }} placeholder="计划名称" />
+                                <Select placeholder="类型" className="filter-item">
+                                    {customType.map(cType => (
+                                        <Option value={cType.value} key={cType.value}>
+                                            {cType.name}
+                                        </Option>
+                                    ))}
+                                </Select>
+                                <Select placeholder="合作状态" className="filter-item">
+                                    {cooperateStatus.map(cType => (
+                                        <Option value={cType.value} key={cType.value}>
+                                            {cType.name}
+                                        </Option>
+                                    ))}
+                                </Select>
                             </div>
                             <div className="filter-right">
                                 <SettingOutlined />

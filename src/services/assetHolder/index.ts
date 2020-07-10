@@ -5,8 +5,24 @@ import {
     IAddAssetHolderBank,
     IAssetHolderBankList,
     IAssetHolderList,
+    ISaveCustomLayout,
     IManageList,
 } from '@/types/assetHolder';
+
+// 资产持有人管理
+export const getCustomLayout = (data: { key: string }) => {
+    return ajax('/parameter/tables/get-custom-layout', { ...data, _csrf: '' }, 'GET');
+};
+
+// 字段数据
+export const getFiles = (data: { type: string }) => {
+    return ajax('/parameter/tables/fields', { ...data, _csrf: '' }, 'GET');
+};
+
+// 资产持有人管理
+export const postCustomLayout = (data: ISaveCustomLayout) => {
+    return ajax('/parameter/tables/save-custom-layout', { ...data, _csrf: '' }, 'POST');
+};
 
 // 获取证件类型
 export const getIdCardList = (data: IIdCardType) => {
