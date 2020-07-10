@@ -17,6 +17,7 @@ const AddBankForm = ({ onCancel, onOk, isSubmit = false, bankId = '', assetHolde
     const title = bankId ? '编辑账户' : '添加账户';
     const initDetail = {
         id: '',
+        holder_id: assetHolderId,
         bank: '',
         account: '',
         account_name: '',
@@ -29,7 +30,10 @@ const AddBankForm = ({ onCancel, onOk, isSubmit = false, bankId = '', assetHolde
             if (isSubmit) {
                 if (bankId) {
                     values.id = bankId;
+                } else {
+                    delete values.id;
                 }
+                values.holder_id = assetHolderId;
                 const { data, result, msg } = await postAddAssetHolderBank(values as IAddAssetHolderBank);
                 if (result) {
                     if (onOk) {

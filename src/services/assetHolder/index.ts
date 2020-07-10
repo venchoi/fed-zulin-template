@@ -14,8 +14,8 @@ export const getIdCardList = (data: IIdCardType) => {
 };
 
 // 负责人列表
-export const getManageList = (data: IManageList) => {
-    return ajax('/asset/holder/get-auth-user-list', { ...data, _csrf: '' }, 'GET');
+export const getManageList = () => {
+    return ajax('/asset/holder/get-auth-user-list', { _csrf: '' }, 'GET');
 };
 
 // 新增 持有人
@@ -35,15 +35,15 @@ export const getAssetHolderList = (data: IAssetHolderList) => {
 
 // 新增资产银行账户列表
 export const postAddAssetHolderBank = (data: IAddAssetHolderBank) => {
-    return ajax('/asset/bank/account-add', { ...data, _csrf: '' }, 'POST');
+    return ajax('/asset/holder/account-add', { ...data, _csrf: '' }, 'POST');
 };
 
 // 详情 资产银行账户
 export const getAssetHolderBankDetail = (data: { id: string }) => {
-    return ajax('/asset/bank/account-detail', { ...data, _csrf: '' }, 'GET');
+    return ajax('/asset/holder/account-detail', { ...data, _csrf: '' }, 'GET');
 };
 
 // 资产银行账户列表
 export const getAssetHolderBankList = (data: IAssetHolderBankList) => {
-    return ajax('/asset/bank/account-list', { ...data, _csrf: '' }, 'GET');
+    return ajax('/asset/holder/account-list', { ...data, _csrf: '' }, 'GET');
 };

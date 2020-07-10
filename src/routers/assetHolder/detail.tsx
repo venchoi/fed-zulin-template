@@ -77,17 +77,15 @@ const Detail = ({
     };
 
     const fetchAccountData = async () => {
-        setLoading(true);
         const { data } = await getAssetHolderBankList({ page: 1, page_size: 10000 });
-        setLoading(false);
         const result = (data && data) || initDetail;
         setAccountList(result);
-        console.log('result', result);
     };
 
     useEffect(() => {
-        fetchDetail();
-        fetchAccountData();
+        fetchDetail().then(() => {
+            fetchAccountData();
+        });
     }, []);
 
     return (
@@ -96,7 +94,7 @@ const Detail = ({
                 title={detail.name || '...'}
                 breadcrumb={{ routes, itemRender, separator: '>' }}
                 ghost={false}
-                subTitle={<Tag color="#87CFFF">企业</Tag>}
+                subTitle={<Tag color="#87CFFF">{detail.type}</Tag>}
             />
             <div className="layout-detail standard-detail">
                 <Tabs type="card">

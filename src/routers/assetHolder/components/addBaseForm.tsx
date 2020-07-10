@@ -32,7 +32,7 @@ const AddBaseForm = ({ id, onCancel, onOk }: IProps) => {
         setIdCardTypeList(result);
     };
     const fetchManagerList = async () => {
-        const { data } = await getManageList({ project_id: '39f3ace2-129e-6ea0-7ef6-863a44172b52' });
+        const { data } = await getManageList();
         setLoading(false);
         const result = data || [];
         setManagerList(result);

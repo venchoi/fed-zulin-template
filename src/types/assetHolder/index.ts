@@ -34,7 +34,8 @@ export interface IAddAssetHolder {
 
 // 添加银行账号
 export interface IAddAssetHolderBank {
-    id: string; // 持有人Id
+    id?: string; //
+    holder_id: string; // 持有人Id
     bank: string; // 开户行
     account: string; // 银行账号
     account_name: string; // 户名
