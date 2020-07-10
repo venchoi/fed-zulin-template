@@ -35,14 +35,16 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         remark: '',
         attachment: [],
         proj_id: '',
+        status,
         id: '',
     }); // 减免详情
-    const [originDetail, setOriginDetail] = useState({
+    const [originDetail, setOriginDetail] = useState<derateDetail>({
         items: [],
         proj_name: '',
         remark: '',
         attachment: [],
         proj_id: '',
+        status,
         id: '',
     }); // 减免详情拷贝值，编辑取消后还原
     const [isEditMode, setIsEditMode] = useState(false); // 是否编辑模式
@@ -60,6 +62,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 }
                 const { data = { items: [] } } = res;
                 const roomsMap: { [index: string]: feeItemType[] } = {};
+                const { status } = data;
                 data.copyItems = [];
                 data.items.forEach((item: feeItemType) => {
                     const copyItem = {
@@ -73,12 +76,20 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                     if (!roomsMap[item.room_name]) {
                         roomsMap[item.room_name] = [];
                     }
-                    if ((copyItem.stayAmount || 0) * 1 > 0) {
+                    if (status !== '已减免') {
+                        if ((copyItem.stayAmount || 0) * 1 > 0) {
+                            roomsMap[item.room_name].push(copyItem);
+                        }
+                        if ((copyItem.stayDemurrageAmount || 0) * 1 > 0) {
+                            roomsMap[item.room_name].push(copyDemurrageItem);
+                        }
+                    } else {
                         roomsMap[item.room_name].push(copyItem);
+                        if ((copyItem.demurrage_derated_amount || 0) * 1 > 0) {
+                            roomsMap[item.room_name].push(copyDemurrageItem);
+                        }
                     }
-                    if ((copyItem.stayDemurrageAmount || 0) * 1 > 0) {
-                        roomsMap[item.room_name].push(copyDemurrageItem);
-                    }
+
                     if (Array.isArray(copyItem.full_room_name)) {
                         copyItem.full_room_name = copyItem.full_room_name.join('、');
                     }
@@ -87,11 +98,18 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                     }
                     copyItem.renter_name = copyItem.renter_organization_name;
                     copyDemurrageItem.renter_name = copyDemurrageItem.renter_organization_name;
-                    if ((copyItem.stayAmount || 0) * 1 > 0) {
+                    if (status !== '已减免') {
+                        if ((copyItem.stayAmount || 0) * 1 > 0) {
+                            data.copyItems.push(copyItem);
+                        }
+                        if ((copyItem.stayDemurrageAmount || 0) * 1 > 0) {
+                            data.copyItems.push(copyDemurrageItem);
+                        }
+                    } else {
                         data.copyItems.push(copyItem);
-                    }
-                    if ((copyItem.stayDemurrageAmount || 0) * 1 > 0) {
-                        data.copyItems.push(copyDemurrageItem);
+                        if ((copyItem.demurrage_derated_amount || 0) * 1 > 0) {
+                            data.copyItems.push(copyDemurrageItem);
+                        }
                     }
                 });
                 data.items = data.copyItems;
@@ -100,6 +118,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 });
                 setSelectedRowKeys(selectedRowKeys);
                 const roomNames: string[] = Object.keys(roomsMap);
+                // 为表格跨行显示设置rowSpan
                 roomNames.forEach(roomName => {
                     const len = roomsMap[roomName].length;
                     for (let j = 0; j < len; j++) {
@@ -172,8 +191,10 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             field: 'renter_organization_name',
             required: false,
             value: (detail: derateDetail) => {
+                console.log(detail);
                 let renterOrganizationNames = detail.items.map(bill => bill.renter_organization_name);
-                renterOrganizationNames = [...new Set(renterOrganizationNames)];
+                renterOrganizationNames = Array.from(new Set(renterOrganizationNames));
+                console.log(renterOrganizationNames.join(','));
                 return renterOrganizationNames.join(',');
             },
         },
@@ -334,9 +355,12 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             width: 120,
             align: 'right',
             render: (text: string, record: feeItemType, index: number) => {
-                return record.isDemurrage
-                    ? comma(formatNum(+record.stayDemurrageAmount || '0.00'))
-                    : comma(formatNum(+record.amount || '0.00'));
+                const { status } = detail;
+                const deratedDemurrageAmount =
+                    status === '已减免'
+                        ? record.demurrage_derated_amount
+                        : comma(formatNum(+record.stayDemurrageAmount || '0.00'));
+                return record.isDemurrage ? deratedDemurrageAmount : comma(formatNum(+record.amount || '0.00'));
             },
         },
         {
@@ -356,8 +380,13 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             width: 120,
             align: 'right',
             render: (text: string, record: feeItemType, index: number) => {
+                const { status } = detail;
+                const deratedDemurrageAmount =
+                    status === '已减免'
+                        ? record.demurrage_derated_amount
+                        : comma(formatNum(record.stayDemurrageAmount || '0.00'));
                 const deratedAmount = record.isDemurrage
-                    ? comma(formatNum(record.stayDemurrageAmount || '0.00'))
+                    ? deratedDemurrageAmount
                     : comma(formatNum(record.derated_amount || '0.00'));
                 const isSelectedFee = selectedRowKeys.find(key => key === record.id + '0');
                 const isSelectedDelay = selectedRowKeys.find(key => key === record.id + '1');
@@ -385,8 +414,10 @@ export const DerateSubRow = (props: derateSubRowProps) => {
     // 合计减免
     const totalDeratedAmount = detail.items.reduce((total: number, item) => {
         const key = item.id + (item.isDemurrage ? '1' : '0');
+        const { status } = detail;
+        const deratedDemurrageAmount = status === '已减免' ? item.demurrage_derated_amount : item.stayDemurrageAmount;
         if (selectedRowKeysMap[key]) {
-            total = total + (!item.isDemurrage ? (+item.derated_amount || 0) * 1 : (item.stayDemurrageAmount || 0) * 1);
+            total = total + (!item.isDemurrage ? (+item.derated_amount || 0) * 1 : (deratedDemurrageAmount || 0) * 1);
         }
         return total;
     }, 0);

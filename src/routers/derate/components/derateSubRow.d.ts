@@ -37,6 +37,7 @@ interface derateDetail {
     remark: string;
     attachment: fileType[];
     proj_id: string;
+    status: string;
     id: string;
 }
 
