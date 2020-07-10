@@ -27,7 +27,9 @@ const AddBankForm = ({ onCancel, onOk, isSubmit = false, bankId = '', assetHolde
     const handleSubmit = () => {
         form.validateFields().then(async values => {
             if (isSubmit) {
-                values.id = assetHolderId;
+                if (bankId) {
+                    values.id = bankId;
+                }
                 const { data, result, msg } = await postAddAssetHolderBank(values as IAddAssetHolderBank);
                 if (result) {
                     if (onOk) {
@@ -47,7 +49,7 @@ const AddBankForm = ({ onCancel, onOk, isSubmit = false, bankId = '', assetHolde
     };
 
     const fetchDetail = async () => {
-        const { data } = await getAssetHolderBankDetail({ bankId });
+        const { data } = await getAssetHolderBankDetail({ id: bankId });
         const result = (data && data[0]) || initDetail;
         setDetail(result);
     };

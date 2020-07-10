@@ -72,7 +72,7 @@ const Detail = ({
         setLoading(true);
         const { data } = await getAssetHolderDetail({ id });
         setLoading(false);
-        const result = (data && data[0]) || initDetail;
+        const result = data || initDetail;
         setDetail(result);
     };
 

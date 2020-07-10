@@ -148,9 +148,7 @@ const BaseInfo = ({ detail, account }: { detail: IAddAssetHolder; account: IAsse
             {sectionList.map(section => (
                 <FedDataSection key={section.title} section={section} />
             ))}
-            {showAddAccount ? (
-                <AddBankForm onCancel={onCancel} onOk={onSave} isSubmit bankId="39f645e4-ed92-67fa-052b-00c9c755853a" />
-            ) : null}
+            {showAddAccount ? <AddBankForm onCancel={onCancel} onOk={onSave} isSubmit /> : null}
         </div>
     );
 };
