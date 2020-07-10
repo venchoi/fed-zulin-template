@@ -52,7 +52,6 @@ export const DerateList = (props: Props) => {
     });
     const tableSetLoading = useCallback(setloading, [setloading]);
     const configWorkflow = useCallback(setWorkflow, [setWorkflow]);
-    console.log(searchParams.keyword, query);
     useEffect(() => {
         getDerateListData();
     }, [searchParams]);
@@ -161,7 +160,7 @@ export const DerateList = (props: Props) => {
         >
             <div>
                 <SearchArea
-                    keywordValue={searchParams.keyword}
+                    keywordValue={searchParams.keyword || ''}
                     selectedRowKeys={selectedRowKeys}
                     onAudit={handleBatchAudit}
                     onKeywordSearch={handleKeywordSearch}

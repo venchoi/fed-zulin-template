@@ -11,6 +11,7 @@ interface searchAreaProps {
     onKeywordSearch(keyword: string, e?: SearchEvent): void;
     onAudit(e: React.MouseEvent): void;
     selectedRowKeys: string[];
+    keywordValue: string;
 }
 
 export const SearchArea = function(props: searchAreaProps) {

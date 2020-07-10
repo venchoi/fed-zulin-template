@@ -2,7 +2,7 @@ import React from 'react';
 import { TreeSelect, message, Input } from 'antd';
 import { getProjectTreeData } from '@s/derate';
 import cloneDeep from 'lodash/cloneDeep';
-import { Local } from '@/MemoryShare';
+import { Local, Cookies } from '@/MemoryShare';
 import { isOutsideClick } from '@/helper/commonUtils';
 import {
     treeProjectSelectProps,
@@ -21,8 +21,9 @@ const dropdownClassName = 'multi-project-tree-select';
 class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProjectSelectState> {
     constructor(props: treeProjectSelectProps) {
         super(props);
-        let projIdsStr = Local.get('stageIds');
-        let projNamesStr = Local.get('stageNames');
+        const stageType = Local.get('stageType') || '单项目';
+        let projIdsStr = stageType === '单项目' ? Cookies.get('stageId') : Local.get('stageIds');
+        let projNamesStr = stageType === '单项目' ? Cookies.get('stageName') : Local.get('stageNames');
         if (props.notInitSelect) {
             projIdsStr = null;
             projNamesStr = null;
