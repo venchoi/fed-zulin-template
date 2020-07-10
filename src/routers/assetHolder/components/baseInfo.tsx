@@ -5,7 +5,7 @@ import FedDataSection from '@c/FedDataSection/FedDataSection';
 import FedDataRow from '@c/FedDataSection/FedDataRow';
 import { valueOf } from '@/types/global';
 import AddBankForm from './addBankForm';
-import moment from 'moment';
+import './baseInfo.less';
 
 interface IDataSection {
     label: '';
@@ -119,8 +119,10 @@ const BaseInfo = ({ detail, account }: { detail: IAddAssetHolder; account: IAsse
     ];
     const [dataSource, setDataSource] = useState([]);
     const renderFedDataTableSection = (data: IDataSection[][]) => (
-        <div className="baseinfo-content">
-            <div onClick={handleAddAccount}>+添加账号</div>
+        <div className="baseinfo-content" style={{ position: 'relative' }}>
+            <div onClick={handleAddAccount} className="add-bank-account-btn">
+                +添加账号
+            </div>
             <FedTable columns={columns} dataSource={dataSource} rowKey="id" scroll={{ y: 'calc(100vh - 820px)' }} />
         </div>
     );
@@ -142,12 +144,14 @@ const BaseInfo = ({ detail, account }: { detail: IAddAssetHolder; account: IAsse
         },
     ];
     return (
-        <>
+        <div className="asset-holder-base-info-wrap">
             {sectionList.map(section => (
                 <FedDataSection key={section.title} section={section} />
             ))}
-            {showAddAccount ? <AddBankForm onCancel={onCancel} onOk={onSave} isSubmit /> : null}
-        </>
+            {showAddAccount ? (
+                <AddBankForm onCancel={onCancel} onOk={onSave} isSubmit bankId="39f645e4-ed92-67fa-052b-00c9c755853a" />
+            ) : null}
+        </div>
     );
 };
 export default BaseInfo;

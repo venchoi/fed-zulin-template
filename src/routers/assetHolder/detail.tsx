@@ -93,7 +93,7 @@ const Detail = ({
     return (
         <>
             <PageHeader
-                title={detail.name || '中国平安保险(集团)股份有限公司'}
+                title={detail.name || '...'}
                 breadcrumb={{ routes, itemRender, separator: '>' }}
                 ghost={false}
                 subTitle={<Tag color="#87CFFF">企业</Tag>}
