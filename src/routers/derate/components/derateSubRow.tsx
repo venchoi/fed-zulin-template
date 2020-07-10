@@ -473,7 +473,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                                 onChange={handleRemarkChange}
                                             />
                                         ) : (
-                                            detail.remark || '-'
+                                            <span className="remark-content">{detail.remark || '-'} </span>
                                         )}
                                     </Form.Item>
                                 </Col>
