@@ -113,9 +113,13 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                     }
                 });
                 data.items = data.copyItems;
-                const selectedRowKeys = data.items.map((item: feeItemType) => {
-                    return item.id + (item.isDemurrage ? '1' : '0');
-                });
+                const selectedRowKeys = data.items
+                    .filter((item: feeItemType) => {
+                        return item.isDemurrage ? +item.demurrage_derated_amount > 0 : +item.derated_amount > 0;
+                    })
+                    .map((item: feeItemType) => {
+                        return item.id + (item.isDemurrage ? '1' : '0');
+                    });
                 setSelectedRowKeys(selectedRowKeys);
                 const roomNames: string[] = Object.keys(roomsMap);
                 // 为表格跨行显示设置rowSpan
