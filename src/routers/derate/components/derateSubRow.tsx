@@ -161,8 +161,8 @@ export const DerateSubRow = (props: derateSubRowProps) => {
 
     const handleAttachmentChange = (file: fileType, files: fileType[]) => {
         setDetail({
-            attachment: files,
             ...detail,
+            attachment: files,
         });
     };
 

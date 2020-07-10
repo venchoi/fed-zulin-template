@@ -12,6 +12,7 @@ import { randomStr } from '@/helper/commonUtils';
 import { getFileType, getOssDirectDomain } from '@/helper/OssHelper';
 import config from '@/config';
 import { UploadOutlined, MoreOutlined, DownloadOutlined } from '@ant-design/icons';
+import FedIcon from '@c/FedIcon';
 import './index.less';
 //@ts-ignore
 import { ObjectUpload } from 'fedtoolgroup';
@@ -286,9 +287,10 @@ class Uploader extends React.Component<Props> {
                                                 />
                                             )}
                                             <div className="delete-img-mask" />
-                                            <i
-                                                className="iconfont icon-shanchu2 delete-icon"
+                                            <FedIcon
                                                 title="删除"
+                                                type="icon-shanchu2"
+                                                className="delete-icon"
                                                 onClick={this.delete.bind(this, item)}
                                             />
                                         </div>

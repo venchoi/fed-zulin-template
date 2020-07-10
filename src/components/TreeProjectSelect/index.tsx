@@ -124,9 +124,11 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
                     const projNamesStr = projs.projNames.join(',');
                     Local.set('stageIds', projIdsStr);
                     Local.set('stageNames', projNamesStr);
+                    Local.set('stageType', '多项目');
                 } else {
                     Local.set('stageIds', projIdsStr);
                     Local.set('stageNames', projNamesStr);
+                    Local.set('stageType', '多项目');
                 }
             }
         }
@@ -184,6 +186,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             const projNamesStr = projNames.join(',');
             Local.set(isCompanySelect ? 'stageCompanyIds' : 'stageIds', projIdsStr);
             Local.set(isCompanySelect ? 'stageCompanyNames' : 'stageNames', projNamesStr);
+            Local.set('stageType', '多项目');
         }
         this.setState({
             projIds: projIds,
