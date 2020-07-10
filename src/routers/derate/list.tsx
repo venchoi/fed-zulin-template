@@ -20,7 +20,8 @@ const baseAlias = 'static';
 const { confirm } = Modal;
 export const DerateList = (props: Props) => {
     const { user, history } = props;
-    const query = queryString.parse(location.search);
+    const queryStr = (location.search || '').replace(/^\?(.*)/, '$1');
+    const query = queryString.parse(queryStr);
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
     const [selectedProjectNames, setselectedProjectNames] = useState<string[]>([]); // 当前选中的项目
     const [searchParams, setsearchParams] = useState<getDerateListParams>({
@@ -51,7 +52,7 @@ export const DerateList = (props: Props) => {
     });
     const tableSetLoading = useCallback(setloading, [setloading]);
     const configWorkflow = useCallback(setWorkflow, [setWorkflow]);
-
+    console.log(searchParams.keyword, query);
     useEffect(() => {
         getDerateListData();
     }, [searchParams]);
@@ -72,8 +73,6 @@ export const DerateList = (props: Props) => {
 
     const getDerateListData = async () => {
         let params = Object.assign({}, searchParams);
-        console.log('search', params);
-
         if (!params.proj_id) {
             return;
         }
@@ -162,6 +161,7 @@ export const DerateList = (props: Props) => {
         >
             <div>
                 <SearchArea
+                    keywordValue={searchParams.keyword}
                     selectedRowKeys={selectedRowKeys}
                     onAudit={handleBatchAudit}
                     onKeywordSearch={handleKeywordSearch}

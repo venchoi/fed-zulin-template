@@ -14,8 +14,12 @@ interface searchAreaProps {
 }
 
 export const SearchArea = function(props: searchAreaProps) {
-    const { selectedRowKeys, onAudit } = props;
+    const { selectedRowKeys, onAudit, keywordValue } = props;
     const [keyword, setKeyword] = useState('');
+
+    useEffect(() => {
+        setKeyword(keywordValue);
+    }, [keywordValue]);
 
     const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const value = e.target.value;
