@@ -195,7 +195,6 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             field: 'renter_organization_name',
             required: false,
             value: (detail: derateDetail) => {
-                console.log(detail);
                 let renterOrganizationNames = detail.items.map(bill => bill.renter_organization_name);
                 renterOrganizationNames = Array.from(new Set(renterOrganizationNames));
                 console.log(renterOrganizationNames.join(','));
@@ -388,7 +387,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 const deratedDemurrageAmount =
                     status === '已减免'
                         ? record.demurrage_derated_amount
-                        : comma(formatNum(record.stayDemurrageAmount || '0.00'));
+                        : comma(formatNum(record.demurrage_derated_amount || '0.00'));
                 const deratedAmount = record.isDemurrage
                     ? deratedDemurrageAmount
                     : comma(formatNum(record.derated_amount || '0.00'));
