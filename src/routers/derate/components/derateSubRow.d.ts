@@ -54,3 +54,9 @@ interface saveDataType {
     proj_id: string;
     id: string;
 }
+
+interface derateDetailDataType {
+    copyItems: feeItemType[];
+    items: feeItemType[];
+    status: string;
+}

@@ -12,6 +12,7 @@ import { derateType, feeItem, responseType } from '../list.d';
 import { fileType } from '@/types/common';
 import { submitDerate } from '@s/derate';
 import { cloneDeep } from 'lodash';
+import { initDerateDetailData } from './componentUtils';
 import './derateSubRow.less';
 import { derateSubRowProps, status, feeItemType, derateDetail, saveDataType } from './derateSubRow.d';
 const layout = {
@@ -61,58 +62,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                     return;
                 }
                 const { data = { items: [] } } = res;
-                const roomsMap: { [index: string]: feeItemType[] } = {};
-                const { status } = data;
-                data.copyItems = [];
-                data.items.forEach((item: feeItemType) => {
-                    const copyItem = {
-                        isDemurrage: false,
-                        ...item,
-                    };
-                    const copyDemurrageItem = {
-                        isDemurrage: true,
-                        ...item,
-                    };
-                    if (!roomsMap[item.room_name]) {
-                        roomsMap[item.room_name] = [];
-                    }
-                    if (status !== '已减免') {
-                        if ((copyItem.stayAmount || 0) * 1 > 0) {
-                            roomsMap[item.room_name].push(copyItem);
-                        }
-                        if ((copyItem.stayDemurrageAmount || 0) * 1 > 0) {
-                            roomsMap[item.room_name].push(copyDemurrageItem);
-                        }
-                    } else {
-                        roomsMap[item.room_name].push(copyItem);
-                        if ((copyItem.demurrage_derated_amount || 0) * 1 > 0) {
-                            roomsMap[item.room_name].push(copyDemurrageItem);
-                        }
-                    }
-
-                    if (Array.isArray(copyItem.full_room_name)) {
-                        copyItem.full_room_name = copyItem.full_room_name.join('、');
-                    }
-                    if (Array.isArray(copyDemurrageItem.full_room_name)) {
-                        copyDemurrageItem.full_room_name = copyDemurrageItem.full_room_name.join('、');
-                    }
-                    copyItem.renter_name = copyItem.renter_organization_name;
-                    copyDemurrageItem.renter_name = copyDemurrageItem.renter_organization_name;
-                    if (status !== '已减免') {
-                        if ((copyItem.stayAmount || 0) * 1 > 0) {
-                            data.copyItems.push(copyItem);
-                        }
-                        if ((copyItem.stayDemurrageAmount || 0) * 1 > 0) {
-                            data.copyItems.push(copyDemurrageItem);
-                        }
-                    } else {
-                        data.copyItems.push(copyItem);
-                        if ((copyItem.demurrage_derated_amount || 0) * 1 > 0) {
-                            data.copyItems.push(copyDemurrageItem);
-                        }
-                    }
-                });
-                data.items = data.copyItems;
+                initDerateDetailData(data);
                 const selectedRowKeys = data.items
                     .filter((item: feeItemType) => {
                         return item.isDemurrage ? +item.demurrage_derated_amount > 0 : +item.derated_amount > 0;
@@ -121,18 +71,6 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                         return item.id + (item.isDemurrage ? '1' : '0');
                     });
                 setSelectedRowKeys(selectedRowKeys);
-                const roomNames: string[] = Object.keys(roomsMap);
-                // 为表格跨行显示设置rowSpan
-                roomNames.forEach(roomName => {
-                    const len = roomsMap[roomName].length;
-                    for (let j = 0; j < len; j++) {
-                        if (j === 0) {
-                            roomsMap[roomName][j].rowSpan = len;
-                        } else {
-                            roomsMap[roomName][j].rowSpan = 0;
-                        }
-                    }
-                });
                 setDetail(data);
                 setOriginDetail(cloneDeep(data));
             })
@@ -280,7 +218,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         setLoading(true);
         const { data, msg, result } = await submitDerate(params);
         if (result) {
-            message.success('保存成功！');
+            message.success('保存成功');
             setIsEditMode(false);
             fetchDerateDetail();
         }
