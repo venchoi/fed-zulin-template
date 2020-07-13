@@ -216,7 +216,7 @@ export const DerateTable = (props: derateTableProps) => {
         {
             dataIndex: 'items',
             title: '资源',
-            width: 144,
+            width: 180,
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
                 const projIds = props.projIds ? props.projIds.join(',') : '';
                 const projNames = props.projNames ? props.projNames.join(',') : '';
@@ -297,7 +297,7 @@ export const DerateTable = (props: derateTableProps) => {
         {
             dataIndex: 'fee_item',
             title: '减免费项',
-            width: 112,
+            width: 150,
             filters: props.feeItemList,
             render: (text: string, record: derateType, index: number) => {
                 let feeName: any = Array.from(new Set(record.items.map(bill => bill.fee_name)));
@@ -312,7 +312,7 @@ export const DerateTable = (props: derateTableProps) => {
         {
             dataIndex: 'derated_amount',
             title: '减免金额',
-            width: 112,
+            width: 142,
             className: 'derate-amount-td',
             render: (text: string, record: derateType, index: number) => {
                 const derated_amount = record.items.reduce((total: number, curr: any) => {

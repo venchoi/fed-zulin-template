@@ -58,16 +58,9 @@ export const baseColumns = [
         },
     },
     {
-        dataIndex: 'gap',
-        title: '',
-        render: (text: string, record: derateType, index: number) => {
-            return '';
-        },
-    },
-    {
         dataIndex: 'proj_name',
         title: '项目名称',
-        width: 120,
+        width: 200,
         render: (text: string, record: derateType, index: number) => {
             return (
                 <span className="derate-table-td" title={text || '-'}>
@@ -79,7 +72,7 @@ export const baseColumns = [
     {
         dataIndex: 'renter_organization_names',
         title: '租客',
-        width: 136,
+        width: 200,
         render: (text: string, record: derateType, index: number) => {
             let renterOrganizationNames = record.items.map(bill => bill.renter_organization_name);
             renterOrganizationNames = [...new Set(renterOrganizationNames)];
