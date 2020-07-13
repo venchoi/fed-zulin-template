@@ -395,7 +395,7 @@ export const DerateTable = (props: derateTableProps) => {
                     }
                 }
                 return (
-                    <div>
+                    <div className="op-col">
                         {record.status === '待审核' &&
                         !oaName &&
                         isEnabled &&
@@ -466,7 +466,6 @@ export const DerateTable = (props: derateTableProps) => {
                                 className="operate-btn"
                                 target="_blank"
                                 href={record.wh_approval_info && record.wh_approval_info.detail_url}
-                                style={{ marginLeft: '16px' }}
                             >
                                 审批详情
                             </a>
