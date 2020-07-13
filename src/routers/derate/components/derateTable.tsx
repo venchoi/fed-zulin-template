@@ -8,7 +8,7 @@ import { ColumnProps } from 'antd/es/table';
 import {
     RightOutlined,
     DownOutlined,
-    ExclamationCircleOutlined,
+    ExclamationCircleFilled,
     InfoCircleOutlined,
     FilterFilled,
     CalendarFilled,
@@ -68,7 +68,6 @@ export const DerateTable = (props: derateTableProps) => {
             setIsEnabledList(data, 'derated_apply');
         }
     };
-
     const getVal = (projId: string, key: string) => {
         const match: any = enableList.find(item => item.projId === projId);
         if (match) {
@@ -76,7 +75,6 @@ export const DerateTable = (props: derateTableProps) => {
         }
         return false;
     };
-
     const fetchOaDetail = async (record: derateType, e: React.MouseEvent) => {
         e && e.stopPropagation();
         const params = {
@@ -95,12 +93,12 @@ export const DerateTable = (props: derateTableProps) => {
             }
         }
     };
-
     const handleAudit = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
         confirm({
-            icon: <ExclamationCircleOutlined />,
+            icon: <ExclamationCircleFilled />,
             title: '确定审核该记录？',
+            centered: true,
             onOk: async () => {
                 setLoading(true);
                 const { result, msg = '操作失败', data } = await auditDerate({ id });
@@ -112,12 +110,12 @@ export const DerateTable = (props: derateTableProps) => {
             },
         });
     };
-
     const handleVoid = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
         confirm({
-            icon: <ExclamationCircleOutlined />,
+            icon: <ExclamationCircleFilled />,
             title: '确定作废该记录？',
+            centered: true,
             onOk: async () => {
                 setLoading(true);
                 const { result, msg = '操作失败', data } = await voidDerate({ id });
@@ -129,12 +127,12 @@ export const DerateTable = (props: derateTableProps) => {
             },
         });
     };
-
     const handleCancelDerate = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
         confirm({
-            icon: <ExclamationCircleOutlined />,
+            icon: <ExclamationCircleFilled />,
             title: '确定取消减免该记录？',
+            centered: true,
             onOk: async () => {
                 setLoading(true);
                 const { result, msg = '操作失败', data } = await cancelDerate({ ids: id });
@@ -146,11 +144,9 @@ export const DerateTable = (props: derateTableProps) => {
             },
         });
     };
-
     const run = (type: string, rowData: derateType, e?: React.MouseEvent) => {
         excute(type, rowData, e, props);
     };
-
     const rowSelection = {
         selectedRowKeys,
         onChange: (selectedRowKeys: any, selectedRows: derateType[]) => {
