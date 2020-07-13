@@ -427,7 +427,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                         </Col>
                                     );
                                 })}
-                                <Col span={24} key={5}>
+                                <Col className="derate-detail-form-item" span={24} key={5}>
                                     <Form.Item
                                         name="remark"
                                         label="减免原因"

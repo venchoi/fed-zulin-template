@@ -19,9 +19,9 @@ interface contentLayoutProps {
 const contentLayout = (props: contentLayoutProps) => {
     const { title, children, topRightSlot, className, isLoading = false } = props;
     return (
-        <Spin spinning={isLoading}>
+        <Spin spinning={isLoading} wrapperClassName="content-container-spin">
             <div className="content-container">
-                <div className={`content ${className}`}>
+                <div className={`content page-container ${className}`}>
                     <div className="top-area">
                         <span className="title">{title}</span>
                         <div className="right-slot-area">{topRightSlot}</div>

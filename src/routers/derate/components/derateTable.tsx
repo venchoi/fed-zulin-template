@@ -163,6 +163,8 @@ export const DerateTable = (props: derateTableProps) => {
                 disabled: oaName || isEnabled || record.status !== '待审核', // Column configuration not to be checked
             };
         },
+        columnWidth: '64px',
+        fixed: true
     };
     const expandable = {
         expandIconColumnIndex: 0,
@@ -262,7 +264,7 @@ export const DerateTable = (props: derateTableProps) => {
         {
             dataIndex: 'applyTime',
             title: '申请日期',
-            width: 120,
+            width: 176,
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => {
                 const value: any = [
                     props.searchParams.start_date ? moment(props.searchParams.start_date) : '',
@@ -315,6 +317,7 @@ export const DerateTable = (props: derateTableProps) => {
             dataIndex: 'derated_amount',
             title: '减免金额',
             width: 112,
+            className: 'derate-amount-td',
             render: (text: string, record: derateType, index: number) => {
                 const derated_amount = record.items.reduce((total: number, curr: any) => {
                     total += +curr.derated_amount || 0;
@@ -340,7 +343,7 @@ export const DerateTable = (props: derateTableProps) => {
         {
             dataIndex: 'status',
             title: '状态',
-            width: 96,
+            width: 112,
             filters: [
                 {
                     text: '待审核',
@@ -378,7 +381,7 @@ export const DerateTable = (props: derateTableProps) => {
             title: '操作',
             key: 'action',
             fixed: expandedRows.length > 0 ? undefined : 'right',
-            width: 128,
+            width: 130,
             render(text: string, record: derateType, index: number) {
                 const { user } = props;
                 const stageId = record.proj_id;

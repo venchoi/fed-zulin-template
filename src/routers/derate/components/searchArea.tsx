@@ -34,6 +34,13 @@ export const SearchArea = function(props: searchAreaProps) {
 
     return (
         <div className="derate-search-area">
+            <Input.Search
+                placeholder="减免流水号、租客、资源、合同、意向书、发起人"
+                onChange={handleKeywordChange}
+                onSearch={handleKeywordSearch}
+                value={keyword}
+                style={{ width: 360 }}
+            />
             <div>
                 <Button
                     type="primary"
@@ -44,13 +51,6 @@ export const SearchArea = function(props: searchAreaProps) {
                     审核
                 </Button>
             </div>
-            <Input.Search
-                placeholder="减免流水号、租客、资源、合同、意向书、发起人"
-                onChange={handleKeywordChange}
-                onSearch={handleKeywordSearch}
-                value={keyword}
-                style={{ width: 360 }}
-            />
         </div>
     );
 };
