@@ -42,11 +42,9 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
                 this.onTreeSelect && this.onTreeSelect(this.state.projIds);
             }
         });
-        document.addEventListener('click', this.handleOutsideClick, false);
     }
 
     componentWillUnmount() {
-        document.removeEventListener('click', this.handleOutsideClick, false);
     }
 
     render() {
@@ -105,34 +103,6 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             searchValue: value,
         });
     };
-
-    handleOutsideClick(e: any) {
-        const isShowDropdown = document.body.querySelector(`.${dropdownClassName}`);
-        if (!isOutsideClick(e, dropdownClassName) || !isShowDropdown) {
-            return;
-        }
-        const { value = [], isJustSelect } = this.props;
-        if (!isJustSelect) {
-            const { projIds = [], projNames = [] } = this.state;
-            const projIdsStr = projIds.join(',');
-            const projNamesStr = projNames.join(',');
-            if (projIdsStr !== value.join(',')) {
-                if (!projIdsStr) {
-                    const projs = this.getSelectedProjIds(['全部']);
-                    this.setProjIds(projs);
-                    const projIdsStr = projs.projIds.join(',');
-                    const projNamesStr = projs.projNames.join(',');
-                    Local.set('stageIds', projIdsStr);
-                    Local.set('stageNames', projNamesStr);
-                    Local.set('stageType', '多项目');
-                } else {
-                    Local.set('stageIds', projIdsStr);
-                    Local.set('stageNames', projNamesStr);
-                    Local.set('stageType', '多项目');
-                }
-            }
-        }
-    }
 
     getData(): treeOriginNode[] {
         const treeData = this.state.treeData;
@@ -200,12 +170,6 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
         this.setProjIds(projs);
         const { onTreeSelected } = this.props;
         onTreeSelected && onTreeSelected(projs);
-        const ele: any = document.getElementById('keywordInput');
-        if (ele) {
-            this.setState({
-                searchValue: ele.value,
-            });
-        }
     };
 
     // 转换请求回来的项目树变成 antd 所需的 treeData 数据

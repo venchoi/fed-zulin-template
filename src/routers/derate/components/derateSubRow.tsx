@@ -18,7 +18,7 @@ import { derateSubRowProps, status, feeItemType, derateDetail, saveDataType } fr
 const layout = {
     labelCol: {
         style: {
-            width: '96px',
+            width: '116px',
         },
     },
     wrapperCol: { span: 20 },
@@ -140,7 +140,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             },
         },
         {
-            name: '合同编号',
+            name: '合同/意向书编号',
             field: 'contract_code',
             required: false,
             value: (detail: derateDetail) => {
@@ -287,7 +287,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             title: '账期',
             width: 224,
             render: (text: string, record: feeItemType, index: number) => {
-                return `${record.start_date} 至 ${record.end_date}`;
+                return (record.start_date && record.end_date ? `${record.start_date} 至 ${record.end_date}` : '-');
             },
         },
         {
