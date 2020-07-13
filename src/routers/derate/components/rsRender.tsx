@@ -58,6 +58,14 @@ export const baseColumns = [
         },
     },
     {
+        dataIndex: 'gap',
+        title: '',
+        width: 200,
+        render: (text: string, record: derateType, index: number) => {
+            return '';
+        },
+    },
+    {
         dataIndex: 'proj_name',
         title: '项目名称',
         width: 120,

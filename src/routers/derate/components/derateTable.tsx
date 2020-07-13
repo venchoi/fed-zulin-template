@@ -159,7 +159,7 @@ export const DerateTable = (props: derateTableProps) => {
                 disabled: oaName || isEnabled || record.status !== '待审核', // Column configuration not to be checked
             };
         },
-        columnWidth: '64px',
+        columnWidth: '48px',
         fixed: true
     };
     const expandable = {
