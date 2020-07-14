@@ -108,15 +108,13 @@ const routes = [
             loading: loading,
         }),
     },
-    // {
-    //     path: '/derate',
-    //     component: Loadable({
-    //         loader: () => import('./routers/derate'),
-    //         loading: loading,
-    //     }),
-    //     // @ts-ignore
-    //     // component: lazy(() => import('./routers/report')),
-    // },
+    {
+        path: '/renter-customers-service',
+        component: Loadable({
+            loader: () => import('./routers/renterCustomerService'),
+            loading,
+        }),
+    },
     {
         path: '/noright',
         component: Loadable({
