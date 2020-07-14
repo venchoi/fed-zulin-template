@@ -24,6 +24,7 @@ export interface getDerateListParams {
     floor_id?: string;
     floor_name?: string;
     status?: string[];
+    stage_id?: string; // 表头项目搜索值
 }
 
 export interface workflowParams {

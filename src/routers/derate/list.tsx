@@ -38,6 +38,7 @@ export const DerateList = (props: Props) => {
         floor_id: '',
         floor_name: '',
         status: [],
+        stage_id: ''
     }); // 减免列表搜索参数
     const [derateTotal, setderateTotal] = useState(0);
     const [derateList, setderateList] = useState([]); // 减免列表
@@ -72,9 +73,12 @@ export const DerateList = (props: Props) => {
 
     const getDerateListData = async () => {
         let params = Object.assign({}, searchParams);
+        // 项目搜索值来自于表头筛选还是项目选择器
+        params.proj_id = params.stage_id ? params.stage_id : params.proj_id;
         if (!params.proj_id) {
             return;
         }
+        params.proj_id 
         if (searchParams.subdistrict_id === '未分区') {
             params.subdistrict_id = '';
         }

@@ -207,9 +207,10 @@ export const DerateTable = (props: derateTableProps) => {
     const isFiltered = !!props.searchParams.start_date || !!props.searchParams.end_date;
     // 资源是否过滤
     const isRSFiltered =
+        !!props.searchParams.stage_id ||
         !!props.searchParams.room_id ||
         !!props.searchParams.building_id ||
-        !!!!props.searchParams.floor_name ||
+        !!props.searchParams.floor_name ||
         !!props.searchParams.subdistrict_id;
     const columns: ColumnProps<derateType>[] = [
         ...baseColumns,
@@ -227,7 +228,7 @@ export const DerateTable = (props: derateTableProps) => {
                         projNames={projNames}
                         selectedConfig={selectedRoomConfig}
                         onChange={(selectedConfig: selectedConfigType) => {
-                            const { stageId, subdistrictId, buildingId, floorId, floorName, roomId } = selectedConfig;
+                            const { stageId, subdistrictId='', buildingId='', floorId='', floorName='', roomId='' } = selectedConfig;
                             confirm();
                             setSelectedRoomConfig({
                                 selectedProjId: stageId,
@@ -241,7 +242,7 @@ export const DerateTable = (props: derateTableProps) => {
                                 ...props.searchParams,
                                 page: 1,
                                 room_id: roomId,
-                                proj_id: stageId,
+                                stage_id: stageId,
                                 subdistrict_id: subdistrictId,
                                 building_id: buildingId,
                                 floor_id: floorId,

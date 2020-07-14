@@ -21,6 +21,7 @@ export interface getDerateListParams {
     floor_id?: string;
     floor_name?: string;
     status?: string[];
+    stage_id?: string;
 }
 
 export interface getDerateDetailParams {
