@@ -7,7 +7,7 @@ import { connect } from 'dva';
 import ContentLayout from '@c/FedListPageLayout';
 import SearchArea from './components/searchArea';
 import TreeProjectSelect from '@c/TreeProjectSelect';
-import FedPagination from './components/pagination';
+import FedPagination from '@c/FedPagination';
 import DerateTable from './components/derateTable';
 import WorkflowApprovalPopover from './components/workflowPopover';
 
