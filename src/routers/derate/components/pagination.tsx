@@ -3,15 +3,20 @@ import { Pagination } from 'antd';
 import { PaginationProps } from 'antd/es/pagination';
 import './pagination.less';
 
+interface FedPaginationProps extends PaginationProps  {
+    wrapperClassName?: string;
+}
+
 const FedPagination = ({
     hideOnSinglePage = true,
     showSizeChanger = true,
     pageSizeOptions = ['10', '20', '30', '50'],
     defaultCurrent = 1,
+    wrapperClassName,
     ...props
-}: PaginationProps) => {
+}: FedPaginationProps) => {
     return (
-        <div className="fed-pagination-container">
+        <div className={`fed-pagination-container ${wrapperClassName}`}>
             <div className="fed-pagination">
                 <Pagination
                     hideOnSinglePage={hideOnSinglePage}

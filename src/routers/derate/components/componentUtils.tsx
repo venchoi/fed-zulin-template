@@ -15,7 +15,7 @@ export const initDerateDetailData = (data: derateDetailDataType) => {
         if (!roomsMap[item.room_name]) {
             roomsMap[item.room_name] = [];
         }
-        if (status !== '已减免') {
+        if (!['已减免', '已作废'].includes(status)) {
             if ((copyItem.stayAmount || 0) * 1 > 0) {
                 roomsMap[item.room_name].push(copyItem);
             }
@@ -23,7 +23,9 @@ export const initDerateDetailData = (data: derateDetailDataType) => {
                 roomsMap[item.room_name].push(copyDemurrageItem);
             }
         } else {
-            roomsMap[item.room_name].push(copyItem);
+            if ((copyItem.derated_amount || 0) * 1 > 0) {
+                roomsMap[item.room_name].push(copyItem);
+            }
             if ((copyItem.demurrage_derated_amount || 0) * 1 > 0) {
                 roomsMap[item.room_name].push(copyDemurrageItem);
             }
@@ -37,7 +39,7 @@ export const initDerateDetailData = (data: derateDetailDataType) => {
         }
         copyItem.renter_name = copyItem.renter_organization_name;
         copyDemurrageItem.renter_name = copyDemurrageItem.renter_organization_name;
-        if (status !== '已减免') {
+        if (!['已减免', '已作废'].includes(status)) {
             if ((copyItem.stayAmount || 0) * 1 > 0) {
                 data.copyItems.push(copyItem);
             }
@@ -45,7 +47,9 @@ export const initDerateDetailData = (data: derateDetailDataType) => {
                 data.copyItems.push(copyDemurrageItem);
             }
         } else {
-            data.copyItems.push(copyItem);
+            if ((copyItem.derated_amount || 0) * 1 > 0) {
+                data.copyItems.push(copyItem);
+            }
             if ((copyItem.demurrage_derated_amount || 0) * 1 > 0) {
                 data.copyItems.push(copyDemurrageItem);
             }

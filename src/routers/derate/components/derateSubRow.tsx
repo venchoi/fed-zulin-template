@@ -356,7 +356,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
     const totalDeratedAmount = detail.items.reduce((total: number, item) => {
         const key = item.id + (item.isDemurrage ? '1' : '0');
         const { status } = detail;
-        const deratedDemurrageAmount = status === '已减免' ? item.demurrage_derated_amount : item.stayDemurrageAmount;
+        const deratedDemurrageAmount = ['已减免', '已作废'].includes(status) ? item.demurrage_derated_amount : item.stayDemurrageAmount;
         if (selectedRowKeysMap[key]) {
             total = total + (!item.isDemurrage ? (+item.derated_amount || 0) * 1 : (deratedDemurrageAmount || 0) * 1);
         }

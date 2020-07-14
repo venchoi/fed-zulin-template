@@ -13,7 +13,7 @@ export interface feeItemType {
     contract_code?: string;
     room_name: string;
     full_room_name: string;
-    derated_amount: number | string;
+    derated_amount: number;
     tempDerateAmount: number | string;
     demurrage_derated_amount: number;
     stayDemurrageAmount: number;

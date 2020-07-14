@@ -4,7 +4,7 @@ import * as queryString from 'query-string';
 import { message, Button, Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { connect } from 'dva';
-import ContentLayout from './components/contentLayout';
+import ContentLayout from '@c/FedListPageLayout';
 import SearchArea from './components/searchArea';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import FedPagination from './components/pagination';
@@ -196,6 +196,7 @@ export const DerateList = (props: Props) => {
                     </div>
                 ) : null}
                 <FedPagination
+                    wrapperClassName="derate-list-pagination"
                     onShowSizeChange={(current, page_size) => {
                         setsearchParams({ ...searchParams, page: 1, page_size });
                     }}
