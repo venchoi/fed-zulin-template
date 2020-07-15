@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import ContentLayout from '@c/FedListPageLayout';
 import RenterList from './renterList';
+import AuditList from './auditList';
 import FedPagination from '@c/FedPagination';
 import { Props } from './list.d';
 import { projsValue } from '@t/project';
@@ -51,8 +52,8 @@ export const renterCustomerServiceList = (props: Props) => {
             }
         >
             <div>
-                <Tabs defaultActiveKey="租户管理员">
-                    <TabPane tab="租户管理员" key="租户管理员">
+                <Tabs defaultActiveKey="租户管理员" animated={false}>
+                    <TabPane tab="租户管理员" key="租户管理员" forceRender={true}>
                         <RenterList 
                             page={page}
                             pageSize={pageSize}
@@ -63,7 +64,14 @@ export const renterCustomerServiceList = (props: Props) => {
                         />
                     </TabPane>
                     <TabPane tab={auditNumberTab} key="审核">
-                        
+                        <AuditList 
+                            page={page}
+                            pageSize={pageSize}
+                            totalSize={totalSize}
+                            stageId={stageId}
+                            setLoading={setLoading} 
+                            setTotalSize={setTotalSize}
+                        />
                     </TabPane>
                 </Tabs>
                 <FedPagination

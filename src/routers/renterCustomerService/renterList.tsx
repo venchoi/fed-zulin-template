@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Divider, Button, Tabs, Badge, Popover } from 'antd';
+import { Divider, Button, Tabs, Badge, Popconfirm } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import SearchArea from './components/renterListSearchArea';
 import FedPagination from '@c/FedPagination';
@@ -7,7 +7,7 @@ import FedTable from '@c/FedTable';
 import { ColumnProps } from 'antd/es/table';
 import { basicRenterListColumns } from './listComponent';
 import { getRenterList } from '@s/renterCustomerService';
-import { RenterListProps, renterListType, statusMapType } from './list.d';
+import { RenterListProps, renterListType, paramsType } from './list.d';
 import {
     getrenterListParams
 } from '@/types/renterCustomerService';
@@ -63,11 +63,10 @@ export const renterList = (props: RenterListProps) => {
 
     }
 
-    const handleKeywordSearch = (value: string) => {
+    const handleSearch = (value: paramsType) => {
         setsearchParams({
             ...searchParams,
-            keyword: value,
-            page: 1,
+            ...value
         });
     };
 
@@ -86,12 +85,19 @@ export const renterList = (props: RenterListProps) => {
                     >
                         更换管理员
                     </Button>
+                    <Popconfirm
+                        placement="bottomRight"
+                        title="确定解除绑定关系？解除后该管理员将不能继续通过微信公众号接收系统消息?"
+                        okText="确定"
+                        cancelText="取消"
+                    >
                     <Button
                         type="link"
                         className="f-hidden renter-customers-service-add-manager"
                     >
                         解绑
                     </Button>
+                    </Popconfirm>
                 </div>)
             }
         },
@@ -100,7 +106,7 @@ export const renterList = (props: RenterListProps) => {
         <div className="renter-list-page">
             <SearchArea 
                 keywordValue={searchParams.keyword || ''}
-                onKeywordSearch={handleKeywordSearch}
+                onSearch={handleSearch}
             />
             <FedTable<renterListType>
                 className="renter-list-table"

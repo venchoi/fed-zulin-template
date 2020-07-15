@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Input, Select } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import './renterListSearchArea.less';
-import { searchAreaProps } from '../list.d';
+import './auditListSearchArea.less';
+import { auditSearchAreaProps } from '../list.d';
 
 type SearchEvent =
     | React.ChangeEvent<HTMLInputElement>
@@ -10,35 +10,26 @@ type SearchEvent =
     | React.KeyboardEvent<HTMLInputElement>
     | undefined;
 const { Option } = Select;
-// 合同状态
+// 审核状态
 const statusLists = [
-    {
-        name: '待审核',
-        value: '待审核'
-    },
-    {
-        name: '审核中',
-        value: '审核中'
-    },
     {
         name: '已审核',
         value: '已审核'
     },
     {
-        name: '执行中',
-        value: '执行中'
+        name: '审核不通过',
+        value: '审核不通过'
     },
     {
-        name: '已关闭',
-        value: '已关闭'
+        name: '待审核',
+        value: '待审核'
     },
 ];
 const typeList = ['企业', '工商个体', '个人'];
-export const renterListSearchArea = function(props: searchAreaProps) {
+export const renterListSearchArea = function(props: auditSearchAreaProps) {
     const { keywordValue, onSearch } = props;
     const [keyword, setKeyword] = useState('');
-    const [renterType, setRenterType] = useState();
-    const [contractStatus, setContractStatus] = useState();
+    const [status, setStatus] = useState<string | undefined>();
 
     useEffect(() => {
         setKeyword(keywordValue);
@@ -47,10 +38,9 @@ export const renterListSearchArea = function(props: searchAreaProps) {
     useEffect(() => {
         onSearch && onSearch({
             keyword,
-            renter_type: renterType || '',
-            contract_status: contractStatus || ''
+            status: status || ''
         });
-    }, [renterType, contractStatus])
+    }, [status])
 
     const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const value = e.target.value;
@@ -60,18 +50,14 @@ export const renterListSearchArea = function(props: searchAreaProps) {
     const handleKeywordSearch = (value: string, e?: SearchEvent): void => {
         onSearch && onSearch({
             keyword: value,
-            renter_type: renterType || '',
-            contract_status: contractStatus || ''
+            status: status || ''
         });
     };
 
     const handleFormItemChange = (type: string) => (value: string): void => {
         switch(type) {
-            case 'renterType':
-                setRenterType(value);
-                break;
-            case 'contractStatus':
-                setContractStatus(value);
+            case 'status':
+                setStatus(value);
                 break; 
             default:
                 break;
@@ -79,11 +65,11 @@ export const renterListSearchArea = function(props: searchAreaProps) {
     };
 
     return (
-        <div className="renter-list-search-area">
+        <div className="audit-list-search-area">
             <div className="search-form">
                 <Input.Search
                     className="search-form-item"
-                    placeholder="租客名称/手机号/合同编号"
+                    placeholder="申请人手机/原管理员手机/合同编号"
                     onChange={handleKeywordChange}
                     onSearch={handleKeywordSearch}
                     value={keyword}
@@ -91,27 +77,13 @@ export const renterListSearchArea = function(props: searchAreaProps) {
                 />
                 <Select
                     className="search-form-item"
-                    placeholder="租客类型"
+                    placeholder="状态"
                     style={{
                         width: 135
                     }}
                     allowClear
-                    value={renterType}
-                    onChange={handleFormItemChange('renterType')}
-                >
-                    {
-                        typeList.map(type => <Option value={type}>{ type }</Option>)
-                    }
-                </Select>
-                <Select
-                    className="search-form-item"
-                    placeholder="合同状态"
-                    style={{
-                        width: 135
-                    }}
-                    allowClear
-                    value={contractStatus}
-                    onChange={handleFormItemChange('contractStatus')}
+                    value={status}
+                    onChange={handleFormItemChange('status')}
                 >
                     {
                         statusLists.map(status => <Option value={status.value}>{ status.name }</Option>)

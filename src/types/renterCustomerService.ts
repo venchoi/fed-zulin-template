@@ -7,3 +7,12 @@ export interface getrenterListParams {
     renter_type: string;
     contract_status: string;
 } 
+
+
+export interface getAuditListParams {
+    stage_id: string;
+    keyword: string;
+    page: number;
+    page_size: number;
+    status: string;
+} 

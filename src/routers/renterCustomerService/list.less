@@ -19,4 +19,37 @@
         position: absolute;
         bottom: 0;
     }
+    .status-item {
+        .icon-dot {
+            display: block;
+            width: 6px;
+            height: 6px;
+            margin-right: 8px;
+            margin-top: 9px;
+            float: left;
+            border-radius: 50%;
+            background-color: #F77D54;
+            &.unaudit {
+                background-color: #F27900;
+            }
+            &.auditing {
+                background-color: #F5B027;
+            }
+            &.audited {
+                background-color: #0D86FF;
+            }
+            &.processing {
+                background-color: #00AD74;
+            }
+            &.closed {
+                background-color: #868B8F;
+            }
+            &.passed {
+                background-color: #868B8F;
+            }
+        }
+        .status-text {
+            float: left;
+        }
+    }
 }
