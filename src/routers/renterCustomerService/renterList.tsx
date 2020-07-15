@@ -5,146 +5,109 @@ import SearchArea from './components/renterListSearchArea';
 import FedPagination from '@c/FedPagination';
 import FedTable from '@c/FedTable';
 import { ColumnProps } from 'antd/es/table';
-import { RenterListProps, renterListType } from './list.d';
+import { basicRenterListColumns } from './listComponent';
+import { getRenterList } from '@s/renterCustomerService';
+import { RenterListProps, renterListType, statusMapType } from './list.d';
+import {
+    getrenterListParams
+} from '@/types/renterCustomerService';
 import './renterList.less';
 
 export const renterList = (props: RenterListProps) => {
-    const [derateList, setDerateList] = useState([]);
-    const columns: ColumnProps<renterListType>[]= [
-        {
-            dataIndex: 'code',
-            title: '合同编号',
-            width: 205,
-            render: (text: string, record: renterListType, index: number) => {
-                return (
-                    <span title={text || '-'}>
-                        {text || '-'}
-                    </span>
-                );
-            },
-        },
-        {
-            dataIndex: 'date',
-            title: '租赁期限',
-            width: 218,
-            render: (text: string, record: renterListType, index: number) => {
-                return (
-                    <span title={text || '-'}>
-                        {record.start_date} 至 {record.end_date}
-                    </span>
-                );
-            },
-        },
-        {
-            dataIndex: 'renter',
-            title: '承租方',
-            width: 228,
-            render: (text: string, record: renterListType, index: number) => {
-                const renters = record.contract_renter.map(item =>
-                    `${item.alias}方: ${item.organization_name}`
-                )
-                const popoverContent = renters.map(renter => <p>{renter}</p>);
-                return <div className="rs-td-container">
-                    <span className="derate-table-td-rs" title={renters[0]}>
-                        {renters[0]}
-                    </span>
-                    <Popover title="全部承租方" placement="bottom" content={popoverContent}>
-                        <InfoCircleOutlined
-                            style={{
-                                color: '#BEC3C7',
-                                marginLeft: '5px',
-                                marginTop: '4px',
-                            }}
-                        />
-                    </Popover>
-                </div>
-            },
-        },
-        {
-            dataIndex: 'rooms',
-            title: '租赁资源',
-            width: 230,
-            render: (text: string, record: renterListType, index: number) => {
-                const rooms = record.contract_room;
-                const popoverContent = (
-                    <div>
-                        {rooms.map(room => {
-                            return <p>{room.room_name}</p>;
-                        })}
-                    </div>
-                );
-                return <div className="rs-td-container">
-                    <span className="derate-table-td-rs" title={rooms[0].room_name || '-'}>
-                        {rooms[0].room_name}
-                    </span>
-                    <Popover title="全部租赁资源" placement="bottom" content={popoverContent}>
-                        <InfoCircleOutlined
-                            style={{
-                                color: '#BEC3C7',
-                                marginLeft: '5px',
-                                marginTop: '4px',
-                            }}
-                        />
-                    </Popover>
-                </div>
-            },
-        },
-        {
-            dataIndex: 'contract_status',
-            title: '合同状态',
-            width: 106,
-            filters: [
-                {
-                    text: '待审核',
-                    value: '待审核',
-                },
-                {
-                    text: '审核中',
-                    value: '审核中',
-                },
-                {
-                    text: '已审核',
-                    value: '已审核',
-                },
-                {
-                    text: '执行中',
-                    value: '执行中',
-                },
-                {
-                    text: '已关闭',
-                    value: '已关闭',
-                },
-            ],
-            render: (text: string, record: renterListType, index: number) => {
-                const statusMap: statusMapType = {
-                    待审核: 'unaudit',
-                    审核中: 'auditing',
-                    已审核: 'audited',
-                    执行中: 'processing',
-                    已关闭: 'closed'
-                };
-                return (
-                    <div className="status-item">
-                        <span className={`icon-dot ${statusMap[text]}`}></span>
-                        <span className="status-text">{text}</span>
-                    </div>
-                );
-            },
-        },
-    ];
+    const { setLoading, setTotalSize, page, pageSize, stageId } = props;
+    const [renterList, setRenterList] = useState<renterListType[]>([]);
+    const [searchParams, setsearchParams] = useState<getrenterListParams>({
+        stage_id: '',
+        keyword: '',
+        page: 1,
+        page_size: 10,
+        renter_type: '',
+        contract_status: ''
+    });
+
+    useEffect(() => {
+        setsearchParams({
+            ...searchParams,
+            page,
+            page_size: pageSize
+        });
+    }, [page, pageSize]);
+
+    useEffect(() => {
+        setsearchParams({
+            ...searchParams,
+            stage_id: stageId
+        });
+    }, [stageId]);
+
+    useEffect(() => {
+        getRenterCustomerList();
+    }, [searchParams]);
+
+    // 获取租户管理员列表数据
+    const getRenterCustomerList = async () => {
+        let params = Object.assign({}, searchParams);
+        if (!params.stage_id) {
+            return;
+        }
+        setLoading(true);
+        const { result, data } = await getRenterList(params);
+        if (result && data) {
+            setRenterList(data.items || []);
+            setTotalSize(data.total);
+        }
+        setLoading(false);
+    };
 
     const handleTableChange = () => {
 
     }
+
+    const handleKeywordSearch = (value: string) => {
+        setsearchParams({
+            ...searchParams,
+            keyword: value,
+            page: 1,
+        });
+    };
+
+    const columns: ColumnProps<renterListType>[]= [
+        ...basicRenterListColumns,
+        {
+            title: '操作',
+            key: 'action',
+            fixed: 'right',
+            width: 140,
+            render: (text: string, record: renterListType, index: number) => {
+                return (<div className="op-col">
+                    <Button
+                        type="link"
+                        className="operate-btn f-hidden renter-customers-service-change-manager"
+                    >
+                        更换管理员
+                    </Button>
+                    <Button
+                        type="link"
+                        className="f-hidden renter-customers-service-add-manager"
+                    >
+                        解绑
+                    </Button>
+                </div>)
+            }
+        },
+    ];
     return (
         <div className="renter-list-page">
-            <SearchArea />
+            <SearchArea 
+                keywordValue={searchParams.keyword || ''}
+                onKeywordSearch={handleKeywordSearch}
+            />
             <FedTable<renterListType>
                 className="renter-list-table"
                 vsides={false}
                 rowKey="id"
                 columns={columns}
-                dataSource={derateList}
+                dataSource={renterList}
                 scroll={{
                     y: 'calc( 100vh - 340px )',
                 }}

@@ -5,7 +5,12 @@ export interface Props {
 }
 
 export interface RenterListProps {
-
+    setLoading(isLoading: boolean): void;
+    setTotalSize(total: number): void;
+    totalSize: number;
+    page: number;
+    pageSize: number;
+    stageId: string;
 }
 
 export interface renterType {
@@ -25,4 +30,11 @@ export interface renterListType {
     end_date: string;
     contract_renter: renterType[];
     contract_room: contractRoomType[];
+    admin_user_name: string;
+    phone: string;
+    email: string;
+}
+
+export interface statusMapType {
+    [index: string]: string;
 }
