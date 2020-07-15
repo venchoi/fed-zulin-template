@@ -8,6 +8,9 @@ export interface getrenterListParams {
     contract_status: string;
 } 
 
+export interface unbindRenterParams {
+    id: string;
+}
 
 export interface getAuditListParams {
     stage_id: string;

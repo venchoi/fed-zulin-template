@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Divider, Button, Tabs, Badge, Popconfirm } from 'antd';
+import { Divider, Button, Tabs, Badge, Popconfirm, message } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import SearchArea from './components/renterListSearchArea';
 import FedPagination from '@c/FedPagination';
 import FedTable from '@c/FedTable';
 import { ColumnProps } from 'antd/es/table';
 import { basicRenterListColumns } from './listComponent';
-import { getRenterList } from '@s/renterCustomerService';
+import { getRenterList, unbindRenter } from '@s/renterCustomerService';
 import { RenterListProps, renterListType, paramsType } from './list.d';
 import {
     getrenterListParams
@@ -59,8 +59,17 @@ export const renterList = (props: RenterListProps) => {
         setLoading(false);
     };
 
-    const handleTableChange = () => {
-
+    const handleUnbindRenter = (record: renterListType) => async () => {
+        setLoading(true);
+        const params = {
+            id: record.id
+        };
+        const { result } = await unbindRenter(params);
+        if (result) {
+            message.success('解绑成功');
+            getRenterCustomerList();
+        }
+        setLoading(false);
     }
 
     const handleSearch = (value: paramsType) => {
@@ -87,16 +96,18 @@ export const renterList = (props: RenterListProps) => {
                     </Button>
                     <Popconfirm
                         placement="bottomRight"
+                        overlayClassName="unbind-btn-popover"
                         title="确定解除绑定关系？解除后该管理员将不能继续通过微信公众号接收系统消息?"
                         okText="确定"
                         cancelText="取消"
+                        onConfirm={handleUnbindRenter(record)}
                     >
-                    <Button
-                        type="link"
-                        className="f-hidden renter-customers-service-add-manager"
-                    >
-                        解绑
-                    </Button>
+                        <Button
+                            type="link"
+                            className="f-hidden renter-customers-service-add-manager"
+                        >
+                            解绑
+                        </Button>
                     </Popconfirm>
                 </div>)
             }
@@ -117,7 +128,6 @@ export const renterList = (props: RenterListProps) => {
                 scroll={{
                     y: 'calc( 100vh - 340px )',
                 }}
-                onChange={handleTableChange}
             />
         </div>
     );

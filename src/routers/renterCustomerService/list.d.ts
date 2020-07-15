@@ -34,6 +34,7 @@ export interface contractRoomType {
 }
 
 export interface renterListType {
+    id: string;
     code: string;
     start_date: string; 
     end_date: string;
