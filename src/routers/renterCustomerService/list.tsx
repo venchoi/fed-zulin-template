@@ -147,21 +147,26 @@ export const renterCustomerServiceList = (props: Props) => {
                         
                     </TabPane>
                 </Tabs>
-                <FedPagination
-                    wrapperClassName="renter-list-pagination"
-                    onShowSizeChange={(current, page_size) => {
-                        setPage(1);
-                        setPageSize(page_size);
-                    }}
-                    onChange={(page_index, page_size) => {
-                        setPage(page_index);
-                        setPageSize(page_size || 0);
-                    }}
-                    current={page}
-                    pageSize={pageSize}
-                    showTotal={total => `共${Math.ceil(+total / +(pageSize || 1))}页， ${total}条记录`}
-                    total={+totalSize}
-                />
+                {
+                    totalSize>0 ?
+                    <FedPagination
+                        wrapperClassName="renter-list-pagination"
+                        onShowSizeChange={(current, page_size) => {
+                            setPage(1);
+                            setPageSize(page_size);
+                        }}
+                        onChange={(page_index, page_size) => {
+                            setPage(page_index);
+                            setPageSize(page_size || 0);
+                        }}
+                        current={page}
+                        pageSize={pageSize}
+                        showTotal={total => `共${Math.ceil(+total / +(pageSize || 1))}页， ${total}条记录`}
+                        total={+totalSize}
+                    />
+                    :
+                    null
+                }
                 <AddAdminModal 
                     isShowModal={isShowModal} 
                     record={currentRecord}
