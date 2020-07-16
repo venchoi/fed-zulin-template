@@ -118,11 +118,11 @@ export const renterListSearchArea = function(props: searchAreaProps) {
                     }
                 </Select>
             </div>
-            <div>
+            {/* <div>
                 <Button>
                     <SettingOutlined />
                 </Button>
-            </div>
+            </div> */}
         </div>
     );
 };

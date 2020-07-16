@@ -90,11 +90,11 @@ export const renterListSearchArea = function(props: auditSearchAreaProps) {
                     }
                 </Select>
             </div>
-            <div>
+            {/* <div>
                 <Button>
                     <SettingOutlined />
                 </Button>
-            </div>
+            </div> */}
         </div>
     );
 };
