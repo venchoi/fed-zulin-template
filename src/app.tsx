@@ -6,7 +6,7 @@ import { RouteComponentProps } from 'dva/router';
 import ReportList from './routers/report';
 import Loadable from 'react-loadable';
 //@ts-ignore
-import { hot } from 'react-hot-loader/root';
+import { hot } from 'react-hot-loader';
 interface Props extends RouteComponentProps {
     getState?: any;
     dispatch?: any;
@@ -34,6 +34,28 @@ const routes = [
         path: '/report',
         component: Loadable({
             loader: () => import('./routers/report'),
+            loading: loading,
+        }),
+    },
+    // TODO children route
+    {
+        path: '/metermg/detail-adjust/:id',
+        component: Loadable({
+            loader: () => import('./routers/meter/adjustmentDetail'),
+            loading: loading,
+        }),
+    },
+    {
+        path: '/metermg/detail-standard/:id',
+        component: Loadable({
+            loader: () => import('./routers/meter/standardDetail'),
+            loading: loading,
+        }),
+    },
+    {
+        path: '/metermg',
+        component: Loadable({
+            loader: () => import('./routers/meter'),
             loading: loading,
         }),
     },
@@ -100,4 +122,4 @@ class App extends React.PureComponent<Props> {
         );
     }
 }
-export default hot(App);
+export default hot(module)(App);

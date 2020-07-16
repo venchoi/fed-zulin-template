@@ -11,4 +11,3 @@ module.exports={
     // target: 'https://rental-ykj-test.myfuwu.com.cn/', //测试环境1
     // target: 'https://rental-ykj-beta.myfuwu.com.cn/', //beta环境
     target: 'https://rental.myfuwu.com.cn/', //正式环境
-}

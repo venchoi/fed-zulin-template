@@ -1,0 +1,4 @@
+每个文件是一个模块的 utils, 最后都到 index 中导出
+如果是基础类型的 utils, 以类型打头，如 stringUtils
+如果是业务工具类，以 module 打头，如 moduleFeeUitls
+如果是其他的，请在该 README 文件中补充规则

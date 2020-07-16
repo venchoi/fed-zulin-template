@@ -4,3 +4,5 @@ declare global {
         Raven: Client;
     }
 }
+
+type valueOf<T> = T[keyof T];

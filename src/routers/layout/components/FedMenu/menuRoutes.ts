@@ -9,6 +9,7 @@ export const maps = [
      */
     { reg: '/middleground/report.*', key: 'Index', code: 'Report', name: '统计报表' },
     { reg: '/middleground/basicdata/customer.*', key: 'Basic', code: 'BasicData', name: '基础数据' },
+    { reg: '/middleground/metermg.*', key: 'PropertyContract', code: 'MeterMg', name: '水电单价管理' },
     { reg: '/middleground/meter.*', key: 'PropertyContract', code: 'Meter', name: '抄表管理' },
     { reg: '/middleground/basicfee.*', key: 'Finance', code: 'Fee', name: '基本费项' },
 ];
