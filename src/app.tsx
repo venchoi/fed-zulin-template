@@ -108,6 +108,13 @@ const routes = [
             loading: loading,
         }),
     },
+    {
+        path: '/outlay/list',
+        component: Loadable({
+            loader: () => import('./routers/outlay'),
+            loading: loading,
+        }),
+    },
     // {
     //     path: '/derate',
     //     component: Loadable({
