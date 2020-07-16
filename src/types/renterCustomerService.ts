@@ -39,3 +39,8 @@ export interface auditRenterParams {
     apply_id: string;
     status: string;
 }
+
+export interface getApplyListCountParams {
+    stage_id: string;
+    status: string;
+}

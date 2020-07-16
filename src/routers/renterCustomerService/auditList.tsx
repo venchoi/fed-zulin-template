@@ -15,7 +15,7 @@ import {
 import './auditList.less';
 
 export const auditList = (props: AuditListProps) => {
-    const { setLoading, setTotalSize, page, pageSize, stageId } = props;
+    const { setLoading, setTotalSize, page, pageSize, stageId, getUnauditStats } = props;
     const [auditList, setRenterList] = useState<auditListType[]>([]);
     const [searchParams, setsearchParams] = useState<getAuditListParams>({
         stage_id: '',
@@ -45,6 +45,7 @@ export const auditList = (props: AuditListProps) => {
 
     useEffect(() => {
         getRenterCustomerList();
+        getUnauditStats();
     }, [searchParams]);
 
     // 获取租户管理员列表数据

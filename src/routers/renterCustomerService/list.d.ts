@@ -13,6 +13,7 @@ export interface RenterListProps {
     stageId: string;
     handleShowAddAdminModal(record: renterListType): void;
     requestRenterList?: boolean;
+    getUnauditStats():void;
 }
 
 export interface AuditListProps {
@@ -22,6 +23,7 @@ export interface AuditListProps {
     page: number;
     pageSize: number;
     stageId: string;
+    getUnauditStats():void;
 }
 
 export interface renterType {

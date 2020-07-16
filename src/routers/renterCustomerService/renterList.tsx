@@ -21,7 +21,8 @@ export const renterList = (props: RenterListProps) => {
         pageSize, 
         stageId,
         handleShowAddAdminModal,
-        requestRenterList
+        requestRenterList,
+        getUnauditStats
     } = props;
     const [renterList, setRenterList] = useState<renterListType[]>([]);
     const [searchParams, setsearchParams] = useState<getrenterListParams>({
@@ -50,6 +51,7 @@ export const renterList = (props: RenterListProps) => {
 
     useEffect(() => {
         getRenterCustomerList();
+        getUnauditStats();
     }, [searchParams, requestRenterList]);
 
     // 获取租户管理员列表数据

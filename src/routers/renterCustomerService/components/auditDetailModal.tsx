@@ -42,13 +42,18 @@ export const auditDetailModal = function(props: auditDetailModalType): JSX.Eleme
     const { contract_code, project_name, contract_room, created_on, apply_user_name, master_phone, origin_master_name, origin_master_phone, attachment } = auditDetail;
 
     useEffect(() => {
-        getAuditDetail();
+        if (isShowModal) {
+            getAuditDetail();
+        }
     }, [isShowModal])
 
     // 获取审批详情
     const getAuditDetail = async () => {
         let params = {
             apply_id: record?.apply_id || ''
+        }
+        if(!params.apply_id) {
+            return;
         }
         setLoading(true);
         const { result, data } = await fetchAuditDetail(params);

@@ -9,6 +9,7 @@ import FedPagination from '@c/FedPagination';
 import AddAdminModal from './components/addAdminModal';
 import { Props } from './list.d';
 import { projsValue } from '@t/project';
+import { getApplyListCount } from '@s/renterCustomerService';
 import { renterListType } from './list.d';
 import './list.less';
 
@@ -26,6 +27,18 @@ export const renterCustomerServiceList = (props: Props) => {
     const [isShowModal, setIsShowModal] = useState(false); // 是否显示新增/更改管理员弹窗
     const [currentRecord, setCurrentRecord] = useState<renterListType | undefined>();
     const [isRequestRenterList, setIsRequestRenterList] = useState(false);
+    const [currentTab, setCurrentTab] = useState('租户管理员');
+
+    const getUnauditStats = async () => {
+        const params = {
+            stage_id: selectedProjectIds.join(','),
+            status: '待审核'
+        }
+        const { result, data } = await getApplyListCount(params);
+        if (result && data) {
+            setAuditNumber(data.total || 0);
+        }
+    }
 
     const handleTreeSelected = (selecctedProject: projsValue) => {
         setselectedProjectIds(selecctedProject.projIds);
@@ -55,6 +68,11 @@ export const renterCustomerServiceList = (props: Props) => {
         }
     }
 
+    const handleChangeTab = (tab: string) => {
+        setPage(1);
+        setCurrentTab(tab);
+    }
+
     const auditNumberTab = (<div className="audit-tab">
         <span>审核</span>
         <Badge count={auditNumber} style={{marginLeft: 4}} />
@@ -69,37 +87,64 @@ export const renterCustomerServiceList = (props: Props) => {
             topRightSlot={
                 <div className="project-select-area">
                     <TreeProjectSelect onTreeSelected={handleTreeSelected} width={312} />
-                    <Divider type="vertical" style={{
-                        height: "28px",
-                        margin: '0 16px'
-                    }} />
-                    <Button type="primary" onClick={() => handleShowAddAdminModal()}>新增管理员</Button>
+                    {
+                        currentTab === '租户管理员' ?
+                        <Divider 
+                            type="vertical" 
+                            style={{
+                                height: "28px",
+                                margin: '0 16px'
+                            }} 
+                        />
+                        :
+                        null
+                    }
+                    {
+                        currentTab === '租户管理员' ?
+                        <Button type="primary" onClick={() => handleShowAddAdminModal()}>新增管理员</Button>
+                        :
+                        null
+                    }
                 </div>
             }
         >
             <div>
-                <Tabs defaultActiveKey="租户管理员" animated={false}>
+                <Tabs defaultActiveKey="租户管理员" animated={false} onChange={handleChangeTab}>
                     <TabPane tab="租户管理员" key="租户管理员" forceRender={true}>
-                        <RenterList 
-                            page={page}
-                            pageSize={pageSize}
-                            totalSize={totalSize}
-                            stageId={stageId}
-                            requestRenterList={isRequestRenterList}
-                            setLoading={setLoading} 
-                            setTotalSize={setTotalSize}
-                            handleShowAddAdminModal={handleShowAddAdminModal}
-                        />
+                        {
+                            currentTab === '租户管理员' ?
+                            <RenterList 
+                                page={page}
+                                pageSize={pageSize}
+                                totalSize={totalSize}
+                                stageId={stageId}
+                                requestRenterList={isRequestRenterList}
+                                setLoading={setLoading} 
+                                setTotalSize={setTotalSize}
+                                handleShowAddAdminModal={handleShowAddAdminModal}
+                                getUnauditStats={getUnauditStats}
+                            />
+                            :
+                            null
+                        }
+                        
                     </TabPane>
                     <TabPane tab={auditNumberTab} key="审核">
-                        <AuditList 
-                            page={page}
-                            pageSize={pageSize}
-                            totalSize={totalSize}
-                            stageId={stageId}
-                            setLoading={setLoading} 
-                            setTotalSize={setTotalSize}
-                        />
+                        {
+                            currentTab === '审核' ?
+                            <AuditList 
+                                page={page}
+                                pageSize={pageSize}
+                                totalSize={totalSize}
+                                stageId={stageId}
+                                setLoading={setLoading} 
+                                setTotalSize={setTotalSize}
+                                getUnauditStats={getUnauditStats}
+                            />
+                            :
+                            null
+                        }
+                        
                     </TabPane>
                 </Tabs>
                 <FedPagination
