@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, BrowserRouter, Redirect } from 'dva/router';
-import { Spin } from 'antd';
+import { Spin, message } from 'antd';
 import Layout from './routers/layout';
 import { RouteComponentProps } from 'dva/router';
 import ReportList from './routers/report';
@@ -12,9 +12,17 @@ interface Props extends RouteComponentProps {
     dispatch?: any;
 }
 
+// 配置全局消息提示
+message.config({
+    top: 100,
+    duration: 2,
+    maxCount: 3
+});
+
 function loading() {
     return <Spin />;
 }
+
 const routes = [
     {
         path: '/asset-holder/add',
