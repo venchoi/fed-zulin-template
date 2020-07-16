@@ -14,7 +14,15 @@ import {
 import './renterList.less';
 
 export const renterList = (props: RenterListProps) => {
-    const { setLoading, setTotalSize, page, pageSize, stageId } = props;
+    const { 
+        setLoading, 
+        setTotalSize, 
+        page, 
+        pageSize, 
+        stageId,
+        handleShowAddAdminModal,
+        requestRenterList
+    } = props;
     const [renterList, setRenterList] = useState<renterListType[]>([]);
     const [searchParams, setsearchParams] = useState<getrenterListParams>({
         stage_id: '',
@@ -42,7 +50,7 @@ export const renterList = (props: RenterListProps) => {
 
     useEffect(() => {
         getRenterCustomerList();
-    }, [searchParams]);
+    }, [searchParams, requestRenterList]);
 
     // 获取租户管理员列表数据
     const getRenterCustomerList = async () => {
@@ -59,6 +67,7 @@ export const renterList = (props: RenterListProps) => {
         setLoading(false);
     };
 
+    // 解绑操作
     const handleUnbindRenter = (record: renterListType) => async () => {
         setLoading(true);
         const params = {
@@ -70,6 +79,11 @@ export const renterList = (props: RenterListProps) => {
             getRenterCustomerList();
         }
         setLoading(false);
+    }
+
+    // 显示编辑弹窗
+    const showEditAdminModal = (record: renterListType) => (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+        handleShowAddAdminModal && handleShowAddAdminModal(record);
     }
 
     const handleSearch = (value: paramsType) => {
@@ -91,6 +105,7 @@ export const renterList = (props: RenterListProps) => {
                     <Button
                         type="link"
                         className="operate-btn f-hidden renter-customers-service-change-manager"
+                        onClick={showEditAdminModal(record)}
                     >
                         更换管理员
                     </Button>

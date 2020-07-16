@@ -36,9 +36,9 @@ const statusLists = [
 const typeList = ['企业', '工商个体', '个人'];
 export const renterListSearchArea = function(props: searchAreaProps) {
     const { keywordValue, onSearch } = props;
-    const [keyword, setKeyword] = useState('');
-    const [renterType, setRenterType] = useState();
-    const [contractStatus, setContractStatus] = useState();
+    const [keyword, setKeyword] = useState<string>('');
+    const [renterType, setRenterType] = useState<string>();
+    const [contractStatus, setContractStatus] = useState<string>();
 
     useEffect(() => {
         setKeyword(keywordValue);

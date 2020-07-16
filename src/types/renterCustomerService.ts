@@ -19,3 +19,14 @@ export interface getAuditListParams {
     page_size: number;
     status: string;
 } 
+
+export interface getContractDetailParams {
+    contract_code: string;
+}
+
+export interface addContractAdminParams {
+    admin_user_name?: string;
+    contract_code?: string;
+    phone?: string;
+    email?: string;
+}

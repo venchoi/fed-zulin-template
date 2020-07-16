@@ -6,8 +6,10 @@ import ContentLayout from '@c/FedListPageLayout';
 import RenterList from './renterList';
 import AuditList from './auditList';
 import FedPagination from '@c/FedPagination';
+import AddAdminModal from './components/addAdminModal';
 import { Props } from './list.d';
 import { projsValue } from '@t/project';
+import { renterListType } from './list.d';
 import './list.less';
 
 const { TabPane } = Tabs;
@@ -21,6 +23,9 @@ export const renterCustomerServiceList = (props: Props) => {
     const [stageId, setStageId] = useState('');
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
     const [selectedProjectNames, setselectedProjectNames] = useState<string[]>([]); // 当前选中的项目
+    const [isShowModal, setIsShowModal] = useState(false); // 是否显示新增/更改管理员弹窗
+    const [currentRecord, setCurrentRecord] = useState<renterListType | undefined>();
+    const [isRequestRenterList, setIsRequestRenterList] = useState(false);
 
     const handleTreeSelected = (selecctedProject: projsValue) => {
         setselectedProjectIds(selecctedProject.projIds);
@@ -28,6 +33,27 @@ export const renterCustomerServiceList = (props: Props) => {
         setPage(1);
         setStageId(selecctedProject.projIds.join(','));
     };
+
+    const handleShowAddAdminModal = (record?: renterListType) => {
+        if(record && record.id) {
+            setCurrentRecord(record);
+            setIsShowModal(true);
+        } else {
+            setCurrentRecord(undefined);
+            setIsShowModal(true);
+        }
+    }
+
+    const handleCloseAdminModal = (isSuccess: boolean): void => {
+        setIsShowModal(false);
+        const tk = setTimeout(() => {
+            setCurrentRecord(undefined);
+            clearTimeout(tk);
+        });
+        if (isSuccess) {
+            setIsRequestRenterList(!isRequestRenterList);
+        }
+    }
 
     const auditNumberTab = (<div className="audit-tab">
         <span>审核</span>
@@ -47,7 +73,7 @@ export const renterCustomerServiceList = (props: Props) => {
                         height: "28px",
                         margin: '0 16px'
                     }} />
-                    <Button type="primary">新增管理员</Button>
+                    <Button type="primary" onClick={() => handleShowAddAdminModal()}>新增管理员</Button>
                 </div>
             }
         >
@@ -59,8 +85,10 @@ export const renterCustomerServiceList = (props: Props) => {
                             pageSize={pageSize}
                             totalSize={totalSize}
                             stageId={stageId}
+                            requestRenterList={isRequestRenterList}
                             setLoading={setLoading} 
                             setTotalSize={setTotalSize}
+                            handleShowAddAdminModal={handleShowAddAdminModal}
                         />
                     </TabPane>
                     <TabPane tab={auditNumberTab} key="审核">
@@ -88,6 +116,12 @@ export const renterCustomerServiceList = (props: Props) => {
                     pageSize={pageSize}
                     showTotal={total => `共${Math.ceil(+total / +(pageSize || 1))}页， ${total}条记录`}
                     total={+totalSize}
+                />
+                <AddAdminModal 
+                    isShowModal={isShowModal} 
+                    record={currentRecord}
+                    onClose={handleCloseAdminModal}
+                    setLoading={setLoading}
                 />
             </div>
         </ContentLayout>

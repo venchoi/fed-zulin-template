@@ -11,6 +11,8 @@ export interface RenterListProps {
     page: number;
     pageSize: number;
     stageId: string;
+    handleShowAddAdminModal(record: renterListType): void;
+    requestRenterList?: boolean;
 }
 
 export interface AuditListProps {

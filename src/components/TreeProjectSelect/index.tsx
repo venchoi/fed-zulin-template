@@ -68,7 +68,6 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             showSearch: true,
             onSearch: this.handleSearchInputChange,
             placeholder: '请选择项目',
-            searchPlaceholder: '输入关键字查找',
             treeCheckable: true,
             treeNodeFilterProp: 'title',
             maxTagCount: maxTagCount || 1,
@@ -79,24 +78,24 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
         return <TreeSelect className="fed-tree-select" {...treeProps}></TreeSelect>;
     }
 
-    dropdownRender = (originNode: React.ElementType, props: any) => {
-        const { searchValue } = this.state;
-        return (
-            <div>
-                <Input
-                    placeholder="请输入"
-                    style={{
-                        marginLeft: '3%',
-                        width: '94%',
-                    }}
-                    size="small"
-                    value={searchValue}
-                    onChange={this.handleSearchInputChange}
-                />
-                {originNode}
-            </div>
-        );
-    };
+    // dropdownRender = (originNode: React.ElementType, props: any) => {
+    //     const { searchValue } = this.state;
+    //     return (
+    //         <div>
+    //             <Input
+    //                 placeholder="请输入"
+    //                 style={{
+    //                     marginLeft: '3%',
+    //                     width: '94%',
+    //                 }}
+    //                 size="small"
+    //                 value={searchValue}
+    //                 onChange={this.handleSearchInputChange}
+    //             />
+    //             {originNode}
+    //         </div>
+    //     );
+    // };
 
     handleSearchInputChange = (value: string) => {
         this.setState({

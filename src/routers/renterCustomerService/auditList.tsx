@@ -7,7 +7,7 @@ import FedTable from '@c/FedTable';
 import { ColumnProps } from 'antd/es/table';
 import { basicAuditListColumns } from './listComponent';
 import { getAuditList } from '@s/renterCustomerService';
-import { AuditListProps, auditListType, searchAreaProps } from './list.d';
+import { AuditListProps, auditListType, auditParamsType } from './list.d';
 import {
     getAuditListParams
 } from '@/types/renterCustomerService';
@@ -62,7 +62,7 @@ export const auditList = (props: AuditListProps) => {
 
     }
 
-    const handleSearch = (value: searchAreaProps) => {
+    const handleSearch = (value: auditParamsType) => {
         setsearchParams({
             ...searchParams,
             ...value
