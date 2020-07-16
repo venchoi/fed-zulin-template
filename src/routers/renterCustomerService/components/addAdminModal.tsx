@@ -5,7 +5,7 @@ import { renterListType } from '../list.d';
 import { SelectValue } from 'antd/lib/select';
 import { getContractDetail, addContractAdmin } from '@s/renterCustomerService';
 import { formatPhone } from '../../../helper/commonUtils';
-interface addAdminModal {
+interface addAdminModalType {
     isShowModal?: Boolean;
     record?: renterListType;
     onClose(isSuccess?: boolean): void;
@@ -26,15 +26,9 @@ const layout = {
     },
     wrapperCol: { span: 16 },
 };
-
-const tailLayout = {
-    wrapperCol: { offset: 8, span: 16 },
-};
-
-
 const { useForm } = Form;
 const { Option } = Select;
-export const addAdminModal = function(props: addAdminModal): JSX.Element {
+export const addAdminModal = function(props: addAdminModalType): JSX.Element {
     const [form] = useForm();
     const [contractInfo, setContractInfo] = useState<contractInfoType>({});
     const [loading, setLoading] = useState(false);

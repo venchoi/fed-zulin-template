@@ -295,7 +295,7 @@ export const basicAuditListColumns:  ColumnProps<auditListType>[] = [
     {
         dataIndex: 'status',
         title: '状态',
-        width: 106,
+        width: 120,
         render: (text: string, record: auditListType, index: number) => {
             const statusMap: statusMapType = {
                 待审核: 'unaudit',

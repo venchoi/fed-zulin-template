@@ -7,6 +7,7 @@ import FedTable from '@c/FedTable';
 import { ColumnProps } from 'antd/es/table';
 import { basicAuditListColumns } from './listComponent';
 import { getAuditList } from '@s/renterCustomerService';
+import AuditDetailModal from './components/auditDetailModal';
 import { AuditListProps, auditListType, auditParamsType } from './list.d';
 import {
     getAuditListParams
@@ -23,6 +24,9 @@ export const auditList = (props: AuditListProps) => {
         page_size: 10,
         status: ''
     });
+    const [isShowModal, setIsShowModal] = useState(false); // 是否显示详情弹窗
+    const [currentRecord, setCurrentRecord] = useState<auditListType>();
+    const [isAudit, setIsAudit] = useState(false);
 
     useEffect(() => {
         setsearchParams({
@@ -58,8 +62,17 @@ export const auditList = (props: AuditListProps) => {
         setLoading(false);
     };
 
-    const handleTableChange = () => {
+    const handleShowAuditModal = (record: auditListType, isAudit?: boolean) => (e: React.MouseEvent):void => {
+        setIsAudit(!!isAudit);
+        setCurrentRecord(record);
+        setIsShowModal(true)
+    }
 
+    const handleCloseModal = (isNeedFetchAuditList: boolean) => {
+        setIsShowModal(false)
+        if (isNeedFetchAuditList) {
+            getRenterCustomerList();
+        }
     }
 
     const handleSearch = (value: auditParamsType) => {
@@ -80,19 +93,13 @@ export const auditList = (props: AuditListProps) => {
                 return (<div className="op-col">
                     {
                         record.status === '待审核' ?
-                            <Popconfirm
-                                placement="bottomRight"
-                                title={text}
-                                okText="确定"
-                                cancelText="取消"
+                            <Button
+                                type="link"
+                                className="operate-btn f-hidden renter-customers-service-audit"
+                                onClick={handleShowAuditModal(record, true)}
                             >
-                                <Button
-                                    type="link"
-                                    className="operate-btn f-hidden renter-customers-service-audit"
-                                >
-                                    审核
-                                </Button>
-                            </Popconfirm>
+                                审核
+                            </Button>
                             :
                             null
                     }
@@ -101,6 +108,7 @@ export const auditList = (props: AuditListProps) => {
                             <Button
                                 type="link"
                                 className="operate-btn f-hidden renter-customers-service-audit"
+                                onClick={handleShowAuditModal(record)}
                             >
                                 详情
                             </Button>
@@ -127,7 +135,13 @@ export const auditList = (props: AuditListProps) => {
                 scroll={{
                     y: 'calc( 100vh - 340px )',
                 }}
-                onChange={handleTableChange}
+            />
+             <AuditDetailModal 
+                isShowModal={isShowModal} 
+                record={currentRecord}
+                isAudit={isAudit}
+                onClose={handleCloseModal}
+                setLoading={setLoading}
             />
         </div>
     );

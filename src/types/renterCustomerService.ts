@@ -30,3 +30,12 @@ export interface addContractAdminParams {
     phone?: string;
     email?: string;
 }
+
+export interface getAuditDetailParams {
+    apply_id: string;
+}
+
+export interface auditRenterParams {
+    apply_id: string;
+    status: string;
+}

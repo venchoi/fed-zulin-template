@@ -1,4 +1,4 @@
-
+import { fileType } from '@t/common';
 export interface Props {
     history: History;
     user: User;
@@ -84,4 +84,22 @@ export interface auditListType {
     origin_master_phone: string;
     contract_status: string;
     status: string;
+    apply_id: string;
+}
+
+export interface contractRoomType {
+    contract_id: string;
+    id: string;
+    room_name: string;
+}
+export interface auditDetailType {
+    contract_code: string;
+    project_name: string;
+    contract_room: contractRoomType[];
+    created_on: string;
+    apply_user_name: string;
+    master_phone: string;
+    origin_master_name: string;
+    origin_master_phone: string;
+    attachment?: fileType[]
 }
