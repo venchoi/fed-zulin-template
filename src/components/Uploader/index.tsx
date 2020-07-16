@@ -17,12 +17,6 @@ import './index.less';
 //@ts-ignore
 import { ObjectUpload } from 'fedtoolgroup';
 const { DEV } = config;
-message.config({
-    top: 100,
-    duration: 2,
-    maxCount: 3,
-    rtl: true,
-});
 
 interface Props {
     files: any;

@@ -16,12 +16,6 @@ import './index.less';
 import { ObjectUpload } from 'fedtoolgroup';
 import FedIcon from '@c/FedIcon';
 const { DEV } = config;
-message.config({
-    top: 100,
-    duration: 2,
-    maxCount: 3,
-    rtl: true,
-});
 const randomStr = () => {
     return (
         Math.random()
