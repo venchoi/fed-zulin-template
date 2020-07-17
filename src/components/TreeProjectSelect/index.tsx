@@ -55,7 +55,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
         const treeProps = {
             ...otherProps,
             treeData: treeData,
-            value: treeData.length > 0 ? projIdsArr : [],
+            value: (treeData.length > 0) && treeData[0]?.children && (treeData[0]?.children?.length > 0) ? projIdsArr : [],
             onChange: this.onTreeSelect,
             style: {
                 width: width || 400,
