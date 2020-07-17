@@ -136,7 +136,7 @@ export const auditList = (props: AuditListProps) => {
                 columns={columns}
                 dataSource={auditList}
                 scroll={{
-                    y: 'calc( 100vh - 372px )',
+                    y: 'calc( 100vh - 388px )',
                 }}
             />
              <AuditDetailModal 
