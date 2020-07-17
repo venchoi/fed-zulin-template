@@ -24,7 +24,7 @@ const logos = [
 
 const Logo = ({ collapsed = false, logoInfo }: Props) => {
     return (
-        <div className="sider-logo">
+        <div className={`sider-logo ${!logos.includes(logoInfo.logo) && !collapsed ? 'custom' : ''}`}>
             {collapsed ? (
                 <img
                     className="sider-logo__small"
