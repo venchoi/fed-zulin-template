@@ -53,11 +53,7 @@ export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
                         content={popoverContent}
                     >
                         <InfoCircleOutlined
-                            style={{
-                                color: '#BEC3C7',
-                                marginLeft: '5px',
-                                marginTop: '4px',
-                            }}
+                            className="icon-info-hover"
                         />
                     </Popover>
                     :
@@ -93,11 +89,7 @@ export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
                         content={popoverContent} 
                     >
                         <InfoCircleOutlined
-                            style={{
-                                color: '#BEC3C7',
-                                marginLeft: '5px',
-                                marginTop: '4px',
-                            }}
+                            className="icon-info-hover"
                         />
                     </Popover>
                     :
@@ -232,11 +224,7 @@ export const basicAuditListColumns:  ColumnProps<auditListType>[] = [
                         content={popoverContent} 
                     >
                         <InfoCircleOutlined
-                            style={{
-                                color: '#BEC3C7',
-                                marginLeft: '5px',
-                                marginTop: '4px',
-                            }}
+                            className="icon-info-hover"
                         />
                     </Popover>
                     :
