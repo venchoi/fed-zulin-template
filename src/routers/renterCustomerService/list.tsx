@@ -75,7 +75,12 @@ export const renterCustomerServiceList = (props: Props) => {
 
     const auditNumberTab = (<div className="audit-tab">
         <span>审核</span>
-        <Badge count={auditNumber} style={{marginLeft: 4}} />
+        {
+            auditNumber > 0 ?  
+            <span className={`audit-number ${auditNumber < 10 ? 'circle' : ''}`}>{ auditNumber }</span>
+            :
+            null
+        }
     </div>);
     return (
         <ContentLayout
