@@ -12,8 +12,8 @@ export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
         width: 205,
         render: (text: string, record: renterListType, index: number) => {
             return (
-                <span  className="contract-code-td renter-table-td" title={text || '-'}>
-                    {text || '-'}
+                <span  className="contract-code-td renter-table-td" title={text}>
+                    {`${text}(${record.version})`}
                 </span>
             );
         },
@@ -309,5 +309,9 @@ export const basicAuditListColumns:  ColumnProps<auditListType>[] = [
                 </div>
             );
         },
-    }
+    },
+    {
+        dataIndex: 'gap',
+        title: ''
+    },
 ]

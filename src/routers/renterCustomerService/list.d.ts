@@ -47,6 +47,7 @@ export interface renterListType {
     admin_user_name: string;
     phone: string;
     email: string;
+    version: string;
 }
 
 export interface statusMapType {
