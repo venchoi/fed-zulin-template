@@ -19,7 +19,7 @@ export const renterCustomerServiceList = (props: Props) => {
     const [loading, setLoading] = useState(false);
     const [auditNumber, setAuditNumber] = useState(0);
     const [totalSize, setTotalSize] = useState(0);
-    const [pageSize, setPageSize] = useState(10);
+    const [pageSize, setPageSize] = useState(20);
     const [page, setPage] = useState(1);
     const [stageId, setStageId] = useState('');
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
@@ -72,7 +72,7 @@ export const renterCustomerServiceList = (props: Props) => {
         setPage(1);
         setCurrentTab(tab);
     }
-
+    console.log(pageSize)
     const auditNumberTab = (<div className="audit-tab">
         <span>审核</span>
         {
@@ -153,7 +153,6 @@ export const renterCustomerServiceList = (props: Props) => {
                     </TabPane>
                 </Tabs>
                 {
-                    totalSize>0 ?
                     <FedPagination
                         wrapperClassName="renter-list-pagination"
                         onShowSizeChange={(current, page_size) => {
@@ -169,8 +168,6 @@ export const renterCustomerServiceList = (props: Props) => {
                         showTotal={total => `共${Math.ceil(+total / +(pageSize || 1))}页， ${total}条记录`}
                         total={+totalSize}
                     />
-                    :
-                    null
                 }
                 <AddAdminModal 
                     isShowModal={isShowModal} 

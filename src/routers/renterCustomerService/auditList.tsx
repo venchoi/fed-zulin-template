@@ -21,7 +21,7 @@ export const auditList = (props: AuditListProps) => {
         stage_id: '',
         keyword: '',
         page: 1,
-        page_size: 10,
+        page_size: 20,
         status: ''
     });
     const [isShowModal, setIsShowModal] = useState(false); // 是否显示详情弹窗
@@ -89,7 +89,7 @@ export const auditList = (props: AuditListProps) => {
             title: '操作',
             key: 'action',
             fixed: 'right',
-            width: 140,
+            width: 64,
             render: (text: string, record: auditListType, index: number) => {
                 return (<div className="op-col">
                     {
@@ -116,7 +116,9 @@ export const auditList = (props: AuditListProps) => {
                             :
                             null
                     }
-                    
+                    {
+                        !['待审核', '已审核'].includes(record.status) ? '-' : null
+                    }
                 </div>)
             }
         },
@@ -134,7 +136,7 @@ export const auditList = (props: AuditListProps) => {
                 columns={columns}
                 dataSource={auditList}
                 scroll={{
-                    y: 'calc( 100vh - 340px )',
+                    y: 'calc( 100vh - 372px )',
                 }}
             />
              <AuditDetailModal 

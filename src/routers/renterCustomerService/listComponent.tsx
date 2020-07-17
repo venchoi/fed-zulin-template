@@ -39,7 +39,11 @@ export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
             const renters = record.contract_renter.map(item =>
                 `${item.alias}方: ${item.organization_name}`
             )
-            const popoverContent = renters.map(renter => <p>{renter}</p>);
+            const popoverContent = <div className="popover-list">
+                {
+                    renters.map(renter => <p>{renter}</p>)
+                }
+            </div>
             return <div className="rs-td-container">
                 <span className="renter-table-td-rs" title={renters[0]}>
                     {renters[0]}
@@ -70,7 +74,7 @@ export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
         render: (text: string, record: renterListType, index: number) => {
             const rooms = record.contract_room;
             const popoverContent = (
-                <div>
+                <div className="popover-list">
                     {rooms.map(room => {
                         return <p>{room.room_name}</p>;
                     })}
@@ -132,7 +136,7 @@ export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
     },
     {
         dataIndex: 'phone',
-        title: '管理员联系方式',
+        title: '管理员手机号',
         width: 147,
         render: (text: string, record: renterListType, index: number) => {
             return (
@@ -205,7 +209,7 @@ export const basicAuditListColumns:  ColumnProps<auditListType>[] = [
         render: (text: string, record: auditListType, index: number) => {
             const rooms = record.contract_room;
             const popoverContent = (
-                <div>
+                <div className="popover-list">
                     {rooms.map(room => {
                         return <p>{room.room_name}</p>;
                     })}

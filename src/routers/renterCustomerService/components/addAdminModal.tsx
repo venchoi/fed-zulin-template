@@ -117,7 +117,7 @@ export const addAdminModal = function(props: addAdminModalType): JSX.Element {
             onCancel={handleCancel}
         >
             <Spin spinning={loading}>
-                <Form {...layout} form={form} name="add-form">
+                <Form {...layout} form={form} name="add-form" validateTrigger="onBlur">
                     {
                         !isEdit ? 
                             <div style={{marginBottom: 16}}>

@@ -29,7 +29,7 @@ export const renterList = (props: RenterListProps) => {
         stage_id: '',
         keyword: '',
         page: 1,
-        page_size: 10,
+        page_size: 20,
         renter_type: '',
         contract_status: ''
     });
@@ -143,7 +143,7 @@ export const renterList = (props: RenterListProps) => {
                 columns={columns}
                 dataSource={renterList}
                 scroll={{
-                    y: 'calc( 100vh - 340px )',
+                    y: 'calc( 100vh - 372px )',
                 }}
             />
         </div>
