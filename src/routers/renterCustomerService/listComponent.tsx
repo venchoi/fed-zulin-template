@@ -172,6 +172,7 @@ export const basicAuditListColumns:  ColumnProps<auditListType>[] = [
     {
         dataIndex: 'created_on',
         title: '申请时间',
+        fixed: 'left',
         width: 205,
         render: (text: string, record: auditListType, index: number) => {
             return (
@@ -187,8 +188,8 @@ export const basicAuditListColumns:  ColumnProps<auditListType>[] = [
         width: 205,
         render: (text: string, record: auditListType, index: number) => {
             return (
-                <span  className="contract-code-td renter-table-td" title={text || '-'}>
-                    {text || '-'}
+                <span  className="contract-code-td renter-table-td" title={text}>
+                    {`${text}(${record.version})`}
                 </span>
             );
         },

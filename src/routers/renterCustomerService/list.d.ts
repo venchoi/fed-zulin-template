@@ -88,6 +88,7 @@ export interface auditListType {
     contract_status: string;
     status: string;
     apply_id: string;
+    version: string;
 }
 
 export interface contractRoomType {
