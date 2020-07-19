@@ -4,7 +4,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { RenterListProps, renterListType, statusMapType, auditListType } from './list.d';
 import { ColumnProps } from 'antd/es/table';
 
-export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
+export const basicRenterListColumns: ColumnProps<renterListType>[] = [
     {
         dataIndex: 'code',
         title: '合同编号',
@@ -12,7 +12,7 @@ export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
         width: 205,
         render: (text: string, record: renterListType, index: number) => {
             return (
-                <span  className="contract-code-td renter-table-td" title={`${text}(${record.version})`}>
+                <span className="contract-code-td renter-table-td" title={`${text}(${record.version})`}>
                     {`${text}(${record.version})`}
                 </span>
             );
@@ -21,9 +21,9 @@ export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
     {
         dataIndex: 'date',
         title: '租赁期限',
-        width: 218,
+        width: 226,
         render: (text: string, record: renterListType, index: number) => {
-            const date = `${record.start_date} 至 ${record.end_date}`
+            const date = `${record.start_date} 至 ${record.end_date}`;
             return (
                 <span title={date} className="renter-table-td">
                     {date}
@@ -36,35 +36,31 @@ export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
         title: '承租方',
         width: 228,
         render: (text: string, record: renterListType, index: number) => {
-            const renters = record.contract_renter.map(item =>
-                `${item.alias}方: ${item.organization_name}`
-            )
-            const popoverContent = <div className="popover-list">
-                {
-                    renters.map(renter => <p>{renter}</p>)
-                }
-            </div>
-            return <div className="rs-td-container">
-                <span className="renter-table-td-rs" title={renters[0]}>
-                    {renters[0]}
-                </span>
-                {
-                    renters.length > 1 ?
-                    <Popover 
-                        title="全部承租方" 
-                        placement="bottom"
-                        overlayClassName="renter-list-popover" 
-                        content={popoverContent}
-                    >
-                        <InfoCircleOutlined
-                            className="icon-info-hover"
-                        />
-                    </Popover>
-                    :
-                    null
-                }
-                
-            </div>
+            const renters = record.contract_renter.map(item => `${item.alias}方: ${item.organization_name}`);
+            const popoverContent = (
+                <div className="popover-list">
+                    {renters.map(renter => (
+                        <p>{renter}</p>
+                    ))}
+                </div>
+            );
+            return (
+                <div className="rs-td-container">
+                    <span className="renter-table-td-rs" title={renters[0]}>
+                        {renters[0]}
+                    </span>
+                    {renters.length > 1 ? (
+                        <Popover
+                            title="全部承租方"
+                            placement="bottom"
+                            overlayClassName="renter-list-popover"
+                            content={popoverContent}
+                        >
+                            <InfoCircleOutlined className="icon-info-hover" />
+                        </Popover>
+                    ) : null}
+                </div>
+            );
         },
     },
     {
@@ -80,26 +76,23 @@ export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
                     })}
                 </div>
             );
-            return <div className="rs-td-container">
-                <span className="renter-table-td-rs" title={rooms[0].room_name || '-'}>
-                    {rooms[0].room_name}
-                </span>
-                {
-                    rooms.length > 1 ?
-                    <Popover
-                        title="全部租赁资源"
-                        placement="bottom"
-                        overlayClassName="renter-list-popover"
-                        content={popoverContent} 
-                    >
-                        <InfoCircleOutlined
-                            className="icon-info-hover"
-                        />
-                    </Popover>
-                    :
-                    null
-                }
-            </div>
+            return (
+                <div className="rs-td-container">
+                    <span className="renter-table-td-rs" title={rooms[0].room_name || '-'}>
+                        {rooms[0].room_name}
+                    </span>
+                    {rooms.length > 1 ? (
+                        <Popover
+                            title="全部租赁资源"
+                            placement="bottom"
+                            overlayClassName="renter-list-popover"
+                            content={popoverContent}
+                        >
+                            <InfoCircleOutlined className="icon-info-hover" />
+                        </Popover>
+                    ) : null}
+                </div>
+            );
         },
     },
     {
@@ -112,7 +105,7 @@ export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
                 审核中: 'auditing',
                 已审核: 'audited',
                 执行中: 'processing',
-                已关闭: 'closed'
+                已关闭: 'closed',
             };
             return (
                 <div className="status-item">
@@ -160,11 +153,11 @@ export const basicRenterListColumns:  ColumnProps<renterListType>[] = [
     },
     {
         dataIndex: 'gap',
-        title: ''
+        title: '',
     },
-]
+];
 
-export const basicAuditListColumns:  ColumnProps<auditListType>[] = [
+export const basicAuditListColumns: ColumnProps<auditListType>[] = [
     {
         dataIndex: 'created_on',
         title: '申请时间',
@@ -172,7 +165,7 @@ export const basicAuditListColumns:  ColumnProps<auditListType>[] = [
         width: 205,
         render: (text: string, record: auditListType, index: number) => {
             return (
-                <span  className="renter-table-td" title={text || '-'}>
+                <span className="renter-table-td" title={text || '-'}>
                     {text || '-'}
                 </span>
             );
@@ -184,7 +177,7 @@ export const basicAuditListColumns:  ColumnProps<auditListType>[] = [
         width: 205,
         render: (text: string, record: auditListType, index: number) => {
             return (
-                <span  className="contract-code-td renter-table-td" title={`${text}(${record.version})`}>
+                <span className="contract-code-td renter-table-td" title={`${text}(${record.version})`}>
                     {`${text}(${record.version})`}
                 </span>
             );
@@ -215,26 +208,23 @@ export const basicAuditListColumns:  ColumnProps<auditListType>[] = [
                     })}
                 </div>
             );
-            return <div className="rs-td-container">
-                <span className="renter-table-td-rs" title={rooms[0].room_name || '-'}>
-                    {rooms[0].room_name}
-                </span>
-                {
-                    rooms.length > 1 ?
-                    <Popover
-                        title="全部租赁资源"
-                        placement="bottom"
-                        overlayClassName="renter-list-popover"
-                        content={popoverContent} 
-                    >
-                        <InfoCircleOutlined
-                            className="icon-info-hover"
-                        />
-                    </Popover>
-                    :
-                    null
-                }
-            </div>
+            return (
+                <div className="rs-td-container">
+                    <span className="renter-table-td-rs" title={rooms[0].room_name || '-'}>
+                        {rooms[0].room_name}
+                    </span>
+                    {rooms.length > 1 ? (
+                        <Popover
+                            title="全部租赁资源"
+                            placement="bottom"
+                            overlayClassName="renter-list-popover"
+                            content={popoverContent}
+                        >
+                            <InfoCircleOutlined className="icon-info-hover" />
+                        </Popover>
+                    ) : null}
+                </div>
+            );
         },
     },
     {
@@ -293,7 +283,7 @@ export const basicAuditListColumns:  ColumnProps<auditListType>[] = [
             const statusMap: statusMapType = {
                 待审核: 'unaudit',
                 已审核: 'audited',
-                审核不通过: 'passed'
+                审核不通过: 'passed',
             };
             return (
                 <div className="status-item">
@@ -305,6 +295,6 @@ export const basicAuditListColumns:  ColumnProps<auditListType>[] = [
     },
     {
         dataIndex: 'gap',
-        title: ''
+        title: '',
     },
-]
+];
