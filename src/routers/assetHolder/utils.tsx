@@ -14,9 +14,6 @@ const calcBodyHeight = WrappedComponent => {
                     const thead = antdTable ? antdTable.querySelectorAll('thead')[0] : null;
                     const pagination = antdTable ? antdTable.querySelectorAll('.ant-pagination')[0] : null;
                     const doms = [];
-
-                    console.log('antdTable', antdTable);
-
                     if (thead) {
                         doms.push(thead);
                     }

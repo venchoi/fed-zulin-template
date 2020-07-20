@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps } from 'dva/router';
-import { Button, Card, Input, Select, Dropdown } from 'antd';
+import { Button, Card, Input, Select, Dropdown, message } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { ResizeTable, DragSelect, MaxHeightTable } from 'ykj-ui';
 import { cloneDeep } from 'lodash';
-import { getAssetHolderList, getCustomLayout, getFiles } from '@/services/assetHolder';
+import { getAssetHolderList, getCustomLayout, getFiles, postCustomLayout } from '@/services/assetHolder';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import { IAddAssetHolderBank, IGetCustomLayout, IField } from '@t/assetHolder';
 import { IHeader } from '../../constants/layoutConfig';
@@ -24,6 +24,7 @@ const List = ({ location }: RouteComponentProps) => {
     const [list, setList] = useState([]);
     const [total, setTotal] = useState(0);
     const [layoutData, setLayoutData] = useState<IGetCustomLayout[]>([]);
+    const type_value = '资产持有人列表';
 
     useEffect(() => {
         getAll();
@@ -35,7 +36,7 @@ const List = ({ location }: RouteComponentProps) => {
         setLayoutData(result);
     };
     const fetchFields = async () => {
-        const { data } = await getFiles({ type: '资产持有人列表' });
+        const { data } = await getFiles({ type: type_value });
         const result: IField[] = data || [];
         const fieldData = cloneDeep(result);
         fieldData.map(field => (field.selected = field.is_default));
@@ -96,6 +97,18 @@ const List = ({ location }: RouteComponentProps) => {
         const resetSetting = () => {};
         const onFinish = resultArr => {
             console.log('resultArr', resultArr);
+            const saveArr = [];
+            resultArr && resultArr.map(item => saveArr.push({ field: item.field, width: 100 }));
+            postCustomLayout({ key: type_value, value: saveArr }).then(json => {
+                const { result, msg } = json;
+                if (result) {
+                    setVisible(false);
+                    message.success('保存成功');
+                    getAll();
+                } else {
+                    message.error(msg || '操作失败');
+                }
+            });
         };
         const onCancel = () => {};
         return <DragSelect options={fieldData} onFinish={onFinish} onCancel={onCancel} />;
@@ -108,7 +121,7 @@ const List = ({ location }: RouteComponentProps) => {
     const onTablePaginationChange = (pagination, filters, sorter, extra) => {};
     return (
         <>
-            <div className="layout-list">
+            <div className="layout-list" style={{ height: '100%' }}>
                 <Card className="asset-holder-card" title="资产持有人管理" bordered={false} extra={extra}>
                     <div className="filter">
                         <div className="filter-left">
@@ -141,7 +154,7 @@ const List = ({ location }: RouteComponentProps) => {
                         </div>
                     </div>
 
-                    <div className="table-list-wrap no-table-border-left no-table-border-right" style={{ height: 200 }}>
+                    <div className="table-list-wrap no-table-border-left no-table-border-right">
                         <Table
                             rowKey="id"
                             align="left"
