@@ -14,6 +14,7 @@ export interface ITableColumn {
 }
 
 export interface IField {
+    id?: string;
     field: string; // "name"
     is_default: boolean; //
     selected?: boolean; //
@@ -71,6 +72,7 @@ export interface IAddAssetHolderBank {
 
 // 银行账号列表
 export interface IAssetHolderBankList {
+    id: string; //
     page: number; // 当前页码
     page_size: number; // 每个大小
     keyword?: string; //  搜索关键字

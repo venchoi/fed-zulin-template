@@ -64,6 +64,6 @@ export const getAssetHolderBankList = (data: IAssetHolderBankList) => {
     return ajax('/asset/holder/account-list', { ...data, _csrf: '' }, 'GET');
 };
 
-export const deleteS = () => {
+export const deleteAssetHolder = (data: { id: string }) => {
     return ajax('/asset/holder/delete', { ...data, _csrf: '' }, 'POST');
 };

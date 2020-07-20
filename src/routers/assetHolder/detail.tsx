@@ -77,7 +77,7 @@ const Detail = ({
     };
 
     const fetchAccountData = async () => {
-        const { data } = await getAssetHolderBankList({ page: 1, page_size: 10000 });
+        const { data } = await getAssetHolderBankList({ page: 1, page_size: 10000, id });
         const result = (data && data) || initDetail;
         setAccountList(result);
     };

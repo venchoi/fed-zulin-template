@@ -1,18 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { RouteComponentProps } from 'dva/router';
-import { Button, Card, Input, Select, Dropdown, message } from 'antd';
+import { Link, RouteComponentProps } from 'dva/router';
+import { Button, Card, Dropdown, Input, message, Popconfirm, Pagination, Select } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-import { ResizeTable, DragSelect, MaxHeightTable } from 'ykj-ui';
+import { ResizeTable, DragSelect } from 'ykj-ui';
 import { cloneDeep } from 'lodash';
-import { getAssetHolderList, getCustomLayout, getFiles, postCustomLayout } from '@/services/assetHolder';
+import {
+    getAssetHolderList,
+    getCustomLayout,
+    getFiles,
+    postCustomLayout,
+    deleteAssetHolder,
+} from '@/services/assetHolder';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import { IAddAssetHolderBank, IGetCustomLayout, IField } from '@t/assetHolder';
 import { IHeader } from '../../constants/layoutConfig';
 import { customType, cooperateStatus } from '../../constants/index';
 import calcBodyHeight from './utils';
 import AddBaseForm from './components/addBaseForm';
+// import MaxHeightTable from 'ykj-ui/es/components/max-height-table'
 import './index.less';
-
 const Table = calcBodyHeight(ResizeTable);
 const { Search } = Input;
 const List = ({ location }: RouteComponentProps) => {
@@ -25,13 +31,14 @@ const List = ({ location }: RouteComponentProps) => {
     const [total, setTotal] = useState(0);
     const [layoutData, setLayoutData] = useState<IGetCustomLayout[]>([]);
     const type_value = '资产持有人列表';
+    const type_value_code = 'asset_holder_layout';
 
     useEffect(() => {
         getAll();
     }, [location]);
 
     const fetchCustomLayOut = async () => {
-        const { data } = await getCustomLayout({ key: 'asset_holder_layout' });
+        const { data } = await getCustomLayout({ key: type_value_code });
         const result: IGetCustomLayout[] = (data && data.asset_holder_layout) || [];
         setLayoutData(result);
     };
@@ -58,7 +65,49 @@ const List = ({ location }: RouteComponentProps) => {
                     dataIndex: it.field,
                     key: it.field,
                     sort: true,
+                    width: 100,
                 });
+            });
+
+            const confirm = (item: IField) => {
+                deleteAssetHolder({ id: item.id }).then((json: { result: boolean; msg: string }) => {
+                    const { result, msg } = json;
+                    if (result) {
+                        message.success('删除成功!');
+                        getAll();
+                    } else {
+                        message.error(msg || '删除失败');
+                    }
+                });
+            };
+
+            arr.push({
+                title: '操作',
+                width: 100,
+                align: 'center',
+                fixed: 'right',
+                isNoResize: true,
+                render: (item: IField) => (
+                    <>
+                        <Link className="record-opt-btn" to={`/asset-holder/detail/${item.id}`}>
+                            详情
+                        </Link>
+                        <Link className="record-opt-btn" to={`/asset-holder/edit/${item.id}`}>
+                            编辑
+                        </Link>
+                        <Popconfirm
+                            placement="topRight"
+                            title="确定删除该资产持有人吗?"
+                            onConfirm={() => {
+                                confirm(item);
+                            }}
+                            okText="确定"
+                            cancelText="取消"
+                        >
+                            <a className="record-opt-btn">删除</a>
+                        </Popconfirm>
+                    </>
+                ),
             });
             return arr;
         };
@@ -96,10 +145,9 @@ const List = ({ location }: RouteComponentProps) => {
     const renderExtraNode = () => {
         const resetSetting = () => {};
         const onFinish = resultArr => {
-            console.log('resultArr', resultArr);
             const saveArr = [];
             resultArr && resultArr.map(item => saveArr.push({ field: item.field, width: 100 }));
-            postCustomLayout({ key: type_value, value: saveArr }).then(json => {
+            postCustomLayout({ key: type_value_code, value: saveArr }).then(json => {
                 const { result, msg } = json;
                 if (result) {
                     setVisible(false);
@@ -110,15 +158,27 @@ const List = ({ location }: RouteComponentProps) => {
                 }
             });
         };
-        const onCancel = () => {};
+        const onCancel = () => {
+            setVisible(false);
+        };
         return <DragSelect options={fieldData} onFinish={onFinish} onCancel={onCancel} />;
     };
     const handleVisibleChange = (val: boolean, callback: Function) => {
         setVisible(val);
     };
-
-    const onHandleResize = (index, size) => {};
+    // 表头宽度设置
+    const onHandleResize = (index, size) => {
+        // 保存宽度
+        console.log('index', index, 'size', size);
+    };
     const onTablePaginationChange = (pagination, filters, sorter, extra) => {};
+    // 页码变化的回调
+    const onPaginationChange = page => {
+        const { history, location } = this.props;
+    };
+    // pageSize变化的回调
+    const onPageSizeChange = (current, size) => {};
+
     return (
         <>
             <div className="layout-list" style={{ height: '100%' }}>
@@ -158,6 +218,7 @@ const List = ({ location }: RouteComponentProps) => {
                         <Table
                             rowKey="id"
                             align="left"
+                            size="small"
                             bordered
                             columns={columns}
                             dataSource={list}
@@ -166,6 +227,18 @@ const List = ({ location }: RouteComponentProps) => {
                             onHandleResize={onHandleResize}
                             onPaginationChange={onTablePaginationChange}
                             pagination={true}
+                        />
+                    </div>
+                    <div className="table-pagination" style={{ display: 'none' }}>
+                        <Pagination
+                            current={1}
+                            pageSize={10}
+                            total={11}
+                            showQuickJumper
+                            showSizeChanger
+                            showTotal={total => `共${Math.ceil(total / 11)}页，${total}条记录`}
+                            onChange={(page, pageSize) => onPaginationChange(page, pageSize)}
+                            onShowSizeChange={(current, size) => onPageSizeChange(current, size)}
                         />
                     </div>
                 </Card>
