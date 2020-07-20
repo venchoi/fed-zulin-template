@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { RouteComponentProps } from 'dva/router';
-import { Button, Card, Input, Select } from 'antd';
+import { Button, Card, Input, Select, Dropdown } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { ResizeTable, DragSelect, MaxHeightTable } from 'ykj-ui';
+import { cloneDeep } from 'lodash';
 import { getAssetHolderList, getCustomLayout, getFiles } from '@/services/assetHolder';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import { IAddAssetHolderBank, IGetCustomLayout, IField } from '@t/assetHolder';
 import { IHeader } from '../../constants/layoutConfig';
 import { customType, cooperateStatus } from '../../constants/index';
+import calcBodyHeight from './utils';
 import AddBaseForm from './components/addBaseForm';
 import './index.less';
 
-const Table = ResizeTable;
+const Table = calcBodyHeight(ResizeTable);
 const { Search } = Input;
 const List = ({ location }: RouteComponentProps) => {
     const [isTableLoading, setIsTableLoading] = useState(false);
     const [showBaseInfoModal, setShowBaseInfoModal] = useState(false);
+    const [visible, setVisible] = useState(false);
     const [columns, setColumns] = useState([]);
     const [fieldData, setFieldData] = useState<IField[]>([]);
     const [list, setList] = useState([]);
@@ -34,7 +37,9 @@ const List = ({ location }: RouteComponentProps) => {
     const fetchFields = async () => {
         const { data } = await getFiles({ type: '资产持有人列表' });
         const result: IField[] = data || [];
-        setFieldData(result);
+        const fieldData = cloneDeep(result);
+        fieldData.map(field => (field.selected = field.is_default));
+        setFieldData(fieldData);
     };
     const fetchList = async () => {
         const params = {
@@ -43,7 +48,7 @@ const List = ({ location }: RouteComponentProps) => {
             page_size: 20,
         };
         const { data } = await getAssetHolderList(params);
-        const { head, items } = data;
+        const { head, items } = data || { head: [], items: [] };
         const head2TableHeader = (head: IField[]) => {
             const arr: IHeader[] = [];
             head.map(it => {
@@ -53,19 +58,6 @@ const List = ({ location }: RouteComponentProps) => {
                     key: it.field,
                     sort: true,
                 });
-            });
-            arr.push({
-                title: '操作',
-                width: 120,
-                align: 'center',
-                fixed: 'right',
-                isNoResize: true,
-                render: text => (
-                    <>
-                        <span className="text-link">查看</span>&nbsp;
-                        <span className="text-link">删除</span>
-                    </>
-                ),
             });
             return arr;
         };
@@ -100,6 +92,17 @@ const List = ({ location }: RouteComponentProps) => {
         setShowBaseInfoModal(false);
         // 刷新列表
     };
+    const renderExtraNode = () => {
+        const resetSetting = () => {};
+        const onFinish = resultArr => {
+            console.log('resultArr', resultArr);
+        };
+        const onCancel = () => {};
+        return <DragSelect options={fieldData} onFinish={onFinish} onCancel={onCancel} />;
+    };
+    const handleVisibleChange = (val: boolean, callback: Function) => {
+        setVisible(val);
+    };
 
     const onHandleResize = (index, size) => {};
     const onTablePaginationChange = (pagination, filters, sorter, extra) => {};
@@ -107,30 +110,38 @@ const List = ({ location }: RouteComponentProps) => {
         <>
             <div className="layout-list">
                 <Card className="asset-holder-card" title="资产持有人管理" bordered={false} extra={extra}>
-                    <div className="table-list-wrap no-table-border-left no-table-border-right">
-                        <div className="filter">
-                            <div className="filter-left">
-                                <Search style={{ width: '312px' }} placeholder="计划名称" />
-                                <Select placeholder="类型" className="filter-item">
-                                    {customType.map(cType => (
-                                        <Option value={cType.value} key={cType.value}>
-                                            {cType.name}
-                                        </Option>
-                                    ))}
-                                </Select>
-                                <Select placeholder="合作状态" className="filter-item">
-                                    {cooperateStatus.map(cType => (
-                                        <Option value={cType.value} key={cType.value}>
-                                            {cType.name}
-                                        </Option>
-                                    ))}
-                                </Select>
-                            </div>
-                            <div className="filter-right">
-                                <SettingOutlined />
-                            </div>
+                    <div className="filter">
+                        <div className="filter-left">
+                            <Search style={{ width: '312px' }} placeholder="计划名称" />
+                            <Select placeholder="类型" className="filter-item">
+                                {customType.map(cType => (
+                                    <Option value={cType.value} key={cType.value}>
+                                        {cType.name}
+                                    </Option>
+                                ))}
+                            </Select>
+                            <Select placeholder="合作状态" className="filter-item">
+                                {cooperateStatus.map(cType => (
+                                    <Option value={cType.value} key={cType.value}>
+                                        {cType.name}
+                                    </Option>
+                                ))}
+                            </Select>
                         </div>
+                        <div className="filter-right">
+                            <Dropdown
+                                placement="bottomRight"
+                                visible={visible}
+                                onVisibleChange={handleVisibleChange}
+                                overlay={renderExtraNode}
+                                trigger={['click']}
+                            >
+                                <Button className="btn-setting" icon={<SettingOutlined />} />
+                            </Dropdown>
+                        </div>
+                    </div>
 
+                    <div className="table-list-wrap no-table-border-left no-table-border-right" style={{ height: 200 }}>
                         <Table
                             rowKey="id"
                             align="left"

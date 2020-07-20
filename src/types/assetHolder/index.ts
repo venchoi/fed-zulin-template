@@ -16,6 +16,7 @@ export interface ITableColumn {
 export interface IField {
     field: string; // "name"
     is_default: boolean; //
+    selected?: boolean; //
     key: string; // "39f649c3-d5a2-0e18-56eb-d7f8bcaf9edb"
     name: string; // "姓名"
 }
