@@ -146,7 +146,7 @@ export const basicRenterListColumns: ColumnProps<renterListType>[] = [
         render: (text: string, record: renterListType, index: number) => {
             return (
                 <span className="renter-table-td" title={record.email}>
-                    {record.email}
+                    {record.email || '-'}
                 </span>
             );
         },
