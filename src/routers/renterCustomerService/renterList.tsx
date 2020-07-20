@@ -138,6 +138,7 @@ export const renterList = (props: RenterListProps) => {
                 columns={columns}
                 dataSource={renterList}
                 scroll={{
+                    x: '1500',
                     y: 'calc( 100vh - 388px )',
                 }}
             />
