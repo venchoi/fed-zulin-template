@@ -5,16 +5,49 @@ import { cloneDeep } from 'lodash';
 import AddBaseForm from './components/addBaseForm';
 import AddBankForm from './components/addBankForm';
 import BankTable from './components/bankTable';
-import { postAddAssetHolder } from '@s/assetHolder';
+import { getAssetHolderBankList, getAssetHolderDetail, postAddAssetHolder } from '@s/assetHolder';
 import { IAddAssetHolder, IAddAssetHolderBank } from '@t/assetHolder';
 import './index.less';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb';
 
-const Add = ({ location, history }: RouteComponentProps) => {
+const Add = ({ history, match }: RouteComponentProps) => {
     const [form] = Form.useForm();
     const [showAddBankAccount, setShowAddBankAccount] = useState(false);
     const [bankList, setBankList] = useState<IAddAssetHolderBank[]>([]);
-    const id = '';
+    let id = '';
+    if (match && match.params) {
+        if (match.params.id) {
+            id = match.params.id;
+        }
+    }
+    // 获取 基本信息
+    const fetchDetail = async () => {
+        const { data } = await getAssetHolderDetail({ id });
+        const result = data;
+        console.log('fetchDetail result', result);
+        if (result) {
+            const keys = Object.keys(result);
+            if (keys) {
+                keys.forEach(name => {
+                    form.setFieldsValue({ [name]: data[name] });
+                });
+            }
+        }
+    };
+    // 获取 收款账户
+    const fetchAccountData = async () => {
+        const { data } = await getAssetHolderBankList({ page: 1, page_size: 10000, id });
+        const result = data && data;
+        if (result) {
+            setBankList(result);
+        }
+    };
+    useEffect(() => {
+        if (id) {
+            fetchDetail().then();
+            fetchAccountData().then();
+        }
+    }, []);
     // 页面保存数据
     const finishHandle = async (values: IAddAssetHolder) => {
         if (id) {
@@ -23,6 +56,9 @@ const Add = ({ location, history }: RouteComponentProps) => {
             const { data, result, msg } = await postAddAssetHolder(values as IAddAssetHolder);
             if (result) {
                 message.success('编辑成功');
+                setTimeout(() => {
+                    history.push('/asset-holder/list');
+                }, 500);
             } else {
                 message.error(msg || '编辑失败');
             }
@@ -43,7 +79,9 @@ const Add = ({ location, history }: RouteComponentProps) => {
             const { result, msg } = await postAddAssetHolder(values as IAddAssetHolder);
             if (result) {
                 message.success('操作成功');
-                history.push('/asset-holder/list');
+                setTimeout(() => {
+                    history.push('/asset-holder/list');
+                }, 500);
             } else {
                 message.error(msg || '操作失败');
             }
@@ -89,7 +127,7 @@ const Add = ({ location, history }: RouteComponentProps) => {
         },
         {
             path: '',
-            breadcrumbName: '新增',
+            breadcrumbName: id ? '编辑' : '新增',
         },
     ];
     const itemRender = (route: Route) => {
@@ -104,7 +142,11 @@ const Add = ({ location, history }: RouteComponentProps) => {
     };
     return (
         <>
-            <PageHeader title="新增资产持有人" breadcrumb={{ routes, itemRender, separator: '>' }} ghost={false} />
+            <PageHeader
+                title={`${id ? '编辑' : '新增'}资产持有人`}
+                breadcrumb={{ routes, itemRender, separator: '>' }}
+                ghost={false}
+            />
             <Form onFinish={finishHandle} form={form}>
                 <div className="layout-list">
                     <Card className="report-card" title="基本信息" bordered={false}>
@@ -116,8 +158,9 @@ const Add = ({ location, history }: RouteComponentProps) => {
                     <Link className="ant-btn" to="/asset-holder/list">
                         取消
                     </Link>
+                    &nbsp;
                     <Button className="add-button" htmlType="submit">
-                        新增
+                        保存
                     </Button>
                 </div>
             </Form>

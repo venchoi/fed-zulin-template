@@ -54,6 +54,11 @@ export const postAddAssetHolderBank = (data: IAddAssetHolderBank) => {
     return ajax('/asset/holder/account-add', { ...data, _csrf: '' }, 'POST');
 };
 
+// 新增资产银行账户列表
+export const postDeleteAssetHolderBank = (data: { id: string }) => {
+    return ajax('/asset/holder/account-delete', { ...data, _csrf: '' }, 'POST');
+};
+
 // 详情 资产银行账户
 export const getAssetHolderBankDetail = (data: { id: string }) => {
     return ajax('/asset/holder/account-detail', { ...data, _csrf: '' }, 'GET');

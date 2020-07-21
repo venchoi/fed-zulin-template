@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Radio, Select, DatePicker, Modal, message, Table, Button, Space, Popconfirm } from 'antd';
 import './bankTable.less';
-import { getIdCardList, postAddAssetHolder } from '@/services/assetHolder';
+import { postAddAssetHolderBank, postDeleteAssetHolderBank } from '@/services/assetHolder';
 import { IAddAssetHolderBank } from '@t/assetHolder';
 import FedIcon from '@c/FedIcon';
 import AddBankForm from './addBankForm';
@@ -42,8 +42,24 @@ const BankTable = ({ data, isCanOperate = false, isNoShowPage = false, onDelete,
     ];
     // 删除
     const deleteAccount = (id: string) => {
-        if (onDelete) {
-            onDelete(id);
+        // 增加 数据模式下的删除
+        if (id.indexOf('0.') > -1) {
+            if (onDelete) {
+                onDelete(id);
+            }
+        } else {
+            // 调用接口直接删除数据
+            postDeleteAssetHolderBank({ id }).then(json => {
+                const { result, msg } = json;
+                if (result) {
+                    message.success('删除成功');
+                    if (onDelete) {
+                        onDelete(id);
+                    }
+                } else {
+                    message.error(msg || '操作失败');
+                }
+            });
         }
     };
     // 编辑
@@ -58,8 +74,24 @@ const BankTable = ({ data, isCanOperate = false, isNoShowPage = false, onDelete,
     // 编辑 弹框确定
     const onSave = (values: IAddAssetHolderBank) => {
         setShowEditBankAccount(false);
-        if (onUpdate) {
-            onUpdate(values);
+        if ((values.id || '').indexOf('0.') > -1) {
+            if (onUpdate) {
+                onUpdate(values);
+            }
+        } else {
+            // 调用接口直接更新数据
+            console.log(data, values);
+            postAddAssetHolderBank(Object.assign({}, data, values)).then(json => {
+                const { result, msg } = json;
+                if (result) {
+                    message.success('修改成功');
+                    if (onUpdate) {
+                        onUpdate(values);
+                    }
+                } else {
+                    message.error(msg || '操作失败');
+                }
+            });
         }
     };
 

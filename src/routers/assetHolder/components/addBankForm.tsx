@@ -48,6 +48,9 @@ const AddBankForm = ({ onCancel, onOk, isSubmit = false, bankId = '', assetHolde
                 const obj = Object.assign({}, values, { id: `${Math.random()}` });
                 if (data) {
                     obj.id = data.id;
+                    if (data.holder_id) {
+                        obj.holder_id = data.holder_id;
+                    }
                 }
                 if (bankId) {
                     obj.id = bankId;

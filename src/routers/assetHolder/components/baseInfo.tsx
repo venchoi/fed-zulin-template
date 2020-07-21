@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { IAddAssetHolder, IAddAssetHolderBank, IAssetHolderBankList } from '@t/assetHolder';
-import FedTable from '@/components/FedTable';
 import FedDataSection from '@c/FedDataSection/FedDataSection';
 import FedDataRow from '@c/FedDataSection/FedDataRow';
 import { valueOf } from '@/types/global';
 import AddBankForm from './addBankForm';
+import BankTable from './bankTable';
 import './baseInfo.less';
 import { Link } from 'dva/router';
 import { Popconfirm } from 'antd';
@@ -14,7 +14,13 @@ interface IDataSection {
     value: valueOf<IAddAssetHolder>;
 }
 
-const BaseInfo = ({ detail, account }: { detail: IAddAssetHolder; account: IAssetHolderBankList }) => {
+interface IDetail {
+    detail: IAddAssetHolder;
+    account: IAssetHolderBankList;
+    onUpdate?: () => void;
+}
+
+const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
     const baseInfoData = [
         [
             {
@@ -39,7 +45,7 @@ const BaseInfo = ({ detail, account }: { detail: IAddAssetHolder; account: IAsse
             },
             {
                 label: '关联项目',
-                value: detail.project_id,
+                value: (detail.projects || []).join('、'),
             },
             {
                 label: '证件类型',
@@ -94,63 +100,24 @@ const BaseInfo = ({ detail, account }: { detail: IAddAssetHolder; account: IAsse
     const handleAddAccount = () => {
         setShowAddAccount(true);
     };
+    const onUpdateTale = () => {
+        if (onUpdate) {
+            onUpdate();
+        }
+    };
     const onCancel = () => {
         setShowAddAccount(false);
     };
     const onSave = (values: IAddAssetHolderBank) => {
         setShowAddAccount(false);
-        //setBankList([...bankList, values]);
+        onUpdateTale();
     };
-    const columns = [
-        {
-            title: '开户行',
-            dataIndex: 'number',
-        },
-        {
-            title: '账号',
-            dataIndex: 'account',
-        },
-        {
-            title: '户名',
-            dataIndex: 'name',
-        },
-        {
-            title: '备注',
-            dataIndex: 'remark',
-        },
-        {
-            dataIndex: 'id',
-            title: '操作',
-            width: 163,
-            render: (text, rowData) => {
-                return (
-                    <div>
-                        <Link className="record-opt-btn" to={`/asset-holder/edit/${item.id}`}>
-                            编辑
-                        </Link>
-                        <Popconfirm
-                            placement="topRight"
-                            title="确定删除该资产持有人吗?"
-                            onConfirm={() => {
-                                confirm(item);
-                            }}
-                            okText="确定"
-                            cancelText="取消"
-                        >
-                            <a className="record-opt-btn">删除</a>
-                        </Popconfirm>
-                    </div>
-                );
-            },
-        },
-    ];
-    const [dataSource, setDataSource] = useState([]);
     const renderFedDataTableSection = (data: IDataSection[][]) => (
         <div className="baseinfo-content" style={{ position: 'relative' }}>
             <div onClick={handleAddAccount} className="add-bank-account-btn">
                 +添加账号
             </div>
-            <FedTable columns={columns} dataSource={dataSource} rowKey="id" scroll={{ y: 'calc(100vh - 820px)' }} />
+            <BankTable data={account} isCanOperate onDelete={onUpdateTale} onUpdate={onUpdateTale} />
         </div>
     );
     const baseInfoContent = renderFedDataSection(baseInfoData as IDataSection[][]);
