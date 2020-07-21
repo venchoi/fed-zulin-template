@@ -6,6 +6,8 @@ import FedDataRow from '@c/FedDataSection/FedDataRow';
 import { valueOf } from '@/types/global';
 import AddBankForm from './addBankForm';
 import './baseInfo.less';
+import { Link } from 'dva/router';
+import { Popconfirm } from 'antd';
 
 interface IDataSection {
     label: '';
@@ -115,6 +117,31 @@ const BaseInfo = ({ detail, account }: { detail: IAddAssetHolder; account: IAsse
         {
             title: '备注',
             dataIndex: 'remark',
+        },
+        {
+            dataIndex: 'id',
+            title: '操作',
+            width: 163,
+            render: (text, rowData) => {
+                return (
+                    <div>
+                        <Link className="record-opt-btn" to={`/asset-holder/edit/${item.id}`}>
+                            编辑
+                        </Link>
+                        <Popconfirm
+                            placement="topRight"
+                            title="确定删除该资产持有人吗?"
+                            onConfirm={() => {
+                                confirm(item);
+                            }}
+                            okText="确定"
+                            cancelText="取消"
+                        >
+                            <a className="record-opt-btn">删除</a>
+                        </Popconfirm>
+                    </div>
+                );
+            },
         },
     ];
     const [dataSource, setDataSource] = useState([]);

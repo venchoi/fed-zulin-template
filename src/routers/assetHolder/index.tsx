@@ -32,16 +32,22 @@ const List = ({ location }: RouteComponentProps) => {
     const [layoutData, setLayoutData] = useState<IGetCustomLayout[]>([]);
     const type_value = '资产持有人列表';
     const type_value_code = 'asset_holder_layout';
-
     useEffect(() => {
-        getAll();
+        fetchFields().then();
     }, [location]);
-
+    useEffect(() => {
+        fetchCustomLayOut().then();
+    }, [fieldData]);
+    useEffect(() => {
+        fetchList().then();
+    }, [layoutData]);
+    // 表格布局字段
     const fetchCustomLayOut = async () => {
         const { data } = await getCustomLayout({ key: type_value_code });
         const result: IGetCustomLayout[] = (data && data.asset_holder_layout) || [];
         setLayoutData(result);
     };
+    // 初始默认字段
     const fetchFields = async () => {
         const { data } = await getFiles({ type: type_value });
         const result: IField[] = data || [];
@@ -49,9 +55,12 @@ const List = ({ location }: RouteComponentProps) => {
         fieldData.map(field => (field.selected = field.is_default));
         setFieldData(fieldData);
     };
+    // 表格数据
     const fetchList = async () => {
+        console.log('fieldData', fieldData);
+        console.log('layoutData', layoutData);
         const params = {
-            advanced_select_fields: fieldData.filter(field => field.is_default) || [],
+            advanced_select_fields: mergeCanUseField(),
             page: 1,
             page_size: 20,
         };
@@ -113,21 +122,33 @@ const List = ({ location }: RouteComponentProps) => {
         };
         setColumns(head2TableHeader(head));
         setList(items);
-        console.log(data);
     };
-
-    const getAll = () => {
-        fetchFields().then(() => {
-            fetchCustomLayOut().then(() => {
-                fetchList();
+    // 合并Custom字段
+    const mergeCanUseField = () => {
+        let optionsData: IField[] = [];
+        if (layoutData && layoutData.length > 0 && fieldData && fieldData.length > 0) {
+            layoutData.forEach(item => {
+                const result = fieldData.find(f => f.field === item.field);
+                if (result) {
+                    optionsData.push(result);
+                }
             });
-        });
+        } else {
+            optionsData = fieldData;
+        }
+        return optionsData;
+    };
+    // 调用接口
+    const getAll = async () => {
+        await fetchFields();
+        await fetchCustomLayOut();
+        await fetchList();
     };
 
     // 新增、筛选区域
     const extra = (
         <>
-            <TreeProjectSelect width={324} isJustSelect />
+            <TreeProjectSelect width={324} isjustselect="true" />
             &nbsp;
             <Button type="primary" onClick={() => setShowBaseInfoModal(true)} className="f-hidden meter-standard-add">
                 新增
@@ -142,10 +163,11 @@ const List = ({ location }: RouteComponentProps) => {
         setShowBaseInfoModal(false);
         // 刷新列表
     };
+    // 渲染可配置列弹框
     const renderExtraNode = () => {
-        const resetSetting = () => {};
-        const onFinish = resultArr => {
-            const saveArr = [];
+        // 确定点击事件
+        const onFinish = (resultArr: IField[]) => {
+            const saveArr: { field: string; width: number }[] = [];
             resultArr && resultArr.map(item => saveArr.push({ field: item.field, width: 100 }));
             postCustomLayout({ key: type_value_code, value: saveArr }).then(json => {
                 const { result, msg } = json;
@@ -158,10 +180,13 @@ const List = ({ location }: RouteComponentProps) => {
                 }
             });
         };
+        // 取消点击事件
         const onCancel = () => {
             setVisible(false);
         };
-        return <DragSelect options={fieldData} onFinish={onFinish} onCancel={onCancel} />;
+        // 配置列数据 如果layoutData返回值为空时，默认使用fieldData数据
+        let optionsData: IField[] = mergeCanUseField();
+        return <DragSelect options={optionsData} onFinish={onFinish} onCancel={onCancel} />;
     };
     const handleVisibleChange = (val: boolean, callback: Function) => {
         setVisible(val);
@@ -188,16 +213,16 @@ const List = ({ location }: RouteComponentProps) => {
                             <Search style={{ width: '312px' }} placeholder="计划名称" />
                             <Select placeholder="类型" className="filter-item">
                                 {customType.map(cType => (
-                                    <Option value={cType.value} key={cType.value}>
+                                    <Select.Option value={cType.value} key={cType.value}>
                                         {cType.name}
-                                    </Option>
+                                    </Select.Option>
                                 ))}
                             </Select>
                             <Select placeholder="合作状态" className="filter-item">
                                 {cooperateStatus.map(cType => (
-                                    <Option value={cType.value} key={cType.value}>
+                                    <Select.Option value={cType.value} key={cType.value}>
                                         {cType.name}
-                                    </Option>
+                                    </Select.Option>
                                 ))}
                             </Select>
                         </div>
@@ -227,18 +252,6 @@ const List = ({ location }: RouteComponentProps) => {
                             onHandleResize={onHandleResize}
                             onPaginationChange={onTablePaginationChange}
                             pagination={true}
-                        />
-                    </div>
-                    <div className="table-pagination" style={{ display: 'none' }}>
-                        <Pagination
-                            current={1}
-                            pageSize={10}
-                            total={11}
-                            showQuickJumper
-                            showSizeChanger
-                            showTotal={total => `共${Math.ceil(total / 11)}页，${total}条记录`}
-                            onChange={(page, pageSize) => onPaginationChange(page, pageSize)}
-                            onShowSizeChange={(current, size) => onPageSizeChange(current, size)}
                         />
                     </div>
                 </Card>

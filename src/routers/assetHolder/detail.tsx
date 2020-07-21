@@ -100,7 +100,7 @@ const Detail = ({
                 <Tabs type="card">
                     <TabPane tab="详细信息" key="1">
                         <Card bordered={false} loading={loading} className="layout-detail-tab-content">
-                            <BaseInfo detail={detail} account={accountList} />
+                            <BaseInfo detail={detail} account={accountList} isCanOperate={true} />
                         </Card>
                     </TabPane>
                     <TabPane tab="合作记录" key="2">

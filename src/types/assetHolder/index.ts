@@ -24,7 +24,7 @@ export interface IField {
 
 export interface ISaveCustomLayout {
     key: string; //
-    value: ITableColumn[];
+    value: { field: string; width: number }[];
 }
 
 export interface IGetCustomLayout {
