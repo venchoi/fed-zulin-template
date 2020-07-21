@@ -7,7 +7,7 @@ import AddBankForm from './addBankForm';
 import BankTable from './bankTable';
 import './baseInfo.less';
 import { Link } from 'dva/router';
-import { Popconfirm } from 'antd';
+import { Popconfirm, Row, Col } from 'antd';
 
 interface IDataSection {
     label: '';
@@ -90,9 +90,14 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
         <div className="baseinfo-content">
             {data.map((itemList, index) => (
                 <div key={`baseinfo-item-${index}`} className="baseinfo-item">
-                    {itemList.map(item => (
-                        <FedDataRow key={item.label} rowData={item} />
-                    ))}
+                    <Row>
+                        {itemList.map(item => (
+                            <Col span={6} className="detail-item-wrap">
+                                <span>{item.label}:</span>
+                                {item.value}
+                            </Col>
+                        ))}
+                    </Row>
                 </div>
             ))}
         </div>

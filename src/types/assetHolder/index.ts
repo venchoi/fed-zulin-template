@@ -44,6 +44,7 @@ export interface IAssetHolderList {
 
 // 添加资产持有人
 export interface IAddAssetHolder {
+    id?: string;
     name: string; // 姓名
     short_name: string; // 简称
     id_code_type: string; // 证件类型
@@ -55,8 +56,11 @@ export interface IAddAssetHolder {
     mobile: string; // 电话号码
     address: string; // 地址
     project_id: string; // 关联项目 多个项目用,分隔
+    projects?: string[]; // 关联项目中文 接口数组返回
     manager: string; // 负责人  【与产品经理确认过，此处的负责人为单选】
     accounts: IAddAssetHolderBank[];
+    created_on?: string; // 创建时间
+    created_by_name?: string; // 创建人
 }
 
 // 添加银行账号
