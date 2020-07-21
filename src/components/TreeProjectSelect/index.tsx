@@ -44,8 +44,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
         });
     }
 
-    componentWillUnmount() {
-    }
+    componentWillUnmount() {}
 
     render() {
         const { width, height, dropdownStyle, maxTagCount, ...otherProps } = this.props;
@@ -55,7 +54,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
         const treeProps = {
             ...otherProps,
             treeData: treeData,
-            value: (treeData.length > 0) && treeData[0]?.children && (treeData[0]?.children?.length > 0) ? projIdsArr : [],
+            value: treeData.length > 0 && treeData[0]?.children && treeData[0]?.children?.length > 0 ? projIdsArr : [],
             onChange: this.onTreeSelect,
             style: {
                 width: width || 400,
@@ -168,8 +167,11 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
     onTreeSelect = (value: string[]): void => {
         const projs = this.getSelectedProjIds(value);
         this.setProjIds(projs);
-        const { onTreeSelected } = this.props;
+        const { onTreeSelected, onChange } = this.props;
         onTreeSelected && onTreeSelected(projs);
+        if (onChange) {
+            onChange(projs.projIds.join(','));
+        }
     };
 
     // 转换请求回来的项目树变成 antd 所需的 treeData 数据

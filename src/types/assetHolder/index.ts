@@ -1,5 +1,3 @@
-import { Status } from '@t/meter';
-
 // 证件类型
 export interface IIdCardType {
     code: string; // 类型
@@ -58,6 +56,7 @@ export interface IAddAssetHolder {
     address: string; // 地址
     project_id: string; // 关联项目 多个项目用,分隔
     manager: string; // 负责人  【与产品经理确认过，此处的负责人为单选】
+    accounts: IAddAssetHolderBank[];
 }
 
 // 添加银行账号

@@ -24,7 +24,7 @@ export interface treeOriginNode extends treeNode {
 }
 
 export interface treeProjectSelectProps {
-    width?: number;
+    width?: number | string;
     height?: string;
     dropdownStyle?: any;
     maxTagCount?: number;

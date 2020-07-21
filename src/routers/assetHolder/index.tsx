@@ -57,8 +57,6 @@ const List = ({ location }: RouteComponentProps) => {
     };
     // 表格数据
     const fetchList = async () => {
-        console.log('fieldData', fieldData);
-        console.log('layoutData', layoutData);
         const params = {
             advanced_select_fields: mergeCanUseField(),
             page: 1,
@@ -77,7 +75,6 @@ const List = ({ location }: RouteComponentProps) => {
                     width: 100,
                 });
             });
-
             const confirm = (item: IField) => {
                 deleteAssetHolder({ id: item.id }).then((json: { result: boolean; msg: string }) => {
                     const { result, msg } = json;
@@ -89,7 +86,6 @@ const List = ({ location }: RouteComponentProps) => {
                     }
                 });
             };
-
             arr.push({
                 title: '操作',
                 width: 100,
@@ -150,9 +146,9 @@ const List = ({ location }: RouteComponentProps) => {
         <>
             <TreeProjectSelect width={324} isjustselect="true" />
             &nbsp;
-            <Button type="primary" onClick={() => setShowBaseInfoModal(true)} className="f-hidden meter-standard-add">
+            <Link to="/asset-holder/add" className="ant-btn ant-btn-primary">
                 新增
-            </Button>
+            </Link>
         </>
     );
 
