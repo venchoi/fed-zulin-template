@@ -19,9 +19,14 @@ import calcBodyHeight from './utils';
 import AddBaseForm from './components/addBaseForm';
 // import MaxHeightTable from 'ykj-ui/es/components/max-height-table'
 import './index.less';
+import FedPagination from '@c/FedPagination';
 const Table = calcBodyHeight(ResizeTable);
 const { Search } = Input;
 const List = ({ location }: RouteComponentProps) => {
+    const [pageObj, setPageObj] = useState({
+        page: 1,
+        page_size: 20,
+    });
     const [isTableLoading, setIsTableLoading] = useState(false);
     const [showBaseInfoModal, setShowBaseInfoModal] = useState(false);
     const [visible, setVisible] = useState(false);
@@ -59,11 +64,11 @@ const List = ({ location }: RouteComponentProps) => {
     const fetchList = async () => {
         const params = {
             advanced_select_fields: mergeCanUseField(),
-            page: 1,
-            page_size: 20,
+            page: pageObj.page,
+            page_size: pageObj.page_size,
         };
         const { data } = await getAssetHolderList(params);
-        const { head, items } = data || { head: [], items: [] };
+        const { head, items, total } = data || { head: [], items: [], total: 0 };
         const head2TableHeader = (head: IField[]) => {
             const arr: IHeader[] = [];
             head.map(it => {
@@ -118,6 +123,7 @@ const List = ({ location }: RouteComponentProps) => {
         };
         setColumns(head2TableHeader(head));
         setList(items);
+        setTotal(total);
     };
     // 合并Custom字段
     const mergeCanUseField = () => {
@@ -183,7 +189,6 @@ const List = ({ location }: RouteComponentProps) => {
         // 保存宽度
         console.log('index', index, 'size', size);
     };
-    const onTablePaginationChange = (pagination, filters, sorter, extra) => {};
     // 表头 排序回调
     const onHandleTableChange = (pagination, filters, sorter) => {
         console.log('sorter', sorter);
@@ -229,7 +234,6 @@ const List = ({ location }: RouteComponentProps) => {
                             </Dropdown>
                         </div>
                     </div>
-
                     <div className="table-list-wrap no-table-border-left no-table-border-right">
                         <Table
                             rowKey="id"
@@ -241,11 +245,22 @@ const List = ({ location }: RouteComponentProps) => {
                             scroll={{ x: 1208, y: true }}
                             loading={isTableLoading}
                             onHandleResize={onHandleResize}
-                            onPaginationChange={onTablePaginationChange}
                             onChange={onHandleTableChange}
-                            pagination={true}
+                            pagination={false}
                         />
                     </div>
+                    <FedPagination
+                        onShowSizeChange={(current, page_size) => {
+                            //setPageObj({ page: 1, page_size });
+                        }}
+                        onChange={(page, page_size) => {
+                            //setPageObj({ page, page_size: page_size || 20 });
+                        }}
+                        current={pageObj.page}
+                        pageSize={pageObj.page_size}
+                        showTotal={total => `共${Math.ceil(+total / +(pageObj.page_size || 1))}页， ${total}条记录`}
+                        total={+total}
+                    />
                 </Card>
                 {showBaseInfoModal ? <AddBaseForm id="" onCancel={onCancel} onOk={onSave} /> : null}
             </div>
