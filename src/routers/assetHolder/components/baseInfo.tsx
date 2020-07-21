@@ -49,7 +49,7 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
             },
             {
                 label: '证件类型',
-                value: detail.id_code_type,
+                value: detail.id_code_type_name,
             },
             {
                 label: '证件号码',
@@ -69,7 +69,7 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
             },
             {
                 label: '负责人',
-                value: detail.manager,
+                value: detail.manager_name,
             },
         ],
     ];

@@ -47,7 +47,8 @@ export interface IAddAssetHolder {
     id?: string;
     name: string; // 姓名
     short_name: string; // 简称
-    id_code_type: string; // 证件类型
+    id_code_type: string; // 证件类型Id
+    id_code_type_name?: string; // 证件类型名称
     id_code: string; // 证件号码
     english_name: string; // 英文姓名
     english_short_name: string; // 英文简称
@@ -57,7 +58,8 @@ export interface IAddAssetHolder {
     address: string; // 地址
     project_id: string; // 关联项目 多个项目用,分隔
     projects?: string[]; // 关联项目中文 接口数组返回
-    manager: string; // 负责人  【与产品经理确认过，此处的负责人为单选】
+    manager: string; // 负责人Id  【与产品经理确认过，此处的负责人为单选】
+    manager_name?: string; // 负责人名称
     accounts: IAddAssetHolderBank[];
     created_on?: string; // 创建时间
     created_by_name?: string; // 创建人

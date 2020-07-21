@@ -71,7 +71,7 @@ const List = ({ location }: RouteComponentProps) => {
                     title: it.name,
                     dataIndex: it.field,
                     key: it.field,
-                    sort: true,
+                    sorter: true,
                     width: 100,
                 });
             });
@@ -80,7 +80,7 @@ const List = ({ location }: RouteComponentProps) => {
                     const { result, msg } = json;
                     if (result) {
                         message.success('删除成功!');
-                        getAll();
+                        fetchList().then();
                     } else {
                         message.error(msg || '删除失败');
                     }
@@ -134,19 +134,11 @@ const List = ({ location }: RouteComponentProps) => {
         }
         return optionsData;
     };
-    // 调用接口
-    const getAll = async () => {
-        await fetchFields();
-        await fetchCustomLayOut();
-        await fetchList();
-    };
-
     // 新增、筛选区域
     const extra = (
         <>
             <TreeProjectSelect width={324} isjustselect="true" />
-            &nbsp;
-            <Link to="/asset-holder/add" className="ant-btn ant-btn-primary">
+            <Link to="/asset-holder/add" className="ant-btn ant-btn-primary" style={{ marginLeft: 16 }}>
                 新增
             </Link>
         </>
@@ -170,7 +162,6 @@ const List = ({ location }: RouteComponentProps) => {
                 if (result) {
                     setVisible(false);
                     message.success('保存成功');
-                    getAll();
                 } else {
                     message.error(msg || '操作失败');
                 }
@@ -193,6 +184,10 @@ const List = ({ location }: RouteComponentProps) => {
         console.log('index', index, 'size', size);
     };
     const onTablePaginationChange = (pagination, filters, sorter, extra) => {};
+    // 表头 排序回调
+    const onHandleTableChange = (pagination, filters, sorter) => {
+        console.log('sorter', sorter);
+    };
     // 页码变化的回调
     const onPaginationChange = page => {
         const { history, location } = this.props;
@@ -247,6 +242,7 @@ const List = ({ location }: RouteComponentProps) => {
                             loading={isTableLoading}
                             onHandleResize={onHandleResize}
                             onPaginationChange={onTablePaginationChange}
+                            onChange={onHandleTableChange}
                             pagination={true}
                         />
                     </div>
