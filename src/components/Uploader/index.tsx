@@ -74,7 +74,7 @@ class Uploader extends React.Component<Props> {
                 fileEl.id = randomStr();
                 const {
                     // accept = 'picture',
-                    accept = 'image/png,image/jpeg,image/jpg,image/gif,application/pdf,application/zip,.rar,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel',
+                    accept = 'image/png,image/jpeg,image/jpg,image/gif,application/pdf,application/zip,.rar,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,ppt,pptx',
                     fileLength = 30,
                     maxSize = 10,
                     files,
