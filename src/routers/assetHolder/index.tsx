@@ -28,8 +28,9 @@ const List = ({ location }: RouteComponentProps) => {
     });
     const [isTableLoading, setIsTableLoading] = useState(false);
     const [visible, setVisible] = useState(false);
-    const [columns, setColumns] = useState([]);
+    const [columns, setColumns] = useState<IHeader[]>([]);
     const [fieldData, setFieldData] = useState<IField[]>([]);
+    const [isFetchField, setIsFetchField] = useState(false);
     const [list, setList] = useState([]);
     const [total, setTotal] = useState(0);
     const [layoutData, setLayoutData] = useState<IGetCustomLayout[]>([]);
@@ -45,7 +46,7 @@ const List = ({ location }: RouteComponentProps) => {
     }, [location]);
     useEffect(() => {
         fetchCustomLayOut().then();
-    }, [fieldData]);
+    }, [fieldData, isFetchField]);
     useEffect(() => {
         fetchList().then();
     }, [layoutData, sortField, sortDirections, keywords, IdCodeType, copStatus]);
@@ -60,7 +61,7 @@ const List = ({ location }: RouteComponentProps) => {
         const { data } = await getFiles({ type: type_value });
         const result: IField[] = data || [];
         const fieldData = cloneDeep(result);
-        fieldData.map(field => (field.selected = field.is_default));
+        fieldData.map((field: IField) => (field.selected = field.is_default));
         setFieldData(fieldData);
     };
     // 表格数据
@@ -90,7 +91,7 @@ const List = ({ location }: RouteComponentProps) => {
                 });
             });
             const confirm = (item: IField) => {
-                deleteAssetHolder({ id: item.id }).then((json: { result: boolean; msg: string }) => {
+                deleteAssetHolder({ id: item.id || '' }).then((json: { result: boolean; msg: string }) => {
                     const { result, msg } = json;
                     if (result) {
                         message.success('删除成功!');
@@ -168,6 +169,7 @@ const List = ({ location }: RouteComponentProps) => {
                 const { result, msg } = json;
                 if (result) {
                     setVisible(false);
+                    setIsFetchField(!isFetchField);
                     message.success('保存成功');
                 } else {
                     message.error(msg || '操作失败');
@@ -186,17 +188,19 @@ const List = ({ location }: RouteComponentProps) => {
         setVisible(val);
     };
     // 表头宽度设置
-    const saveCustomLayoutDebance = debounce(postCustomLayout, 500);
-    const onHandleResize = (index, size) => {
-        const copyColumns = cloneDeep(columns);
+    const saveCustomLayoutDebounce = debounce(postCustomLayout, 500);
+    // 表头 自定义列宽回调
+    const onHandleResize = (index: number, size: { width: number; height: number }) => {
+        const copyColumns: IHeader[] = cloneDeep(columns);
         if (copyColumns && copyColumns.length > index) {
             copyColumns[index].width = size.width;
             setColumns(copyColumns);
         }
-        // saveCustomLayoutDebance({ key: type_value_code, value: []})
+        // saveCustomLayoutDebounce({ key: type_value_code, value: []})
     };
     // 表头 排序回调
-    const onHandleTableChange = (pagination, filters, sorter) => {
+    const onHandleTableChange = (pagination: {}, filters: {}, sorter: { field: string; order: string }) => {
+        console.log(pagination, filters, sorter);
         setField(sorter.field);
         setSortDirections((sorter.order || '').replace('end', ''));
     };
@@ -230,8 +234,12 @@ const List = ({ location }: RouteComponentProps) => {
                             <Select
                                 placeholder="类型"
                                 className="filter-item"
+                                value={IdCodeType}
                                 onChange={handleChange.bind(null, 'type')}
                             >
+                                <Select.Option value="" key="">
+                                    全部
+                                </Select.Option>
                                 {customType.map(cType => (
                                     <Select.Option value={cType.value} key={cType.value}>
                                         {cType.name}
@@ -241,8 +249,12 @@ const List = ({ location }: RouteComponentProps) => {
                             <Select
                                 placeholder="合作状态"
                                 className="filter-item"
+                                value={copStatus}
                                 onChange={handleChange.bind(null, 'status')}
                             >
+                                <Select.Option value="" key="">
+                                    全部
+                                </Select.Option>
                                 {cooperateStatus.map(cType => (
                                     <Select.Option value={cType.value} key={cType.value}>
                                         {cType.name}
