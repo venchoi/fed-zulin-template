@@ -11,7 +11,7 @@ import FedPagination from '@c/FedPagination';
 import DerateTable from './components/derateTable';
 import WorkflowApprovalPopover from './components/workflowPopover';
 
-import { getDerateList, batchAuditDerate, getBillItemFee } from '@s/derate';
+import { getDerateList, batchAuditDerate, getBillItemFee, auditAll, getAuditStatus } from '@s/derate';
 import { getDerateListParams } from '@/types/derateTypes';
 import { Props, derateType, billFeeItemType, callbackFn } from './list.d';
 import { projsValue } from '@t/project';
@@ -88,6 +88,9 @@ export const DerateList = (props: Props) => {
             setderateList(data.items || []);
             setderateTotal(data.total);
         }
+        // 搜索后清空选中
+        setselectedRowKeys([]);
+        setselectedRows([]);
         setloading(false);
     };
 
@@ -122,13 +125,49 @@ export const DerateList = (props: Props) => {
         setselectedRowKeys([]);
     };
 
-    const handleBatchAudit = (e: React.MouseEvent) => {
+    const handleAuditAll = async () => {
+        const auditParams = {
+            proj_ids: selectedProjectIds.join(','),
+            type: '减免批量审核'
+        }
+        setloading(true)
+        const { result, data } = await auditAll(auditParams);
+        if (result && data) {
+            const tk = setInterval(async () => {
+                const {result, data} = await getAuditStatus(auditParams);
+                if (!result) {
+                    setloading(false)
+                    clearInterval(tk);
+                }
+                if (data[0] && data[0].status === '失败') {
+                    setloading(false);
+                    message.error(data[0].msg)
+                    clearInterval(tk);
+                }
+                if (data[0] && data[0].status === '成功') {
+                    setloading(false);
+                    clearInterval(tk);
+                    message.success('全部审核完成');
+                    getDerateListData();
+                }
+            }, 2000);
+        } else {
+            setloading(false);
+        }
+    }
+
+    const handleBatchAudit = (isAll: boolean | undefined) => (e: React.MouseEvent) => {
         const ids = selectedRowKeys;
         e.stopPropagation();
+        const title = isAll ? '确定审核全部的记录？' : '确定审核选中的记录？';
         confirm({
             icon: <ExclamationCircleOutlined />,
-            title: '确定审核选中的记录？',
+            title,
             onOk: async () => {
+                if (isAll) {
+                    handleAuditAll();
+                    return;
+                }
                 setloading(true);
                 const { result, msg = '操作失败', data } = await batchAuditDerate({ ids });
                 setloading(false);
@@ -166,6 +205,7 @@ export const DerateList = (props: Props) => {
                 <SearchArea
                     keywordValue={searchParams.keyword || ''}
                     selectedRowKeys={selectedRowKeys}
+                    total={+derateTotal}
                     onAudit={handleBatchAudit}
                     onKeywordSearch={handleKeywordSearch}
                 />
@@ -185,7 +225,7 @@ export const DerateList = (props: Props) => {
                     feeItemList={feeItemList}
                     configWorkflow={configWorkflow}
                 />
-                {selectedRowKeys.length > 0 ? (
+                {/* {selectedRowKeys.length > 0 ? (
                     <div className="selected-status-bar">
                         <span className="text">
                             已选：<span className="selected-num">{selectedRowKeys.length}</span>条 减免单
@@ -194,7 +234,7 @@ export const DerateList = (props: Props) => {
                             取消已选
                         </Button>
                     </div>
-                ) : null}
+                ) : null} */}
                 <FedPagination
                     wrapperClassName="derate-list-pagination"
                     onShowSizeChange={(current, page_size) => {

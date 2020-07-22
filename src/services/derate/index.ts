@@ -14,6 +14,8 @@ import {
     workflowTempIsEnableParams,
     createWHInstanceParams,
     commitInfoStatusParams,
+    auditAllParams,
+    getAuditStatusParams
 } from '@/types/derateTypes';
 
 export const getProjectTreeData = (data: getTreeDataParams) => {
@@ -44,8 +46,19 @@ export const auditDerate = (data: auditParams) => {
     return ajax('/bill/derated/audit', { ...data, _csrf: '' }, 'POST');
 };
 
+// 批量审核
 export const batchAuditDerate = (data: batchAuditParams) => {
     return ajax('/bill/derated/batch-audit', { ...data, _csrf: '' }, 'POST');
+};
+
+// 全部审核
+export const auditAll = (data: auditAllParams) => {
+    return ajax('/queue/queue/add', { ...data, _csrf: '' }, 'POST');
+};
+
+// 获取审核结果
+export const getAuditStatus = (data: getAuditStatusParams) => {
+    return ajax('/queue/queue/get-status', { ...data, _csrf: '' }, 'POST');
 };
 
 // 作废

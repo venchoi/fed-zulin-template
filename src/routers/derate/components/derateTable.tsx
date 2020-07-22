@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ReactText } from 'react';
 import { Button, Table, message, Modal, DatePicker } from 'antd';
 import RoomCascader from '@c/RoomCascader';
-import { PaginationConfig } from 'antd/es/pagination';
+import { TablePaginationConfig } from 'antd/es/table';
 import DerateSubRow from './derateSubRow';
 import moment from 'moment';
 import { ColumnProps } from 'antd/es/table';
@@ -194,7 +194,7 @@ export const DerateTable = (props: derateTableProps) => {
         const projStr = props.projIds ? props.projIds.join(',') : '';
         getWorkflowStatus(projStr);
     }, [props.projIds.join(',')]);
-    const handleTableChange = (pagination: PaginationConfig, filters: any, sorter: any) => {
+    const handleTableChange = (pagination: TablePaginationConfig, filters: any, sorter: any) => {
         const fee_name = filters.fee_item && filters.fee_item.length > 0 ? filters.fee_item.join(',') : '';
         const status = filters.status && filters.status.length > 0 ? filters.status : [];
         props.setSearchParams({
@@ -488,7 +488,7 @@ export const DerateTable = (props: derateTableProps) => {
             }}
             expandable={expandable}
             scroll={{
-                y: 'calc( 100vh - 340px )',
+                y: 'calc( 100vh - 372px )',
             }}
             onChange={handleTableChange}
         />
