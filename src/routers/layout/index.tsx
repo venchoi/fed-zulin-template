@@ -99,7 +99,7 @@ class Layout extends React.Component<Props, State> {
         } = this.state;
         const nav = find(appList, ['key', appCode]);
         return (
-            <AntLayout style={{ minHeight: '100vh', overflow: 'hidden' }} className="main">
+            <AntLayout style={{ height: '100vh', overflow: 'hidden' }} className="main">
                 <Sider
                     style={{ minHeight: '100vh', maxHeight: '100vh' }}
                     trigger={<CollapseItem collapsed={collapsed} />}
