@@ -3,7 +3,7 @@ import { Link, RouteComponentProps } from 'dva/router';
 import { Button, Card, Dropdown, Input, message, Popconfirm, Select } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { ResizeTable, DragSelect } from 'ykj-ui';
-import { cloneDeep, debounce } from 'lodash';
+import { cloneDeep, debounce, throttle } from 'lodash';
 import {
     getAssetHolderList,
     getCustomLayout,
@@ -21,6 +21,7 @@ import './index.less';
 
 const Table = calcBodyHeight(ResizeTable);
 const { Search } = Input;
+let timer: NodeJS.Timeout;
 const List = ({ location }: RouteComponentProps) => {
     const [pageObj, setPageObj] = useState({
         page: 1,
@@ -87,7 +88,7 @@ const List = ({ location }: RouteComponentProps) => {
                     dataIndex: it.field,
                     key: it.field,
                     sorter: true,
-                    width: 100,
+                    width: it.width || 100,
                     ellipsis: true,
                 });
             });
@@ -144,6 +145,7 @@ const List = ({ location }: RouteComponentProps) => {
             layoutData.forEach(item => {
                 const result = fieldData.find(f => f.field === item.field);
                 if (result) {
+                    result.width = item.width;
                     optionsData.push(result);
                 }
             });
@@ -189,20 +191,31 @@ const List = ({ location }: RouteComponentProps) => {
     const handleVisibleChange = (val: boolean, callback: Function) => {
         setVisible(val);
     };
-    // 表头宽度设置
-    const saveCustomLayoutDebounce = debounce(postCustomLayout, 500);
-    // 表头 自定义列宽回调
-    const onHandleResize = (index: number, size: { width: number; height: number }) => {
+    // 表头 自定义列宽throttle
+    const onHandleResizeThrottle = (index: number, size: { width: number; height: number }) => {
         const copyColumns: IHeader[] = cloneDeep(columns);
         if (copyColumns && copyColumns.length > index) {
             copyColumns[index].width = size.width;
             setColumns(copyColumns);
         }
-        // saveCustomLayoutDebounce({ key: type_value_code, value: []})
+        // 保存表頭列寬
+        if (timer) {
+            clearTimeout(timer);
+        }
+        timer = setTimeout(() => {
+            const arr: { field: string; width: number }[] = [];
+            copyColumns.forEach(column => {
+                if (column.dataIndex) {
+                    arr.push({ field: column.dataIndex, width: column.width });
+                }
+            });
+            postCustomLayout({ key: type_value_code, value: arr });
+        }, 800);
     };
+    // 表头 自定义列宽回调
+    const onHandleResize = throttle(onHandleResizeThrottle, 100);
     // 表头 排序回调
     const onHandleTableChange = (pagination: {}, filters: {}, sorter: { field: string; order: string }) => {
-        console.log(pagination, filters, sorter);
         setField(sorter.field);
         setSortDirections((sorter.order || '').replace('end', ''));
     };
