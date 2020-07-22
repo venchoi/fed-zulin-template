@@ -176,7 +176,7 @@ export const DerateList = (props: Props) => {
                     getDerateListData();
                     message.success('操作成功');
                 } else {
-                    message.error(msg);
+                    // message.error(msg);
                 }
             },
         });
