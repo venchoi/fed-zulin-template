@@ -12,10 +12,11 @@ interface searchAreaProps {
     onAudit(e: React.MouseEvent): void;
     selectedRowKeys: string[];
     keywordValue: string;
+    total: number;
 }
 
 export const SearchArea = function(props: searchAreaProps) {
-    const { selectedRowKeys, onAudit, keywordValue } = props;
+    const { selectedRowKeys, onAudit, keywordValue, total } = props;
     const [keyword, setKeyword] = useState('');
 
     useEffect(() => {
@@ -45,8 +46,20 @@ export const SearchArea = function(props: searchAreaProps) {
                 <Button
                     type="primary"
                     className="f-hidden rental-derate-audit"
+                    disabled={total === 0}
+                    onClick={onAudit(true)}
+                    style={{
+                        marginRight: '16px'
+                    }}
+                >
+                    全部审核
+                </Button>
+
+                <Button
+                    type="primary"
+                    className="f-hidden rental-derate-audit"
                     disabled={selectedRowKeys.length === 0}
-                    onClick={onAudit}
+                    onClick={onAudit()}
                 >
                     审核
                 </Button>
