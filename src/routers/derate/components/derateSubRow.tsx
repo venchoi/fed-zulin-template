@@ -84,6 +84,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
 
     const handleCancelEdit = () => {
         setDetail(originDetail);
+        fetchDerateDetail();
         setIsEditMode(false);
     };
 
@@ -220,6 +221,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         if (result) {
             message.success('保存成功');
             setIsEditMode(false);
+            props?.getDerateListData()
             fetchDerateDetail();
         }
         setLoading(false);
@@ -348,6 +350,9 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             },
         },
     ];
+    if (['已减免', '已作废'].includes(detail.status)) {
+        columns.splice(4, 1);
+    }
     const selectedRowKeysMap: { [index: string]: boolean } = {};
     selectedRowKeys.forEach((item: string) => {
         selectedRowKeysMap[item] = true;
@@ -356,7 +361,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
     const totalDeratedAmount = detail.items.reduce((total: number, item) => {
         const key = item.id + (item.isDemurrage ? '1' : '0');
         const { status } = detail;
-        const deratedDemurrageAmount = ['已减免', '已作废'].includes(status) ? item.demurrage_derated_amount : item.stayDemurrageAmount;
+        const deratedDemurrageAmount = item.demurrage_derated_amount || item.stayDemurrageAmount;
         if (selectedRowKeysMap[key]) {
             total = total + (!item.isDemurrage ? (+item.derated_amount || 0) * 1 : (deratedDemurrageAmount || 0) * 1);
         }

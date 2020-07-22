@@ -93,6 +93,21 @@ export const DerateTable = (props: derateTableProps) => {
             }
         }
     };
+
+    const handleCloseRow = (id: string) => {
+        if (!expandedRows.length) {return;}
+        for(let i=0; i<expandedRows.length; i++) {
+            if (expandedRows[i] === id) {
+                console.log(id, i)
+                const rows = expandedRows.slice();
+                rows.splice(i, 1);
+                setExpandedRows(rows);
+                console.log(rows)
+                return;
+            }
+        }
+    }
+
     const handleAudit = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
         confirm({
@@ -104,6 +119,7 @@ export const DerateTable = (props: derateTableProps) => {
                 const { result, msg = '操作失败', data } = await auditDerate({ id });
                 setLoading(false);
                 if (result) {
+                    handleCloseRow(id);
                     getDerateListData();
                     message.success('操作成功');
                 }
@@ -138,6 +154,7 @@ export const DerateTable = (props: derateTableProps) => {
                 const { result, msg = '操作失败', data } = await cancelDerate({ ids: id });
                 setLoading(false);
                 if (result) {
+                    handleCloseRow(id);
                     getDerateListData();
                     message.success('操作成功');
                 }
@@ -165,12 +182,15 @@ export const DerateTable = (props: derateTableProps) => {
     const expandable = {
         expandIconColumnIndex: 0,
         expandRowByClick: true,
-        expandedRowRender: (record: derateType) => {
-            return (
+        expandedRowRender: (record: derateType, index: number, indent: number, expanded: boolean) => {
+            return expanded ?
+            (
                 <div className="derate-sub-row-container link-btn f-hidden rental-derate-view">
-                    <DerateSubRow record={record} />
+                    <DerateSubRow record={record} getDerateListData={getDerateListData} />
                 </div>
-            );
+            )
+            :
+            null;
         },
         rowExpandable: (record: derateType) => {
             return true;
@@ -186,6 +206,7 @@ export const DerateTable = (props: derateTableProps) => {
                 </div>
             );
         },
+        expandedRowKeys: expandedRows || [],
         onExpandedRowsChange: (expandedRows: ReactText[]) => {
             setExpandedRows(expandedRows);
         },
