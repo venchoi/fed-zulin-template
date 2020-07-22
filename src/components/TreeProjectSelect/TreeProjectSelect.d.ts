@@ -39,6 +39,7 @@ export interface treeProjectSelectState {
     searchValue: string;
     projIds: string[];
     projNames: string[];
+    allProjs: projsType
 }
 
 declare class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProjectSelectState> {

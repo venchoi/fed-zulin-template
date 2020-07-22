@@ -16,6 +16,11 @@ interface callbackFn {
     (item: treeOriginNode): void;
 }
 
+interface projsType {
+    projIds: string[];
+    projNames: string[];
+}
+
 const dropdownClassName = 'multi-project-tree-select';
 
 class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProjectSelectState> {
@@ -33,6 +38,10 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             searchValue: '',
             projIds: projIdsStr ? projIdsStr.split(',') : [],
             projNames: projNamesStr ? projNamesStr.split(',') : [],
+            allProjs: {
+                projIds: [],
+                projNames: []
+            }
         };
     }
 
@@ -72,6 +81,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             maxTagCount: maxTagCount || 1,
             searchValue,
             showArrow: true,
+            onDropdownVisibleChange: this.handleDropdownVisibleChange
             // dropdownRender: this.dropdownRender,
         };
         return <TreeSelect className="fed-tree-select" {...treeProps}></TreeSelect>;
@@ -95,6 +105,19 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
     //         </div>
     //     );
     // };
+
+    handleDropdownVisibleChange = (visible: boolean) => {
+        console.log(visible)
+        const { projIds, allProjs } = this.state;
+        if (!visible && projIds.length === 0) {
+            this.setProjIds(allProjs);
+            const { onTreeSelected, onChange } = this.props;
+            onTreeSelected && onTreeSelected(allProjs);
+            if (onChange) {
+                onChange(allProjs.projIds.join(','));
+            }
+        }
+    }
 
     handleSearchInputChange = (value: string) => {
         this.setState({
@@ -191,6 +214,32 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
         return copyData;
     }
 
+    // 获取所有叶子节点项目
+    getAllProjs(originData: treeOriginNode[]): projsType {
+        const copyData = cloneDeep(originData);
+        const temp: projsType = {
+            projIds: [],
+            projNames: []
+        }
+        const callback = (item: treeOriginNode): void => {
+            const isEnd = item.is_end ? +item.is_end === 1 : false;
+            item.isLeaf = !Array.isArray(item.children) || item.children.length === 0 || isEnd;
+            item.disabled = (!Array.isArray(item.children) || item.children.length === 0) && !isEnd;
+            item.title = item.label;
+            item.key = item.value;
+            if (item.isLeaf && !item.disabled) {
+                temp.projIds.push(item.value);
+                temp.projNames.push(item.label);
+            }
+            if (Array.isArray(item.children) && item.children.length > 0) {
+                item.children.forEach(callback);
+                item.disabled = item.children.every(item => item.disabled);
+            }
+        };
+        copyData.forEach(callback);
+        return temp;
+    }
+
     // 获取原始项目树形结构数据
     getProjectData(cb: any) {
         getProjectTreeData({}).then(res => {
@@ -200,9 +249,11 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             }
             const originData = (res.data && res.data.company) || [];
             const treeData = this.transferOriginTreeData(originData);
+            const allProjs = this.getAllProjs(originData);
             this.setState(
                 {
                     treeData,
+                    allProjs
                 },
                 () => {
                     cb && cb();
