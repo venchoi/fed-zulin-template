@@ -55,7 +55,7 @@ class Uploader extends React.Component<Props> {
             multiple = false,
             maxSize = 10,
         } = this.props;
-        const accept = ['docx', 'xlsx', 'pptx', 'pdf', 'rar', 'zip'];
+        const accept = ['doc', 'docx', 'xls', 'xlsx', 'pptx', 'pdf', 'rar', 'zip', 'ppt'];
 
         const _this = this;
         const config = {

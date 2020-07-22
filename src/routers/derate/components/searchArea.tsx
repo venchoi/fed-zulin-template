@@ -9,7 +9,7 @@ type SearchEvent =
     | undefined;
 interface searchAreaProps {
     onKeywordSearch(keyword: string, e?: SearchEvent): void;
-    onAudit(e: React.MouseEvent): void;
+    onAudit(isAll: boolean | undefined): (e: React.MouseEvent) => void;
     selectedRowKeys: string[];
     keywordValue: string;
     total: number;
@@ -59,7 +59,7 @@ export const SearchArea = function(props: searchAreaProps) {
                     type="primary"
                     className="f-hidden rental-derate-audit"
                     disabled={selectedRowKeys.length === 0}
-                    onClick={onAudit()}
+                    onClick={onAudit(false)}
                 >
                     审核
                 </Button>
