@@ -18,7 +18,6 @@ import { customType, cooperateStatus } from '../../constants/index';
 import calcBodyHeight from './utils';
 import FedPagination from '@c/FedPagination';
 import './index.less';
-import FedTable from '@c/FedTable';
 
 const Table = calcBodyHeight(ResizeTable);
 const { Search } = Input;
