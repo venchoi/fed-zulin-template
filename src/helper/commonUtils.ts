@@ -171,3 +171,22 @@ export function sort(arr: any[]): any[] {
     });
     return arr;
 }
+
+
+export function formatPhone(phone: string): string {
+    if(!phone) {
+        return phone;
+    }
+    let result = '';
+    var mLength = phone.length;
+    if (mLength <= 3) {
+        result = phone;
+    } else {
+        if (mLength <= 7) {
+            result = phone.substring(0, 3) + " " + phone.substring(3, mLength);
+        } else {
+            result = phone.substring(0, 3) + " " + phone.substring(3, 7) + " " + phone.substring(7, mLength);
+        }
+    }
+    return result;
+}
