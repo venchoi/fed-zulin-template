@@ -47,10 +47,10 @@ const List = ({ location }: RouteComponentProps) => {
     }, [location]);
     useEffect(() => {
         fetchCustomLayOut().then();
-    }, [fieldData, isFetchField]);
+    }, [fieldData, isFetchField, sortField, sortDirections]);
     useEffect(() => {
         fetchList().then();
-    }, [layoutData, sortField, sortDirections, keywords, IdCodeType, copStatus]);
+    }, [layoutData, keywords, IdCodeType, copStatus]);
     // 表格布局字段
     const fetchCustomLayOut = async () => {
         const { data } = await getCustomLayout({ key: type_value_code });
