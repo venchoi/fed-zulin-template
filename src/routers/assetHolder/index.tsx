@@ -18,6 +18,7 @@ import { customType, cooperateStatus } from '../../constants/index';
 import calcBodyHeight from './utils';
 import FedPagination from '@c/FedPagination';
 import './index.less';
+import FedTable from '@c/FedTable';
 
 const Table = calcBodyHeight(ResizeTable);
 const { Search } = Input;
@@ -66,6 +67,7 @@ const List = ({ location }: RouteComponentProps) => {
     };
     // 表格数据
     const fetchList = async () => {
+        setIsTableLoading(true);
         const params = {
             advanced_select_fields: mergeCanUseField(),
             page: pageObj.page,
@@ -134,6 +136,7 @@ const List = ({ location }: RouteComponentProps) => {
         setColumns(head2TableHeader(head));
         setList(items);
         setTotal(total);
+        setIsTableLoading(false);
     };
     // 合并Custom字段
     const mergeCanUseField = () => {
