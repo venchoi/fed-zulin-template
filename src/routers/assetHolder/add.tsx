@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { RouteComponentProps, Link, routerRedux } from 'dva/router';
-import { Card, Form, Button, message, Modal, Tag, PageHeader } from 'antd';
+import { RouteComponentProps, Link } from 'dva/router';
+import { Card, Form, Button, message, PageHeader, Divider } from 'antd';
+import { Route } from 'antd/es/breadcrumb/Breadcrumb';
 import { cloneDeep } from 'lodash';
 import AddBaseForm from './components/addBaseForm';
 import AddBankForm from './components/addBankForm';
 import BankTable from './components/bankTable';
 import { getAssetHolderBankList, getAssetHolderDetail, postAddAssetHolder } from '@s/assetHolder';
 import { IAddAssetHolder, IAddAssetHolderBank } from '@t/assetHolder';
-import './index.less';
-import { Route } from 'antd/es/breadcrumb/Breadcrumb';
+import './add.less';
 
 const Add = ({ history, match }: RouteComponentProps) => {
     const [form] = Form.useForm();
@@ -24,12 +24,15 @@ const Add = ({ history, match }: RouteComponentProps) => {
     const fetchDetail = async () => {
         const { data } = await getAssetHolderDetail({ id });
         const result = data;
-        console.log('fetchDetail result', result);
         if (result) {
             const keys = Object.keys(result);
             if (keys) {
                 keys.forEach(name => {
-                    form.setFieldsValue({ [name]: data[name] });
+                    if (name === 'project_id') {
+                        form.setFieldsValue({ [name]: [data[name]] });
+                    } else {
+                        form.setFieldsValue({ [name]: data[name] });
+                    }
                 });
             }
         }
@@ -147,21 +150,40 @@ const Add = ({ history, match }: RouteComponentProps) => {
                 breadcrumb={{ routes, itemRender, separator: '>' }}
                 ghost={false}
             />
-            <Form onFinish={finishHandle} form={form}>
-                <div className="layout-list">
-                    <Card className="report-card" title="基本信息" bordered={false}>
+            <Form onFinish={finishHandle} form={form} style={{ height: '88%', display: 'flex' }}>
+                <div className="layout-detail asset-holder-add-wrap">
+                    <Card className="report-card" title="基本信息" bordered={false} style={{ height: '330px' }}>
                         <AddBaseForm id="" />
                     </Card>
-                    <Card className="report-card" title="收款账户" bordered={false} extra={extra}>
-                        <BankTable data={bankList} isCanOperate onDelete={onDeleteAccount} onUpdate={onUpdateAccount} />
+                    <Card
+                        className="report-card"
+                        title="收款账户"
+                        bordered={false}
+                        extra={extra}
+                        style={{ height: 'calc(100% - 330px)' }}
+                    >
+                        <div className="account-table">
+                            <BankTable
+                                data={bankList}
+                                isCanOperate
+                                onDelete={onDeleteAccount}
+                                onUpdate={onUpdateAccount}
+                            />
+                        </div>
+
+                        <div className="layout-detail-footer">
+                            <Divider />
+                            <div className="layout-detail-footer-content layout-detail-footer-content-text-right">
+                                <Link className="ant-btn" to="/asset-holder/list">
+                                    取 消
+                                </Link>
+                                <Button className="add-button ant-btn-primary btn-margin-left-16" htmlType="submit">
+                                    {' '}
+                                    保 存
+                                </Button>
+                            </div>
+                        </div>
                     </Card>
-                    <Link className="ant-btn" to="/asset-holder/list">
-                        取消
-                    </Link>
-                    &nbsp;
-                    <Button className="add-button" htmlType="submit">
-                        保存
-                    </Button>
                 </div>
             </Form>
             {showAddBankAccount ? <AddBankForm onCancel={onCancel} onOk={onSave} /> : null}

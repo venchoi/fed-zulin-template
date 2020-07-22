@@ -24,12 +24,13 @@ export interface IField {
 
 export interface ISaveCustomLayout {
     key: string; //
-    value: { field: string; width: number }[];
+    value: IAddAssetHolder[];
 }
 
 export interface IGetCustomLayout {
-    field: string; // 字段英文名称 如 sale_price
+    field: string; // 字段英文名称  如 sale_price
     width: number; // 设置的列宽    如 100
+    selected?: boolean; // 是否選中
 }
 
 export interface IManageList {
@@ -79,6 +80,7 @@ export interface IAddAssetHolderBank {
     account: string; // 银行账号
     account_name: string; // 户名
     remark: string; // 备注
+    width?: number;
 }
 
 // 银行账号列表

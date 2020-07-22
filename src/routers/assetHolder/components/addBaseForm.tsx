@@ -21,25 +21,22 @@ interface IManagerList {
 const { Option } = Select;
 const AddBaseForm = ({ id, onOk }: IProps) => {
     const [form] = Form.useForm();
-    const [loading, setLoading] = useState(true);
     const [idCardTypeList, setIdCardTypeList] = useState<IIdCardTypeList[]>([]);
     const [managerList, setManagerList] = useState<IManagerList[]>([]);
     const fetchIdCardDetail = async () => {
-        setLoading(true);
         const { data } = await getIdCardList({ code: 'IdType' });
         const result = data || [];
         setIdCardTypeList(result);
     };
     const fetchManagerList = async () => {
         const { data } = await getManageList();
-        setLoading(false);
         const result = data || [];
         setManagerList(result);
     };
 
     useEffect(() => {
-        fetchIdCardDetail();
-        fetchManagerList();
+        fetchIdCardDetail().then();
+        fetchManagerList().then();
     }, []);
 
     const num = 24;

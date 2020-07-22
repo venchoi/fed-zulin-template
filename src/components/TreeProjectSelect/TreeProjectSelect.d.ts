@@ -33,6 +33,7 @@ export interface treeProjectSelectProps {
     notInitSelect?: boolean; // 不初始展示选中值
     onTreeSelected?: (value: projsValue) => void;
     value?: string[];
+    onChange?: (value: string) => void;
 }
 export interface treeProjectSelectState {
     treeData: treeOriginNode[];

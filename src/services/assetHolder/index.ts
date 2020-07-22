@@ -5,8 +5,7 @@ import {
     IAddAssetHolderBank,
     IAssetHolderBankList,
     IAssetHolderList,
-    ISaveCustomLayout,
-    IManageList,
+    IField,
 } from '@/types/assetHolder';
 
 // 资产持有人管理
@@ -20,7 +19,7 @@ export const getFiles = (data: { type: string }) => {
 };
 
 // 资产持有人管理
-export const postCustomLayout = (data: ISaveCustomLayout) => {
+export const postCustomLayout = (data: { value: IField[]; key: string }) => {
     return ajax('/parameter/tables/save-custom-layout', { ...data, _csrf: '' }, 'POST');
 };
 
