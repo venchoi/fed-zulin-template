@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, RouteComponentProps } from 'dva/router';
-import { Button, Card, Dropdown, Input, message, Popconfirm, Pagination, Select } from 'antd';
+import { Button, Card, Dropdown, Input, message, Popconfirm, Select } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { ResizeTable, DragSelect } from 'ykj-ui';
 import { cloneDeep, debounce } from 'lodash';
@@ -12,14 +12,13 @@ import {
     deleteAssetHolder,
 } from '@/services/assetHolder';
 import TreeProjectSelect from '@c/TreeProjectSelect';
-import { IAddAssetHolderBank, IGetCustomLayout, IField } from '@t/assetHolder';
+import { IGetCustomLayout, IField } from '@t/assetHolder';
 import { IHeader } from '../../constants/layoutConfig';
 import { customType, cooperateStatus } from '../../constants/index';
 import calcBodyHeight from './utils';
-import AddBaseForm from './components/addBaseForm';
-// import MaxHeightTable from 'ykj-ui/es/components/max-height-table'
-import './index.less';
 import FedPagination from '@c/FedPagination';
+import './index.less';
+
 const Table = calcBodyHeight(ResizeTable);
 const { Search } = Input;
 const List = ({ location }: RouteComponentProps) => {
@@ -34,6 +33,11 @@ const List = ({ location }: RouteComponentProps) => {
     const [list, setList] = useState([]);
     const [total, setTotal] = useState(0);
     const [layoutData, setLayoutData] = useState<IGetCustomLayout[]>([]);
+    const [sortField, setField] = useState('');
+    const [sortDirections, setSortDirections] = useState('');
+    const [keywords, setKeywords] = useState('');
+    const [IdCodeType, setIdCodeType] = useState('');
+    const [copStatus, setCopStatus] = useState('');
     const type_value = '资产持有人列表';
     const type_value_code = 'asset_holder_layout';
     useEffect(() => {
@@ -44,7 +48,7 @@ const List = ({ location }: RouteComponentProps) => {
     }, [fieldData]);
     useEffect(() => {
         fetchList().then();
-    }, [layoutData]);
+    }, [layoutData, sortField, sortDirections, keywords, IdCodeType, copStatus]);
     // 表格布局字段
     const fetchCustomLayOut = async () => {
         const { data } = await getCustomLayout({ key: type_value_code });
@@ -65,6 +69,11 @@ const List = ({ location }: RouteComponentProps) => {
             advanced_select_fields: mergeCanUseField(),
             page: pageObj.page,
             page_size: pageObj.page_size,
+            name: keywords,
+            order_by: sortField,
+            order_method: sortDirections,
+            type: IdCodeType,
+            status: copStatus,
         };
         const { data } = await getAssetHolderList(params);
         const { head, items, total } = data || { head: [], items: [], total: 0 };
@@ -77,6 +86,7 @@ const List = ({ location }: RouteComponentProps) => {
                     key: it.field,
                     sorter: true,
                     width: 100,
+                    ellipsis: true,
                 });
             });
             const confirm = (item: IField) => {
@@ -187,7 +197,24 @@ const List = ({ location }: RouteComponentProps) => {
     };
     // 表头 排序回调
     const onHandleTableChange = (pagination, filters, sorter) => {
-        console.log('sorter', sorter);
+        setField(sorter.field);
+        setSortDirections((sorter.order || '').replace('end', ''));
+    };
+    // 计划名称、类型、合作状态 数据变化事件
+    const handleChange = (type: string, value: string) => {
+        switch (type) {
+            case 'name':
+                setKeywords(value);
+                break;
+            case 'type':
+                setIdCodeType(value);
+                break;
+            case 'status':
+                setCopStatus(value);
+                break;
+            default:
+                break;
+        }
     };
     return (
         <>
@@ -195,15 +222,27 @@ const List = ({ location }: RouteComponentProps) => {
                 <Card className="asset-holder-card" title="资产持有人管理" bordered={false} extra={extra}>
                     <div className="filter">
                         <div className="filter-left">
-                            <Search style={{ width: '312px' }} placeholder="计划名称" />
-                            <Select placeholder="类型" className="filter-item">
+                            <Search
+                                style={{ width: '312px' }}
+                                placeholder="计划名称"
+                                onSearch={value => handleChange('name', value)}
+                            />
+                            <Select
+                                placeholder="类型"
+                                className="filter-item"
+                                onChange={handleChange.bind(null, 'type')}
+                            >
                                 {customType.map(cType => (
                                     <Select.Option value={cType.value} key={cType.value}>
                                         {cType.name}
                                     </Select.Option>
                                 ))}
                             </Select>
-                            <Select placeholder="合作状态" className="filter-item">
+                            <Select
+                                placeholder="合作状态"
+                                className="filter-item"
+                                onChange={handleChange.bind(null, 'status')}
+                            >
                                 {cooperateStatus.map(cType => (
                                     <Select.Option value={cType.value} key={cType.value}>
                                         {cType.name}

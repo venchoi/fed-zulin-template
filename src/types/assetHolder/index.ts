@@ -15,7 +15,7 @@ export interface IField {
     id?: string;
     field: string; // "name"
     is_default: boolean; //
-    selected?: boolean; //
+    sorter?: boolean;
     key: string; // "39f649c3-d5a2-0e18-56eb-d7f8bcaf9edb"
     name: string; // "姓名"
 }
@@ -39,7 +39,11 @@ export interface IAssetHolderList {
     advanced_select_fields: IField[];
     page: number; // 当前页码
     page_size: number; // 每个大小
-    keyword?: string; //  搜索关键字
+    order_by?: string; // 排序字段
+    name?: string; // 搜索关键字
+    type?: string; // 证件类型
+    status?: string; // 合作状态
+    order_method?: string; // 排序方式
 }
 
 // 添加资产持有人

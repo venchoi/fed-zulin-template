@@ -9,5 +9,5 @@ export const customType = [
 export const cooperateStatus = [
     { name: '未合作', value: '未合作' },
     { name: '已合作', value: '已合作' },
-    { name: '合作中止', value: '未合作' },
+    { name: '合作中止', value: '合作中止' },
 ];
