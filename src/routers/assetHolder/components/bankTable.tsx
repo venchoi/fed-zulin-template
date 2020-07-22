@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Input, Radio, Select, DatePicker, Modal, message, Table, Button, Space, Popconfirm } from 'antd';
-import './bankTable.less';
+import { message, Table, Popconfirm } from 'antd';
 import { postAddAssetHolderBank, postDeleteAssetHolderBank } from '@/services/assetHolder';
 import { IAddAssetHolderBank } from '@t/assetHolder';
 import FedIcon from '@c/FedIcon';
 import AddBankForm from './addBankForm';
+import './bankTable.less';
 
 interface IProps {
     onFinishUpdate?: () => void; // 数据更新完回调
@@ -39,7 +39,43 @@ const BankTable = ({ data, isCanOperate = false, isNoShowPage = false, onDelete,
             dataIndex: 'remark',
             key: 'remark',
         },
+        {
+            dataIndex: 'id',
+            title: '操作',
+            width: 100,
+            render: (text: string, rowData: IAddAssetHolderBank) => {
+                return (
+                    <>
+                        <FedIcon
+                            onClick={editAccount.bind(null, rowData)}
+                            title="编辑"
+                            className="account-record-icon"
+                            type="icon-bianji"
+                        />
+                        <Popconfirm
+                            placement="topRight"
+                            title="确定删除该账户信息吗?"
+                            onConfirm={() => {
+                                deleteAccount(rowData.id || '');
+                            }}
+                            okText="确定"
+                            cancelText="取消"
+                        >
+                            <FedIcon
+                                title="删除"
+                                style={{ marginLeft: 16 }}
+                                className="account-record-icon"
+                                type="icon-shanchu2"
+                            />
+                        </Popconfirm>
+                    </>
+                );
+            },
+        },
     ];
+    if (!isCanOperate) {
+        columns.pop();
+    }
     // 删除
     const deleteAccount = (id: string) => {
         // 增加 数据模式下的删除
@@ -48,18 +84,22 @@ const BankTable = ({ data, isCanOperate = false, isNoShowPage = false, onDelete,
                 onDelete(id);
             }
         } else {
-            // 调用接口直接删除数据
-            postDeleteAssetHolderBank({ id }).then(json => {
-                const { result, msg } = json;
-                if (result) {
-                    message.success('删除成功');
-                    if (onDelete) {
-                        onDelete(id);
+            if (id) {
+                // 调用接口直接删除数据
+                postDeleteAssetHolderBank({ id }).then(json => {
+                    const { result, msg } = json;
+                    if (result) {
+                        message.success('删除成功');
+                        if (onDelete) {
+                            onDelete(id);
+                        }
+                    } else {
+                        message.error(msg || '操作失败');
                     }
-                } else {
-                    message.error(msg || '操作失败');
-                }
-            });
+                });
+            } else {
+                message.error('Id不存在!');
+            }
         }
     };
     // 编辑
@@ -94,43 +134,6 @@ const BankTable = ({ data, isCanOperate = false, isNoShowPage = false, onDelete,
             });
         }
     };
-
-    if (isCanOperate) {
-        columns.push({
-            dataIndex: 'id',
-            title: '操作',
-            width: 100,
-            render: (text, rowData) => {
-                return (
-                    <>
-                        <FedIcon
-                            onClick={editAccount.bind(null, rowData)}
-                            title="编辑"
-                            className="account-record-icon"
-                            type="icon-bianji"
-                        />
-                        <Popconfirm
-                            placement="topRight"
-                            title="确定删除该账户信息吗?"
-                            onConfirm={() => {
-                                deleteAccount(rowData.id);
-                            }}
-                            okText="确定"
-                            cancelText="取消"
-                        >
-                            <FedIcon
-                                title="删除"
-                                style={{ marginLeft: 16 }}
-                                className="account-record-icon"
-                                type="icon-shanchu2"
-                            />
-                        </Popconfirm>
-                    </>
-                );
-            },
-        });
-    }
-
     return (
         <>
             <div className="add-base-account-table-wrap">

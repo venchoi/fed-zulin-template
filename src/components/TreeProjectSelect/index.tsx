@@ -44,6 +44,27 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
         });
     }
 
+    shouldComponentUpdate(
+        nextProps: Readonly<treeProjectSelectProps>,
+        nextState: Readonly<treeProjectSelectState>,
+        nextContext: any
+    ): boolean {
+        let stateProjIds = (this.state.projIds || []).join(',');
+        let nextPropsValue = nextProps.value;
+        if (nextPropsValue && nextPropsValue instanceof Array) {
+            nextPropsValue = nextProps.value.join(',');
+        }
+        if (nextPropsValue && stateProjIds !== nextPropsValue) {
+            this.setState({ projIds: nextPropsValue.split(',') });
+            const { onChange } = this.props;
+            if (onChange) {
+                onChange(nextPropsValue);
+            }
+            return true;
+        }
+        return true;
+    }
+
     componentWillUnmount() {}
 
     render() {

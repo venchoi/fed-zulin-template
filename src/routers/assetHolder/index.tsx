@@ -50,7 +50,7 @@ const List = ({ location }: RouteComponentProps) => {
     }, [fieldData, isFetchField, sortField, sortDirections]);
     useEffect(() => {
         fetchList().then();
-    }, [layoutData, keywords, IdCodeType, copStatus]);
+    }, [layoutData, keywords, IdCodeType, copStatus, pageObj]);
     // 表格布局字段
     const fetchCustomLayOut = async () => {
         const { data } = await getCustomLayout({ key: type_value_code });
@@ -68,8 +68,12 @@ const List = ({ location }: RouteComponentProps) => {
     // 表格数据
     const fetchList = async () => {
         setIsTableLoading(true);
+        const paramsFields = (mergeCanUseField() || []).filter(field => field.selected);
+        if (paramsFields.length === 0) {
+            return;
+        }
         const params = {
-            advanced_select_fields: mergeCanUseField(),
+            advanced_select_fields: paramsFields,
             page: pageObj.page,
             page_size: pageObj.page_size,
             name: keywords,
@@ -146,6 +150,7 @@ const List = ({ location }: RouteComponentProps) => {
                 const result = fieldData.find(f => f.field === item.field);
                 if (result) {
                     result.width = item.width;
+                    result.selected = item.selected;
                     optionsData.push(result);
                 }
             });
@@ -167,9 +172,10 @@ const List = ({ location }: RouteComponentProps) => {
     const renderExtraNode = () => {
         // 确定点击事件
         const onFinish = (resultArr: IField[]) => {
-            const saveArr: { field: string; width: number }[] = [];
-            resultArr && resultArr.map(item => saveArr.push({ field: item.field, width: 100 }));
-            postCustomLayout({ key: type_value_code, value: saveArr }).then(json => {
+            console.log('resultArr', resultArr);
+            //const saveArr: { field: string; width: number }[] = [];
+            //resultArr && resultArr.map(item => saveArr.push({ field: item.field, width: item.width || 100 }));
+            postCustomLayout({ key: type_value_code, value: resultArr }).then(json => {
                 const { result, msg } = json;
                 if (result) {
                     setVisible(false);
@@ -306,10 +312,11 @@ const List = ({ location }: RouteComponentProps) => {
                     </div>
                     <FedPagination
                         onShowSizeChange={(current, page_size) => {
-                            //setPageObj({ page: 1, page_size });
+                            setPageObj({ page: 1, page_size });
                         }}
                         onChange={(page, page_size) => {
-                            //setPageObj({ page, page_size: page_size || 20 });
+                            console.log('page', page);
+                            setPageObj({ page, page_size: page_size || pageObj.page_size });
                         }}
                         current={pageObj.page}
                         pageSize={pageObj.page_size}
