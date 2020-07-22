@@ -425,12 +425,21 @@ export const DerateTable = (props: derateTableProps) => {
                             <a
                                 className="link-btn f-hidden rental-derate-view"
                                 href={`/${baseAlias}/workflowApproval/detail/${record.workflow_instance_id}`}
+                                style={{
+                                    wordBreak: 'keep-all'
+                                }}
                             >
                                 审批详情
                             </a>
                         ) : null}
                         {record.status === '审核中' && +record.show_third_detail === 1 ? (
-                            <a className="operate-btn" onClick={fetchOaDetail.bind(this, record)}>
+                            <a 
+                                className="operate-btn" 
+                                onClick={fetchOaDetail.bind(this, record)}
+                                style={{
+                                    wordBreak: 'keep-all'
+                                }}
+                            >
                                 审批详情
                             </a>
                         ) : null}
@@ -465,6 +474,9 @@ export const DerateTable = (props: derateTableProps) => {
                             <a
                                 className="operate-btn"
                                 target="_blank"
+                                style={{
+                                    wordBreak: 'keep-all'
+                                }}
                                 href={record.wh_approval_info && record.wh_approval_info.detail_url}
                             >
                                 审批详情
