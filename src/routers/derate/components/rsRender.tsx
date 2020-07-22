@@ -83,7 +83,7 @@ export const baseColumns = [
                 </span>
             );
         },
-    },
+    }
 ];
 
 export default rsRender;

@@ -375,6 +375,9 @@ export const DerateTable = (props: derateTableProps) => {
             },
         },
         {
+            dataIndex: 'gap',
+        },
+        {
             title: '操作',
             key: 'action',
             fixed: expandedRows.length > 0 ? undefined : 'right',
@@ -500,6 +503,7 @@ export const DerateTable = (props: derateTableProps) => {
             }}
             expandable={expandable}
             scroll={{
+                x: 1400,
                 y: 'calc( 100vh - 372px )',
             }}
             onChange={handleTableChange}
