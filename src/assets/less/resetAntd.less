@@ -75,12 +75,28 @@ body .ant-divider, .ant-divider-horizontal {
     .ant-table-filter-dropdown {
         .ant-dropdown-menu {
             max-height: 340px;
+            padding: 0;
+            .ant-dropdown-menu-item {
+                &.ant-dropdown-menu-item-active {
+                    background-color: #f2f5f7;
+                }
+                &.ant-dropdown-menu-item-selected {
+                    font-weight: bold;
+                }
+                .ant-checkbox-inner {
+                    border-radius: 2px;
+                }
+            }
         }
         .ant-table-filter-dropdown-btns {
             padding-left: 16px;
             padding-right: 16px;
         }
     }
+}
+
+.ant-tree-select-dropdown.ant-select-dropdown {
+    padding: 0;
 }
 
 // 重置 small 尺寸按钮样式
@@ -106,9 +122,15 @@ span.ant-select-tree-checkbox-inner, span.ant-checkbox {
     word-break: break-all;
 }
 
-span.ant-select-tree .ant-select-tree-node-content-wrapper {
-    border-radius: 0;
+.ant-select-tree {
+    span.ant-select-tree-node-content-wrapper {
+        border-radius: 0;
+        &:hover {
+            background-color: #f2f5f7;
+        }
+    }
 }
+
 
 // 重写 Modal 弹窗样式
 .ant-modal {
@@ -121,5 +143,38 @@ span.ant-select-tree .ant-select-tree-node-content-wrapper {
                 margin-left: 16px;
             }
         }
+    }
+}
+
+.ant-cascader-menus {
+    .ant-cascader-menu {
+        padding: 0;
+    }
+    li.ant-cascader-menu-item
+    {
+        &:hover {
+            background: #f2f5f7;
+        }
+        &.ant-cascader-menu-item-active {
+            background-color: #EBF9FF;
+        }
+    }
+}
+
+
+.ant-checkbox {
+    .ant-checkbox-inner {
+        border-radius: 2px;
+    }
+}
+
+.ant-table {
+    table {
+        .ant-table-thead > tr > th {
+            background-color: #FAFBFC;
+        }
+    }
+    .ant-table-tbody > tr.ant-table-row:hover > td {
+        background-color: #FAFBFC;
     }
 }

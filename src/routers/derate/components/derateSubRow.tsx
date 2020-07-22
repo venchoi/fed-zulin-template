@@ -432,7 +432,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                         </Col>
                                     );
                                 })}
-                                <Col className="derate-detail-form-item" span={24} key={5}>
+                                <Col className="derate-detail-form-item remark" span={24} key={5}>
                                     <Form.Item
                                         name="remark"
                                         label="减免原因"
@@ -466,6 +466,11 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                 dataSource={detail.items}
                                 rowKey={(record: feeItemType) => {
                                     return record.id + (record.isDemurrage ? '1' : '0');
+                                }}
+                                style={{
+                                    borderLeft: '1px solid #EDEFF0',
+                                    borderRight: '1px solid #EDEFF0',
+                                    borderTop: '1px solid #EDEFF0',
                                 }}
                             />
                             <div className="total-bar">

@@ -180,7 +180,7 @@ export const DerateTable = (props: derateTableProps) => {
         fixed: true
     };
     const expandable = {
-        expandIconColumnIndex: 0,
+        expandIconColumnIndex: -1,
         expandRowByClick: true,
         expandedRowRender: (record: derateType, index: number, indent: number, expanded: boolean) => {
             return expanded ?
@@ -209,7 +209,7 @@ export const DerateTable = (props: derateTableProps) => {
         expandedRowKeys: expandedRows || [],
         onExpandedRowsChange: (expandedRows: ReactText[]) => {
             setExpandedRows(expandedRows);
-        },
+        }
     };
     useEffect(() => {
         const projStr = props.projIds ? props.projIds.join(',') : '';
@@ -234,6 +234,35 @@ export const DerateTable = (props: derateTableProps) => {
         !!props.searchParams.floor_name ||
         !!props.searchParams.subdistrict_id;
     const columns: ColumnProps<derateType>[] = [
+        {
+            dataIndex: 'code',
+            title: '减免流水号',
+            width: 200,
+            render: (text: string, record: derateType, index: number) => {
+                const isExpanded = expandedRows &&  expandedRows.includes(record.id); 
+                return (
+                    <span className="derate-table-td" title={text || '-'}>
+                        {
+                            isExpanded ?
+                            <DownOutlined 
+                                style={{
+                                    color: '#BEC3C7',
+                                    marginRight: '4px'
+                                }} 
+                            />
+                            :
+                            <RightOutlined 
+                                style={{
+                                    color: '#BEC3C7',
+                                    marginRight: '4px'
+                                }} 
+                            />
+                        }
+                        {text}
+                    </span>
+                );
+            },
+        },
         ...baseColumns,
         {
             dataIndex: 'items',
@@ -402,7 +431,7 @@ export const DerateTable = (props: derateTableProps) => {
             title: '操作',
             key: 'action',
             fixed: expandedRows.length > 0 ? undefined : 'right',
-            width: 130,
+            width: 128,
             render(text: string, record: derateType, index: number) {
                 const { user } = props;
                 const stageId = record.proj_id;
@@ -524,8 +553,8 @@ export const DerateTable = (props: derateTableProps) => {
             }}
             expandable={expandable}
             scroll={{
-                x: 1400,
-                y: 'calc( 100vh - 372px )',
+                x: 1000,
+                y: 'calc( 100vh - 340px )',
             }}
             onChange={handleTableChange}
         />

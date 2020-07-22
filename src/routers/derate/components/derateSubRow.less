@@ -1,16 +1,15 @@
 .derate-detail {
     padding: 0px 8px;
-    padding-bottom: 8px;
     .head-area {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 8px;
         .title {
             font-size: 16px;
             color: @heading-color;
             line-height: 24px;
+            font-weight: bold;
         }
         .op-btns {
             display: flex;
@@ -28,6 +27,7 @@
     }
     .content-area {
         padding: 16px 24px;
+        padding-bottom: 0;
         background-color: white;
     }
     // 覆盖 antd 样式
@@ -53,6 +53,9 @@
         border-top: none;
     }
     .derate-detail-form-item {
+        &.remark {
+            margin-bottom: 0; 
+        }
         .ant-form-item-label > label {
             line-height: 24px;
             height: 24px;

@@ -28,7 +28,7 @@ export const DerateList = (props: Props) => {
         proj_id: '',
         keyword: query.keyword || '',
         page: 1,
-        page_size: 10,
+        page_size: 20,
         start_date: '',
         end_date: '',
         fee_name: '',
