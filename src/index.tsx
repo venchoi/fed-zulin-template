@@ -8,7 +8,7 @@ import App from './app';
 import mainModel from './model/main';
 import './assets/init/normalize.css';
 import './assets/less/index.less';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory as createHistory } from 'history';
 //@ts-ignore
 import createLoading from 'dva-loading';
 
