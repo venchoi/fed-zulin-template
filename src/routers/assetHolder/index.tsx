@@ -3,7 +3,7 @@ import { Link, RouteComponentProps } from 'dva/router';
 import { Button, Card, Dropdown, Input, message, Popconfirm, Pagination, Select } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { ResizeTable, DragSelect } from 'ykj-ui';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, debounce } from 'lodash';
 import {
     getAssetHolderList,
     getCustomLayout,
@@ -28,7 +28,6 @@ const List = ({ location }: RouteComponentProps) => {
         page_size: 20,
     });
     const [isTableLoading, setIsTableLoading] = useState(false);
-    const [showBaseInfoModal, setShowBaseInfoModal] = useState(false);
     const [visible, setVisible] = useState(false);
     const [columns, setColumns] = useState([]);
     const [fieldData, setFieldData] = useState<IField[]>([]);
@@ -149,14 +148,6 @@ const List = ({ location }: RouteComponentProps) => {
             </Link>
         </>
     );
-
-    const onCancel = () => {
-        setShowBaseInfoModal(false);
-    };
-    const onSave = (values: IAddAssetHolderBank) => {
-        setShowBaseInfoModal(false);
-        // 刷新列表
-    };
     // 渲染可配置列弹框
     const renderExtraNode = () => {
         // 确定点击事件
@@ -185,21 +176,19 @@ const List = ({ location }: RouteComponentProps) => {
         setVisible(val);
     };
     // 表头宽度设置
+    const saveCustomLayoutDebance = debounce(postCustomLayout, 500);
     const onHandleResize = (index, size) => {
-        // 保存宽度
-        console.log('index', index, 'size', size);
+        const copyColumns = cloneDeep(columns);
+        if (copyColumns && copyColumns.length > index) {
+            copyColumns[index].width = size.width;
+            setColumns(copyColumns);
+        }
+        // saveCustomLayoutDebance({ key: type_value_code, value: []})
     };
     // 表头 排序回调
     const onHandleTableChange = (pagination, filters, sorter) => {
         console.log('sorter', sorter);
     };
-    // 页码变化的回调
-    const onPaginationChange = page => {
-        const { history, location } = this.props;
-    };
-    // pageSize变化的回调
-    const onPageSizeChange = (current, size) => {};
-
     return (
         <>
             <div className="layout-list" style={{ height: '100%' }}>
@@ -262,7 +251,6 @@ const List = ({ location }: RouteComponentProps) => {
                         total={+total}
                     />
                 </Card>
-                {showBaseInfoModal ? <AddBaseForm id="" onCancel={onCancel} onOk={onSave} /> : null}
             </div>
         </>
     );
