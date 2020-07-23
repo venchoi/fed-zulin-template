@@ -11,6 +11,7 @@ export const maps = [
     { reg: '/middleground/basicdata/customer.*', key: 'Basic', code: 'BasicData', name: '基础数据' },
     { reg: '/middleground/metermg.*', key: 'PropertyContract', code: 'MeterMg', name: '水电单价管理' },
     { reg: '/middleground/meter.*', key: 'PropertyContract', code: 'Meter', name: '抄表管理' },
+    { reg: '/middleground/derate/list', key: 'Finance', code: 'Derate', name: '减免管理' },
 ];
 
 export function getKey(pathName: any) {

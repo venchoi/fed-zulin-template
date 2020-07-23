@@ -5,11 +5,10 @@ import { ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import config from './config';
 import App from './app';
-import model1 from './model/count';
-import model2 from './model/list';
+import mainModel from './model/main';
 import './assets/init/normalize.css';
 import './assets/less/index.less';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory as createHistory } from 'history';
 //@ts-ignore
 import createLoading from 'dva-loading';
 
@@ -34,8 +33,7 @@ const app = dva({
     history: createHistory(),
 });
 app.use(createLoading());
-app.model(model1);
-app.model(model2);
+app.model(mainModel);
 
 function renderWithHotReload(C: any) {
     app.router((obj: any) => (

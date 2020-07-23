@@ -1,5 +1,5 @@
 import React from 'react';
-import FedIcon from '../../../components/FedIcon';
+import FedIcon from '@c/FedIcon';
 
 interface Props {
     collapsed: boolean;

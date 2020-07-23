@@ -54,3 +54,127 @@ body .ant-divider, .ant-divider-horizontal {
 .ant-form-item-has-error {
     margin-bottom: 8px;
 }
+
+// 表头圆角去除
+.ant-table-container .ant-table-content table > thead > tr:first-child th:last-child {
+    border-top-right-radius: 0px;
+}
+
+.ant-table-container .ant-table-content table > thead > tr:first-child th:first-child {
+    border-top-left-radius: 0px;
+}
+
+// 弹窗按钮间距要求为16px
+.ant-modal-confirm .ant-modal-confirm-btns button + button {
+    margin-bottom: 0;
+    margin-left: 16px;
+}
+
+// 表格下拉列表最大高度设置
+.ant-dropdown {
+    .ant-table-filter-dropdown {
+        .ant-dropdown-menu {
+            max-height: 340px;
+            padding: 0;
+            .ant-dropdown-menu-item {
+                &.ant-dropdown-menu-item-active {
+                    background-color: #f2f5f7;
+                }
+                &.ant-dropdown-menu-item-selected {
+                    font-weight: bold;
+                }
+                .ant-checkbox-inner {
+                    border-radius: 2px;
+                }
+            }
+        }
+        .ant-table-filter-dropdown-btns {
+            padding-left: 16px;
+            padding-right: 16px;
+        }
+    }
+}
+
+.ant-tree-select-dropdown.ant-select-dropdown {
+    padding: 0;
+}
+
+// 重置 small 尺寸按钮样式
+.ant-btn-sm {
+    width: 64px;
+    border-radius: 4px;
+}
+
+.ant-select-multiple span.ant-select-selection-item {
+    border-radius: 2px;
+}
+
+span.ant-select-tree-checkbox-inner, span.ant-checkbox {
+    border-radius: 2px;
+}
+
+.ant-table-fixed {
+    table-layout: fixed;
+}
+
+.ant-table-tbody > tr > td {
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.ant-select-tree {
+    span.ant-select-tree-node-content-wrapper {
+        border-radius: 0;
+        &:hover {
+            background-color: #f2f5f7;
+        }
+    }
+}
+
+
+// 重写 Modal 弹窗样式
+.ant-modal {
+    .ant-modal-content {
+        .ant-modal-footer {
+            button {
+                min-width: 80px;
+            }
+            button + button {
+                margin-left: 16px;
+            }
+        }
+    }
+}
+
+.ant-cascader-menus {
+    .ant-cascader-menu {
+        padding: 0;
+    }
+    li.ant-cascader-menu-item
+    {
+        &:hover {
+            background: #f2f5f7;
+        }
+        &.ant-cascader-menu-item-active {
+            background-color: #EBF9FF;
+        }
+    }
+}
+
+
+.ant-checkbox {
+    .ant-checkbox-inner {
+        border-radius: 2px;
+    }
+}
+
+.ant-table {
+    table {
+        .ant-table-thead > tr > th {
+            background-color: #FAFBFC;
+        }
+    }
+    .ant-table-tbody > tr.ant-table-row:hover > td {
+        background-color: #FAFBFC;
+    }
+}
