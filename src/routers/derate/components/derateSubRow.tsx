@@ -240,6 +240,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             dataIndex: 'room_name',
             title: '资源',
             width: 192,
+            className: 'room-name-col',
             render: (text: string, record: feeItemType, index: number) => {
                 const rooms = record.full_room_name ? record.full_room_name.split(',') : [];
                 const popoverContent = (
@@ -321,6 +322,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             dataIndex: 'derate',
             title: '减免金额',
             width: 120,
+            className: "derate-col",
             align: 'right',
             render: (text: string, record: feeItemType, index: number) => {
                 const { status } = detail;
@@ -335,7 +337,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 const isSelectedDelay = selectedRowKeys.find(key => key === record.id + '1');
                 const deratedFormItem = record.isDemurrage ? (
                     <Form.Item validateStatus={record.validateStatus}>
-                        <Input disabled value={isSelectedDelay ? record.stayDemurrageAmount : ''} />
+                        <Input disabled value={isSelectedDelay ? record.stayDemurrageAmount : ''} style={{textAlign: 'right'}}/>
                     </Form.Item>
                 ) : (
                     <Form.Item validateStatus={record.validateStatus}>
@@ -343,6 +345,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                             disabled={!isSelectedFee}
                             onChange={handleDerateAmountChange(record)}
                             value={!isSelectedFee ? '' : record.derated_amount}
+                            style={{textAlign: 'right'}}
                         />
                     </Form.Item>
                 );
@@ -441,6 +444,9 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                                 required: false,
                                             },
                                         ]}
+                                        wrapperCol={{
+                                            span: 24
+                                        }}
                                     >
                                         {isEditMode ? (
                                             <InputWithCount
