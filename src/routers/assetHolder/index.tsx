@@ -61,12 +61,18 @@ const List = ({ location }: RouteComponentProps) => {
     // 表格布局字段
     const fetchCustomLayOut = async () => {
         const { data } = await getCustomLayout({ key: type_value_code });
-        const result: IGetCustomLayout[] = (data && data.asset_holder_layout) || [];
+        let result: IGetCustomLayout[] = (data && data.asset_holder_layout) || [];
         setLayoutData(result);
     };
     // 表格数据
     const fetchList = async () => {
         setIsTableLoading(true);
+        if (layoutData.length === 0 && fieldData.length > 0) {
+            // 第一次用户进入时 还没有该自定义信息
+            const copyLayoutData = cloneDeep(fieldData);
+            copyLayoutData.map(data => (data.selected = true));
+            setLayoutData(copyLayoutData);
+        }
         let paramsFields = (layoutData || []).filter(field => field.selected);
         if (paramsFields.length === 0) {
             if ((layoutData || []).length > 0) {
@@ -121,6 +127,7 @@ const List = ({ location }: RouteComponentProps) => {
                 align: 'center',
                 fixed: 'right',
                 isNoResize: true,
+                ellipsis: true,
                 render: (item: IField) => (
                     <>
                         <Link className="record-opt-btn" to={`/asset-holder/detail/${item.id}`}>
