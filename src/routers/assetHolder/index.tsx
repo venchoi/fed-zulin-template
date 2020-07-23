@@ -181,9 +181,6 @@ const List = ({ location }: RouteComponentProps) => {
     const renderExtraNode = () => {
         // 确定点击事件
         const onFinish = (resultArr: IField[]) => {
-            console.log('resultArr', resultArr);
-            //const saveArr: { field: string; width: number }[] = [];
-            //resultArr && resultArr.map(item => saveArr.push({ field: item.field, width: item.width || 100 }));
             postCustomLayout({ key: type_value_code, value: resultArr }).then(json => {
                 const { result, msg } = json;
                 if (result) {
