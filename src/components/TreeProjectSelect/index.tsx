@@ -33,6 +33,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             projIdsStr = null;
             projNamesStr = null;
         }
+        console.log(projIdsStr, 'cont')
         this.state = {
             treeData: [],
             searchValue: '',
@@ -47,8 +48,12 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
 
     componentDidMount() {
         this.getProjectData(() => {
-            if (this.state.projIds && this.state.projIds.length > 0) {
-                this.onTreeSelect && this.onTreeSelect(this.state.projIds);
+            const { projIds, allProjs } = this.state;
+            if (projIds && projIds.length > 0) {
+                const projIdsArr = projIds ? projIds.filter(proj => {
+                    return allProjs?.projIds.indexOf(proj) >= 0
+                }) : [];
+                this.onTreeSelect && this.onTreeSelect(projIdsArr);
             }
         });
     }
@@ -78,8 +83,11 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
 
     render() {
         const { width, height, dropdownStyle, maxTagCount, ...otherProps } = this.props;
-        const { projIds, searchValue } = this.state;
-        const projIdsArr = projIds ? projIds : [];
+        const { projIds, searchValue, allProjs } = this.state;
+        const projIdsArr = projIds ? projIds.filter(proj => {
+            return allProjs?.projIds.indexOf(proj) >= 0
+        }) : [];
+        console.log(projIds, projIdsArr)
         const treeData = this.getData();
         const treeProps = {
             ...otherProps,
@@ -208,6 +216,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
 
     // 树形组件选中
     onTreeSelect = (value: string[]): void => {
+        console.log('ontreeselect', value);
         const projs = this.getSelectedProjIds(value);
         this.setProjIds(projs);
         const { onTreeSelected, onChange } = this.props;
