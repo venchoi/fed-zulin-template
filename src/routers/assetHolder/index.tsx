@@ -56,7 +56,6 @@ const List = ({ location }: RouteComponentProps) => {
         const { data } = await getFiles({ type: type_value });
         const result: IField[] = data || [];
         const fieldData = cloneDeep(result);
-        fieldData.map((field: IField) => (field.selected = field.is_default));
         setFieldData(fieldData);
     };
     // 表格布局字段
@@ -68,9 +67,18 @@ const List = ({ location }: RouteComponentProps) => {
     // 表格数据
     const fetchList = async () => {
         setIsTableLoading(true);
-        const paramsFields = (mergeCanUseField() || []).filter(field => field.selected);
+        let paramsFields = (layoutData || []).filter(field => field.selected);
         if (paramsFields.length === 0) {
-            return;
+            if ((layoutData || []).length > 0) {
+                paramsFields = [layoutData[0]];
+            }
+            if (paramsFields.length === 0 && (fieldData || []).length > 0) {
+                const initField = { field: '', is_default: true, key: '', name: '', selected: true, width: 100 };
+                paramsFields = [Object.assign(initField, fieldData[0])];
+            }
+            if (paramsFields.length === 0) {
+                return;
+            }
         }
         const params = {
             advanced_select_fields: paramsFields,
@@ -109,7 +117,7 @@ const List = ({ location }: RouteComponentProps) => {
             };
             arr.push({
                 title: '操作',
-                width: 100,
+                width: 140,
                 align: 'center',
                 fixed: 'right',
                 isNoResize: true,
@@ -142,32 +150,6 @@ const List = ({ location }: RouteComponentProps) => {
         setTotal(total);
         setIsTableLoading(false);
     };
-    // 合并Custom字段
-    const mergeCanUseField = () => {
-        let optionsData: IField[] = [];
-        if (layoutData && layoutData.length > 0 && fieldData && fieldData.length > 0) {
-            const selectedLayoutData = layoutData.filter(data => data.selected);
-            if (selectedLayoutData.length > 0) {
-                selectedLayoutData.forEach(item => {
-                    const result = fieldData.find(f => f.field === item.field);
-                    if (result) {
-                        result.width = item.width;
-                        result.selected = item.selected;
-                        optionsData.push(result);
-                    }
-                });
-            } else {
-                // 全部不选中时，默认取第一条数据展示
-                const result = fieldData[0];
-                result.width = 'auto';
-                result.selected = true;
-                optionsData.push(result);
-            }
-        } else {
-            optionsData = fieldData;
-        }
-        return optionsData;
-    };
     // 新增、筛选区域
     const extra = (
         <>
@@ -197,8 +179,7 @@ const List = ({ location }: RouteComponentProps) => {
             setVisible(false);
         };
         // 配置列数据 如果layoutData返回值为空时，默认使用fieldData数据
-        let optionsData: IField[] = mergeCanUseField();
-        return <DragSelect options={optionsData} onFinish={onFinish} onCancel={onCancel} />;
+        return <DragSelect options={layoutData} onFinish={onFinish} onCancel={onCancel} />;
     };
     const handleVisibleChange = (val: boolean, callback: Function) => {
         setVisible(val);

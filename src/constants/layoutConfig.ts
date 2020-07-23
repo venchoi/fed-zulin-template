@@ -8,7 +8,7 @@ export interface IHeader {
     align?: string;
     isNoResize?: boolean;
     fixed?: string;
-    width: number;
+    width: number | string;
     ellipsis?: boolean;
     render?: (item: IField) => void;
     [propsName: string]: any;

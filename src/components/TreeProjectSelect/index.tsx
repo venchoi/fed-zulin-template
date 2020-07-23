@@ -33,7 +33,6 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             projIdsStr = null;
             projNamesStr = null;
         }
-        console.log(projIdsStr, 'cont')
         this.state = {
             treeData: [],
             searchValue: '',
@@ -41,8 +40,8 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             projNames: projNamesStr ? projNamesStr.split(',') : [],
             allProjs: {
                 projIds: [],
-                projNames: []
-            }
+                projNames: [],
+            },
         };
     }
 
@@ -50,9 +49,11 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
         this.getProjectData(() => {
             const { projIds, allProjs } = this.state;
             if (projIds && projIds.length > 0) {
-                const projIdsArr = projIds ? projIds.filter(proj => {
-                    return allProjs?.projIds.indexOf(proj) >= 0
-                }) : [];
+                const projIdsArr = projIds
+                    ? projIds.filter(proj => {
+                          return allProjs?.projIds.indexOf(proj) >= 0;
+                      })
+                    : [];
                 this.onTreeSelect && this.onTreeSelect(projIdsArr);
             }
         });
@@ -84,10 +85,11 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
     render() {
         const { width, height, dropdownStyle, maxTagCount, ...otherProps } = this.props;
         const { projIds, searchValue, allProjs } = this.state;
-        const projIdsArr = projIds ? projIds.filter(proj => {
-            return allProjs?.projIds.indexOf(proj) >= 0
-        }) : [];
-        console.log(projIds, projIdsArr)
+        const projIdsArr = projIds
+            ? projIds.filter(proj => {
+                  return allProjs?.projIds.indexOf(proj) >= 0;
+              })
+            : [];
         const treeData = this.getData();
         const treeProps = {
             ...otherProps,
@@ -110,7 +112,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             maxTagCount: maxTagCount || 1,
             searchValue,
             showArrow: true,
-            onDropdownVisibleChange: this.handleDropdownVisibleChange
+            onDropdownVisibleChange: this.handleDropdownVisibleChange,
             // dropdownRender: this.dropdownRender,
         };
         return <TreeSelect className="fed-tree-select" {...treeProps}></TreeSelect>;
@@ -136,7 +138,6 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
     // };
 
     handleDropdownVisibleChange = (visible: boolean) => {
-        console.log(visible)
         const { projIds, allProjs } = this.state;
         if (!visible && projIds.length === 0) {
             this.setProjIds(allProjs);
@@ -146,7 +147,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
                 onChange(allProjs.projIds.join(','));
             }
         }
-    }
+    };
 
     handleSearchInputChange = (value: string) => {
         this.setState({
@@ -216,7 +217,6 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
 
     // 树形组件选中
     onTreeSelect = (value: string[]): void => {
-        console.log('ontreeselect', value);
         const projs = this.getSelectedProjIds(value);
         this.setProjIds(projs);
         const { onTreeSelected, onChange } = this.props;
@@ -249,8 +249,8 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
         const copyData = cloneDeep(originData);
         const temp: projsType = {
             projIds: [],
-            projNames: []
-        }
+            projNames: [],
+        };
         const callback = (item: treeOriginNode): void => {
             const isEnd = item.is_end ? +item.is_end === 1 : false;
             item.isLeaf = !Array.isArray(item.children) || item.children.length === 0 || isEnd;
@@ -283,7 +283,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             this.setState(
                 {
                     treeData,
-                    allProjs
+                    allProjs,
                 },
                 () => {
                     cb && cb();
