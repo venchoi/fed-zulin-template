@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { IAddAssetHolder, IAddAssetHolderBank, IAssetHolderBankList } from '@t/assetHolder';
 import FedDataSection from '@c/FedDataSection/FedDataSection';
-import FedDataRow from '@c/FedDataSection/FedDataRow';
 import { valueOf } from '@/types/global';
+import AddBaseForm from './addBaseForm';
 import AddBankForm from './addBankForm';
 import BankTable from './bankTable';
 import './baseInfo.less';
-import { Link } from 'dva/router';
-import { Popconfirm, Row, Col } from 'antd';
+import { Modal, Row, Col } from 'antd';
+import FedIcon from '@c/FedIcon';
 
 interface IDataSection {
     label: '';
@@ -86,6 +86,27 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
         ],
     ];
     const [showAddAccount, setShowAddAccount] = useState(false);
+    const [editBaseInfo, setEditBaseInfo] = useState(false);
+    const handleAddAccount = () => {
+        setShowAddAccount(true);
+    };
+    const onUpdateTale = () => {
+        if (onUpdate) {
+            onUpdate();
+        }
+    };
+    const onCancel = () => {
+        setShowAddAccount(false);
+    };
+    const onSave = (values: IAddAssetHolderBank) => {
+        setShowAddAccount(false);
+        onUpdateTale();
+    };
+    // 编辑基本信息
+    const onEditBaseInfo = () => {
+        console.log('detail', detail);
+        setEditBaseInfo(true);
+    };
     const renderFedDataSection = (data: IDataSection[][]) => (
         <div className="baseinfo-content">
             {data.map((itemList, index) => (
@@ -102,28 +123,8 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
             ))}
         </div>
     );
-    const handleAddAccount = () => {
-        setShowAddAccount(true);
-    };
-    const onUpdateTale = () => {
-        if (onUpdate) {
-            onUpdate();
-        }
-    };
-    const onCancel = () => {
-        setShowAddAccount(false);
-    };
-    const onSave = (values: IAddAssetHolderBank) => {
-        setShowAddAccount(false);
-        onUpdateTale();
-    };
     const renderFedDataTableSection = (data: IDataSection[][]) => (
-        <div className="baseinfo-content" style={{ position: 'relative' }}>
-            <div onClick={handleAddAccount} className="add-bank-account-btn">
-                +添加账号
-            </div>
-            <BankTable data={account} isCanOperate onDelete={onUpdateTale} onUpdate={onUpdateTale} />
-        </div>
+        <BankTable data={account} isCanOperate onDelete={onUpdateTale} onUpdate={onUpdateTale} />
     );
     const baseInfoContent = renderFedDataSection(baseInfoData as IDataSection[][]);
     const accountInfoContent = renderFedDataTableSection(baseInfoData as IDataSection[][]);
@@ -131,10 +132,16 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
     const sectionList = [
         {
             title: '基本信息',
+            showEditIcon: <FedIcon type="icon-bianji" className="edit-icon" title="编辑" onClick={onEditBaseInfo} />,
             content: baseInfoContent,
         },
         {
             title: '账户信息',
+            extra: (
+                <div onClick={handleAddAccount} className="add-bank-account-btn">
+                    +添加账号
+                </div>
+            ),
             content: accountInfoContent,
         },
         {
@@ -143,14 +150,31 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
         },
     ];
     return (
-        <div className="asset-holder-base-info-wrap">
-            {sectionList.map(section => (
-                <FedDataSection key={section.title} section={section} />
-            ))}
-            {showAddAccount ? (
-                <AddBankForm onCancel={onCancel} onOk={onSave} assetHolderId={detail.id} isSubmit />
+        <>
+            <div className="asset-holder-base-info-wrap">
+                {sectionList.map(section => (
+                    <FedDataSection key={section.title} section={section} />
+                ))}
+                {showAddAccount ? (
+                    <AddBankForm onCancel={onCancel} onOk={onSave} assetHolderId={detail.id} isSubmit />
+                ) : null}
+            </div>
+            {editBaseInfo ? (
+                <Modal
+                    title="修改基本信息"
+                    visible={editBaseInfo}
+                    onOk={() => {
+                        setEditBaseInfo(false);
+                    }}
+                    onCancel={() => {
+                        setEditBaseInfo(false);
+                    }}
+                    wrapClassName="edit-base-modal-wrap"
+                >
+                    <AddBaseForm id={detail.id} onOk={() => {}} />
+                </Modal>
             ) : null}
-        </div>
+        </>
     );
 };
 export default BaseInfo;

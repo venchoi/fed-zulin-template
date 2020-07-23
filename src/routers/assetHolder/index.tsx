@@ -1,9 +1,12 @@
+/**
+ * 资产持有人列表页
+ */
 import React, { useState, useEffect } from 'react';
 import { Link, RouteComponentProps } from 'dva/router';
 import { Button, Card, Dropdown, Input, message, Popconfirm, Select } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { ResizeTable, DragSelect } from 'ykj-ui';
-import { cloneDeep, debounce, throttle } from 'lodash';
+import { cloneDeep, throttle } from 'lodash';
 import {
     getAssetHolderList,
     getCustomLayout,

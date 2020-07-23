@@ -40,6 +40,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
     }, []);
 
     const num = 24;
+    const spanNum = id ? 24 : 6;
     const handleSubmit = () => {
         form.validateFields().then(async values => {
             if (id) {
@@ -71,9 +72,9 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
 
     return (
         <>
-            <div className="add-base-form-wrap">
+            <div className={id ? 'edit add-base-form-wrap' : 'add-base-form-wrap'}>
                 <Row>
-                    <Col span={6}>
+                    <Col span={spanNum}>
                         <Form.Item
                             name="name"
                             label="持有人名称"
@@ -85,7 +86,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             <Input placeholder="请输入" />
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={spanNum}>
                         <Form.Item
                             name="short_name"
                             label="持有人简称"
@@ -97,7 +98,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             <Input placeholder="请输入" />
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={spanNum}>
                         <Form.Item
                             name="english_name"
                             label="英文名称"
@@ -109,7 +110,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             <Input placeholder="请输入" />
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={spanNum}>
                         <Form.Item
                             name="english_short_name"
                             label="英文简称"
@@ -123,7 +124,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={6}>
+                    <Col span={spanNum}>
                         <Form.Item
                             name="type"
                             label="客户类型"
@@ -141,7 +142,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={spanNum}>
                         <Form.Item
                             name="project_id"
                             label="关联项目"
@@ -153,7 +154,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             <TreeProjectSelect onTreeSelected={() => {}} width="100%" isJustSelect notInitSelect />
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={spanNum}>
                         <Form.Item
                             name="id_code_type"
                             label="证件类型"
@@ -171,7 +172,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             </Select>
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={spanNum}>
                         <Form.Item
                             name="id_code"
                             label="证件号码"
@@ -185,7 +186,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={6}>
+                    <Col span={spanNum}>
                         <Form.Item
                             name="contacter"
                             label="联系人"
@@ -197,7 +198,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             <Input placeholder="请输入" />
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={spanNum}>
                         <Form.Item
                             name="mobile"
                             label="电话号码"
@@ -209,7 +210,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             <Input placeholder="请输入" />
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={spanNum}>
                         <Form.Item
                             name="address"
                             label="联系地址"
@@ -221,7 +222,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             <Input placeholder="请输入" />
                         </Form.Item>
                     </Col>
-                    <Col span={6}>
+                    <Col span={spanNum}>
                         <Form.Item
                             name="manager"
                             label="负责人"

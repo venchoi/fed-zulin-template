@@ -6,7 +6,6 @@ import { PageHeader, Tabs, Card, Tag } from 'antd';
 import { RouteComponentProps, Link } from 'dva/router';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
 import { IAddAssetHolder, IAddAssetHolderBank } from '@t/assetHolder';
-import { ENABLE } from '@t/common';
 import { match } from 'react-router';
 import BaseInfo from './components/baseInfo';
 import AdjustmentRecord from './components/adjustmentRecord';
