@@ -431,7 +431,7 @@ export const DerateTable = (props: derateTableProps) => {
             title: '操作',
             key: 'action',
             fixed: expandedRows.length > 0 ? undefined : 'right',
-            width: 128,
+            width: 180,
             render(text: string, record: derateType, index: number) {
                 const { user } = props;
                 const stageId = record.proj_id;
