@@ -19,7 +19,7 @@ export interface IField {
     key: string; // "39f649c3-d5a2-0e18-56eb-d7f8bcaf9edb"
     name: string; // "姓名"
     selected?: boolean; //
-    width?: number;
+    width?: number | string;
 }
 
 export interface ISaveCustomLayout {

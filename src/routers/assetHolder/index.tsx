@@ -47,16 +47,10 @@ const List = ({ location }: RouteComponentProps) => {
     }, [location]);
     useEffect(() => {
         fetchCustomLayOut().then();
-    }, [fieldData, isFetchField, sortField, sortDirections]);
+    }, [isFetchField, sortField, sortDirections]);
     useEffect(() => {
         fetchList().then();
     }, [layoutData, keywords, IdCodeType, copStatus, pageObj]);
-    // 表格布局字段
-    const fetchCustomLayOut = async () => {
-        const { data } = await getCustomLayout({ key: type_value_code });
-        const result: IGetCustomLayout[] = (data && data.asset_holder_layout) || [];
-        setLayoutData(result);
-    };
     // 初始默认字段
     const fetchFields = async () => {
         const { data } = await getFiles({ type: type_value });
@@ -64,6 +58,12 @@ const List = ({ location }: RouteComponentProps) => {
         const fieldData = cloneDeep(result);
         fieldData.map((field: IField) => (field.selected = field.is_default));
         setFieldData(fieldData);
+    };
+    // 表格布局字段
+    const fetchCustomLayOut = async () => {
+        const { data } = await getCustomLayout({ key: type_value_code });
+        const result: IGetCustomLayout[] = (data && data.asset_holder_layout) || [];
+        setLayoutData(result);
     };
     // 表格数据
     const fetchList = async () => {
@@ -146,14 +146,23 @@ const List = ({ location }: RouteComponentProps) => {
     const mergeCanUseField = () => {
         let optionsData: IField[] = [];
         if (layoutData && layoutData.length > 0 && fieldData && fieldData.length > 0) {
-            layoutData.forEach(item => {
-                const result = fieldData.find(f => f.field === item.field);
-                if (result) {
-                    result.width = item.width;
-                    result.selected = item.selected;
-                    optionsData.push(result);
-                }
-            });
+            const selectedLayoutData = layoutData.filter(data => data.selected);
+            if (selectedLayoutData.length > 0) {
+                selectedLayoutData.forEach(item => {
+                    const result = fieldData.find(f => f.field === item.field);
+                    if (result) {
+                        result.width = item.width;
+                        result.selected = item.selected;
+                        optionsData.push(result);
+                    }
+                });
+            } else {
+                // 全部不选中时，默认取第一条数据展示
+                const result = fieldData[0];
+                result.width = 'auto';
+                result.selected = true;
+                optionsData.push(result);
+            }
         } else {
             optionsData = fieldData;
         }
