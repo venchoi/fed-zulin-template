@@ -84,7 +84,7 @@ const AddBankForm = ({ onCancel, onOk, isSubmit = false, bankId = '', assetHolde
 
     return (
         <Modal visible={true} width={473} title={title} centered onCancel={() => onCancel()} onOk={handleSubmit}>
-            <div className="add-base-form-wrap">
+            <div>
                 <Form form={form}>
                     <Form.Item
                         name="bank"

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Form, Input, Radio, Select, DatePicker, Modal, message, Table, Button, Row, Col } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
+import { Form, Input, Select, message, Row, Col } from 'antd';
 import { getIdCardList, postAddAssetHolder, getManageList } from '@/services/assetHolder';
 import { IAddAssetHolder, IAddAssetHolderBank } from '@t/assetHolder';
 import { customType } from '../../../constants/index';
@@ -20,7 +20,6 @@ interface IManagerList {
 }
 const { Option } = Select;
 const AddBaseForm = ({ id, onOk }: IProps) => {
-    const [form] = Form.useForm();
     const [idCardTypeList, setIdCardTypeList] = useState<IIdCardTypeList[]>([]);
     const [managerList, setManagerList] = useState<IManagerList[]>([]);
     const fetchIdCardDetail = async () => {
@@ -33,43 +32,12 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
         const result = data || [];
         setManagerList(result);
     };
-
     useEffect(() => {
         fetchIdCardDetail().then();
         fetchManagerList().then();
     }, []);
-
-    const num = 24;
+    const num = id ? 5 : 24;
     const spanNum = id ? 24 : 6;
-    const handleSubmit = () => {
-        form.validateFields().then(async values => {
-            if (id) {
-                // 编辑
-                values.id = id;
-                const { data, result, msg } = await postAddAssetHolder(values as IAddAssetHolder);
-                if (result) {
-                    if (onOk) {
-                        onOk(data);
-                    }
-                    message.success('编辑成功');
-                } else {
-                    message.error(msg || '编辑失败');
-                }
-            } else {
-                // 新增
-                const { data, result, msg } = await postAddAssetHolder(values as IAddAssetHolder);
-                if (result) {
-                    if (onOk) {
-                        onOk(data);
-                    }
-                    message.success('操作成功');
-                } else {
-                    message.error(msg || '操作成功');
-                }
-            }
-        });
-    };
-
     return (
         <>
             <div className={id ? 'edit add-base-form-wrap' : 'add-base-form-wrap'}>

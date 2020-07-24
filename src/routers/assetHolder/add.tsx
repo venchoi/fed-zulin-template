@@ -178,7 +178,6 @@ const Add = ({ history, match }: RouteComponentProps) => {
                                     取 消
                                 </Link>
                                 <Button className="add-button ant-btn-primary btn-margin-left-16" htmlType="submit">
-                                    {' '}
                                     保 存
                                 </Button>
                             </div>

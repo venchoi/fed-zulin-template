@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { IAddAssetHolder, IAddAssetHolderBank, IAssetHolderBankList } from '@t/assetHolder';
 import FedDataSection from '@c/FedDataSection/FedDataSection';
 import { valueOf } from '@/types/global';
@@ -6,8 +6,9 @@ import AddBaseForm from './addBaseForm';
 import AddBankForm from './addBankForm';
 import BankTable from './bankTable';
 import './baseInfo.less';
-import { Modal, Row, Col } from 'antd';
+import { Modal, Row, Col, Form, message } from 'antd';
 import FedIcon from '@c/FedIcon';
+import { postAddAssetHolder } from '@s/assetHolder';
 
 interface IDataSection {
     label: '';
@@ -21,6 +22,7 @@ interface IDetail {
 }
 
 const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
+    const [form] = Form.useForm();
     const baseInfoData = [
         [
             {
@@ -104,7 +106,6 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
     };
     // 编辑基本信息
     const onEditBaseInfo = () => {
-        console.log('detail', detail);
         setEditBaseInfo(true);
     };
     const renderFedDataSection = (data: IDataSection[][]) => (
@@ -149,6 +150,35 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
             content: systematicallyContent,
         },
     ];
+    const handleSubmit = () => {
+        form.validateFields().then(async values => {
+            if (detail.id) {
+                values.id = detail.id;
+                const { result, msg } = await postAddAssetHolder(values as IAddAssetHolder);
+                if (result) {
+                    setEditBaseInfo(false);
+                    message.success('编辑成功');
+                    if (onUpdate) {
+                        onUpdate('base');
+                    }
+                } else {
+                    message.error(msg || '编辑失败');
+                }
+            }
+        });
+    };
+    if (detail) {
+        const keys = Object.keys(detail);
+        if (keys) {
+            keys.forEach(name => {
+                if (name === 'project_id') {
+                    form.setFieldsValue({ [name]: [detail[name]] });
+                } else {
+                    form.setFieldsValue({ [name]: detail[name] });
+                }
+            });
+        }
+    }
     return (
         <>
             <div className="asset-holder-base-info-wrap">
@@ -160,19 +190,22 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
                 ) : null}
             </div>
             {editBaseInfo ? (
-                <Modal
-                    title="修改基本信息"
-                    visible={editBaseInfo}
-                    onOk={() => {
-                        setEditBaseInfo(false);
-                    }}
-                    onCancel={() => {
-                        setEditBaseInfo(false);
-                    }}
-                    wrapClassName="edit-base-modal-wrap"
-                >
-                    <AddBaseForm id={detail.id} onOk={() => {}} />
-                </Modal>
+                <Form form={form}>
+                    <Modal
+                        title="修改基本信息"
+                        visible={editBaseInfo}
+                        onOk={() => {
+                            handleSubmit();
+                        }}
+                        okButtonProps={{ htmlType: 'submit' }}
+                        onCancel={() => {
+                            setEditBaseInfo(false);
+                        }}
+                        wrapClassName="edit-base-modal-wrap"
+                    >
+                        <AddBaseForm id={detail.id} onOk={() => {}} />
+                    </Modal>
+                </Form>
             ) : null}
         </>
     );
