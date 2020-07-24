@@ -16,7 +16,7 @@ import {
 } from '@/services/assetHolder';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import { IGetCustomLayout, IField } from '@t/assetHolder';
-import { IHeader } from '../../constants/layoutConfig';
+import { IHeader, asset_holder_list_layout } from '../../constants/layoutConfig';
 import { customType, cooperateStatus } from '../../constants/index';
 import calcBodyHeight from './utils';
 import FedPagination from '@c/FedPagination';
