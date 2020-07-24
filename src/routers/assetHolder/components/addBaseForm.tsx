@@ -129,7 +129,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             labelCol={{ span: num }}
                             labelAlign="right"
                             className="form-item-center"
-                            rules={[{ required: true, max: 100, whitespace: true, message: '请选择证件类型!' }]}
+                            rules={[{ required: true, whitespace: true, message: '请选择证件类型!' }]}
                         >
                             <Select placeholder="请选择">
                                 {idCardTypeList.map(item => (
@@ -147,7 +147,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             labelCol={{ span: num }}
                             labelAlign="right"
                             className="form-item-right"
-                            rules={[{ required: true, max: 20, whitespace: true, message: '请输入证件号码!' }]}
+                            rules={[{ required: true, whitespace: true, message: '请输入证件号码!' }]}
                         >
                             <Input placeholder="请输入" />
                         </Form.Item>
@@ -161,7 +161,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             labelCol={{ span: num }}
                             labelAlign="right"
                             className="form-item-left"
-                            rules={[{ required: true, max: 20, whitespace: true, message: '请输入联系人!' }]}
+                            rules={[{ required: true, whitespace: true, message: '请输入联系人!' }]}
                         >
                             <Input placeholder="请输入" />
                         </Form.Item>
@@ -173,7 +173,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             labelCol={{ span: num }}
                             labelAlign="right"
                             className="form-item-center"
-                            rules={[{ required: true, max: 20, whitespace: true, message: '请输入电话号码!' }]}
+                            rules={[{ required: true, whitespace: true, message: '请输入电话号码!' }]}
                         >
                             <Input placeholder="请输入" />
                         </Form.Item>
@@ -185,7 +185,7 @@ const AddBaseForm = ({ id, onOk }: IProps) => {
                             labelCol={{ span: num }}
                             labelAlign="right"
                             className="form-item-center"
-                            rules={[{ required: false, max: 20, whitespace: true }]}
+                            rules={[{ required: false, whitespace: true }]}
                         >
                             <Input placeholder="请输入" />
                         </Form.Item>
