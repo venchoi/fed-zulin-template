@@ -106,12 +106,18 @@ const List = ({ location }: RouteComponentProps) => {
             head.map(it => {
                 arr.push({
                     title: it.name,
-                    dataIndex: it.field,
+                    // dataIndex: it.field,
                     key: it.field,
                     sorter: true,
                     width: it.width || asset_holder_list_layout[it.field] || 100,
                     ellipsis: true,
-                    render: (text, item: IField) => <div>{item[it.field] || '-'}</div>,
+                    render: (text, item: IField) => {
+                        let value = item[it.field] || '-';
+                        if (value instanceof Array) {
+                            value = value.join(',');
+                        }
+                        return <div>{value}</div>;
+                    },
                 });
             });
             // 添加一列自适应宽度
