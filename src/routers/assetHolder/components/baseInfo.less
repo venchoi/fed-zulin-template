@@ -1,9 +1,6 @@
 @import '../../../constants';
 .asset-holder-base-info-wrap{
   .add-bank-account-btn{
-    position: absolute;
-    top: -40px;
-    right: 10px;
     color: @color-blue;
     cursor: pointer;
   }
@@ -20,5 +17,23 @@
       display: inline-block;
       margin-bottom: 16px;
     }
+  }
+
+  .edit-icon{
+    margin-left: 16px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #BEC3C7;
+  }
+  .edit-icon:hover{color: @color-blue;}
+}
+
+.edit-base-modal-wrap{
+  .ant-modal-body{
+    padding: 0;
+  }
+  .add-base-form-wrap{
+    max-height: 700px;
+    overflow-y: auto;
   }
 }

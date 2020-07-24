@@ -152,7 +152,7 @@ const Add = ({ history, match }: RouteComponentProps) => {
             />
             <Form onFinish={finishHandle} form={form} style={{ height: '88%', display: 'flex' }}>
                 <div className="layout-detail asset-holder-add-wrap">
-                    <Card className="report-card" title="基本信息" bordered={false} style={{ height: '330px' }}>
+                    <Card className="report-card" title="基本信息" bordered={false} style={{ minHeight: '300px' }}>
                         <AddBaseForm id="" />
                     </Card>
                     <Card
@@ -160,7 +160,7 @@ const Add = ({ history, match }: RouteComponentProps) => {
                         title="收款账户"
                         bordered={false}
                         extra={extra}
-                        style={{ height: 'calc(100% - 330px)' }}
+                        style={{ height: 'calc(100% - 300px)' }}
                     >
                         <div className="account-table">
                             <BankTable
@@ -178,7 +178,6 @@ const Add = ({ history, match }: RouteComponentProps) => {
                                     取 消
                                 </Link>
                                 <Button className="add-button ant-btn-primary btn-margin-left-16" htmlType="submit">
-                                    {' '}
                                     保 存
                                 </Button>
                             </div>

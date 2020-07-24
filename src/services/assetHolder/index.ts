@@ -7,6 +7,7 @@ import {
     IAssetHolderList,
     IField,
 } from '@/types/assetHolder';
+import { IHeader } from '@/constants/layoutConfig';
 
 // 资产持有人管理
 export const getCustomLayout = (data: { key: string }) => {
@@ -19,7 +20,7 @@ export const getFiles = (data: { type: string }) => {
 };
 
 // 资产持有人管理
-export const postCustomLayout = (data: { value: IField[]; key: string }) => {
+export const postCustomLayout = (data: { value: IHeader[]; key: string }) => {
     return ajax('/parameter/tables/save-custom-layout', { ...data, _csrf: '' }, 'POST');
 };
 
