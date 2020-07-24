@@ -10,14 +10,14 @@ export interface IHeader {
     fixed?: string;
     width: number | string;
     ellipsis?: boolean;
-    render?: (item: IField) => void;
+    render?: (text?: string, item: IField) => void;
     [propsName: string]: any;
 }
 
 // 资产持有人列表 表格默认列宽
 export const asset_holder_list_layout = {
     name: 350,
-    project_id: 277,
+    projects: 277,
     short_name: 100,
     id_code_type: 100,
     id_code: 100,
