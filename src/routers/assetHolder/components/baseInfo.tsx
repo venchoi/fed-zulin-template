@@ -1,14 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { IAddAssetHolder, IAddAssetHolderBank, IAssetHolderBankList } from '@t/assetHolder';
 import FedDataSection from '@c/FedDataSection/FedDataSection';
+import { Modal, Row, Col, Form, message } from 'antd';
+import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { valueOf } from '@/types/global';
 import AddBaseForm from './addBaseForm';
 import AddBankForm from './addBankForm';
 import BankTable from './bankTable';
-import './baseInfo.less';
-import { Modal, Row, Col, Form, message } from 'antd';
-import FedIcon from '@c/FedIcon';
 import { postAddAssetHolder } from '@s/assetHolder';
+import './baseInfo.less';
 
 interface IDataSection {
     label: '';
@@ -133,14 +133,14 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
     const sectionList = [
         {
             title: '基本信息',
-            showEditIcon: <FedIcon type="icon-icn_edit1" className="edit-icon" title="编辑" onClick={onEditBaseInfo} />,
+            showEditIcon: <EditOutlined className="edit-icon" title="编辑" onClick={onEditBaseInfo} />,
             content: baseInfoContent,
         },
         {
             title: '账户信息',
             extra: (
                 <div onClick={handleAddAccount} className="add-bank-account-btn">
-                    +添加账号
+                    <PlusOutlined /> 添加账号
                 </div>
             ),
             content: accountInfoContent,
