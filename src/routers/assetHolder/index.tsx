@@ -111,6 +111,7 @@ const List = ({ location }: RouteComponentProps) => {
                     sorter: true,
                     width: it.width || 100,
                     ellipsis: true,
+                    render: (text, item: IField) => <div>{item[it.field] || '-'}</div>,
                 });
             });
             // 添加一列自适应宽度
