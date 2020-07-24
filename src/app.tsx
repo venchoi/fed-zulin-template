@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, BrowserRouter, Redirect } from 'dva/router';
-import { Spin } from 'antd';
+import { Spin, message } from 'antd';
 import Layout from './routers/layout';
 import { RouteComponentProps } from 'dva/router';
 import ReportList from './routers/report';
@@ -12,29 +12,79 @@ interface Props extends RouteComponentProps {
     dispatch?: any;
 }
 
+// 配置全局消息提示
+message.config({
+    top: 100,
+    duration: 2,
+    maxCount: 3,
+});
+
 function loading() {
     return <Spin />;
 }
+
 const routes = [
+    {
+        path: '/asset-holder/add',
+        component: Loadable({
+            loader: () => import('./routers/assetHolder/add'),
+            loading,
+        }),
+    },
+    {
+        path: '/asset-holder/edit/:id',
+        component: Loadable({
+            loader: () => import('./routers/assetHolder/add'),
+            loading,
+        }),
+    },
+    {
+        path: '/asset-holder/detail/:id',
+        component: Loadable({
+            loader: () => import('./routers/assetHolder/detail'),
+            loading,
+        }),
+    },
+    {
+        path: '/asset-holder/list',
+        component: Loadable({
+            loader: () => import('./routers/assetHolder/index'),
+            loading,
+        }),
+    },
+    {
+        path: '/asset-holder',
+        component: Loadable({
+            loader: () => import('./routers/assetHolder/index'),
+            loading,
+        }),
+    },
     {
         path: '/ui',
         component: Loadable({
             loader: () => import('./routers/ui'),
-            loading: loading,
+            loading,
         }),
     },
     {
         path: '*/export-list/:type/:stage_id',
         component: Loadable({
             loader: () => import('./routers/export'),
-            loading: loading,
+            loading,
         }),
     },
     {
         path: '/report',
         component: Loadable({
             loader: () => import('./routers/report'),
-            loading: loading,
+            loading,
+        }),
+    },
+    {
+        path: '/derate',
+        component: Loadable({
+            loader: () => import('./routers/derate'),
+            loading,
         }),
     },
     // TODO children route
@@ -67,6 +117,13 @@ const routes = [
         }),
     },
     {
+        path: '/renter-customers-service',
+        component: Loadable({
+            loader: () => import('./routers/renterCustomerService'),
+            loading,
+        }),
+    },
+    {
         path: '/basicfee',
         component: Loadable({
             loader: () => import('./routers/basicfee/index'),
@@ -86,39 +143,33 @@ const routes = [
         path: '/noright',
         component: Loadable({
             loader: () => import('./routers/interceptors/noRights'),
-            loading: loading,
+            loading,
         }),
     },
     {
         path: '/404',
         component: Loadable({
             loader: () => import('./routers/interceptors/notFoundPage'),
-            loading: loading,
+            loading,
         }),
     },
 ];
 
-class App extends React.PureComponent<Props> {
+class App extends React.PureComponent<RouteComponentProps> {
     public render() {
         return (
-            <Layout>
-                <BrowserRouter basename="/middleground">
+            <BrowserRouter basename="/middleground">
+                <Layout dispatch={this.props.dispatch}>
                     {/* <Suspense fallback={<Spin size="large" tip="Loading..."></Spin>}> */}
                     <Switch>
                         {routes.map(item => {
                             return <Route path={item.path} component={item.component} key={item.path} />;
                         })}
-                        {/* <Route
-                            path="/"
-                            component={() => {
-                                return <ReportList history={this.props.history} />;
-                            }}
-                        /> */}
                         <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
                     </Switch>
                     {/* </Suspense> */}
-                </BrowserRouter>
-            </Layout>
+                </Layout>
+            </BrowserRouter>
         );
     }
 }

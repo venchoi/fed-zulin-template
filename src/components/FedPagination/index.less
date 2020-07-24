@@ -1,9 +1,18 @@
-.fed-pagination {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 16px;
+.fed-pagination-container {
     width: 100%;
-    background: #fff;
+    box-sizing: border-box;
+    .fed-pagination {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 16px;
+        width: 100%;
+        background: #fff;
+    }
+    // 为了解决 UI 要求的右边距为16px
+    .ant-pagination-options-size-changer.ant-select {
+        margin-right: 0px;
+    }
 }
+

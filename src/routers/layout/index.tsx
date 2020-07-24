@@ -10,7 +10,7 @@ import FedHeader from './components/FedHeader';
 import FedMenu from './components/FedMenu';
 import CollapseItem from './components/CollapseItem';
 import Logo from './components/Logo';
-import { getHomeBaseInfo, getWorkflowTodo } from '../../services/app';
+import { getHomeBaseInfo, getWorkflowTodo } from '@s/app';
 import { find } from 'lodash';
 import config from '../../config';
 import { handleBaseInfo } from '../../helper/handleBaseInfo';
@@ -21,8 +21,13 @@ import './index.less';
 const { Header, Sider, Content, Footer } = AntLayout;
 
 const { DEV } = config;
+interface dispatchArg {
+    type: string;
+    data: any;
+}
 interface Props {
-    children: ReactElement;
+    children: React.ReactNode;
+    dispatch(data: dispatchArg): void;
 }
 
 interface LogoInfo {
@@ -94,7 +99,7 @@ class Layout extends React.Component<Props, State> {
         } = this.state;
         const nav = find(appList, ['key', appCode]);
         return (
-            <AntLayout style={{ minHeight: '100vh' }} className="main">
+            <AntLayout style={{ height: '100vh', overflow: 'hidden' }} className="main">
                 <Sider
                     style={{ minHeight: '100vh', maxHeight: '100vh' }}
                     trigger={<CollapseItem collapsed={collapsed} />}
@@ -119,7 +124,7 @@ class Layout extends React.Component<Props, State> {
                         />
                     </Header>
                     <Content style={{ overflowX: 'auto' }}>
-                        <div style={{ minWidth: '1208px', height: '100%' }}>{inited ? children : <Spin />}</div>
+                        <div style={{ minWidth: '896px', height: '100%' }}>{inited ? children : <Spin />}</div>
                     </Content>
                     <Footer className="main-footer">
                         Copyright © {new Date().getFullYear()} 明源云空间 版权所有 鄂ICP备15101856号-1

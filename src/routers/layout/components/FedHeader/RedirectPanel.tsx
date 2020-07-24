@@ -1,6 +1,6 @@
 import React, { Component, MouseEventHandler } from 'react';
-import { Modal, Divider } from 'antd';
-import FedIcon from '../../../../components/FedIcon';
+import { Modal } from 'antd';
+import FedIcon from '@c/FedIcon';
 import './RedirectPanel.less';
 import { AppInfo, MapOptions } from './interface';
 

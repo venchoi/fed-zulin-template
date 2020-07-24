@@ -10,8 +10,12 @@ export interface fileType {
     type: string;
     edit?: string | boolean;
 }
-
 export enum ENABLE {
     NOTENABLED = '0',
     ENABLED = '1',
+}
+export interface responseType {
+    status?: boolean;
+    msg?: string;
+    data?: any[];
 }

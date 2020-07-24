@@ -1,7 +1,5 @@
 //统一发送ajax请求的接口
-import { Cookies } from '@/MemoryShare';
 import ajax from '../../api/utils/ajax';
-import otherServer from '../../api/config';
 
 interface ReportListParams {
     keyword: string;

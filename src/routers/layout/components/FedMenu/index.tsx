@@ -1,9 +1,8 @@
 import React from 'react';
 import { Badge, Menu } from 'antd';
 import { Link } from 'dva/router';
-import FedIcon from '../../../../components/FedIcon';
+import FedIcon from '@c/FedIcon';
 import { getKey } from './menuRoutes';
-import {} from '../FedHeader/interface';
 
 interface Props {
     collapsed: boolean;
@@ -61,7 +60,7 @@ export default class Menus extends React.Component<Props, State> {
                         {(menuItem.children || []).map((childItem: any) => {
                             // 如果is_access_fun的值为或者 当前项目的标识与url _smp参数不一致也需要跳转
                             const isHref = +childItem.is_access_fun === 1;
-                            const isOldSite = /\/static\//.test(childItem.func_url);
+                            const isOldSite = /\/static\/|\/pact\/|\/fed\//.test(childItem.func_url);
                             const navClass = '';
                             const key = childItem.func_code;
 
@@ -82,13 +81,22 @@ export default class Menus extends React.Component<Props, State> {
                             }
                             return (
                                 <Menu.Item key={key} className={navClass}>
-                                    <a href={url}>
-                                        {/* 新站点使用langs.text会产生乱码？ */}
-                                        {childItem.func_name}
-                                        {count ? (
-                                            <Badge count={count} overflowCount={99} style={{ marginLeft: '5px' }} />
-                                        ) : null}
-                                    </a>
+                                    {!isHref && !isOldSite ? (
+                                        <Link to={childItem.func_url}>
+                                            {childItem.func_name}
+                                            {count ? (
+                                                <Badge count={count} overflowCount={99} style={{ marginLeft: '5px' }} />
+                                            ) : null}
+                                        </Link>
+                                    ) : (
+                                        <a href={url}>
+                                            {/* 新站点使用langs.text会产生乱码？ */}
+                                            {childItem.func_name}
+                                            {count ? (
+                                                <Badge count={count} overflowCount={99} style={{ marginLeft: '5px' }} />
+                                            ) : null}
+                                        </a>
+                                    )}
                                 </Menu.Item>
                             );
                         })}
