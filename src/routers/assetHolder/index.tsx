@@ -208,12 +208,23 @@ const List = ({ location }: RouteComponentProps) => {
             clearTimeout(timer);
         }
         timer = setTimeout(() => {
-            const arr: { field: string; width: number }[] = [];
-            copyColumns.forEach(column => {
+            const arr: IHeader[] = [];
+            const editColumns: IHeader[] = cloneDeep(columns);
+            editColumns.forEach(column => {
                 if (column.dataIndex) {
-                    arr.push({ field: column.dataIndex, width: column.width });
+                    column.selected = true;
+                    column.field = column.dataIndex;
+                    column.key = (fieldData.find(f => f.field === column.dataIndex) || {}).key;
+                    column.name = column.title;
+                    delete column.dataIndex;
+                    delete column.ellipsis;
+                    delete column.ellipsis;
+                    delete column.sorter;
+                    delete column.title;
+                    arr.push(column);
                 }
             });
+            if (arr.length === 0) return;
             postCustomLayout({ key: type_value_code, value: arr });
         }, 800);
     };
