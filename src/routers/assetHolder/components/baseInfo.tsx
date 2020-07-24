@@ -4,6 +4,7 @@ import FedDataSection from '@c/FedDataSection/FedDataSection';
 import { Modal, Row, Col, Form, message } from 'antd';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { valueOf } from '@/types/global';
+import { dateStrShow2Min } from '@/helper/date';
 import AddBaseForm from './addBaseForm';
 import AddBankForm from './addBankForm';
 import BankTable from './bankTable';
@@ -18,7 +19,7 @@ interface IDataSection {
 interface IDetail {
     detail: IAddAssetHolder;
     account: IAssetHolderBankList;
-    onUpdate?: () => void;
+    onUpdate?: (type?: string) => void;
 }
 
 const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
@@ -79,11 +80,19 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
         [
             {
                 label: '创建时间',
-                value: detail.created_on,
+                value: dateStrShow2Min(detail.created_on),
             },
             {
                 label: '创建人',
                 value: detail.created_by_name,
+            },
+            {
+                label: '最后修改时间',
+                value: dateStrShow2Min(detail.modified_on),
+            },
+            {
+                label: '最后修改人',
+                value: detail.modified_on_name,
             },
         ],
     ];

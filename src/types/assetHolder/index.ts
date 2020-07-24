@@ -70,6 +70,8 @@ export interface IAddAssetHolder {
     accounts: IAddAssetHolderBank[];
     created_on?: string; // 创建时间
     created_by_name?: string; // 创建人
+    modified_on?: string; // 最后修改时间
+    modified_on_name?: string; // 最后修改人
 }
 
 // 添加银行账号
