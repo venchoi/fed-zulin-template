@@ -109,7 +109,7 @@ const List = ({ location }: RouteComponentProps) => {
                     dataIndex: it.field,
                     key: it.field,
                     sorter: true,
-                    width: it.width || 100,
+                    width: it.width || asset_holder_list_layout[it.field] || 100,
                     ellipsis: true,
                     render: (text, item: IField) => <div>{item[it.field] || '-'}</div>,
                 });
