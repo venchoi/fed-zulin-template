@@ -1,3 +1,6 @@
 dist/*
 node_modules/*
 middleground/*
+covarage
+.idea
+.vscode/*
