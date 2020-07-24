@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { message, Table, Popconfirm } from 'antd';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { postAddAssetHolderBank, postDeleteAssetHolderBank } from '@/services/assetHolder';
 import { IAddAssetHolderBank } from '@t/assetHolder';
 import FedIcon from '@c/FedIcon';
@@ -46,11 +47,10 @@ const BankTable = ({ data, isCanOperate = false, isNoShowPage = false, onDelete,
             render: (text: string, rowData: IAddAssetHolderBank) => {
                 return (
                     <>
-                        <FedIcon
-                            onClick={editAccount.bind(null, rowData)}
+                        <EditOutlined
                             title="编辑"
                             className="account-record-icon"
-                            type="icon-bianji"
+                            onClick={editAccount.bind(null, rowData)}
                         />
                         <Popconfirm
                             placement="topRight"
@@ -61,12 +61,7 @@ const BankTable = ({ data, isCanOperate = false, isNoShowPage = false, onDelete,
                             okText="确定"
                             cancelText="取消"
                         >
-                            <FedIcon
-                                title="删除"
-                                style={{ marginLeft: 16 }}
-                                className="account-record-icon"
-                                type="icon-shanchu2"
-                            />
+                            <DeleteOutlined title="删除" style={{ marginLeft: 16 }} className="account-record-icon" />
                         </Popconfirm>
                     </>
                 );

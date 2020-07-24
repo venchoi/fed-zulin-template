@@ -8,6 +8,8 @@ import './FedDataSection.less';
 interface IProps {
     section: {
         title?: string | ReactNode;
+        showEditIcon?: ReactNode;
+        extra?: ReactNode;
         content?: string | ReactNode;
     };
 }
@@ -15,7 +17,13 @@ function FedDataSection(props: IProps) {
     const { section } = props;
     return (
         <div className="fed-data-section">
-            {section.title ? <div className="fed-data-section-title">{section.title}</div> : null}
+            {section.title ? (
+                <div className="fed-data-section-title">
+                    {section.title}
+                    {section.showEditIcon ? section.showEditIcon : null}
+                    {section.extra ? <div className="fed-data-section-title-extra">{section.extra}</div> : null}
+                </div>
+            ) : null}
             {section.content ? <div className="fed-data-section-content">{section.content}</div> : null}
         </div>
     );

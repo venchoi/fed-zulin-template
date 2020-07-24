@@ -33,7 +33,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             projIdsStr = null;
             projNamesStr = null;
         }
-        console.log(projIdsStr, 'cont');
+
         this.state = {
             treeData: [],
             searchValue: '',
@@ -91,7 +91,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
                   return allProjs?.projIds.indexOf(proj) >= 0;
               })
             : [];
-        console.log(projIds, projIdsArr);
+
         const treeData = this.getData();
         const treeProps = {
             ...otherProps,
@@ -140,7 +140,6 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
     // };
 
     handleDropdownVisibleChange = (visible: boolean) => {
-        console.log(visible);
         const { projIds, allProjs } = this.state;
         if (!visible && projIds.length === 0) {
             this.setProjIds(allProjs);
@@ -220,7 +219,6 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
 
     // 树形组件选中
     onTreeSelect = (value: string[]): void => {
-        console.log('ontreeselect', value);
         const projs = this.getSelectedProjIds(value);
         this.setProjIds(projs);
         const { onTreeSelected, onChange } = this.props;

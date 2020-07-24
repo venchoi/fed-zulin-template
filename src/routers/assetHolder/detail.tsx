@@ -6,7 +6,6 @@ import { PageHeader, Tabs, Card, Tag } from 'antd';
 import { RouteComponentProps, Link } from 'dva/router';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
 import { IAddAssetHolder, IAddAssetHolderBank } from '@t/assetHolder';
-import { ENABLE } from '@t/common';
 import { match } from 'react-router';
 import BaseInfo from './components/baseInfo';
 import AdjustmentRecord from './components/adjustmentRecord';
@@ -44,7 +43,8 @@ const Detail = ({
         project_id: '', // 关联项目 多个项目用,分隔
         manager: '', // 负责人  【与产品经理确认过，此处的负责人为单选】
     };
-    const [loading, setLoading] = useState(true);
+    const [baseLoading, setBaseLoading] = useState(true);
+    const [accountLoading, setAccountLoading] = useState(true);
     const [detail, setDetail] = useState<IAddAssetHolder>(initDetail);
     const [accountList, setAccountList] = useState<IAddAssetHolderBank[]>([]);
     const routes = [
@@ -69,21 +69,27 @@ const Detail = ({
         return <span key={route.path}>{route.breadcrumbName}</span>;
     };
     const fetchDetail = async () => {
-        setLoading(true);
+        setBaseLoading(true);
         const { data } = await getAssetHolderDetail({ id });
-        setLoading(false);
+        setBaseLoading(false);
         const result = data || initDetail;
         setDetail(result);
     };
 
     const fetchAccountData = async () => {
+        setAccountLoading(true);
         const { data } = await getAssetHolderBankList({ page: 1, page_size: 10000, id });
+        setAccountLoading(false);
         const result = (data && data) || initDetail;
         setAccountList(result);
     };
 
-    const updateInfo = () => {
-        fetchAccountData().then();
+    const updateInfo = (type?: string) => {
+        if (type === 'base') {
+            fetchDetail().then();
+        } else {
+            fetchAccountData().then();
+        }
     };
 
     useEffect(() => {
@@ -103,12 +109,12 @@ const Detail = ({
             <div className="layout-detail standard-detail">
                 <Tabs type="card">
                     <TabPane tab="详细信息" key="1">
-                        <Card bordered={false} loading={loading} className="layout-detail-tab-content">
+                        <Card bordered={false} loading={baseLoading} className="layout-detail-tab-content">
                             <BaseInfo detail={detail} account={accountList} isCanOperate={true} onUpdate={updateInfo} />
                         </Card>
                     </TabPane>
                     <TabPane tab="合作记录" key="2">
-                        <Card bordered={false} loading={loading} className="layout-detail-tab-content">
+                        <Card bordered={false} loading={accountLoading} className="layout-detail-tab-content">
                             <AdjustmentRecord id={detail.id} />
                         </Card>
                     </TabPane>
