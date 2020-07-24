@@ -133,7 +133,7 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
     const sectionList = [
         {
             title: '基本信息',
-            showEditIcon: <FedIcon type="icon-bianji" className="edit-icon" title="编辑" onClick={onEditBaseInfo} />,
+            showEditIcon: <FedIcon type="icon-icn_edit1" className="edit-icon" title="编辑" onClick={onEditBaseInfo} />,
             content: baseInfoContent,
         },
         {
