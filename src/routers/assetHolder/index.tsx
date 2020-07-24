@@ -113,6 +113,8 @@ const List = ({ location }: RouteComponentProps) => {
                     ellipsis: true,
                 });
             });
+            // 添加一列自适应宽度
+            arr.push({ title: '', width: 'auto' });
             const confirm = (item: IField) => {
                 deleteAssetHolder({ id: item.id || '' }).then((json: { result: boolean; msg: string }) => {
                     const { result, msg } = json;

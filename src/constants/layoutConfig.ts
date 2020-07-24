@@ -13,3 +13,6 @@ export interface IHeader {
     render?: (item: IField) => void;
     [propsName: string]: any;
 }
+
+// 资产持有人列表 表格默认列宽
+export const asset_holder_list_layout = {};
