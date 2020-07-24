@@ -4969,10 +4969,10 @@ fecha@~4.2.0:
   resolved "https://registry.in.myspacex.cn/fecha/download/fecha-4.2.0.tgz#3ffb6395453e3f3efff850404f0a59b6747f5f41"
   integrity sha1-P/tjlUU+Pz7/+FBATwpZtnR/X0E=
 
-fed-finance-component@^3.0.7:
-  version "3.0.7"
-  resolved "https://registry.in.myspacex.cn/fed-finance-component/download/fed-finance-component-3.0.7.tgz#4f5828a8654baee39d76aa02c9706b98b34af9da"
-  integrity sha1-T1goqGVLruOddqoCyXBrmLNK+do=
+fed-finance-component@^3.0.8:
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/fed-finance-component/-/fed-finance-component-3.0.8.tgz#993e23af3c8abaee407fa6cb5491ef3d556a47cf"
+  integrity sha512-pywFHkDduVB3506E+IgYw7rjMi+70VBaM21jL3Lr52PXSbFZqp0x0YoRP5aEiItVuZppHFRcBXeRvSfoEmlgDg==
   dependencies:
     "@ant-design/icons" "^4.0.0"
     antd "^4.3.2"
