@@ -19,3 +19,22 @@ export interface responseType {
     msg?: string;
     data?: any[];
 }
+
+// 请求的接口放回报文结构
+export interface ResponseData<T> {
+    data: T;
+    msg: string;
+    result: boolean;
+}
+
+// 支付方式
+export interface PaymentMode {
+    ext?: string; // 额外信息，json字符串，eg: "{"name":"现金支付","isNeedFee":"1","feeMode":"按比例","ratio":1}"
+    id: string;
+    is_enabled?: number;
+    is_system?: string;
+    scope_id?: string | null;
+    sort?: number;
+    title?: string;
+    value: string;
+}
