@@ -22,7 +22,7 @@ export const getStandardPriceDetail = (params: { id: string }) => {
 };
 // 【单价管理】—— 调整记录
 export const getStandardPriceAdjustment = (params: {
-    status: Status
+    status: Status;
     meter_standard_price_id: string;
     page: number;
     page_size: number;

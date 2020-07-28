@@ -35,7 +35,7 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
     }
     return promise
         .then(res => {
-            if (!res?.data?.result) message.error(res?.data?.msg || '网络请求失败');
+            if (!res?.data?.result) message.error(res?.data?.msg || res?.data?.message || '网络请求失败');
             return res.data;
         })
         .catch(err => {
@@ -53,7 +53,10 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
                 }
             } else {
                 console.error('请求失败了', err);
-                message.error(data.msg || '网络请求失败');
+                // 状态码为301或者302时不提示
+                if (response.status !== 301 && response.status !== 302) {
+                    message.error(data.msg || '网络请求失败');
+                }
             }
         });
 }

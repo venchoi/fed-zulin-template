@@ -67,14 +67,18 @@ export function handleBaseInfo(payload: any) {
                         if (DEV) {
                             //开发结算设置对应的端口号
                             if (!functions[k].func_url) functions[k].func_url = '';
+                            const urlReg = new RegExp(`http(s)?://.+?(${config.baseAlias})(\/.*)`);
                             // is_access_fun = 1,或者当前项目的标识与url _smp参数不一致也需要跳转 时表示需要外链
                             functions[k].func_url =
                                 +functions[k].is_access_fun === 1
                                     ? functions[k].func_url
-                                    : functions[k].func_url.replace(
-                                          location.hostname,
-                                          `${location.hostname}:${serverPort}`
-                                      );
+                                    : functions[k].func_url.replace(urlReg, '$3');
+                        } else {
+                            const origin = window.location.origin.replace(/(https\:\/\/rental)\d(.*)/, '$1$2');
+                            functions[k].func_url =
+                                +functions[k].is_access_fun === 1
+                                    ? functions[k].func_url
+                                    : functions[k].func_url.replace(`${origin}${config.baseAlias}`, '');
                         }
                         nav.children.push(functions[k]);
                     } else {

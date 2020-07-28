@@ -6,13 +6,80 @@
 .layout {
     &-list {
         padding: 24px 24px 0 24px;
+        .fed-table .ant-table-body {
+            padding-bottom: 16px;
+        }
+        >.ant-card {
+            height: 100%;
+            min-height: 100%;
+        }
+        .fed-pagination-container {
+            //position: absolute;
+            //bottom: 0;
+            //right: 0;
+            width: 100%;
+        }
+        .tabpane-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            >.fed-table {
+                // flex-grow: 1;
+            }
+        }
+        .filter {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            &-left {
+                display: flex;
+                align-items: center;
+                & > .filter-item {
+                    flex-shrink: 0;
+                    margin-right: 16px;
+                }
+            }
+            &-right {
+                .ant-btn:not(:first-of-type) {
+                    margin-left: 16px;
+                }
+            }
+        }
     }
     &-detail {
+        width: 100%;
         padding: 16px 16px 0 16px;
         & &-tab-content {
             padding: 20px 16px;
             height: calc(100vh - 236px);
             overflow: auto;
+        }
+        &-tabs {
+            & .layout-detail-tab-content {
+                height: calc(100vh - 246px); // 详情页有tab的高度
+            }
+        }
+        &-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            &-content {
+                padding: 8px 24px;
+
+                &-text-center{
+                    text-align: center;
+                }
+                &-text-right{
+                    text-align: right;
+                }
+            }
+        }
+        .ant-tabs .ant-tabs-bottom-content, .ant-tabs .ant-tabs-top-content {
+            border: 1px solid #ebeff2;
+            border-top: 0;
         }
     }
 }
@@ -22,4 +89,13 @@
     &::-webkit-scrollbar {
         display: none;
     }
+}
+
+.ant-table-form {
+    .ant-form-item {
+        margin-bottom: 0;
+    }
+}
+.btn-icon-only {
+    color: #BEC3C7;
 }

@@ -134,7 +134,14 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
     ];
 
     return (
-        <Modal visible={true} width={720} onCancel={() => onCancel()} onOk={() => handleSubmit()} title="发起调整" centered>
+        <Modal
+            visible={true}
+            width={720}
+            onCancel={() => onCancel()}
+            onOk={() => handleSubmit()}
+            title="发起调整"
+            centered
+        >
             <Form
                 form={form}
                 labelCol={{ span: 5 }}
@@ -195,7 +202,14 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                 >
                     {({ getFieldValue }) => {
                         return getFieldValue('is_step') === '0' ? (
-                            <FormItem name="price" label="标准单价" rules={[{ required: true }, { pattern: /^\d+(\.{0,1}\d+){0,1}$/, message: '请输入数字'}]}>
+                            <FormItem
+                                name="price"
+                                label="标准单价"
+                                rules={[
+                                    { required: true },
+                                    { pattern: /^\d+(\.{0,1}\d+){0,1}$/, message: '请输入数字' },
+                                ]}
+                            >
                                 <Input
                                     placeholder="请输入单价"
                                     addonAfter={<>元/{unitTransfer(editItem.unit)}</>}
@@ -306,7 +320,13 @@ const EditModal = ({ editItem, onCancel, onOk }: IProps) => {
                                                             <Form.Item
                                                                 {...field}
                                                                 name={[field.name, 'price']}
-                                                                rules={[{ required: true, message: '请输入单价' }, { pattern: /^\d+(\.{0,1}\d+){0,1}$/, message: '请输入数字'}]}
+                                                                rules={[
+                                                                    { required: true, message: '请输入单价' },
+                                                                    {
+                                                                        pattern: /^\d+(\.{0,1}\d+){0,1}$/,
+                                                                        message: '请输入数字',
+                                                                    },
+                                                                ]}
                                                             >
                                                                 <Input />
                                                             </Form.Item>

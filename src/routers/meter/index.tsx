@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Button } from 'antd';
 import { match } from 'react-router';
-import qs from 'querystring'
+import qs from 'querystring';
 import { RouteComponentProps, Link } from 'dva/router';
 import Adjustment from './components/adjustmentList';
 import Standard from './components/standardList';
@@ -27,7 +27,12 @@ const List = ({ location }: RouteComponentProps) => {
     ];
     const extra = (
         <>
-            <Button type="primary"  data-event={MeterTracker['meter-standard-add']} onClick={() => setAddModalVisible(true)} className="f-hidden meter-standard-add">
+            <Button
+                type="primary"
+                data-event={MeterTracker['meter-standard-add']}
+                onClick={() => setAddModalVisible(true)}
+                className="f-hidden meter-standard-add"
+            >
                 新建标准
             </Button>
         </>
@@ -39,10 +44,10 @@ const List = ({ location }: RouteComponentProps) => {
         }
     };
     useEffect(() => {
-        const query = location.search.replace('?', '')
-        const parseQuery = qs.parse(query)
-        setActiveTabKey(parseQuery.tab as string)
-    }, [location])
+        const query = location.search.replace('?', '');
+        const parseQuery = qs.parse(query);
+        setActiveTabKey(parseQuery.tab as string);
+    }, [location]);
     return (
         <>
             <div className="layout-list meter-list" data-module="水电单价管理">

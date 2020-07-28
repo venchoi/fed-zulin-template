@@ -1,0 +1,70 @@
+.workflow-approval-popover-components-for-wrap{
+    position: fixed;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+  
+    .mask{
+      z-index: 2001;
+      background-color: #000;
+      overflow: hidden;
+      opacity: .5;
+      width: 100%;
+      height: 100%;
+    }
+  
+    .content{
+      top: 45%;
+      left: 45%;
+      position: fixed;
+      z-index: 2001;
+      width: 200px;
+      //height: 150px;
+      height: 100px;
+      background-color: #fff;
+      border-radius: 4px;
+      text-align: center;
+  
+     .loading-area{
+       height: 100px;
+       width: 200px;
+       .loading-backdrop{
+         background-color: #fff !important;
+       }
+     }
+  
+      .info{
+        text-align: center;
+        word-wrap:break-word;
+        min-height: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .info-process{
+        min-height: 20px;
+      }
+      .info.error{
+        color: red;
+        height: 100px;
+        overflow-y: auto;
+        padding: 8px 4px;
+      }
+  
+      .btn{
+        position: absolute;
+        bottom: 3px;
+        left: 70px;
+      }
+      .btn-primary{
+        left: 45px;
+      }
+    }
+    .content-error{
+      height: 150px;
+    }
+  }
+  
