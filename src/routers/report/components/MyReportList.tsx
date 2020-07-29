@@ -127,22 +127,6 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
     };
 
     /**
-     * 下载报表工具
-     */
-    const handleDownload = () => {
-        const agent = navigator.userAgent.toLocaleLowerCase();
-        if (agent.indexOf('mac os') !== -1) {
-            window.location.href =
-                'https://fine-build.oss-cn-shanghai.aliyuncs.com/finereport/10.0/stable/exe/macos_FineReport-CN.dmg';
-        } else {
-            window.location.href =
-                agent.indexOf('win64') >= 0 || agent.indexOf('wow64') >= 0
-                    ? 'https://fine-build.oss-cn-shanghai.aliyuncs.com/finereport/10.0/stable/exe/windows_x64_FineReport-CN.exe'
-                    : 'https://fine-build.oss-cn-shanghai.aliyuncs.com/finereport/10.0/stable/exe/windows_x86_FineReport-CN.exe';
-        }
-    };
-
-    /**
      * 更新报表
      */
     const handleUpdateStatus = () => {
@@ -248,9 +232,6 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
                                     </Button>
                                 </>
                             )}
-                            <Button icon={<DownloadOutlined />} onClick={handleDownload}>
-                                下载报表工具
-                            </Button>
                             <Button
                                 type="primary"
                                 ghost
