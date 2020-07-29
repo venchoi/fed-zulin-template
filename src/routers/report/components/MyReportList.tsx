@@ -234,18 +234,10 @@ const MyReportList = ({ columns: propsColumns = [], setActiveTabKey }: IProps) =
                             )}
                             <Button
                                 type="primary"
-                                ghost
                                 onClick={() => setActiveTabKey('basicreport')}
                                 className="f-hidden rental-report-add"
                             >
                                 从报表库中添加
-                            </Button>
-                            <Button
-                                type="primary"
-                                onClick={() => setShowEditModal(true)}
-                                className="f-hidden rental-report-add"
-                            >
-                                添加报表
                             </Button>
                         </>
                     }
