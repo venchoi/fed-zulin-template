@@ -100,8 +100,9 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
                 width: width || 400,
                 height: height,
             },
+            listHeight: 336,
             dropdownStyle: dropdownStyle || {
-                maxHeight: 400,
+                maxHeight: 336
             },
             treeDefaultExpandAll: true,
             showSearch: true,
