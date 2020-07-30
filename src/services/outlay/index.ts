@@ -1,6 +1,6 @@
 import ajax from '@/api/utils/ajax';
 import { ResponseData } from '@/types/common';
-import { FeeItem, OutLayListItem, CanApplyInvoice } from '@/types/outlay';
+import { FeeItem, OutLayListItem, CanApplyInvoice, StatisticData } from '@/types/outlay';
 import { GetOutlayListParams } from '../../routers/outlay/index.d';
 
 // 根据项目获取费项列表
@@ -15,6 +15,12 @@ export const getOutlayList = (
     return ajax('/transaction/exchange/list', params, 'POST');
 };
 
+// 获取开具发票功能是否打开
 export const getCanApplyInvoice = (): Promise<ResponseData<CanApplyInvoice>> => {
     return ajax('/receipt/receipt/get-switch', {}, 'GET');
 };
+
+export const getStatistics = (params: GetOutlayListParams): Promise<ResponseData<StatisticData>> => {
+    return ajax('/transaction/exchange/statistics', params, 'POST')
+}
+

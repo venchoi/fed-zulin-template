@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Card, message } from 'antd';
 // @ts-ignore
 import * as queryString from 'query-string';
@@ -9,8 +9,8 @@ import OutlayTable from './components/OutlayTable';
 import TopRightFunc from './components/TopRightFunc';
 import { GetOutlayListParams } from './index.d';
 import { projsValue } from '@t/project';
-import { getOutlayList, getCanApplyInvoice } from '@/services/outlay';
-import { OutLayListItem } from '@/types/outlay';
+import { getOutlayList, getCanApplyInvoice, getStatistics } from '@/services/outlay';
+import { OutLayListItem, StatisticData } from '@/types/outlay';
 
 const OutlayList = (props: any) => {
     const { history } = props;
@@ -36,9 +36,13 @@ const OutlayList = (props: any) => {
     }); // 搜索参数
     const [outlayList, setOutlayList] = useState<OutLayListItem[]>([]);
     const [outlayListTotal, setOutlayListTotal] = useState(0);
+    const [statisticData, setStatisticData] = useState<StatisticData>({income: '0', refund: '0'});
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
+    const [selectedRows, setSelectedRows] = useState<OutLayListItem[]>([]);
     const [loading, setLoading] = useState(false);
     const [canApplyInvoice, setCanApplyInvoice] = useState(false); // 是否开启了申请开票功能
+
+    const tableSetLoading = useCallback(setLoading, [setLoading])
 
     useEffect(() => {
         getCanApplyInvoice().then(json => {
@@ -55,16 +59,22 @@ const OutlayList = (props: any) => {
 
     useEffect(() => {
         setLoading(true);
-        getOutlayList(filterOptions).then(json => {
+        const getData = async () => {
+            const allData = await Promise.all([getOutlayList(filterOptions), getStatistics(filterOptions)]);
             try {
-                const { data } = json;
-                setOutlayList(data.items || []);
-                setOutlayListTotal(+data.total || 0);
-                setLoading(false);
+                const [json1, json2] = allData;
+                const { data: data1 } = json1;
+                setOutlayList(data1.items || []);
+                setOutlayListTotal(+data1.total || 0);
+
+                const { data: data2 } = json2;
+                setStatisticData(data2);
             } catch (error) {
                 message.error(error || '接口数据有误');
             }
-        });
+        }
+        getData();
+        setLoading(false);
     }, [filterOptions]);
 
     /**
@@ -99,16 +109,27 @@ const OutlayList = (props: any) => {
         });
     };
 
+    const handleTableSelect = (selectedRowKeys: string[], selectedRows: OutLayListItem[]) => {
+        setSelectedRows(selectedRows);
+        setSelectedRowKeys(selectedRowKeys);
+    };
+
+
+
     return (
         <ContentLayout
             className="outlay-page"
             title="收支管理"
+            isLoading={loading}
             topRightSlot={
                 <div className="project-select-area">
                     <TopRightFunc
                         onChange={handleTopRightFunc}
                         projIds={selectedProjectIds}
                         projNames={selectedProjectNames}
+                        extData={{canApplyInvoice}}
+                        selectedRows={selectedRows}
+                        selectedRowKeys={selectedRowKeys}
                     ></TopRightFunc>
                 </div>
             }
@@ -125,16 +146,18 @@ const OutlayList = (props: any) => {
                 <OutlayTable
                     outlayList={outlayList}
                     outlayListTotal={outlayListTotal}
-                    loading={loading}
-                    onPageSizeChange={(current: number, page_size: number) => {
+                    onPageSizeChange={(page_size: number) => {
                         setFilterOptions({ ...filterOptions, page: 1, page_size });
                     }}
-                    onPageChange={(page_index: number, page_size: number) => {
-                        setFilterOptions({ ...filterOptions, page: page_index, page_size: page_size || 10 });
+                    onPageChange={(page_index: number) => {
+                        setFilterOptions({ ...filterOptions, page: page_index });
                     }}
                     page={filterOptions.page}
                     pageSize={filterOptions.page_size}
-                    extData={{ CanApplyInvoice: canApplyInvoice }}
+                    extData={{ canApplyInvoice, statisticData }}
+                    selectedRowKeys={selectedRowKeys}
+                    selectedRows={selectedRows}
+                    onTableSelect={handleTableSelect}
                 />
             </div>
         </ContentLayout>

@@ -10,12 +10,14 @@ export enum RangePickerType {
 export interface OutLayTableProps {
     outlayList: any[];
     outlayListTotal: number;
-    loading: boolean;
     page: number;
     pageSize: number;
     onPageSizeChange: Function;
     onPageChange: Function;
-    extData: { canApplyInvoice: boolean };
+    extData: { canApplyInvoice: boolean; statisticData: StatisticData };
+    onTableSelect: Function;
+    selectedRowKeys: string[];
+    selectedRows: OutLayListItem[];
 }
 
 export interface ExtBill {
@@ -171,4 +173,9 @@ export interface OutLayListItem {
 export interface CanApplyInvoice {
     apply_receipt: number;
     has_third_vat: number;
+}
+
+export interface StatisticData {
+    income: string;
+    refund: string;
 }

@@ -11,8 +11,15 @@ import config from '@/config';
 
 import './OutlayTable.less';
 import { isPlainObject } from 'lodash';
+import { feeItem } from '../../derate/list.d';
 
 const OutLayTable = (props: OutLayTableProps) => {
+
+    const { onTableSelect, extData: {canApplyInvoice, statisticData}, selectedRowKeys, selectedRows } = props;
+    const total = (parseFloat(statisticData.income || '0') + parseFloat(statisticData.refund || '0')).toFixed(2);
+    const income = parseFloat(statisticData.income || '0').toFixed(2);
+    const refund = parseFloat(statisticData.refund || '0').toFixed(2);
+
     const renderExchangedToNamePopover = (record: OutLayListItem) => {
         const {
             type,
@@ -102,7 +109,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             dataIndex: 'code',
             title: '交易号',
             render: (code: string, record: OutLayListItem, index: number) => {
-                const { full_room_name, payment_time, exchanged_on } = record;
+                const { payment_time, exchanged_on } = record;
                 let exChangeDate = '--';
                 if (exchanged_on) {
                     const arr = exchanged_on.split(' ');
@@ -209,7 +216,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             },
         },
         {
-            dataIndex: '',
+            dataIndex: 'ext_payment',
             title: '支出(元)',
             render: (ext_payment: ExtPayment[], record: OutLayListItem, index: number) => {
                 let outPay = '--';
@@ -283,22 +290,46 @@ const OutLayTable = (props: OutLayTableProps) => {
         },
     ];
 
+    const rowSelection = {
+        hideSelectAll: true,
+        onChange: (selectedRowKeys: any, selectedRows: OutLayListItem[]) => {
+            onTableSelect && onTableSelect(selectedRowKeys, selectedRows);
+        },
+        getCheckboxProps: (record: OutLayListItem) => {
+            const { exchanged_amount, proj_id, fee_items} = record;
+            let selectedStageId, hasReceiptSelected;
+            if(selectedRows.length > 0) {
+                const { fee_items } = selectedRows[0];
+                selectedStageId = selectedRows[0].proj_id;
+                hasReceiptSelected = fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
+            }
+            const isRefund = exchanged_amount < 0;
+            const hasReceipt = fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
+            const disabled = selectedStageId && (proj_id !== selectedStageId || hasReceipt !== hasReceiptSelected);
+            // 退款或者跟已选择的不属于同一个项目或者跟已选择的是否有收据不一致，不能做勾选做批量操作
+            return {disabled: !!(isRefund || disabled)}
+          },
+        columnWidth: '48px',
+    }
+
     return (
         <div data-component="outlay-table">
             <FedTable
                 rowKey="id"
                 columns={columns}
                 dataSource={props.outlayList}
+                rowSelection={rowSelection}
                 scroll={{
-                    y: 'calc( 100vh - 340px )',
+                    y: 'calc( 100vh - 410px )',
                 }}
             />
+            <div className="total">收入(元)：{income}&emsp;支出(元)：{refund}&emsp;总计(元)：{total}&emsp;</div>
             <FedPagination
                 onShowSizeChange={(current, page_size) => {
-                    props.onPageSizeChange({ page_size });
+                    props.onPageSizeChange(page_size);
                 }}
                 onChange={(page_index, page_size) => {
-                    props.onPageChange({ page: page_index, page_size: page_size || 10 });
+                    props.onPageChange(page_index);
                 }}
                 current={props.page}
                 pageSize={props.pageSize}
