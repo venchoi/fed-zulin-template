@@ -173,7 +173,7 @@ const Filter = (props: FilterProps) => {
                     />
                 </div>
                 <div>
-                    <span className="deal-date">下单时间：</span>
+                    <span className="deal-date">交易时间：</span>
                     <RangePicker
                         format={dateFormat}
                         // value={[moment(props.filterOptions.exchange_start_date), moment(props.filterOptions.exchange_end_date)]}

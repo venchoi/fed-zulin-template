@@ -38,3 +38,9 @@ export interface PaymentMode {
     title?: string;
     value: string;
 }
+
+export type SearchEvent =
+    | React.ChangeEvent<HTMLInputElement>
+    | React.MouseEvent<HTMLElement, MouseEvent>
+    | React.KeyboardEvent<HTMLInputElement>
+    | undefined;
