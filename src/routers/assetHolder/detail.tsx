@@ -6,6 +6,7 @@ import { PageHeader, Tabs, Card, Tag } from 'antd';
 import { RouteComponentProps, Link } from 'dva/router';
 import { Route } from 'antd/es/breadcrumb/Breadcrumb.d';
 import { IAddAssetHolder, IAddAssetHolderBank } from '@t/assetHolder';
+import { customType } from '../../constants/index';
 import { match } from 'react-router';
 import BaseInfo from './components/baseInfo';
 import AdjustmentRecord from './components/adjustmentRecord';
@@ -57,7 +58,6 @@ const Detail = ({
             breadcrumbName: '资产持有人详情',
         },
     ];
-
     const itemRender = (route: Route) => {
         if (route.path) {
             return (
@@ -75,7 +75,6 @@ const Detail = ({
         const result = data || initDetail;
         setDetail(result);
     };
-
     const fetchAccountData = async () => {
         setAccountLoading(true);
         const { data } = await getAssetHolderBankList({ page: 1, page_size: 10000, id });
@@ -83,7 +82,6 @@ const Detail = ({
         const result = (data && data) || initDetail;
         setAccountList(result);
     };
-
     const updateInfo = (type?: string) => {
         if (type === 'base') {
             fetchDetail().then();
@@ -91,7 +89,16 @@ const Detail = ({
             fetchAccountData().then();
         }
     };
-
+    const enterpriseType = (type: string) => {
+        if (type === '企业') {
+            return <Tag color="processing">企业</Tag>;
+        } else if (type === '工商个体') {
+            return <Tag color="success">工商个体</Tag>;
+        } else if (type === '个人') {
+            return <Tag color="warning">个人</Tag>;
+        }
+        return null;
+    };
     useEffect(() => {
         fetchDetail().then(() => {
             fetchAccountData().then();
@@ -104,9 +111,9 @@ const Detail = ({
                 title={detail.name || '...'}
                 breadcrumb={{ routes, itemRender, separator: '>' }}
                 ghost={false}
-                subTitle={<Tag color="#87CFFF">{detail.type}</Tag>}
+                subTitle={enterpriseType(detail.type)}
             />
-            <div className="layout-detail standard-detail">
+            <div className="layout-detail">
                 <Tabs type="card">
                     <TabPane tab="详细信息" key="1">
                         <Card bordered={false} loading={baseLoading} className="layout-detail-tab-content">

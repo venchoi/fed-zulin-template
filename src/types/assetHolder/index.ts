@@ -39,6 +39,7 @@ export interface IManageList {
 
 // 资产持有人 列表
 export interface IAssetHolderList {
+    proj_id: string; // 项目Id
     advanced_select_fields: IField[];
     page: number; // 当前页码
     page_size: number; // 每个大小
