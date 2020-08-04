@@ -32,13 +32,13 @@ export const renterCustomerServiceList = (props: Props) => {
     const getUnauditStats = async () => {
         const params = {
             stage_id: selectedProjectIds.join(','),
-            status: '待审核'
-        }
+            status: '待审核',
+        };
         const { result, data } = await getApplyListCount(params);
         if (result && data) {
             setAuditNumber(data.total || 0);
         }
-    }
+    };
 
     const handleTreeSelected = (selecctedProject: projsValue) => {
         setselectedProjectIds(selecctedProject.projIds);
@@ -48,14 +48,14 @@ export const renterCustomerServiceList = (props: Props) => {
     };
 
     const handleShowAddAdminModal = (record?: renterListType) => {
-        if(record && record.id) {
+        if (record && record.id) {
             setCurrentRecord(record);
             setIsShowModal(true);
         } else {
             setCurrentRecord(undefined);
             setIsShowModal(true);
         }
-    }
+    };
 
     const handleCloseAdminModal = (isSuccess: boolean): void => {
         setIsShowModal(false);
@@ -66,22 +66,21 @@ export const renterCustomerServiceList = (props: Props) => {
         if (isSuccess) {
             setIsRequestRenterList(!isRequestRenterList);
         }
-    }
+    };
 
     const handleChangeTab = (tab: string) => {
         setPage(1);
         setCurrentTab(tab);
-    }
-    console.log(pageSize)
-    const auditNumberTab = (<div className="audit-tab">
-        <span>审核</span>
-        {
-            auditNumber > 0 ?  
-            <span className={`audit-number ${auditNumber < 10 ? 'circle' : ''}`}>{ auditNumber }</span>
-            :
-            null
-        }
-    </div>);
+    };
+    console.log(pageSize);
+    const auditNumberTab = (
+        <div className="audit-tab">
+            <span>审核</span>
+            {auditNumber > 0 ? (
+                <span className={`audit-number ${auditNumber < 10 ? 'circle' : ''}`}>{auditNumber}</span>
+            ) : null}
+        </div>
+    );
     return (
         <ContentLayout
             className="renter-customer-service-list-page"
@@ -92,64 +91,52 @@ export const renterCustomerServiceList = (props: Props) => {
             topRightSlot={
                 <div className="project-select-area">
                     <TreeProjectSelect onTreeSelected={handleTreeSelected} width={312} />
-                    {
-                        currentTab === '租户管理员' ?
-                        <Divider 
-                            type="vertical" 
+                    {currentTab === '租户管理员' ? (
+                        <Divider
+                            type="vertical"
                             style={{
-                                height: "28px",
-                                margin: '0 16px'
-                            }} 
+                                height: '28px',
+                                margin: '0 16px',
+                            }}
                         />
-                        :
-                        null
-                    }
-                    {
-                        currentTab === '租户管理员' ?
-                        <Button type="primary" onClick={() => handleShowAddAdminModal()}>新增管理员</Button>
-                        :
-                        null
-                    }
+                    ) : null}
+                    {currentTab === '租户管理员' ? (
+                        <Button type="primary" onClick={() => handleShowAddAdminModal()}>
+                            新增管理员
+                        </Button>
+                    ) : null}
                 </div>
             }
         >
             <div>
                 <Tabs defaultActiveKey="租户管理员" animated={false} onChange={handleChangeTab}>
                     <TabPane tab="租户管理员" key="租户管理员" forceRender={true}>
-                        {
-                            currentTab === '租户管理员' ?
-                            <RenterList 
+                        {currentTab === '租户管理员' ? (
+                            <RenterList
                                 page={page}
                                 pageSize={pageSize}
                                 totalSize={totalSize}
                                 stageId={stageId}
                                 requestRenterList={isRequestRenterList}
-                                setLoading={setLoading} 
+                                setLoading={setLoading}
                                 setTotalSize={setTotalSize}
                                 handleShowAddAdminModal={handleShowAddAdminModal}
                                 getUnauditStats={getUnauditStats}
                             />
-                            :
-                            null
-                        }
-                        
+                        ) : null}
                     </TabPane>
                     <TabPane tab={auditNumberTab} key="审核">
-                        {
-                            currentTab === '审核' ?
-                            <AuditList 
+                        {currentTab === '审核' ? (
+                            <AuditList
                                 page={page}
                                 pageSize={pageSize}
                                 totalSize={totalSize}
                                 stageId={stageId}
-                                setLoading={setLoading} 
+                                setLoading={setLoading}
                                 setTotalSize={setTotalSize}
                                 getUnauditStats={getUnauditStats}
                             />
-                            :
-                            null
-                        }
-                        
+                        ) : null}
                     </TabPane>
                 </Tabs>
                 {
@@ -169,8 +156,8 @@ export const renterCustomerServiceList = (props: Props) => {
                         total={+totalSize}
                     />
                 }
-                <AddAdminModal 
-                    isShowModal={isShowModal} 
+                <AddAdminModal
+                    isShowModal={isShowModal}
                     record={currentRecord}
                     onClose={handleCloseAdminModal}
                     setLoading={setLoading}
@@ -178,7 +165,7 @@ export const renterCustomerServiceList = (props: Props) => {
             </div>
         </ContentLayout>
     );
-}
+};
 
 function mapStateToProps(state: any) {
     return {

@@ -33,6 +33,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             projIdsStr = null;
             projNamesStr = null;
         }
+
         this.state = {
             treeData: [],
             searchValue: '',
@@ -90,6 +91,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
                   return allProjs?.projIds.indexOf(proj) >= 0;
               })
             : [];
+
         const treeData = this.getData();
         const treeProps = {
             ...otherProps,

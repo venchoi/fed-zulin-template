@@ -54,7 +54,9 @@ const BaseInfo = ({ detail }: { detail: IAdjustmentDetail }) => {
             },
             {
                 label: '生效时间',
-                value: `${moment(detail.start_date).format('YYYY-MM-DD')}${detail.end_date ? ` 至 ${moment(detail.end_date).format('YYYY-MM-DD')}` : ''}`,
+                value: `${moment(detail.start_date).format('YYYY-MM-DD')}${
+                    detail.end_date ? ` 至 ${moment(detail.end_date).format('YYYY-MM-DD')}` : ''
+                }`,
             },
             {
                 label: '调整附件',
@@ -92,7 +94,7 @@ const BaseInfo = ({ detail }: { detail: IAdjustmentDetail }) => {
             {data.map((itemList, index) => (
                 <div key={`baseinfo-item-${index}`} className="baseinfo-item">
                     {itemList.map(item => (
-                        <FedDataRow key={item.label} rowData={item} valueWidth="auto"/>
+                        <FedDataRow key={item.label} rowData={item} valueWidth="auto" />
                     ))}
                 </div>
             ))}

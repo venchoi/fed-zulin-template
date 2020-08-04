@@ -221,7 +221,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         if (result) {
             message.success('保存成功');
             setIsEditMode(false);
-            props?.getDerateListData()
+            props?.getDerateListData();
             fetchDerateDetail();
         }
         setLoading(false);
@@ -290,7 +290,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             title: '账期',
             width: 224,
             render: (text: string, record: feeItemType, index: number) => {
-                return (record.start_date && record.end_date ? `${record.start_date} 至 ${record.end_date}` : '-');
+                return record.start_date && record.end_date ? `${record.start_date} 至 ${record.end_date}` : '-';
             },
         },
         {
@@ -322,7 +322,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             dataIndex: 'derate',
             title: '减免金额',
             width: 120,
-            className: "derate-col",
+            className: 'derate-col',
             align: 'right',
             render: (text: string, record: feeItemType, index: number) => {
                 const { status } = detail;
@@ -337,7 +337,11 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 const isSelectedDelay = selectedRowKeys.find(key => key === record.id + '1');
                 const deratedFormItem = record.isDemurrage ? (
                     <Form.Item validateStatus={record.validateStatus}>
-                        <Input disabled value={isSelectedDelay ? record.stayDemurrageAmount : ''} style={{textAlign: 'right'}}/>
+                        <Input
+                            disabled
+                            value={isSelectedDelay ? record.stayDemurrageAmount : ''}
+                            style={{ textAlign: 'right' }}
+                        />
                     </Form.Item>
                 ) : (
                     <Form.Item validateStatus={record.validateStatus}>
@@ -345,7 +349,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                             disabled={!isSelectedFee}
                             onChange={handleDerateAmountChange(record)}
                             value={!isSelectedFee ? '' : record.derated_amount}
-                            style={{textAlign: 'right'}}
+                            style={{ textAlign: 'right' }}
                         />
                     </Form.Item>
                 );
@@ -445,7 +449,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                             },
                                         ]}
                                         wrapperCol={{
-                                            span: 24
+                                            span: 24,
                                         }}
                                     >
                                         {isEditMode ? (

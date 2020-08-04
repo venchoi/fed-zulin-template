@@ -16,7 +16,7 @@ interface Props extends RouteComponentProps {
 message.config({
     top: 100,
     duration: 2,
-    maxCount: 3
+    maxCount: 3,
 });
 
 function loading() {
@@ -123,6 +123,22 @@ const routes = [
             loading,
         }),
     },
+    {
+        path: '/basicfee',
+        component: Loadable({
+            loader: () => import('./routers/basicfee/index'),
+            loading: loading,
+        }),
+    },
+    // {
+    //     path: '/derate',
+    //     component: Loadable({
+    //         loader: () => import('./routers/derate'),
+    //         loading: loading,
+    //     }),
+    //     // @ts-ignore
+    //     // component: lazy(() => import('./routers/report')),
+    // },
     {
         path: '/noright',
         component: Loadable({

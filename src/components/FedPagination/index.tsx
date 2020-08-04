@@ -3,8 +3,7 @@ import { Pagination, Divider } from 'antd';
 import { PaginationProps } from 'antd/es/pagination';
 import './index.less';
 
-
-interface FedPaginationProps extends PaginationProps  {
+interface FedPaginationProps extends PaginationProps {
     wrapperClassName?: string;
 }
 

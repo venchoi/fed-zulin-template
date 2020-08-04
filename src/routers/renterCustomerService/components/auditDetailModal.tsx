@@ -16,43 +16,53 @@ interface auditDetailModalType {
 }
 
 const layout = {
-    labelCol: { 
+    labelCol: {
         style: {
-            width: 100
-        }
+            width: 100,
+        },
     },
     wrapperCol: { span: 16 },
 };
 
 const initialDetail = {
-    contract_code: '', 
-    project_name: '', 
-    contract_room: [], 
-    created_on: '', 
-    apply_user_name: '', 
-    master_phone: '', 
-    origin_master_name: '', 
+    contract_code: '',
+    project_name: '',
+    contract_room: [],
+    created_on: '',
+    apply_user_name: '',
+    master_phone: '',
+    origin_master_name: '',
     origin_master_phone: '',
-    attachment: []
-}
+    attachment: [],
+};
 export const auditDetailModal = function(props: auditDetailModalType): JSX.Element {
     const { isShowModal, record, isAudit, onClose } = props;
     const [loading, setLoading] = useState(false);
-    const [auditDetail, setAuditDetail] = useState<auditDetailType>({...initialDetail})
-    const { contract_code, project_name, contract_room, created_on, apply_user_name, master_phone, origin_master_name, origin_master_phone, attachment } = auditDetail;
+    const [auditDetail, setAuditDetail] = useState<auditDetailType>({ ...initialDetail });
+    const {
+        contract_code,
+        project_name,
+        contract_room,
+        created_on,
+        apply_user_name,
+        master_phone,
+        origin_master_name,
+        origin_master_phone,
+        attachment,
+    } = auditDetail;
 
     useEffect(() => {
         if (isShowModal) {
             getAuditDetail();
         }
-    }, [isShowModal])
+    }, [isShowModal]);
 
     // 获取审批详情
     const getAuditDetail = async () => {
         let params = {
-            apply_id: record?.apply_id || ''
-        }
-        if(!params.apply_id) {
+            apply_id: record?.apply_id || '',
+        };
+        if (!params.apply_id) {
             return;
         }
         setLoading(true);
@@ -64,21 +74,21 @@ export const auditDetailModal = function(props: auditDetailModalType): JSX.Eleme
     };
 
     const closeModal = () => {
-        setAuditDetail({...initialDetail});
+        setAuditDetail({ ...initialDetail });
         onClose && onClose();
-    }
+    };
 
     const handleAudit = async (isPassed: boolean) => {
         const params = {
             apply_id: record?.apply_id || '',
-            status: isPassed ? '审核通过' : '审核不通过'
-        }
+            status: isPassed ? '审核通过' : '审核不通过',
+        };
         const { result } = await auditRenter(params);
         if (result) {
             onClose && onClose(true);
             message.success('审核成功');
         }
-    }
+    };
 
     const handleOk = () => {
         if (!isAudit) {
@@ -86,7 +96,7 @@ export const auditDetailModal = function(props: auditDetailModalType): JSX.Eleme
         } else {
             handleAudit(true);
         }
-    }
+    };
 
     const handleCancel = () => {
         if (!isAudit) {
@@ -94,72 +104,59 @@ export const auditDetailModal = function(props: auditDetailModalType): JSX.Eleme
         } else {
             handleAudit(true);
         }
-    }
+    };
 
     const okText = isAudit ? '审核通过' : '确定';
     const cancelText = isAudit ? '审核不通过' : '取消';
     return (
         <Modal
             centered
-            width={480}            
+            width={480}
             title="审批详情"
             visible={!!isShowModal}
             onCancel={closeModal}
             wrapClassName="audit-renter-detail-form-modal"
             footer={[
                 <Button key="back" onClick={handleCancel}>
-                    { cancelText }
+                    {cancelText}
                 </Button>,
                 <Button key="submit" type="primary" onClick={handleOk}>
-                    { okText }
+                    {okText}
                 </Button>,
             ]}
         >
             <Spin spinning={loading}>
                 <Form {...layout} name="audit-renter-detail-form">
-                    <Form.Item label="相关合同">
-                        {contract_code}
-                    </Form.Item>
-                    <Form.Item label="相关项目">
-                        {project_name}
-                    </Form.Item>
+                    <Form.Item label="相关合同">{contract_code}</Form.Item>
+                    <Form.Item label="相关项目">{project_name}</Form.Item>
                     <Form.Item label="相关房间">
-                        {
-                            contract_room ? contract_room.map((item, index) =>
-                                <p className={`room-item ${(contract_room.length>1 && index==0) ? 'first-room' : ''}`}>{item.room_name}</p>
-                            ) : '--'
-                        }
+                        {contract_room
+                            ? contract_room.map((item, index) => (
+                                  <p
+                                      className={`room-item ${
+                                          contract_room.length > 1 && index == 0 ? 'first-room' : ''
+                                      }`}
+                                  >
+                                      {item.room_name}
+                                  </p>
+                              ))
+                            : '--'}
                     </Form.Item>
-                    <Form.Item label="申请时间">
-                        {created_on}
-                    </Form.Item>
-                    <Form.Item label="申请人姓名">
-                        {apply_user_name}
-                    </Form.Item>
-                    <Form.Item label="申请人手机">
-                        {master_phone || '--'}
-                    </Form.Item>
-                    <Form.Item label="原管理人姓名">
-                        {origin_master_name || '--'}
-                    </Form.Item>
-                    <Form.Item label="原管理人手机">
-                        {origin_master_phone || '--'}
-                    </Form.Item>
+                    <Form.Item label="申请时间">{created_on}</Form.Item>
+                    <Form.Item label="申请人姓名">{apply_user_name}</Form.Item>
+                    <Form.Item label="申请人手机">{master_phone || '--'}</Form.Item>
+                    <Form.Item label="原管理人姓名">{origin_master_name || '--'}</Form.Item>
+                    <Form.Item label="原管理人手机">{origin_master_phone || '--'}</Form.Item>
                     <Form.Item label="附件">
-                        {(attachment && attachment.length > 0) ? (
-                            <Uploader
-                                readonly
-                                files={attachment || []}
-                                maxSize={50}
-                            />
+                        {attachment && attachment.length > 0 ? (
+                            <Uploader readonly files={attachment || []} maxSize={50} />
                         ) : (
                             <span>-</span>
                         )}
                     </Form.Item>
                 </Form>
             </Spin>
-            
-        </Modal>  
+        </Modal>
     );
 };
 

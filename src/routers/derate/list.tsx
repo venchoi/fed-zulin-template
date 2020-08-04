@@ -38,7 +38,7 @@ export const DerateList = (props: Props) => {
         floor_id: '',
         floor_name: '',
         status: [],
-        stage_id: ''
+        stage_id: '',
     }); // 减免列表搜索参数
     const [derateTotal, setderateTotal] = useState(0);
     const [derateList, setderateList] = useState([]); // 减免列表
@@ -78,7 +78,7 @@ export const DerateList = (props: Props) => {
         if (!params.proj_id) {
             return;
         }
-        params.proj_id 
+        params.proj_id;
         if (searchParams.subdistrict_id === '未分区') {
             params.subdistrict_id = '';
         }
@@ -128,20 +128,20 @@ export const DerateList = (props: Props) => {
     const handleAuditAll = async () => {
         const auditParams = {
             proj_ids: selectedProjectIds.join(','),
-            type: '减免批量审核'
-        }
-        setloading(true)
+            type: '减免批量审核',
+        };
+        setloading(true);
         const { result, data } = await auditAll(auditParams);
         if (result && data) {
             const tk = setInterval(async () => {
-                const {result, data} = await getAuditStatus(auditParams);
+                const { result, data } = await getAuditStatus(auditParams);
                 if (!result) {
-                    setloading(false)
+                    setloading(false);
                     clearInterval(tk);
                 }
                 if (data[0] && data[0].status === '失败') {
                     setloading(false);
-                    message.error(data[0].msg)
+                    message.error(data[0].msg);
                     clearInterval(tk);
                 }
                 if (data[0] && data[0].status === '成功') {
@@ -154,7 +154,7 @@ export const DerateList = (props: Props) => {
         } else {
             setloading(false);
         }
-    }
+    };
 
     const handleBatchAudit = (isAll: boolean | undefined) => (e: React.MouseEvent) => {
         const ids = selectedRowKeys;

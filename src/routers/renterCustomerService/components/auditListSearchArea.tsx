@@ -14,15 +14,15 @@ const { Option } = Select;
 const statusLists = [
     {
         name: '已审核',
-        value: '已审核'
+        value: '已审核',
     },
     {
         name: '审核不通过',
-        value: '审核不通过'
+        value: '审核不通过',
     },
     {
         name: '待审核',
-        value: '待审核'
+        value: '待审核',
     },
 ];
 const typeList = ['企业', '工商个体', '个人'];
@@ -36,11 +36,12 @@ export const renterListSearchArea = function(props: auditSearchAreaProps) {
     }, [keywordValue]);
 
     useEffect(() => {
-        onSearch && onSearch({
-            keyword,
-            status: status || ''
-        });
-    }, [status])
+        onSearch &&
+            onSearch({
+                keyword,
+                status: status || '',
+            });
+    }, [status]);
 
     const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const value = e.target.value;
@@ -48,17 +49,18 @@ export const renterListSearchArea = function(props: auditSearchAreaProps) {
     };
 
     const handleKeywordSearch = (value: string, e?: SearchEvent): void => {
-        onSearch && onSearch({
-            keyword: value,
-            status: status || ''
-        });
+        onSearch &&
+            onSearch({
+                keyword: value,
+                status: status || '',
+            });
     };
 
     const handleFormItemChange = (type: string) => (value: string): void => {
-        switch(type) {
+        switch (type) {
             case 'status':
                 setStatus(value);
-                break; 
+                break;
             default:
                 break;
         }
@@ -79,15 +81,15 @@ export const renterListSearchArea = function(props: auditSearchAreaProps) {
                     className="search-form-item"
                     placeholder="状态"
                     style={{
-                        width: 135
+                        width: 135,
                     }}
                     allowClear
                     value={status}
                     onChange={handleFormItemChange('status')}
                 >
-                    {
-                        statusLists.map(status => <Option value={status.value}>{ status.name }</Option>)
-                    }
+                    {statusLists.map(status => (
+                        <Option value={status.value}>{status.name}</Option>
+                    ))}
                 </Select>
             </div>
             {/* <div>

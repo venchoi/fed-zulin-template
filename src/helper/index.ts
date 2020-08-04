@@ -1,2 +1,2 @@
-import StringUtilsClass from './sringUtils'
-export const StringUtils = StringUtilsClass
+import StringUtilsClass from './sringUtils';
+export const StringUtils = StringUtilsClass;

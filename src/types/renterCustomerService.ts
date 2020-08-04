@@ -1,4 +1,3 @@
-
 export interface getrenterListParams {
     stage_id: string;
     keyword: string;
@@ -6,7 +5,7 @@ export interface getrenterListParams {
     page_size: number;
     renter_type: string;
     contract_status: string;
-} 
+}
 
 export interface unbindRenterParams {
     id: string;
@@ -18,7 +17,7 @@ export interface getAuditListParams {
     page: number;
     page_size: number;
     status: string;
-} 
+}
 
 export interface getContractDetailParams {
     contract_code: string;

@@ -19,10 +19,10 @@ interface contractInfoType {
 }
 
 const layout = {
-    labelCol: { 
+    labelCol: {
         style: {
-            width: 100
-        }
+            width: 100,
+        },
     },
     wrapperCol: { span: 16 },
 };
@@ -32,16 +32,11 @@ export const addAdminModal = function(props: addAdminModalType): JSX.Element {
     const [form] = useForm();
     const [contractInfo, setContractInfo] = useState<contractInfoType>({});
     const [loading, setLoading] = useState(false);
-    const {record, isShowModal, onClose} = props;
+    const { record, isShowModal, onClose } = props;
     useEffect(() => {
         if (!isShowModal) {
             setContractInfo({});
-            form.resetFields([
-                'contract_code',
-                'phone',
-                'admin_user_name',
-                'email'
-            ]);
+            form.resetFields(['contract_code', 'phone', 'admin_user_name', 'email']);
         }
     }, [isShowModal]);
 
@@ -54,25 +49,27 @@ export const addAdminModal = function(props: addAdminModalType): JSX.Element {
             message.error('请检查合同有效性');
             return Promise.reject();
         }
-        return form.validateFields()
+        return form.validateFields();
     };
 
     const handleOk = async () => {
-        validateForm().then(async () => {
-            const params = form.getFieldsValue();
-            params.phone = params.phone.replace(/\s/g, '');
-            if (isEdit) {
-                params.contract_code = record?.code;
-            }
-            const { result } = await addContractAdmin(params);
-            if (result) {
-                onClose && onClose(true);
-                const msg = isEdit ? '更换管理员成功' : '新增管理员成功';
-                message.success(msg);
-            }
-        }).catch(err => {
-            console.log(err);
-        });
+        validateForm()
+            .then(async () => {
+                const params = form.getFieldsValue();
+                params.phone = params.phone.replace(/\s/g, '');
+                if (isEdit) {
+                    params.contract_code = record?.code;
+                }
+                const { result } = await addContractAdmin(params);
+                if (result) {
+                    onClose && onClose(true);
+                    const msg = isEdit ? '更换管理员成功' : '新增管理员成功';
+                    message.success(msg);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
     };
 
     const handleCancel = () => {
@@ -83,63 +80,57 @@ export const addAdminModal = function(props: addAdminModalType): JSX.Element {
         const value = e?.target?.value;
         if (value) {
             form.setFieldsValue({
-                phone: formatPhone(value.replace(/\s/g, ''))
+                phone: formatPhone(value.replace(/\s/g, '')),
             });
         }
     };
 
     const handleSearchContract = async (value: string) => {
         const params = {
-            contract_code: value
+            contract_code: value,
         };
         setLoading(true);
         const { result, data } = await getContractDetail(params);
         setLoading(false);
         if (result && data) {
             const { stage_name, start_date, end_date } = data;
-            setContractInfo({ 
+            setContractInfo({
                 stage_name,
                 start_date,
-                end_date
+                end_date,
             });
         } else {
             message.error('未查询到此合同信息');
         }
-    }
+    };
 
     return (
-        <Modal
-            centered
-            width={480}            
-            title={title}
-            visible={!!isShowModal}
-            onOk={handleOk}
-            onCancel={handleCancel}
-        >
+        <Modal centered width={480} title={title} visible={!!isShowModal} onOk={handleOk} onCancel={handleCancel}>
             <Spin spinning={loading}>
                 <Form {...layout} form={form} name="add-form" validateTrigger="onBlur">
-                    {
-                        !isEdit ? 
-                            <div style={{marginBottom: 16}}>
-                                <Form.Item name="contract_code" label="合同编号" rules={[{ required: true }]}>
-                                    <Input.Search placeholder="请输入" onSearch={handleSearchContract}  style={{ width: 232 }} />
-                                </Form.Item>
-                                <Form.Item label="项目名称">
-                                    { contractInfo.stage_name || '-'}
-                                </Form.Item>
-                                <Form.Item label="合同有效期">
-                                    { contractInfo.start_date ? `${contractInfo.start_date} 至 ${contractInfo.end_date}` : '-'}
-                                </Form.Item>
-                            </div>
-                            :
-                            null
-                    }
+                    {!isEdit ? (
+                        <div style={{ marginBottom: 16 }}>
+                            <Form.Item name="contract_code" label="合同编号" rules={[{ required: true }]}>
+                                <Input.Search
+                                    placeholder="请输入"
+                                    onSearch={handleSearchContract}
+                                    style={{ width: 232 }}
+                                />
+                            </Form.Item>
+                            <Form.Item label="项目名称">{contractInfo.stage_name || '-'}</Form.Item>
+                            <Form.Item label="合同有效期">
+                                {contractInfo.start_date
+                                    ? `${contractInfo.start_date} 至 ${contractInfo.end_date}`
+                                    : '-'}
+                            </Form.Item>
+                        </div>
+                    ) : null}
                     <Form.Item name="admin_user_name" label="管理员姓名" rules={[{ required: true }]}>
                         <Input placeholder="请输入" style={{ width: 160 }} />
                     </Form.Item>
-                    <Form.Item 
-                        name="phone" 
-                        label="手机号" 
+                    <Form.Item
+                        name="phone"
+                        label="手机号"
                         rules={[
                             { required: true },
                             ({ getFieldValue }) => ({
@@ -155,13 +146,13 @@ export const addAdminModal = function(props: addAdminModalType): JSX.Element {
                     >
                         <Input placeholder="请输入" style={{ width: 160 }} onChange={handlePhoneChange} />
                     </Form.Item>
-                    <Form.Item 
-                        name="email" 
+                    <Form.Item
+                        name="email"
                         label="邮箱"
                         rules={[
                             ({ getFieldValue }) => ({
                                 validator(rule, value) {
-                                    const emailReg = /^.+\@.+\..+$/
+                                    const emailReg = /^.+\@.+\..+$/;
                                     if (!value || emailReg.test(value)) {
                                         return Promise.resolve();
                                     }
@@ -174,8 +165,7 @@ export const addAdminModal = function(props: addAdminModalType): JSX.Element {
                     </Form.Item>
                 </Form>
             </Spin>
-            
-        </Modal>  
+        </Modal>
     );
 };
 

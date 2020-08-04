@@ -19,7 +19,15 @@ interface contentLayoutProps {
     contentWrapperClassName?: string;
 }
 const contentLayout = (props: contentLayoutProps) => {
-    const { title, children, topRightSlot, className, isLoading = false, isShowDivider=true, contentWrapperClassName='' } = props;
+    const {
+        title,
+        children,
+        topRightSlot,
+        className,
+        isLoading = false,
+        isShowDivider = true,
+        contentWrapperClassName = '',
+    } = props;
     return (
         <Spin spinning={isLoading} wrapperClassName="content-container-spin">
             <div className={`content-container ${isShowDivider ? 'enable-divider' : ''}`}>

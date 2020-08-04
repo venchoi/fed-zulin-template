@@ -13,7 +13,7 @@ export interface RenterListProps {
     stageId: string;
     handleShowAddAdminModal(record: renterListType): void;
     requestRenterList?: boolean;
-    getUnauditStats():void;
+    getUnauditStats(): void;
 }
 
 export interface AuditListProps {
@@ -23,7 +23,7 @@ export interface AuditListProps {
     page: number;
     pageSize: number;
     stageId: string;
-    getUnauditStats():void;
+    getUnauditStats(): void;
 }
 
 export interface renterType {
@@ -40,7 +40,7 @@ export interface contractRoomType {
 export interface renterListType {
     id: string;
     code: string;
-    start_date: string; 
+    start_date: string;
     end_date: string;
     contract_renter: renterType[];
     contract_room: contractRoomType[];
@@ -77,7 +77,7 @@ export interface auditSearchAreaProps {
 
 export interface auditListType {
     code: string;
-    created_on: string; 
+    created_on: string;
     stage_name: string;
     contract_renter: renterType[];
     contract_room: contractRoomType[];
@@ -105,5 +105,5 @@ export interface auditDetailType {
     master_phone: string;
     origin_master_name: string;
     origin_master_phone: string;
-    attachment?: fileType[]
+    attachment?: fileType[];
 }

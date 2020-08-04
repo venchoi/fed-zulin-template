@@ -9,9 +9,7 @@ import { basicAuditListColumns } from './listComponent';
 import { getAuditList } from '@s/renterCustomerService';
 import AuditDetailModal from './components/auditDetailModal';
 import { AuditListProps, auditListType, auditParamsType } from './list.d';
-import {
-    getAuditListParams
-} from '@/types/renterCustomerService';
+import { getAuditListParams } from '@/types/renterCustomerService';
 import './auditList.less';
 
 export const auditList = (props: AuditListProps) => {
@@ -22,7 +20,7 @@ export const auditList = (props: AuditListProps) => {
         keyword: '',
         page: 1,
         page_size: 20,
-        status: ''
+        status: '',
     });
     const [isShowModal, setIsShowModal] = useState(false); // 是否显示详情弹窗
     const [currentRecord, setCurrentRecord] = useState<auditListType>();
@@ -32,14 +30,14 @@ export const auditList = (props: AuditListProps) => {
         setsearchParams({
             ...searchParams,
             page,
-            page_size: pageSize
+            page_size: pageSize,
         });
     }, [page, pageSize]);
 
     useEffect(() => {
         setsearchParams({
             ...searchParams,
-            stage_id: stageId
+            stage_id: stageId,
         });
     }, [stageId]);
 
@@ -63,27 +61,27 @@ export const auditList = (props: AuditListProps) => {
         setLoading(false);
     };
 
-    const handleShowAuditModal = (record: auditListType, isAudit?: boolean) => (e: React.MouseEvent):void => {
+    const handleShowAuditModal = (record: auditListType, isAudit?: boolean) => (e: React.MouseEvent): void => {
         setIsAudit(!!isAudit);
         setCurrentRecord(record);
-        setIsShowModal(true)
-    }
+        setIsShowModal(true);
+    };
 
     const handleCloseModal = (isNeedFetchAuditList: boolean) => {
-        setIsShowModal(false)
+        setIsShowModal(false);
         if (isNeedFetchAuditList) {
             getRenterCustomerList();
         }
-    }
+    };
 
     const handleSearch = (value: auditParamsType) => {
         setsearchParams({
             ...searchParams,
-            ...value
+            ...value,
         });
     };
 
-    const columns: ColumnProps<auditListType>[]= [
+    const columns: ColumnProps<auditListType>[] = [
         ...basicAuditListColumns,
         {
             title: '操作',
@@ -91,9 +89,9 @@ export const auditList = (props: AuditListProps) => {
             fixed: 'right',
             width: 64,
             render: (text: string, record: auditListType, index: number) => {
-                return (<div className="op-col">
-                    {
-                        record.status === '待审核' ?
+                return (
+                    <div className="op-col">
+                        {record.status === '待审核' ? (
                             <Button
                                 type="link"
                                 className="operate-btn f-hidden renter-customers-service-audit"
@@ -101,11 +99,8 @@ export const auditList = (props: AuditListProps) => {
                             >
                                 审核
                             </Button>
-                            :
-                            null
-                    }
-                    {
-                        record.status === '已审核' ?
+                        ) : null}
+                        {record.status === '已审核' ? (
                             <Button
                                 type="link"
                                 className="operate-btn f-hidden renter-customers-service-audit"
@@ -113,22 +108,16 @@ export const auditList = (props: AuditListProps) => {
                             >
                                 详情
                             </Button>
-                            :
-                            null
-                    }
-                    {
-                        !['待审核', '已审核'].includes(record.status) ? '-' : null
-                    }
-                </div>)
-            }
+                        ) : null}
+                        {!['待审核', '已审核'].includes(record.status) ? '-' : null}
+                    </div>
+                );
+            },
         },
     ];
     return (
         <div className="renter-list-page">
-            <AuditSearchArea 
-                keywordValue={searchParams.keyword || ''}
-                onSearch={handleSearch}
-            />
+            <AuditSearchArea keywordValue={searchParams.keyword || ''} onSearch={handleSearch} />
             <FedTable<auditListType>
                 className="renter-list-table"
                 vsides={false}
@@ -140,8 +129,8 @@ export const auditList = (props: AuditListProps) => {
                     y: 'calc( 100vh - 388px )',
                 }}
             />
-             <AuditDetailModal 
-                isShowModal={isShowModal} 
+            <AuditDetailModal
+                isShowModal={isShowModal}
                 record={currentRecord}
                 isAudit={isAudit}
                 onClose={handleCloseModal}
@@ -149,6 +138,6 @@ export const auditList = (props: AuditListProps) => {
             />
         </div>
     );
-}
+};
 
 export default auditList;

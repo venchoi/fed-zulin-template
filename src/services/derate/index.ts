@@ -15,7 +15,7 @@ import {
     createWHInstanceParams,
     commitInfoStatusParams,
     auditAllParams,
-    getAuditStatusParams
+    getAuditStatusParams,
 } from '@/types/derateTypes';
 
 export const getProjectTreeData = (data: getTreeDataParams) => {

@@ -49,7 +49,7 @@ export const SearchArea = function(props: searchAreaProps) {
                     disabled={total === 0}
                     onClick={onAudit(true)}
                     style={{
-                        marginRight: '16px'
+                        marginRight: '16px',
                     }}
                 >
                     全部审核

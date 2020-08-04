@@ -7,7 +7,7 @@ import {
     addContractAdminParams,
     getAuditDetailParams,
     auditRenterParams,
-    getApplyListCountParams
+    getApplyListCountParams,
 } from '@/types/renterCustomerService';
 
 // 获取减免列表
@@ -30,7 +30,7 @@ export const getContractDetail = (data: getContractDetailParams) => {
     return ajax('/user/contract-admin/get-contract-detail', { ...data, _csrf: '' }, 'GET');
 };
 
-// 新增编辑管理员 
+// 新增编辑管理员
 export const addContractAdmin = (data: addContractAdminParams) => {
     return ajax('/user/contract-admin/set-contract-admin', { ...data, _csrf: '' }, 'POST');
 };
@@ -40,11 +40,10 @@ export const fetchAuditDetail = (data: getAuditDetailParams) => {
     return ajax('/user/contract-admin/apply-detail', { ...data, _csrf: '' }, 'GET');
 };
 
-// 审核 
+// 审核
 export const auditRenter = (data: auditRenterParams) => {
     return ajax('/user/contract-admin/pass-apply', { ...data, _csrf: '' }, 'POST');
 };
-
 
 // 获取待审核数量
 export const getApplyListCount = (data: getApplyListCountParams) => {

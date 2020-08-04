@@ -131,7 +131,11 @@ const Standard = (props: IProps) => {
                         >
                             调整价格
                         </Button>
-                        <Button type="link" data-event={MeterTracker['meter-standard-view']} className="f-hidden meter-standard-view">
+                        <Button
+                            type="link"
+                            data-event={MeterTracker['meter-standard-view']}
+                            className="f-hidden meter-standard-view"
+                        >
                             <Link to={`/metermg/detail-standard/${rowData.id}`}>详情</Link>
                         </Button>
                         <Dropdown
@@ -189,7 +193,7 @@ const Standard = (props: IProps) => {
                     fetchList();
                 }
             },
-        })
+        });
     };
 
     const handlePriceEnabled = async (rowData: IStandardPriceItem) => {
