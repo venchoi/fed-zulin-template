@@ -1,9 +1,8 @@
 import React from 'react';
 import { Badge, Menu } from 'antd';
 import { Link } from 'dva/router';
-import FedIcon from '../../../../components/FedIcon';
+import FedIcon from '@c/FedIcon';
 import { getKey } from './menuRoutes';
-import {} from '../FedHeader/interface';
 
 interface Props {
     collapsed: boolean;
@@ -51,7 +50,7 @@ export default class Menus extends React.Component<Props, State> {
                         key={menuItem.func_code}
                         title={
                             <span>
-                                <Badge dot={menuItem.func_code === 'Index' && workflow.total_todo} className="anticon">
+                                <Badge dot={menuItem.func_code === 'Index' && workflow.total_todo}>
                                     <FedIcon type={menuItem.icon} />
                                 </Badge>
                                 <span>{menuItem.func_name}</span>
@@ -61,7 +60,7 @@ export default class Menus extends React.Component<Props, State> {
                         {(menuItem.children || []).map((childItem: any) => {
                             // 如果is_access_fun的值为或者 当前项目的标识与url _smp参数不一致也需要跳转
                             const isHref = +childItem.is_access_fun === 1;
-                            const isOldSite = /\/static\//.test(childItem.func_url);
+                            const isOldSite = /\/static\/|\/pact\/|\/fed\//.test(childItem.func_url);
                             const navClass = '';
                             const key = childItem.func_code;
 
@@ -75,17 +74,29 @@ export default class Menus extends React.Component<Props, State> {
                                 count = workflow.total_todo || 0;
                             }
 
-                            const url = childItem.func_url || '';
+                            let url = childItem.func_url || '';
                             // 后台返回的菜单栏地址截取掉。便于前端路由做判断
+                            if (/rental\d?-ykj-test/.test(location.host)) {
+                                url = url.replace(/(https?\:\/\/)rental\d?-ykj-test[^\/]+\//, `$1${location.host}/`);
+                            }
                             return (
                                 <Menu.Item key={key} className={navClass}>
-                                    <a href={url}>
-                                        {/* 新站点使用langs.text会产生乱码？ */}
-                                        {childItem.func_name}
-                                        {count ? (
-                                            <Badge count={count} overflowCount={99} style={{ marginLeft: '5px' }} />
-                                        ) : null}
-                                    </a>
+                                    {!isHref && !isOldSite ? (
+                                        <Link to={childItem.func_url}>
+                                            {childItem.func_name}
+                                            {count ? (
+                                                <Badge count={count} overflowCount={99} style={{ marginLeft: '5px' }} />
+                                            ) : null}
+                                        </Link>
+                                    ) : (
+                                        <a href={url}>
+                                            {/* 新站点使用langs.text会产生乱码？ */}
+                                            {childItem.func_name}
+                                            {count ? (
+                                                <Badge count={count} overflowCount={99} style={{ marginLeft: '5px' }} />
+                                            ) : null}
+                                        </a>
+                                    )}
                                 </Menu.Item>
                             );
                         })}
