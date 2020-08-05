@@ -1,0 +1,96 @@
+.derate-list-page {
+    position: relative;
+    .project-select-area {
+        .ant-select {
+            float: right;
+        }
+    }
+    .status-item {
+        .icon-dot {
+            display: block;
+            width: 6px;
+            height: 6px;
+            margin-right: 8px;
+            margin-top: 9px;
+            float: left;
+            border-radius: 50%;
+            background-color: #F77D54;
+            &.unaudit {
+                background-color: #F77D54;
+            }
+            &.auditing {
+                background-color: #F5B027;
+            }
+            &.audited {
+                background-color: #30B39D;
+            }
+            &.deleted {
+                background-color: #D7D8D9;
+            }
+        }
+        .status-text {
+            float: left;
+        }
+    }
+    .selected-status-bar {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: space-between;
+        align-items: center;
+        height: 32px;
+        padding: 0 15px;
+        border-top: 1px solid #D7D8D9;
+        background-color: white;
+        .text {
+            color: #636566;
+            font-size: 14px;
+            .selected-num {
+                color: #F24F18;
+            }
+        }
+    }
+    span.derate-table-td {
+        display: block;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .derate-amount-td {
+        text-align: right;
+    }
+    .rs-td-container {
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: flex-start;
+        span.derate-table-td-rs {
+            display: block;
+            max-width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    }
+    .derate-sub-row-container {
+        width: 100%;
+    }
+    .op-col {
+        .operate-btn {
+            margin: 0;
+            height: 22px;
+            padding-left: 0;
+            margin-right: 16px;
+        }
+        .link-btn {
+            margin: 0;
+            height: 22px;
+            padding-left: 0;
+            margin-right: 16px;
+        }
+    }
+
+    .derate-list-pagination {
+        position: absolute;
+        bottom: 0;
+    }
+}

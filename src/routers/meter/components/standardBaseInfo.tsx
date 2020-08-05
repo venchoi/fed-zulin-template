@@ -46,11 +46,7 @@ const BaseInfo = ({ detail }: { detail: IStandardPriceDetail }) => {
                 label: '生效时间',
                 value: detail.effect_date,
                 render: () => {
-                    return (
-                        <>
-                          {moment(detail.effect_date).format('YYYY-MM-DD')}  
-                        </>
-                    );
+                    return <>{moment(detail.effect_date).format('YYYY-MM-DD')}</>;
                 },
             },
         ],

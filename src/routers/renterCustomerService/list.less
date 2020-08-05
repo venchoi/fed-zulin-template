@@ -1,0 +1,113 @@
+.renter-customer-service-list-page {
+    position: relative;
+    .project-select-area {
+        float: right;
+    }
+    .renter-customer-content-area {
+        .ant-tabs-nav-wrap {
+            padding-left: 16px;
+        }
+        .audit-tab {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    .renter-list-pagination {
+        position: absolute;
+        bottom: 0;
+    }
+    .status-item {
+        .icon-dot {
+            display: block;
+            width: 6px;
+            height: 6px;
+            margin-right: 8px;
+            margin-top: 9px;
+            float: left;
+            border-radius: 50%;
+            background-color: #F77D54;
+            &.unaudit {
+                background-color: #F27900;
+            }
+            &.auditing {
+                background-color: #F2AA00;
+            }
+            &.audited {
+                background-color: #0D86FF;
+            }
+            &.processing {
+                background-color: #00AD74;
+            }
+            &.closed {
+                background-color: #868B8F;
+            }
+            &.passed {
+                background-color: #868B8F;
+            }
+        }
+        .status-text {
+            float: left;
+        }
+    }
+    .anticon.icon-info-hover {
+        color: #BEC3C7;
+        margin-left: 5px;
+        margin-top: 4px;
+        &:hover {
+            cursor: pointer;
+            color: #0D86FF ;
+        }
+    }
+    .audit-number {
+        min-width: 16px;
+        height: 16px;
+        padding: 0 6px;
+        margin-left: 4px;
+        border-radius: 8px;
+        line-height: 16px;
+        font-weight: normal;
+        font-size: 12px;
+        white-space: nowrap;
+        text-align: center;
+        color: white;
+        background-color: #EB3B3B;
+        &.circle {
+            width: 16px;
+            height: 16px;
+            padding: 0;
+            border-radius: 50%;
+        }
+    }
+}
+.audit-renter-detail-form-modal {
+    .ant-row.ant-form-item {
+        margin-bottom: 6px ;
+        .ant-form-item-label {
+            margin-right: 24px;
+            text-align: left;
+        }
+    }
+    .room-item {
+        line-height: 22px;
+        margin-bottom: 0;
+        &.first-room {
+            margin-top: 5px;
+        }
+    }
+    .ant-modal-body {
+        max-height: 500px;
+        overflow-y: scroll;
+        padding: 16px 24px;
+    }
+    form#audit-renter-detail-form {
+        margin-top: -5px;
+    }
+}
+
+.popover-list {
+    p:last-child {
+        margin-bottom: 0;
+    }
+}

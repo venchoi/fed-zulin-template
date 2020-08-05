@@ -72,12 +72,12 @@ const AdjustmentDetail = ({
         }
         return <span key={route.path}>{route.breadcrumbName}</span>;
     };
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
     const [detail, setDetail] = useState<IAdjustmentDetail>(initDetail);
     const fetchDetail = async () => {
-        setLoading(true)
+        setLoading(true);
         const { data } = await getPriceAdjustmentDetail({ id });
-        setLoading(false)
+        setLoading(false);
         const result = data || initDetail;
         setDetail({ ...result, step_data: JSON.parse(result.step_data) });
     };
@@ -95,7 +95,7 @@ const AdjustmentDetail = ({
         <>
             <PageHeader
                 title={detail.standard_name || '调整单详情'}
-                breadcrumb={{ routes, itemRender, separator: ">" }}
+                breadcrumb={{ routes, itemRender, separator: '>' }}
                 ghost={false}
             />
             <div className="layout-detail adjustment-detail">
@@ -106,17 +106,28 @@ const AdjustmentDetail = ({
                         <footer style={{ padding: '16px 0' }}>
                             <Space>
                                 {[Status.PENDING].includes(detail.status) ? (
-                                    <Popconfirm title="确认审核该调整单?" onConfirm={() => { actionHandler({ type: PriceAdjustHandleType.AUDIT, id }) }}>
+                                    <Popconfirm
+                                        title="确认审核该调整单?"
+                                        onConfirm={() => {
+                                            actionHandler({ type: PriceAdjustHandleType.AUDIT, id });
+                                        }}
+                                    >
                                         <Button type="primary">审核</Button>
                                     </Popconfirm>
                                 ) : null}
                                 {[Status.PENDING].includes(detail.status) ? (
-                                    <Popconfirm title="确认作废该调整单？" onConfirm={() => actionHandler({ type: PriceAdjustHandleType.VOID, id })}>
+                                    <Popconfirm
+                                        title="确认作废该调整单？"
+                                        onConfirm={() => actionHandler({ type: PriceAdjustHandleType.VOID, id })}
+                                    >
                                         <Button>作废</Button>
                                     </Popconfirm>
                                 ) : null}
                                 {[Status.AUDITED].includes(detail.status) ? (
-                                    <Popconfirm title="确认取消审核该调整单？" onConfirm={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id })}>
+                                    <Popconfirm
+                                        title="确认取消审核该调整单？"
+                                        onConfirm={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id })}
+                                    >
                                         <Button>取消审核</Button>
                                     </Popconfirm>
                                 ) : null}

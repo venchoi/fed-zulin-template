@@ -114,25 +114,52 @@ const Adjustment = (props: IProps) => {
                 return (
                     <Space>
                         {[Status.PENDING].includes(rowData.status) ? (
-                            <Popconfirm title="确认审核该调整单？" onConfirm={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id: rowData.id })}>
-                                <Button type="link" data-event={MeterTracker['meter-adjustment-audit']} className="f-hidden meter-adjustment-audit">
+                            <Popconfirm
+                                title="确认审核该调整单？"
+                                onConfirm={() => actionHandler({ type: PriceAdjustHandleType.AUDIT, id: rowData.id })}
+                            >
+                                <Button
+                                    type="link"
+                                    data-event={MeterTracker['meter-adjustment-audit']}
+                                    className="f-hidden meter-adjustment-audit"
+                                >
                                     审核
                                 </Button>
                             </Popconfirm>
                         ) : null}
-                        <Button type="link" data-event={MeterTracker['meter-adjustment-view']}  className="f-hidden meter-adjustment-view">
+                        <Button
+                            type="link"
+                            data-event={MeterTracker['meter-adjustment-view']}
+                            className="f-hidden meter-adjustment-view"
+                        >
                             <Link to={`/metermg/detail-adjust/${rowData.id}`}>详情</Link>
                         </Button>
                         {[Status.PENDING].includes(rowData.status) ? (
-                            <Popconfirm title="确认作废该调整单？" onConfirm={() => actionHandler({ type: PriceAdjustHandleType.VOID, id: rowData.id })}>
-                                <Button type="link" data-event={MeterTracker['meter-adjustment-void']} className="f-hidden meter-adjustment-void">
+                            <Popconfirm
+                                title="确认作废该调整单？"
+                                onConfirm={() => actionHandler({ type: PriceAdjustHandleType.VOID, id: rowData.id })}
+                            >
+                                <Button
+                                    type="link"
+                                    data-event={MeterTracker['meter-adjustment-void']}
+                                    className="f-hidden meter-adjustment-void"
+                                >
                                     作废
                                 </Button>
                             </Popconfirm>
                         ) : null}
                         {[Status.AUDITED].includes(rowData.status) ? (
-                            <Popconfirm title="确认取消审核该调整单？" onConfirm={() => actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id: rowData.id })}>
-                                <Button type="link" data-event={MeterTracker['meter-adjustment-cancel-audit']} className="f-hidden meter-adjustment-cancel-audit">
+                            <Popconfirm
+                                title="确认取消审核该调整单？"
+                                onConfirm={() =>
+                                    actionHandler({ type: PriceAdjustHandleType.CANCELAUDIT, id: rowData.id })
+                                }
+                            >
+                                <Button
+                                    type="link"
+                                    data-event={MeterTracker['meter-adjustment-cancel-audit']}
+                                    className="f-hidden meter-adjustment-cancel-audit"
+                                >
                                     取消审核
                                 </Button>
                             </Popconfirm>
