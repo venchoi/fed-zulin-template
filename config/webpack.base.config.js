@@ -93,7 +93,7 @@ module.exports = {
         new LodashModuleReplacementPlugin({ shorthands: true }),
     ],
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.jsx','.less','.css'],
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.less', '.css'],
         alias: {
             '@': path.resolve(__dirname, '../src'),
             '@c': path.resolve(__dirname, '../src/components'),
@@ -107,6 +107,23 @@ module.exports = {
         runtimeChunk: true,
         splitChunks: {
             chunks: 'all',
+            minSize: 60000,
+            maxSize: 0,
+            minChunks: 1,
+            maxAsyncRequests: 30,
+            maxInitialRequests: 30,
+            automaticNameDelimiter: '~',
+            cacheGroups: {
+                defaultVendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                },
+                default: {
+                    minChunks: 1,
+                    priority: -20,
+                    reuseExistingChunk: true,
+                },
+            },
         },
     },
 };
