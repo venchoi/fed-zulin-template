@@ -1,5 +1,5 @@
 import { projsValue } from '@t/project';
-import { OutLayListItem } from '@/types/outlay';
+import { OutLayListItem, StageDataItem } from '@/types/outlay';
 
 export interface GetOutlayListParams {
     stage_id?: string;
@@ -28,7 +28,7 @@ export interface FilterProps {
 export interface TopRightFuncProps {
     projIds: Array<string>;
     projNames: Array<string>;
-    extData: {canApplyInvoice: boolean};
+    extData: {canApplyInvoice: boolean, stageData: StageDataItem[], user: any};
     selectedRows: OutLayListItem[];
     selectedRowKeys: string[];
     onChange(type: string, value: projsValue | string): void;

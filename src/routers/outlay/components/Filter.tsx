@@ -48,7 +48,7 @@ const Filter = (props: FilterProps) => {
         });
     }, [props.filterOptions]);
 
-    const handleRoomCascaderChange = (selectedConfig: SelectedRoomConfig) => {
+    const handleRoomCascaderChange = debounce((selectedConfig: SelectedRoomConfig) => {
         const {
             stageId,
             subdistrictId = '',
@@ -74,7 +74,7 @@ const Filter = (props: FilterProps) => {
             building_id: buildingId,
             floor_name: floorName,
         });
-    };
+    }, 600);
 
     const handleSelectChange = (name: string, value: SelectValue) => {
         console.log('===handleSelectChange', name, value);

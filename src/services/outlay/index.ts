@@ -1,6 +1,6 @@
 import ajax from '@/api/utils/ajax';
 import { ResponseData } from '@/types/common';
-import { FeeItem, OutLayListItem, CanApplyInvoice, StatisticData } from '@/types/outlay';
+import { FeeItem, OutLayListItem, CanApplyInvoice, StatisticData, StageDataItem } from '@/types/outlay';
 import { GetOutlayListParams } from '../../routers/outlay/index.d';
 
 // 根据项目获取费项列表
@@ -11,7 +11,7 @@ export const getFeeList = (params: { proj_id: string }): Promise<ResponseData<Fe
 // 获取收支表格数据
 export const getOutlayList = (
     params: GetOutlayListParams
-): Promise<ResponseData<{ items: OutLayListItem[]; total: string }>> => {
+): Promise<ResponseData<{ items: OutLayListItem[], total: string, stages: StageDataItem[] }>> => {
     return ajax('/transaction/exchange/list', params, 'POST');
 };
 

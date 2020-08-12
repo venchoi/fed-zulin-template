@@ -20,6 +20,24 @@ const OutLayTable = (props: OutLayTableProps) => {
     const income = parseFloat(statisticData.income || '0').toFixed(2);
     const refund = parseFloat(statisticData.refund || '0').toFixed(2);
 
+    /**
+     * 开发票/申请开发票
+     * @param record 
+     * @param isApply 是否是申请开票
+     */
+    const handleOpenInvoice = (record: OutLayListItem, isApply?: boolean) => {
+        const { fee_items, proj_id } = record;
+        let billItems: any = [];
+        billItems = billItems.concat(fee_items.map(innerItem => {
+            return {
+                bill_item_id: innerItem.bill_item_id,
+                amount: innerItem.available_invoicing_amount
+            }
+        }))
+        const hrefName = isApply ? 'apply-invoice' : 'invoice'
+        location.href = `/fed/invoice/${hrefName}?bill_items=${JSON.stringify(billItems)}&stage_id=${proj_id}`;
+    }
+
     const renderExchangedToNamePopover = (record: OutLayListItem) => {
         const {
             type,
@@ -279,8 +297,8 @@ const OutLayTable = (props: OutLayTableProps) => {
                                 开收据
                             </a>
                         )}
-                        {!canApplyInvoice && hasInvoice && <a className="operate-btn">开发票</a>}
-                        {canApplyInvoice && hasInvoice && <a className="operate-btn">申请开票</a>}
+                        {!canApplyInvoice && hasInvoice && <a className="operate-btn" onClick={() => handleOpenInvoice(record)}>开发票</a>}
+                        {canApplyInvoice && hasInvoice && <a className="operate-btn" onClick={() => handleOpenInvoice(record, true)}>申请开票</a>}
                         <Link className="operate-btn" to={`${config.baseAlias}/outlay/detail/${id}`}>
                             详情
                         </Link>

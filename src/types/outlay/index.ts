@@ -170,6 +170,12 @@ export interface OutLayListItem {
     workflow_instance_id: string | boolean;
 }
 
+export interface StageDataItem {
+    id: string;
+    name: string;
+    print_template_id: string;
+}
+
 export interface CanApplyInvoice {
     apply_receipt: number;
     has_third_vat: number;

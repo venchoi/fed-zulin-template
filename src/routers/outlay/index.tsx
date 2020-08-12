@@ -10,10 +10,11 @@ import TopRightFunc from './components/TopRightFunc';
 import { GetOutlayListParams } from './index.d';
 import { projsValue } from '@t/project';
 import { getOutlayList, getCanApplyInvoice, getStatistics } from '@/services/outlay';
-import { OutLayListItem, StatisticData } from '@/types/outlay';
+import { OutLayListItem, StatisticData, StageDataItem } from '@/types/outlay';
+import { connect } from 'dva';
 
 const OutlayList = (props: any) => {
-    const { history } = props;
+    const { user, history } = props;
     const queryStr = (location.search || '').replace(/^\?(.*)/, '$1');
     const query = queryString.parse(queryStr);
     const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]); // 当前选中的项目
@@ -36,6 +37,7 @@ const OutlayList = (props: any) => {
     }); // 搜索参数
     const [outlayList, setOutlayList] = useState<OutLayListItem[]>([]);
     const [outlayListTotal, setOutlayListTotal] = useState(0);
+    const [stageData, setStageData] = useState<StageDataItem[]>([]); // 所有项目的打印模板
     const [statisticData, setStatisticData] = useState<StatisticData>({income: '0', refund: '0'});
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
     const [selectedRows, setSelectedRows] = useState<OutLayListItem[]>([]);
@@ -45,6 +47,7 @@ const OutlayList = (props: any) => {
     const tableSetLoading = useCallback(setLoading, [setLoading])
 
     useEffect(() => {
+        console.log("outlay index", user, history);
         getCanApplyInvoice().then(json => {
             try {
                 const {
@@ -66,6 +69,7 @@ const OutlayList = (props: any) => {
                 const { data: data1 } = json1;
                 setOutlayList(data1.items || []);
                 setOutlayListTotal(+data1.total || 0);
+                setStageData(data1.stages);
 
                 const { data: data2 } = json2;
                 setStatisticData(data2);
@@ -127,7 +131,7 @@ const OutlayList = (props: any) => {
                         onChange={handleTopRightFunc}
                         projIds={selectedProjectIds}
                         projNames={selectedProjectNames}
-                        extData={{canApplyInvoice}}
+                        extData={{canApplyInvoice, stageData, user}}
                         selectedRows={selectedRows}
                         selectedRowKeys={selectedRowKeys}
                     ></TopRightFunc>
@@ -164,4 +168,8 @@ const OutlayList = (props: any) => {
     );
 };
 
-export default OutlayList;
+const mapStateToProps = (state: any) => ({
+    user: state.main.user
+});
+
+export default connect(mapStateToProps)(OutlayList);

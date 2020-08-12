@@ -1,11 +1,13 @@
 import React from 'react';
 import TreeProjectSelect from '@/components/TreeProjectSelect';
-import { Divider, Menu, Dropdown, Button } from 'antd';
+import { Divider, Menu, Dropdown, Button, message } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { MenuInfo} from 'rc-menu/lib/interface.d'
 import { projsValue } from '@/types/project';
 import './TopRightFunc.less';
 import { TopRightFuncProps } from '../index.d';
+import { opLog } from '@/services/app';
+import { getReportHref } from '@/helper/commonUtils';
 
 interface BillItem  {
     bill_item_id: string;
@@ -14,17 +16,20 @@ interface BillItem  {
 
 const TopRightFunc = (props: TopRightFuncProps) => {
 
-    const { extData: {canApplyInvoice}, selectedRows, selectedRowKeys } = props;
+    const { extData: {canApplyInvoice, stageData, user}, selectedRows, selectedRowKeys, projIds } = props;
+    // 是否能打印。所勾选的项是否收据都开具了
     const isPrintEnabled = selectedRows.length > 0 && selectedRows.every(item => {
         const { fee_items } = item;
         const hasReceipt = fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
         return hasReceipt;
     });
+    // 是否能开发票
     const isInvoiceEnabled = selectedRows.length > 0 && selectedRows.every(item => {
         return item.fee_items && item.fee_items.some(feeItem => {
             return feeItem.can_invoicing == 1;
         });
     });
+    // 是否能开收据
     const isBatchReceiptEnabled = !(selectedRows.length === 0 || selectedRows.some(item => {
         const { fee_items, exchanged_amount } = item;
         const hasReceipt =
@@ -56,7 +61,7 @@ const TopRightFunc = (props: TopRightFuncProps) => {
             return billItemsMap[itemId]
         });
         return billItems;
-    },
+    }
 
     const handleBatchMenuClick = (param: MenuInfo) => {
         const { key } = param;
@@ -78,7 +83,53 @@ const TopRightFunc = (props: TopRightFuncProps) => {
 
     const handlePrintMenuClick = (param: MenuInfo) => {
         console.log(param);
-        // TODO
+        const { key } = param;
+        const projId = selectedRows[0].proj_id;
+        const exchangeIds: string[] = [];
+        //租客 id 集合
+        const renterIds: string[] = [];
+        selectedRows.forEach((item) => {
+            exchangeIds.push(item.id);
+            if (Object.hasOwnProperty.call(item, 'ext_renter')) {
+                renterIds.push(item.ext_renter.id);
+            }
+        });
+        const filterStageData = stageData.find(item => item.id === projId);
+        if (filterStageData && Object.hasOwnProperty.call(filterStageData, 'print_template_id') && filterStageData.print_template_id !== '') {
+            const printTemplateId = filterStageData.print_template_id;
+            const exchangeIdStr = exchangeIds.map(ex => `'${ex}'`).join(',');
+            const currRenterId = renterIds[0];
+            const isPass = renterIds.every((item) => item === currRenterId);
+            if (key === '1' && !isPass) {
+                message.error('所选交易中，存在不同交易方，不允许打印收据！');
+                return;
+            }
+            const params = {
+                id: printTemplateId,
+                exchange_ids: exchangeIdStr,
+                is_print_one: 0
+            }
+            if (key === '2') {
+                params.is_print_one = 1
+            }
+            const url = getReportHref(params);
+            window.open(url, '_blank');
+            try {
+                // 日志记录
+                const detail = `${user.displayName + user.account} 打印了收据,交易号为 ${exchangeIdStr}`;
+                console.log("opLog detail", detail);
+                // TODO user还没准备好
+                /* opLog({
+                    key_name: 'rental_receipt_print',
+                    desc: '收据打印',
+                    detail
+                }) */
+            } catch (e) {
+                // console.log(e)
+            }
+        } else {
+            message.error('未设置打印模板')
+        }
     };
 
     const handleTreeSelected = (selectedProject: projsValue) => {
