@@ -44,3 +44,9 @@ export type SearchEvent =
     | React.MouseEvent<HTMLElement, MouseEvent>
     | React.KeyboardEvent<HTMLInputElement>
     | undefined;
+
+export interface OpLogParams {
+    key_name: string;
+    desc: string;
+    detail: string;
+}
