@@ -24,8 +24,8 @@ export const SearchArea = function(props: searchAreaProps) {
     }, [keywordValue]);
 
     const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const value = e.target.value;
-        setKeyword(value);
+        const value = e.target.value || '';
+        setKeyword(value.trim());
     };
 
     const handleKeywordSearch = (value: string, e?: SearchEvent): void => {
