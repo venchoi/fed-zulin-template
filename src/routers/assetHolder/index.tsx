@@ -3,7 +3,8 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Link, RouteComponentProps } from 'dva/router';
-import { Button, Card, Dropdown, Input, message, Popconfirm, Select } from 'antd';
+import { Button, Card, Divider, Dropdown, Input, message, Modal, Popconfirm, Select } from 'antd';
+import { CloseCircleOutlined } from '@ant-design/icons';
 import { SettingOutlined } from '@ant-design/icons';
 import { ResizeTable, DragSelect } from 'ykj-ui';
 import { cloneDeep, throttle } from 'lodash';
@@ -13,6 +14,7 @@ import {
     getFiles,
     postCustomLayout,
     deleteAssetHolder,
+    batchDeleteAssetHolder,
 } from '@/services/assetHolder';
 import TreeProjectSelect from '@c/TreeProjectSelect';
 import { IGetCustomLayout, IField } from '@t/assetHolder';
@@ -21,6 +23,7 @@ import { customType, cooperateStatus } from '../../constants/index';
 import calcBodyHeight from './utils';
 import FedPagination from '@c/FedPagination';
 import './index.less';
+import { projsValue } from '@t/project';
 
 const Table = calcBodyHeight(ResizeTable);
 const { Search } = Input;
@@ -35,6 +38,8 @@ const List = ({ location }: RouteComponentProps) => {
     const [columns, setColumns] = useState<IHeader[]>([]);
     const [fieldData, setFieldData] = useState<IField[]>([]);
     const [isFetchField, setIsFetchField] = useState(false);
+    const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]); // 当前选中的项目
+    const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]); // 当前选中的行
     const [list, setList] = useState([]);
     const [total, setTotal] = useState(0);
     const [layoutData, setLayoutData] = useState<IGetCustomLayout[]>([]);
@@ -90,6 +95,7 @@ const List = ({ location }: RouteComponentProps) => {
             }
         }
         const params = {
+            proj_id: selectedProjectIds.join(','),
             advanced_select_fields: paramsFields,
             page: pageObj.page,
             page_size: pageObj.page_size,
@@ -106,13 +112,12 @@ const List = ({ location }: RouteComponentProps) => {
             head.map(it => {
                 arr.push({
                     title: it.name,
-                    // dataIndex: it.field,
                     key: it.field,
                     sorter: true,
                     width: it.width || asset_holder_list_layout[it.field] || 100,
                     ellipsis: true,
                     render: (text, item: IField) => {
-                        let value = item[it.field] || '-';
+                        let value: string | [] = item[it.field] || '-';
                         if (value instanceof Array) {
                             value = value.join(',');
                         }
@@ -135,7 +140,7 @@ const List = ({ location }: RouteComponentProps) => {
             };
             arr.push({
                 title: '操作',
-                width: 140,
+                width: 152,
                 align: 'center',
                 fixed: 'right',
                 isNoResize: true,
@@ -157,7 +162,7 @@ const List = ({ location }: RouteComponentProps) => {
                             okText="确定"
                             cancelText="取消"
                         >
-                            <a className="record-opt-btn">删除</a>
+                            <a>删除</a>
                         </Popconfirm>
                     </>
                 ),
@@ -169,10 +174,16 @@ const List = ({ location }: RouteComponentProps) => {
         setTotal(total);
         setIsTableLoading(false);
     };
+    // 项目切换
+    const handleTreeSelected = (selecctedProject: projsValue) => {
+        setSelectedProjectIds(selecctedProject.projIds);
+        setSelectedRowKeys([]);
+        setPageObj({ page: 1, page_size: pageObj.page_size });
+    };
     // 新增、筛选区域
     const extra = (
         <>
-            <TreeProjectSelect width={324} isjustselect="true" />
+            <TreeProjectSelect width={324} onTreeSelected={handleTreeSelected} />
             <Link to="/asset-holder/add" className="ant-btn ant-btn-primary" style={{ marginLeft: 16 }}>
                 新增
             </Link>
@@ -182,16 +193,18 @@ const List = ({ location }: RouteComponentProps) => {
     const renderExtraNode = () => {
         // 确定点击事件
         const onFinish = (resultArr: IField[]) => {
-            postCustomLayout({ key: type_value_code, value: resultArr }).then(json => {
-                const { result, msg } = json;
-                if (result) {
-                    setVisible(false);
-                    setIsFetchField(!isFetchField);
-                    message.success('保存成功');
-                } else {
-                    message.error(msg || '操作失败');
+            postCustomLayout({ key: type_value_code, value: resultArr }).then(
+                (json: { result: boolean; msg: string }) => {
+                    const { result, msg } = json;
+                    if (result) {
+                        setVisible(false);
+                        setIsFetchField(!isFetchField);
+                        message.success('保存成功');
+                    } else {
+                        message.error(msg || '操作失败');
+                    }
                 }
-            });
+            );
         };
         // 取消点击事件
         const onCancel = () => {
@@ -202,6 +215,34 @@ const List = ({ location }: RouteComponentProps) => {
     };
     const handleVisibleChange = (val: boolean, callback: Function) => {
         setVisible(val);
+    };
+    const onSelectChange = (selectedRowKeys: string[]) => {
+        setSelectedRowKeys(selectedRowKeys);
+    };
+    const rowSelection = { selectedRowKeys, onChange: onSelectChange };
+    // 批量删除选中的记录
+    const onBatchDelete = () => {
+        Modal.confirm({
+            title: '确定要删除所选资产持有人吗？',
+            icon: <CloseCircleOutlined style={{ color: '#EB3B3B' }} />,
+            className: 'asset-holder-list-batch-delete-confirm',
+            content: '删除后不可恢复',
+            centered: true,
+            okText: '确 定',
+            cancelText: '取 消',
+            onOk: () => {
+                batchDeleteAssetHolder({ id: selectedRowKeys }).then((json: { result: boolean; msg: string }) => {
+                    const { result, msg } = json;
+                    if (result) {
+                        message.success('删除成功!');
+                        setSelectedRowKeys([]);
+                        setPageObj({ page: 1, page_size: pageObj.page_size });
+                    } else {
+                        message.error(msg || '删除失败');
+                    }
+                });
+            },
+        });
     };
     // 表头 自定义列宽throttle
     const onHandleResizeThrottle = (index: number, size: { width: number; height: number }) => {
@@ -216,15 +257,14 @@ const List = ({ location }: RouteComponentProps) => {
         }
         timer = setTimeout(() => {
             const arr: IHeader[] = [];
-            const editColumns: IHeader[] = cloneDeep(columns);
+            const editColumns: IHeader[] = JSON.parse(JSON.stringify(copyColumns));
             editColumns.forEach(column => {
-                if (column.dataIndex) {
+                if (column.key) {
                     column.selected = true;
-                    column.field = column.dataIndex;
-                    column.key = (fieldData.find(f => f.field === column.dataIndex) || {}).key;
+                    column.field = column.key;
+                    column.key = (fieldData.find(f => f.field === column.key) || {}).key;
                     column.name = column.title;
                     delete column.dataIndex;
-                    delete column.ellipsis;
                     delete column.ellipsis;
                     delete column.sorter;
                     delete column.title;
@@ -262,7 +302,7 @@ const List = ({ location }: RouteComponentProps) => {
         <>
             <div className="layout-list" style={{ height: '100%' }}>
                 <Card className="asset-holder-card" title="资产持有人管理" bordered={false} extra={extra}>
-                    <div className="filter">
+                    <div className={selectedRowKeys.length > 0 ? 'f-hidden' : 'filter'}>
                         <div className="filter-left">
                             <Search
                                 style={{ width: '312px' }}
@@ -312,6 +352,26 @@ const List = ({ location }: RouteComponentProps) => {
                             </Dropdown>
                         </div>
                     </div>
+                    <div className={selectedRowKeys.length > 0 ? 'filter' : 'f-hidden'}>
+                        <div className="filter-left">
+                            <span className="text-desc">
+                                已选中<span className="num">{selectedRowKeys.length}</span>项
+                            </span>
+                            <Divider type="vertical" className="divider-style" />
+                            <a
+                                className="btn-del"
+                                onClick={() => {
+                                    setSelectedRowKeys([]);
+                                }}
+                            >
+                                清空
+                            </a>
+                            <a className="ant-btn" onClick={onBatchDelete}>
+                                批量删除
+                            </a>
+                        </div>
+                        <div className="filter-left"></div>
+                    </div>
                     <div className="table-list-wrap no-table-border-left no-table-border-right">
                         <Table
                             rowKey="id"
@@ -325,14 +385,16 @@ const List = ({ location }: RouteComponentProps) => {
                             onHandleResize={onHandleResize}
                             onChange={onHandleTableChange}
                             pagination={false}
+                            rowSelection={rowSelection}
                         />
                     </div>
                     <FedPagination
                         onShowSizeChange={(current, page_size) => {
+                            setSelectedRowKeys([]);
                             setPageObj({ page: 1, page_size });
                         }}
                         onChange={(page, page_size) => {
-                            console.log('page', page);
+                            setSelectedRowKeys([]);
                             setPageObj({ page, page_size: page_size || pageObj.page_size });
                         }}
                         current={pageObj.page}

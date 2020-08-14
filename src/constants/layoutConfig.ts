@@ -10,7 +10,7 @@ export interface IHeader {
     fixed?: string;
     width: number | string;
     ellipsis?: boolean;
-    render?: (text?: string, item: IField) => void;
+    render?: (text?: string) => void;
     [propsName: string]: any;
 }
 

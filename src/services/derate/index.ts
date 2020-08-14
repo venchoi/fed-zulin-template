@@ -91,5 +91,5 @@ export const createInstanceForWH = (data: createWHInstanceParams) => {
 };
 
 export const getCommitInfoStatusForWH = (data: commitInfoStatusParams) => {
-    return ajax('/workflow/workflow/get-commit-info', { ...data, _csrf: '' }, 'POST');
+    return ajax('/workflow/workflow/get-commit-info', { ...data, _csrf: '' }, 'GET');
 };
