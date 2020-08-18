@@ -19,3 +19,17 @@ export interface responseType {
     msg?: string;
     data?: any[];
 }
+
+// 登录用户信息
+export interface User {
+    account: string;
+    displayName: string;
+    display_name: string;
+    key: string;
+    org_id: string;
+    organ_name: string;
+    tenantCode: string;
+    tenant_code: string;
+    tenant_name: string;
+    user_id: string;
+}

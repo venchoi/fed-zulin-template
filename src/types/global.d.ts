@@ -6,3 +6,4 @@ declare global {
 }
 
 type valueOf<T> = T[keyof T];
+

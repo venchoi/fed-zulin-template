@@ -87,6 +87,13 @@ const routes = [
             loading,
         }),
     },
+    {
+        path: '/workspace',
+        component: Loadable({
+            loader: () => import('./routers/workspace'),
+            loading,
+        }),
+    },
     // TODO children route
     {
         path: '/metermg/detail-adjust/:id',
