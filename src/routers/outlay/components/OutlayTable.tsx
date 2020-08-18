@@ -3,22 +3,67 @@ import FedTable from '@/components/FedTable';
 import FedPagination from '@/components/FedPagination';
 import { OutLayTableProps, OutLayListItem, FeeItem, ExtPayment } from '@/types/outlay';
 import { ColumnProps } from 'antd/lib/table';
-import { Popover, Row, Col, Divider } from 'antd';
+import { Popover, Row, Col, Divider, Dropdown, Button } from 'antd';
 import FedIcon from '@/components/FedIcon';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, SettingOutlined } from '@ant-design/icons';
 import { Link } from 'dva/router';
 import config from '@/config';
 
 import './OutlayTable.less';
-import { isPlainObject } from 'lodash';
-import { feeItem } from '../../derate/list.d';
+import { isPlainObject, debounce, throttle } from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import { ResizeTable, DragSelect } from 'ykj-ui';
+import { IField } from '@/types/common';
 
 const OutLayTable = (props: OutLayTableProps) => {
 
-    const { onTableSelect, extData: {canApplyInvoice, statisticData}, selectedRowKeys, selectedRows } = props;
+    const { outlayList, onTableSelect, extData: {canApplyInvoice, statisticData}, selectedRowKeys, selectedRows, isTableLoading } = props;
     const total = (parseFloat(statisticData.income || '0') + parseFloat(statisticData.refund || '0')).toFixed(2);
     const income = parseFloat(statisticData.income || '0').toFixed(2);
     const refund = parseFloat(statisticData.refund || '0').toFixed(2);
+    const [columns, setColumns] = useState<any>([]);
+    const [visible, setVisible] = useState(false); // 列配置的弹窗显示/隐藏
+    const [fields, setFields] = useState<any>([]);
+
+    useEffect(() => {
+        setColumns(initColumns.map((col, index) => ({
+            ...col,
+        })))
+        setFields(initColumns.map((col, index) => ({
+            field: col.dataIndex,
+            is_default: true,
+            key: `${index}`,
+            name: col.title,
+            selected: true,
+        })))
+    }, [])
+
+    const onHandleResize = throttle((index: number, size: { width: number; height: number }) => {
+        const nextColumns = cloneDeep(initColumns);
+        nextColumns[index].width =  size.width;
+        setColumns(nextColumns);
+    }, 100);
+
+    // 渲染可配置列弹框
+    const renderExtraNode = () => {
+        // 确定点击事件
+        const onFinish = (resultArr: any) => {
+            console.log("resultArr", resultArr);
+            setVisible(false);
+            setColumns(initColumns.filter((item: ColumnProps<OutLayListItem>) => resultArr.some((fieldItem: IField) => fieldItem.field === item.dataIndex && fieldItem.selected)))
+        }
+         
+        // 取消点击事件
+        const onCancel = () => {
+            setVisible(false);
+        };
+        // 配置列数据 如果layoutData返回值为空时，默认使用fieldData数据
+        return <DragSelect options={fields} onFinish={onFinish} onCancel={onCancel} />;
+    };
+
+    const handleVisibleChange = (val: boolean) => {
+        setVisible(val);
+    };
 
     /**
      * 开发票/申请开发票
@@ -122,12 +167,14 @@ const OutLayTable = (props: OutLayTableProps) => {
         );
     };
 
-    const columns: ColumnProps<OutLayListItem>[] = [
+    const initColumns: ColumnProps<OutLayListItem>[] = [
         {
             dataIndex: 'code',
             title: '交易号',
+            width: 224,
+            fixed: 'left',
             render: (code: string, record: OutLayListItem, index: number) => {
-                const { payment_time, exchanged_on } = record;
+                const { payment_time, exchanged_on, id } = record;
                 let exChangeDate = '--';
                 if (exchanged_on) {
                     const arr = exchanged_on.split(' ');
@@ -137,17 +184,24 @@ const OutLayTable = (props: OutLayTableProps) => {
                 }
                 return (
                     <div>
-                        <p>{code}</p>
+                        <a href={`${config.baseAlias}/outlay/detail/${id}`}>{code}</a>
                         {/* TODO 打包合同名称/楼栋 */}
-                        <p>支付时间：{payment_time}</p>
-                        <p>交易时间：{exChangeDate}</p>
                     </div>
                 );
             },
         },
         {
+            dataIndex: 'proj_name',
+            title: '项目名称',
+            width: 160,
+            render: (text: string) => {
+                return <span>{text || '--'}</span>;
+            },
+        },
+        {
             dataIndex: 'exchanged_to_name',
             title: '交易对方',
+            width: 140,
             render: (exchanged_to_name: string, record: OutLayListItem, index: number) => {
                 const {
                     ext_renter: { name, type, organization_name },
@@ -172,14 +226,19 @@ const OutLayTable = (props: OutLayTableProps) => {
                                 <ExclamationCircleOutlined style={{ color: '#BEC3C7' }} />
                             </Popover>
                         </p>
-                        <p>项目：{proj_name}</p>
                     </div>
                 );
             },
         },
         {
+            // dataIndex: '',
+            title: '租赁资源',
+            width: 200
+        },
+        {
             dataIndex: 'fee_items',
             title: '费项',
+            width: 120,
             render: (fee_items: FeeItem[], record: OutLayListItem, index: number) => {
                 const feeItemName = Array.isArray(fee_items) && fee_items.map(fee => fee.fee_name).join();
                 const { payment_mode, system_remark } = record;
@@ -187,10 +246,10 @@ const OutLayTable = (props: OutLayTableProps) => {
                 return (
                     <div>
                         <p>{feeItemName}</p>
-                        <p>
+                        {/* <p>
                             {payment_mode}
                             {remark}
-                        </p>
+                        </p> */}
                     </div>
                 );
             },
@@ -198,20 +257,46 @@ const OutLayTable = (props: OutLayTableProps) => {
         {
             dataIndex: 'lessor_name',
             title: '甲方名称',
+            width: 140,
             render: (text: string) => {
                 return <span>{text || '--'}</span>;
             },
         },
         {
             dataIndex: 'lessor_account_name',
-            title: '收款方账号',
+            title: '收款账号',
+            width: 200,
             render: (text: string) => {
                 return <span>{text || '--'}</span>;
             },
         },
         {
+            dataIndex: '',
+            title: '交易总额(元)',
+            width: 140,
+            align: 'right',
+            render: (exchanged_amount: string) => {
+                // TODO 加千分分隔符
+                const amount = Math.abs(+exchanged_amount || 0).toFixed(2);
+                let operator = '';
+                if (+exchanged_amount > 0) {
+                    operator = '+';
+                } else if (+exchanged_amount < 0) {
+                    operator = '-';
+                }
+                return (
+                    <div>
+                        <span>{operator}</span>
+                        <span>{amount}</span>
+                    </div>
+                );
+            },
+        },
+        {
             dataIndex: 'ext_payment',
             title: '收入(元)',
+            width: 140,
+            align: 'right',
             render: (ext_payment: ExtPayment[], record: OutLayListItem, index: number) => {
                 let inPay = '--';
                 if (Array.isArray(ext_payment)) {
@@ -236,6 +321,8 @@ const OutLayTable = (props: OutLayTableProps) => {
         {
             dataIndex: 'ext_payment',
             title: '支出(元)',
+            width: 140,
+            align: 'right',
             render: (ext_payment: ExtPayment[], record: OutLayListItem, index: number) => {
                 let outPay = '--';
                 if (Array.isArray(ext_payment)) {
@@ -258,27 +345,32 @@ const OutLayTable = (props: OutLayTableProps) => {
             },
         },
         {
-            dataIndex: '',
-            title: '交易总额(元)',
-            render: (exchanged_amount: string) => {
-                // TODO 加千分分隔符
-                const amount = Math.abs(+exchanged_amount || 0).toFixed(2);
-                let operator = '';
-                if (+exchanged_amount > 0) {
-                    operator = '+';
-                } else if (+exchanged_amount < 0) {
-                    operator = '-';
+            dataIndex: 'exchanged_on',
+            title: '交易时间',
+            width: 160,
+            render: (exchanged_on: string) => {
+                let exChangeDate = '--';
+                if (exchanged_on) {
+                    const arr = exchanged_on.split(' ');
+                    if (arr && arr.length >= 0) {
+                        exChangeDate = arr[0];
+                    }
                 }
-                return (
-                    <div>
-                        <span>{operator}</span>
-                        <span>{amount}</span>
-                    </div>
-                );
+                return <span>{exChangeDate || '--'}</span>;
+            },
+        },
+        {
+            dataIndex: 'payment_time',
+            title: '支付时间',
+            width: 160,
+            render: (text: string) => {
+                return <span>{text || '--'}</span>;
             },
         },
         {
             title: '操作',
+            width: 132,
+            fixed: 'right',
             render: (text: string, record: OutLayListItem, index: number) => {
                 const { id, fee_items, proj_id } = record;
                 const {
@@ -299,9 +391,6 @@ const OutLayTable = (props: OutLayTableProps) => {
                         )}
                         {!canApplyInvoice && hasInvoice && <a className="operate-btn" onClick={() => handleOpenInvoice(record)}>开发票</a>}
                         {canApplyInvoice && hasInvoice && <a className="operate-btn" onClick={() => handleOpenInvoice(record, true)}>申请开票</a>}
-                        <Link className="operate-btn" to={`${config.baseAlias}/outlay/detail/${id}`}>
-                            详情
-                        </Link>
                     </div>
                 );
             },
@@ -332,15 +421,31 @@ const OutLayTable = (props: OutLayTableProps) => {
 
     return (
         <div data-component="outlay-table">
-            <FedTable
+            <div className="field-setting-btn">
+                <Dropdown
+                    placement="bottomRight"
+                    visible={visible}
+                    onVisibleChange={handleVisibleChange}
+                    overlay={renderExtraNode}
+                    trigger={['click']}
+                >
+                    <Button className="btn-setting" icon={<SettingOutlined />} />
+                </Dropdown>
+            </div>
+            <ResizeTable
                 rowKey="id"
+                align="left"
+                size="small"
+                bordered
                 columns={columns}
-                dataSource={props.outlayList}
+                dataSource={outlayList}
+                scroll={{ y: 'calc( 100vh - 410px )', }}
+                loading={isTableLoading}
+                onHandleResize={onHandleResize}
+                pagination={false}
                 rowSelection={rowSelection}
-                scroll={{
-                    y: 'calc( 100vh - 410px )',
-                }}
             />
+
             <div className="total">收入(元)：{income}&emsp;支出(元)：{refund}&emsp;总计(元)：{total}&emsp;</div>
             <FedPagination
                 onShowSizeChange={(current, page_size) => {

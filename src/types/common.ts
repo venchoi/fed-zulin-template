@@ -50,3 +50,15 @@ export interface OpLogParams {
     desc: string;
     detail: string;
 }
+
+export interface IField {
+    id?: string;
+    field: string; // "name"
+    is_default: boolean; //
+    sorter?: boolean;
+    key: string; // "39f649c3-d5a2-0e18-56eb-d7f8bcaf9edb"
+    name: string; // "姓名"
+    selected?: boolean; //
+    width?: number | string;
+}
+

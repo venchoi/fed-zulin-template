@@ -44,8 +44,6 @@ const OutlayList = (props: any) => {
     const [loading, setLoading] = useState(false);
     const [canApplyInvoice, setCanApplyInvoice] = useState(false); // 是否开启了申请开票功能
 
-    const tableSetLoading = useCallback(setLoading, [setLoading])
-
     useEffect(() => {
         console.log("outlay index", user, history);
         getCanApplyInvoice().then(json => {
@@ -61,9 +59,10 @@ const OutlayList = (props: any) => {
     }, []);
 
     useEffect(() => {
-        setLoading(true);
         const getData = async () => {
+            setLoading(true);
             const allData = await Promise.all([getOutlayList(filterOptions), getStatistics(filterOptions)]);
+            setLoading(false);
             try {
                 const [json1, json2] = allData;
                 const { data: data1 } = json1;
@@ -78,7 +77,6 @@ const OutlayList = (props: any) => {
             }
         }
         getData();
-        setLoading(false);
     }, [filterOptions]);
 
     /**
@@ -124,7 +122,6 @@ const OutlayList = (props: any) => {
         <ContentLayout
             className="outlay-page"
             title="收支管理"
-            isLoading={loading}
             topRightSlot={
                 <div className="project-select-area">
                     <TopRightFunc
@@ -162,6 +159,7 @@ const OutlayList = (props: any) => {
                     selectedRowKeys={selectedRowKeys}
                     selectedRows={selectedRows}
                     onTableSelect={handleTableSelect}
+                    isTableLoading={loading}
                 />
             </div>
         </ContentLayout>

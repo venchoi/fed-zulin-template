@@ -18,6 +18,7 @@ export interface OutLayTableProps {
     onTableSelect: Function;
     selectedRowKeys: string[];
     selectedRows: OutLayListItem[];
+    isTableLoading: boolean;
 }
 
 export interface ExtBill {
