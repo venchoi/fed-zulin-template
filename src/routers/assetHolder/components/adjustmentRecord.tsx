@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Badge, Button, Select, Statistic, Space } from 'antd';
-import { find } from 'lodash';
-import { Link } from 'dva/router';
+import { Select } from 'antd';
 import FedTable from '@/components/FedTable';
 import { IStandardPriceAdjustmentItem, Status, IAdjustmentAddItem } from '@t/meter';
 import { getStandardPriceAdjustment } from '@s/meter';
 import { ColumnProps } from 'antd/lib/table';
 import FedPagination from '@/components/FedPagination';
-import moment from 'moment';
 
 const { Option } = Select;
 
@@ -36,41 +33,24 @@ const AdjustmentRecord = ({ id = '' }) => {
     const columns: ColumnProps<IStandardPriceAdjustmentItem>[] = [
         {
             title: '合同编号',
-            width: 200,
+            width: 261,
             dataIndex: 'number',
             render: (text, record, index) => index + 1,
-            align: 'center',
         },
         {
             title: '资产单元',
             dataIndex: 'start_date',
-            render: (text, rowData) => {
-                return (
-                    <>
-                        {moment(text).format('YYYY-MM-DD')}
-                        {rowData.end_date ? ` 至 ${moment(rowData.end_date).format('YYYY-MM-DD')}` : ''}
-                    </>
-                );
-            },
+            width: 340,
         },
         {
             title: '租赁租期',
             dataIndex: 'price',
-            align: 'right',
-            render: (text, rowData) => {
-                const { is_step, price, unit, step_data } = rowData;
-                // @ts-ignore
-                let stepArr: IStepData[] = step_data;
-                return <div>fasdf</div>;
-            },
+            width: 288,
         },
         {
             title: '经办人',
-            width: 120,
+            width: 137,
             dataIndex: 'status',
-            render: (text: Status) => {
-                return <div>fasdf</div>;
-            },
         },
         {
             title: '状态',
