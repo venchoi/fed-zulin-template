@@ -3,12 +3,17 @@ const base_config = require('./webpack.base.config');
 const proxyConfig = require('./proxyConfig');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const webpack = require('webpack');
+const { argv } = require('yargs');
+// 本地开发环境配置，默认 rental 环境
+const env = argv.env || 'rental';
+const config = proxyConfig[env];
+console.log(config)
 const dev_config = {
     mode: 'development',
     devServer: {
         contentBase: '/',
         open: true,
-        port: 8807,
+        port: config.port,
         hot: true,
         https: true,
         host: 'rental-dev.myfuwu.com.cn',
@@ -18,7 +23,7 @@ const dev_config = {
         historyApiFallback: true,
         proxy: {
             '/api': {
-                target: proxyConfig.target,
+                target: config.target,
                 changeOrigin: true,
                 pathRewrite: {
                     '^/api': '',
@@ -26,7 +31,7 @@ const dev_config = {
             },
             // 增加 本地附件上传代理设置
             '/auth': {
-                target: proxyConfig.target,
+                target: config.target,
                 changeOrigin: true,
             },
         },

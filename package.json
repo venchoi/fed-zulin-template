@@ -5,7 +5,9 @@
     "main": "index.js",
     "scripts": {
         "prewatch": "rimraf ./node_modules/.cache",
-        "dev": "webpack-dev-server --hot --config config/webpack.dev.config.js --mode development",
+        "dev1": "webpack-dev-server --hot --config config/webpack.dev.config.js --mode development --env rental",
+        "dev2": "webpack-dev-server --hot --config config/webpack.dev.config.js --mode development --env rental2",
+        "dev3": "webpack-dev-server --hot --config config/webpack.dev.config.js --mode development --env rental3",
         "build": "yarn  && webpack --config config/webpack.prod.config.js --mode production",
         "buildCDN": "cross-env cdn=true webpack --config config/webpack.prod.config.js",
         "doc:server": "styleguidist server",
@@ -107,7 +109,8 @@
         "webpack-cli": "^3.3.10",
         "webpack-dev-server": "^3.9.0",
         "webpack-merge": "^4.2.2",
-        "workbox-webpack-plugin": "^4.3.1"
+        "workbox-webpack-plugin": "^4.3.1",
+        "yargs": "^15.4.1"
     },
     "jest": {
         "testEnvironment": "node"
