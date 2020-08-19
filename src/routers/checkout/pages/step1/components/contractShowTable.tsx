@@ -1,9 +1,16 @@
-import React from 'react';
+/**
+ * 展示选择的合同信息
+ * 包括 选择合同的按钮 与 选择的合同信息
+ */
+import React, { useState } from 'react';
 import { Link } from 'dva/router';
 import { Table, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import SelectContractModal from './selectContractModal';
+import './contractShowTable.less';
 
-const PageModuleHeader = () => {
+const ContractShowTable = () => {
+    const [showModal, setShowModal] = useState(false);
     const columns = [
         {
             title: '合同编号',
@@ -31,20 +38,39 @@ const PageModuleHeader = () => {
             project: '丁家庄项目',
         },
     ];
-    const obj = { width: '844px', marginTop: '16px' };
+
     return (
         <>
-            <div style={{ marginTop: '16px' }}>
-                <span style={{ color: '#F73E4D', marginRight: '4px' }}>*</span>退租合同：
-                <Button style={{ marginLeft: '8px' }}>
-                    <PlusOutlined />
+            <div className="checkout-contract-show-table-wrap">
+                <span className="require">*</span>
+                <span className="label-title">退租合同：</span>
+                <Button
+                    className="add-contract-btn"
+                    onClick={() => {
+                        setShowModal(!showModal);
+                    }}
+                >
+                    <PlusOutlined style={{ color: '#868B8F' }} />
                     选择合同
                 </Button>
+                <Table
+                    dataSource={data}
+                    columns={columns}
+                    size="small"
+                    bordered
+                    pagination={false}
+                    className="contract-table"
+                />
             </div>
-
-            <Table dataSource={data} columns={columns} size="small" bordered pagination={false} style={obj} />
+            {showModal ? (
+                <SelectContractModal
+                    onCancel={() => {
+                        setShowModal(!showModal);
+                    }}
+                />
+            ) : null}
         </>
     );
 };
 
-export default PageModuleHeader;
+export default ContractShowTable;
