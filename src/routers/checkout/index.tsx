@@ -4,7 +4,7 @@
 import React, { ReactElement } from 'react';
 import { connect } from 'dva';
 import { ProjectItemType, AssetSelectBaseType } from './types';
-import './list.less';
+import './index.less';
 
 type AssetSelectProps = {
     actions: {
@@ -43,6 +43,4 @@ class AddCheckoutList extends React.Component<AssetSelectProps, AssetsSelectStat
         return <div className="checkout-page-wrap one-page">退租列表</div>;
     }
 }
-export default connect(checkout => {
-    checkoutOne: checkout && checkout.one;
-})(AddCheckoutList);
+export default AddCheckoutList;

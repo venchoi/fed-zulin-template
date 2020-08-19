@@ -8,16 +8,20 @@ const PageModuleHeader = () => {
             title: '合同编号',
             dataIndex: 'bank',
             key: 'bank',
-            width: 100,
         },
         {
             title: '合同期限',
             dataIndex: 'account',
             key: 'account',
-            width: 100,
+        },
+        {
+            title: '所属项目',
+            dataIndex: 'project',
+            key: 'project',
         },
     ];
     // dataSource={data}
+    const obj = { width: '300px' };
     return (
         <>
             <div>
@@ -27,7 +31,7 @@ const PageModuleHeader = () => {
                     选择合同
                 </Button>
             </div>
-            <Table columns={columns} size="small" bordered />
+            <Table columns={columns} size="small" bordered style={obj} />
         </>
     );
 };
