@@ -12,7 +12,7 @@ import { ColumnProps } from 'antd/lib/table';
 import { statusItem, Statistics } from '../config';
 import AdjustmentChart from './adjustmentTimeLine';
 import PriceItem from './price';
-import FedDataSection from '@/components/FedDataSection/FedDataSection';
+import FedDataSection from '@c/FedDataSection';
 import FedPagination from '@/components/FedPagination';
 import moment from 'moment';
 
@@ -141,8 +141,10 @@ const AdjustmentRecord = ({ id = '' }) => {
     );
     return (
         <>
-            <FedDataSection section={{ title: '单价变动折线图', content: <AdjustmentChart id={id} /> }} />
-            <FedDataSection section={{ title: '调整记录', content: recordContent }} />
+            <FedDataSection title="单价变动折线图">
+                <AdjustmentChart id={id} />
+            </FedDataSection>
+            <FedDataSection title="调整记录">{recordContent}</FedDataSection>
         </>
     );
 };

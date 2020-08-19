@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { IAddAssetHolder, IAddAssetHolderBank, IAssetHolderBankList } from '@t/assetHolder';
-import FedDataSection from '@c/FedDataSection/FedDataSection';
+import FedDataSection from '@c/FedDataSection';
 import { Modal, Row, Col, Form, message } from 'antd';
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { valueOf } from '@/types/global';
@@ -192,7 +192,9 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
         <>
             <div className="asset-holder-base-info-wrap">
                 {sectionList.map(section => (
-                    <FedDataSection key={section.title} section={section} />
+                    <FedDataSection key={section.title} {...section}>
+                        {section.content}
+                    </FedDataSection>
                 ))}
                 {showAddAccount ? (
                     <AddBankForm onCancel={onCancel} onOk={onSave} assetHolderId={detail.id} isSubmit />

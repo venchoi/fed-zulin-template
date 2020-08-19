@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { IAdjustmentDetail, IStepData } from '@/types/meter';
-import FedDataSection from '@c/FedDataSection/FedDataSection';
+import FedDataSection from '@c/FedDataSection';
 import FedDataRow from '@c/FedDataSection/FedDataRow';
 import FedUpload from '@c/FedUpload';
 import { valueOf } from '@/types/global';
@@ -94,7 +94,7 @@ const BaseInfo = ({ detail }: { detail: IAdjustmentDetail }) => {
             {data.map((itemList, index) => (
                 <div key={`baseinfo-item-${index}`} className="baseinfo-item">
                     {itemList.map(item => (
-                        <FedDataRow key={item.label} rowData={item} valueWidth="auto" />
+                        <FedDataRow key={item.label} rowData={item} valueWidth="auto" labelWidth="98px" />
                     ))}
                 </div>
             ))}
@@ -115,7 +115,9 @@ const BaseInfo = ({ detail }: { detail: IAdjustmentDetail }) => {
     return (
         <>
             {sectionList.map(section => (
-                <FedDataSection key={section.title} section={section} />
+                <FedDataSection key={section.title} {...section}>
+                    {section.content}
+                </FedDataSection>
             ))}
         </>
     );

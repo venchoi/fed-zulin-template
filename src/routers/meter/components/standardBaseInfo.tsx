@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { IStandardICURDParams, IStandardPriceDetail } from '@/types/meter';
-import FedDataSection from '@c/FedDataSection/FedDataSection';
+import FedDataSection from '@c/FedDataSection';
 import FedDataRow from '@c/FedDataSection/FedDataRow';
 import { valueOf } from '@/types/global';
 import PriceItem from './price';
@@ -68,7 +68,7 @@ const BaseInfo = ({ detail }: { detail: IStandardPriceDetail }) => {
             {data.map((itemList, index) => (
                 <div key={`baseinfo-item-${index}`} className="baseinfo-item">
                     {itemList.map(item => (
-                        <FedDataRow key={item.label} rowData={item} />
+                        <FedDataRow key={item.label} rowData={item} labelWidth="98px" />
                     ))}
                 </div>
             ))}
@@ -89,7 +89,9 @@ const BaseInfo = ({ detail }: { detail: IStandardPriceDetail }) => {
     return (
         <>
             {sectionList.map(section => (
-                <FedDataSection key={section.title} section={section} />
+                <FedDataSection key={section.title} {...section}>
+                    {section.content}
+                </FedDataSection>
             ))}
         </>
     );
