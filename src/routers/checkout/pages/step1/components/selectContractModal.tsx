@@ -5,7 +5,9 @@
 import React, { useState } from 'react';
 import { Modal, Table } from 'antd';
 import TreeProjectSelect from '@c/TreeProjectSelect';
-import './contractShowTable.less';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { getContractList } from '../../../services/index';
+import './selectContractModal.less';
 
 interface IProps {
     onCancel: () => void;
@@ -18,6 +20,7 @@ interface projectsValue {
 }
 
 const rowSelection = {
+    type: 'radio',
     onChange: (selectedRowKeys: string, selectedRows: any) => {
         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
     },
@@ -39,61 +42,68 @@ const SelectContractModal = ({ onCancel }: IProps) => {
                         {item}
                     </a>
                 );
-                // return <Link to="/asset-holder/list">{item}</Link>;
             },
             width: 209,
             fixed: 'left',
         },
         {
             title: '资源名称',
-            dataIndex: 'time',
-            key: 'time',
+            dataIndex: 'rooms',
+            key: 'rooms',
             width: 330,
+            render: (item: any) => {
+                if (item && item.length > 1) {
+                    return (
+                        <div>
+                            <span className="room-resources">
+                                {item.map((r: any) => r.room_name || '-').join('、')}
+                            </span>
+                            <InfoCircleOutlined />
+                        </div>
+                    );
+                } else if (item && item.length === 1) {
+                    return (item[0] || {}).room_name || '-';
+                }
+                return '-';
+            },
         },
         {
             title: '承租方',
-            dataIndex: 'project',
-            key: 'project',
+            dataIndex: 'organization_name',
+            key: 'organization_name',
             width: 245,
         },
         {
             title: '合同期限',
             dataIndex: 'project1',
             key: 'project1',
+            render: (text: string | undefined, item: any) => {
+                return item ? (
+                    <span>
+                        {item.sign_date}至{item.end_date}
+                    </span>
+                ) : (
+                    '-'
+                );
+            },
         },
     ];
-    const data = [
-        {
-            key: '1',
-            code: 'TZ20200726015428838',
-            time: '5地块-11栋-华银路19号02幢-102室',
-            project: '南京亿宏佳通讯科技有限公司',
-            project1: '2019-08-08 至 2020-08-08',
-        },
-        {
-            key: '2',
-            code: 'TZ20200726015428839',
-            time: '打包资源名称：四组团-（11地块）12幢-商铺',
-            project: '南京亿宏佳通讯科技有限公司',
-            project1: '2019-08-08 至 2020-08-08',
-        },
-        {
-            key: '3',
-            code: 'TZ20200726015428839',
-            time: '5地块-11栋-华银路19号02幢-102室',
-            project: '南京亿宏佳通讯科技有限公司',
-            project1: '2019-08-08 至 2020-08-08',
-        },
-    ];
-
+    const [data, setData] = useState<[]>([]);
+    const [loading, setLoading] = useState(true);
     // 获取数据
-    const getContract = () => {
-        // contract/contract/list
+    const getContract = async () => {
+        const { data } = await getContractList({ keywords: '', project_ids: '', page: 1, page_size: 20 });
+        if (data) {
+            const items = data.items;
+            setData(items);
+        }
+        setLoading(false);
     };
 
     // 切换项目回调
     const handleTreeSelected = (selectedProject: projectsValue) => {
         console.log('projsValue', selectedProject);
+        getContract().then();
     };
 
     return (
@@ -113,17 +123,15 @@ const SelectContractModal = ({ onCancel }: IProps) => {
                         <TreeProjectSelect onTreeSelected={handleTreeSelected} width={324} isjustselect="true" />
                     </div>
                     <Table
-                        rowSelection={{
-                            type: 'radio',
-                            ...rowSelection,
-                        }}
+                        rowSelection={rowSelection}
                         dataSource={data}
                         columns={columns}
                         size="small"
                         bordered
                         pagination={false}
                         className="contract-table"
-                        scroll={{ x: 1100 }}
+                        scroll={{ x: 1100, y: 560 }}
+                        loading={loading}
                     />
                 </div>
             </Modal>
