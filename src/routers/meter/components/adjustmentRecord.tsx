@@ -12,7 +12,7 @@ import { ColumnProps } from 'antd/lib/table';
 import { statusItem, Statistics } from '../config';
 import AdjustmentChart from './adjustmentTimeLine';
 import PriceItem from './price';
-import FedDataSection from '@/components/FedDataSection/FedDataSection';
+import FedDataSection from '@c/FedDataSection';
 import FedPagination from '@/components/FedPagination';
 import moment from 'moment';
 

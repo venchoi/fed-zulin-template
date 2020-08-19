@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import './FedDataSection.less';
+import './index.less';
 
 /**
  * 数据段, 常用于详情页

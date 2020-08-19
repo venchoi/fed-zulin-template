@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { IAdjustmentDetail, IStepData } from '@/types/meter';
-import FedDataSection from '@c/FedDataSection/FedDataSection';
+import FedDataSection from '@c/FedDataSection';
 import FedDataRow from '@c/FedDataSection/FedDataRow';
 import FedUpload from '@c/FedUpload';
 import { valueOf } from '@/types/global';

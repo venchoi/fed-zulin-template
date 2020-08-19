@@ -3,7 +3,7 @@
  */
 import React from 'react';
 import { IStandardICURDParams, IStandardPriceDetail } from '@/types/meter';
-import FedDataSection from '@c/FedDataSection/FedDataSection';
+import FedDataSection from '@c/FedDataSection';
 import FedDataRow from '@c/FedDataSection/FedDataRow';
 import { valueOf } from '@/types/global';
 import PriceItem from './price';
