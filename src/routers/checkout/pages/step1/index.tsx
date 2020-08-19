@@ -11,7 +11,7 @@ import CheckoutStepBar from '../../components/stepBar';
 import PageModuleHeader from '../../components/pageModuleHeader';
 import ShowContractTable from './components/contractShowTable';
 import { ProjectItemType, AssetSelectBaseType } from '../../types';
-import './pages.less';
+import './index.less';
 
 type AssetSelectProps = {
     actions: {
@@ -63,7 +63,7 @@ class AddCheckoutOne extends React.Component<AssetSelectProps, AssetsSelectState
 
 function mapStateToProps(state: any) {
     return {
-        checkoutOne: state.checkout.one,
+        checkoutStep1: state.checkout.step1,
     };
 }
 export default connect(mapStateToProps)(AddCheckoutOne);

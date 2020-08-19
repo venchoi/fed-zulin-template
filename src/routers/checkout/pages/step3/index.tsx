@@ -4,7 +4,7 @@
 import React, { ReactElement } from 'react';
 import { connect } from 'dva';
 import { ProjectItemType, AssetSelectBaseType } from '../../types';
-import '../step1/pages.less';
+import '../index.less';
 
 type AssetSelectProps = {
     actions: {
@@ -35,7 +35,7 @@ class AddCheckoutThree extends React.Component<AssetSelectProps, AssetsSelectSta
 
 function mapStateToProps(state: any) {
     return {
-        checkoutThree: state.checkout.three,
+        checkoutStep3: state.checkout.step3,
     };
 }
 export default connect(mapStateToProps)(AddCheckoutThree);

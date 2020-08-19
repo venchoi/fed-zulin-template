@@ -1,10 +1,10 @@
 /**
- * 办理退租步骤页---- 第三步
+ * 办理退租步骤页---- 第二步
  */
 import React, { ReactElement } from 'react';
 import { connect } from 'dva';
 import { ProjectItemType, AssetSelectBaseType } from '../../types';
-import '../step1/pages.less';
+import '../index.less';
 
 type AssetSelectProps = {
     actions: {
@@ -35,7 +35,7 @@ class AddCheckoutTwo extends React.Component<AssetSelectProps, AssetsSelectState
 
 function mapStateToProps(state: any) {
     return {
-        checkoutThree: state.checkout.three,
+        checkoutStep2: state.checkout.step2,
     };
 }
 export default connect(mapStateToProps)(AddCheckoutTwo);
