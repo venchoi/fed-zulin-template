@@ -26,7 +26,7 @@ function FedDataRow(props: IProps) {
                 className={`fed-data-row-label  ${
                     rowData.labelAlign ? `fed-data-row-label-align-${rowData.labelAlign}` : ''
                 }`}
-                style={{ width: labelWidth || '98px' }}
+                style={{ width: labelWidth }}
             >
                 {rowData.label}:
             </div>

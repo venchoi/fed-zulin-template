@@ -141,10 +141,10 @@ const AdjustmentRecord = ({ id = '' }) => {
     );
     return (
         <>
-            <FedDataSection {...{ title: '单价变动折线图', content: <AdjustmentChart id={id} /> }}>
-                {section.content}
+            <FedDataSection title="单价变动折线图">
+                <AdjustmentChart id={id} />
             </FedDataSection>
-            <FedDataSection {...{ title: '调整记录', content: recordContent }}>{section.content}</FedDataSection>
+            <FedDataSection title="调整记录">{recordContent}</FedDataSection>
         </>
     );
 };

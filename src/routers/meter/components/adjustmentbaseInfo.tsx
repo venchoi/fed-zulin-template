@@ -94,7 +94,7 @@ const BaseInfo = ({ detail }: { detail: IAdjustmentDetail }) => {
             {data.map((itemList, index) => (
                 <div key={`baseinfo-item-${index}`} className="baseinfo-item">
                     {itemList.map(item => (
-                        <FedDataRow key={item.label} rowData={item} valueWidth="auto" />
+                        <FedDataRow key={item.label} rowData={item} valueWidth="auto" labelWidth="98px" />
                     ))}
                 </div>
             ))}

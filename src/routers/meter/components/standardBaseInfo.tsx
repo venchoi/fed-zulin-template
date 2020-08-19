@@ -68,7 +68,7 @@ const BaseInfo = ({ detail }: { detail: IStandardPriceDetail }) => {
             {data.map((itemList, index) => (
                 <div key={`baseinfo-item-${index}`} className="baseinfo-item">
                     {itemList.map(item => (
-                        <FedDataRow key={item.label} rowData={item} />
+                        <FedDataRow key={item.label} rowData={item} labelWidth="98px" />
                     ))}
                 </div>
             ))}
