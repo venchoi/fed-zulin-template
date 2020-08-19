@@ -1,18 +1,22 @@
 import React from 'react';
-import { message, Table, Popconfirm, Input, Button } from 'antd';
+import { Link } from 'dva/router';
+import { Table, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 
 const PageModuleHeader = () => {
     const columns = [
         {
             title: '合同编号',
-            dataIndex: 'bank',
-            key: 'bank',
+            dataIndex: 'code',
+            key: 'code',
+            render: (item: string) => {
+                return <Link to="/asset-holder/list">{item}</Link>;
+            },
         },
         {
             title: '合同期限',
-            dataIndex: 'account',
-            key: 'account',
+            dataIndex: 'time',
+            key: 'time',
         },
         {
             title: '所属项目',
@@ -20,18 +24,25 @@ const PageModuleHeader = () => {
             key: 'project',
         },
     ];
-    // dataSource={data}
-    const obj = { width: '300px' };
+    const data = [
+        {
+            code: 'TZ20200726015428838',
+            time: '2019-08-08 至 2020-08-08',
+            project: '丁家庄项目',
+        },
+    ];
+    const obj = { width: '844px', marginTop: '16px' };
     return (
         <>
-            <div>
-                退租合同：{' '}
-                <Button>
+            <div style={{ marginTop: '16px' }}>
+                <span style={{ color: '#F73E4D', marginRight: '4px' }}>*</span>退租合同：
+                <Button style={{ marginLeft: '8px' }}>
                     <PlusOutlined />
                     选择合同
                 </Button>
             </div>
-            <Table columns={columns} size="small" bordered style={obj} />
+
+            <Table dataSource={data} columns={columns} size="small" bordered pagination={false} style={obj} />
         </>
     );
 };

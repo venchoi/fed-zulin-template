@@ -4,7 +4,7 @@
 import React, { ReactElement } from 'react';
 import { connect } from 'dva';
 import { ProjectItemType, AssetSelectBaseType } from '../../types';
-import '../index.less';
+import './index.less';
 
 type AssetSelectProps = {
     actions: {
