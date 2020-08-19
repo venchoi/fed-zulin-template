@@ -60,6 +60,55 @@ const routes = [
         }),
     },
     {
+        path: '/checkout/page-one',
+        component: Loadable({
+            loader: () => import('./routers/checkout/pages/step1/index'),
+            loading,
+        }),
+    },
+    {
+        path: '/checkout/page-two',
+        component: Loadable({
+            loader: () => import('./routers/checkout/pages/step2/index'),
+            loading,
+        }),
+    },
+    {
+        path: '/checkout/page-three',
+        component: Loadable({
+            loader: () => import('./routers/checkout/pages/step3/index'),
+            loading,
+        }),
+    },
+    {
+        path: '/checkout/page-four',
+        component: Loadable({
+            loader: () => import('./routers/checkout/pages/step4/index'),
+            loading,
+        }),
+    },
+    {
+        path: '/checkout/page-five',
+        component: Loadable({
+            loader: () => import('./routers/checkout/pages/step5/index'),
+            loading,
+        }),
+    },
+    {
+        path: '/checkout/page-six',
+        component: Loadable({
+            loader: () => import('./routers/checkout/pages/step6/index'),
+            loading,
+        }),
+    },
+    {
+        path: '/checkout/list',
+        component: Loadable({
+            loader: () => import('./routers/checkout/index'),
+            loading,
+        }),
+    },
+    {
         path: '/ui',
         component: Loadable({
             loader: () => import('./routers/ui'),

@@ -6,6 +6,7 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 import config from './config';
 import App from './app';
 import mainModel from './model/main';
+import checkout from './model/checkout';
 import './assets/init/normalize.css';
 import './assets/less/index.less';
 import { createBrowserHistory as createHistory } from 'history';
@@ -34,7 +35,7 @@ const app = dva({
 });
 app.use(createLoading());
 app.model(mainModel);
-
+app.model(checkout);
 function renderWithHotReload(C: any) {
     app.router((obj: any) => (
         <ConfigProvider locale={zhCN}>
