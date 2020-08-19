@@ -192,7 +192,9 @@ const BaseInfo = ({ detail, account, onUpdate }: IDetail) => {
         <>
             <div className="asset-holder-base-info-wrap">
                 {sectionList.map(section => (
-                    <FedDataSection key={section.title} section={section} />
+                    <FedDataSection key={section.title} {...section}>
+                        {section.content}
+                    </FedDataSection>
                 ))}
                 {showAddAccount ? (
                     <AddBankForm onCancel={onCancel} onOk={onSave} assetHolderId={detail.id} isSubmit />

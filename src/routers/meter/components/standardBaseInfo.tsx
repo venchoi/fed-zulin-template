@@ -89,7 +89,9 @@ const BaseInfo = ({ detail }: { detail: IStandardPriceDetail }) => {
     return (
         <>
             {sectionList.map(section => (
-                <FedDataSection key={section.title} section={section} />
+                <FedDataSection key={section.title} {...section}>
+                    {section.content}
+                </FedDataSection>
             ))}
         </>
     );

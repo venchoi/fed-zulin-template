@@ -6,25 +6,23 @@ import './index.less';
  * @param { object } section 数据段 eg: { title: '基本信息', content: { ReactNode }}
  */
 interface IProps {
-    section: {
-        title?: string | ReactNode;
-        showEditIcon?: ReactNode;
-        extra?: ReactNode;
-        content?: string | ReactNode;
-    };
+    title?: string | ReactNode;
+    showEditIcon?: ReactNode;
+    extra?: ReactNode;
+    children?: string | ReactNode;
 }
 function FedDataSection(props: IProps) {
-    const { section } = props;
+    const { title, showEditIcon, extra, children } = props;
     return (
         <div className="fed-data-section">
-            {section.title ? (
+            {title ? (
                 <div className="fed-data-section-title">
-                    {section.title}
-                    {section.showEditIcon ? section.showEditIcon : null}
-                    {section.extra ? <div className="fed-data-section-title-extra">{section.extra}</div> : null}
+                    {title}
+                    {showEditIcon ? showEditIcon : null}
+                    {extra ? <div className="fed-data-section-title-extra">{extra}</div> : null}
                 </div>
             ) : null}
-            {section.content ? <div className="fed-data-section-content">{section.content}</div> : null}
+            {children ? <div className="fed-data-section-content">{children}</div> : null}
         </div>
     );
 }
