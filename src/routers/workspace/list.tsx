@@ -5,13 +5,24 @@ import TreeProjectSelect from '@c/TreeProjectSelect';
 import { WorkspaceIndexPageProps } from './list.d';
 import FedIcon from '@c/FedIcon';
 import moment from 'moment';
+import TodoPane from './components/todoPane';
+import { projsValue } from '@t/project';
+import { categoryMap } from './todoCategoryMaps';
 import './index.less';
 
 const weekDayMap = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'];
+const todoTypes = Object.keys(categoryMap);
 export const WorkspaceIndexPage = (props: WorkspaceIndexPageProps) => {
     const { user } = props;
     const [isLoading, setIsloading] = useState(false);
-    const handleTreeSelected = () => {};
+    const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
+    const [selectedProjectNames, setselectedProjectNames] = useState<string[]>([]); // 当前选中的项目
+
+    const handleTreeSelected = (selecctedProject: projsValue) => {
+        setselectedProjectIds(selecctedProject.projIds);
+        setselectedProjectNames(selecctedProject.projNames);
+    };
+
     const timeStr = moment().format('YYYY年MM月DD日') + ' ' + weekDayMap[moment().isoWeekday() - 1];
     return (
         <Spin spinning={isLoading} wrapperClassName="content-container-spin">
@@ -31,11 +42,17 @@ export const WorkspaceIndexPage = (props: WorkspaceIndexPageProps) => {
                     </div>
                     <div className="workspace-content">
                         <div className="title-area">
-                            <h2>待办事项</h2>
+                            <h2 className="title">待办事项</h2>
                             <TreeProjectSelect onTreeSelected={handleTreeSelected} width={312} />
                         </div>
-                        <Tabs defaultActiveKey="1">
-                            <Tabs.TabPane tab="财务待办" key="财务待办"></Tabs.TabPane>
+                        <Tabs defaultActiveKey="1" size="small" className="workspace-tabs">
+                            {todoTypes.map(typeItem => {
+                                return (
+                                    <Tabs.TabPane tab={categoryMap[typeItem].name} key={categoryMap[typeItem].type}>
+                                        <TodoPane type={categoryMap[typeItem].type} projs={selectedProjectIds} />
+                                    </Tabs.TabPane>
+                                );
+                            })}
                         </Tabs>
                     </div>
                 </div>

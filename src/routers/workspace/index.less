@@ -21,6 +21,7 @@
         justify-content: flex-start;
         .workspace-content {
             flex: 1;
+            overflow: hidden;
             margin-top: 16px;
             background-color: white;
             box-sizing: border-box;
@@ -31,6 +32,7 @@
     .top-area {
         overflow: auto;
         padding: 16px;
+        min-height: 146px;
         border: 1px solid #EBEFF2;
         background: white;
         border-radius: 4px;
@@ -66,6 +68,44 @@
                 .second-line {
                     color: #868B8F;
                     margin-bottom: 0;
+                }
+            }
+        }
+    }
+    .workspace-content {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        .title-area {
+            display: flex;
+            padding: 16px;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            .title {
+                font-size: 16px;
+                line-height: 32px;
+                margin-bottom: 0;
+            }
+        }
+        .workspace-tabs {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: flex-start;
+            flex: 1;
+            .ant-tabs-nav {
+                height: 38px;
+                // 重置下 tab 组件的样式
+                margin-bottom: 0;
+                .ant-tabs-nav-wrap {
+                    padding: 0 16px;
+                }
+            }
+            .ant-tabs-content-holder {
+                flex: 1;
+                width: 100%;
+                .ant-tabs-content {
+                    height: 100%;
+                    width: 100%;
                 }
             }
         }

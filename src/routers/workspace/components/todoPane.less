@@ -1,0 +1,65 @@
+.workspace-todo-pane {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+    .todo-category-list {
+        width: 200px;
+        min-width: 200px;
+        height: 100%;
+        padding-top: 16px;
+        overflow-y: auto;
+        border-right: 1px solid #EBEFF2;
+        .category-item {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 9px 16px;
+            color: #868B8F;
+            &.active {
+                position: relative;
+                color: #0D86FF;
+                background-color: #EBF9FF;
+                &::after {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    content: '';
+                    display: block;
+                    height: 100%;
+                    width: 2px;
+                    background-color: #0D86FF;
+                }
+            }
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+    .todo-table-container {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        flex: 1;
+        height: 100%;
+        overflow: hidden;
+        .table-bar {
+            display: flex;
+            padding: 16px;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            line-height: 24px;
+            .active-name {
+                font-size: 16px;
+                color: #313233;
+            }
+            button {
+                height: 24px;
+            }
+        }
+        .fed-table {
+            flex: 1;
+        }
+    }
+}
