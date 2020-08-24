@@ -1,9 +1,6 @@
 import { User } from '../../types/common';
 import { ColumnType } from 'antd/es/table/Column';
 
-enum TodoType {
-    finance,
-}
 export interface WorkspaceIndexPageProps {
     user: User;
 }
@@ -19,7 +16,7 @@ export interface category {
 export interface categoryMapType {
     [type: string]: {
         name: string;
-        type: TodoType;
+        type: string;
         categories: category[];
     };
 }
@@ -29,7 +26,7 @@ export interface categoryTableMapType {
 }
 
 export interface TodoProps {
-    type: TodoType;
+    type: string;
     projs: string[];
 }
 

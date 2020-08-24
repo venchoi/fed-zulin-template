@@ -1,8 +1,8 @@
-import { categoryMapType, TodoType } from './list.d';
+import { categoryMapType } from './list.d';
 export const categoryMap: categoryMapType = {
     finance: {
         name: '财务待办',
-        type: TodoType.finance,
+        type: 'finance',
         categories: [
             {
                 name: '账单待审核',

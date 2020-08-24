@@ -27,12 +27,12 @@ export const TodoPane = (props: TodoProps) => {
         categoryMap[type].categories.forEach(item => {
             map[item.id] = item;
         });
-        console.log(map);
         return map;
     }, [categoryMap[type].categories]);
 
     // 获取左侧场景列表数据
     const fetchCategoryListData = async () => {
+        console.log(projs);
         if (!projs || projs.length <= 0) {
             return;
         }
