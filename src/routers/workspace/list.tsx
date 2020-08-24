@@ -17,7 +17,6 @@ export const WorkspaceIndexPage = (props: WorkspaceIndexPageProps) => {
     const [isLoading, setIsloading] = useState(false);
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
     const [selectedProjectNames, setselectedProjectNames] = useState<string[]>([]); // 当前选中的项目
-
     const handleTreeSelected = (selecctedProject: projsValue) => {
         setselectedProjectIds(selecctedProject.projIds);
         setselectedProjectNames(selecctedProject.projNames);
@@ -25,39 +24,39 @@ export const WorkspaceIndexPage = (props: WorkspaceIndexPageProps) => {
 
     const timeStr = moment().format('YYYY年MM月DD日') + ' ' + weekDayMap[moment().isoWeekday() - 1];
     return (
-        <Spin spinning={isLoading} wrapperClassName="content-container-spin">
-            <div className="content-container workspace">
-                <div className="content page-container">
-                    <div className="top-area">
-                        <h1>工作台</h1>
-                        <div className="user-info">
-                            <div className="avatar">
-                                <FedIcon type="icon-icn_avatar" className="default-avatar" />
-                            </div>
-                            <div className="des">
-                                <p className="first-line">你好，{user.display_name}，祝开心每一天！</p>
-                                <p className="second-line time">{timeStr}</p>
-                            </div>
+        // <Spin spinning={isLoading} wrapperClassName="content-container-spin">
+        <div className="content-container workspace">
+            <div className="content page-container">
+                <div className="top-area">
+                    <h1>工作台</h1>
+                    <div className="user-info">
+                        <div className="avatar">
+                            <FedIcon type="icon-icn_avatar" className="default-avatar" />
                         </div>
-                    </div>
-                    <div className="workspace-content">
-                        <div className="title-area">
-                            <h2 className="title">待办事项</h2>
-                            <TreeProjectSelect onTreeSelected={handleTreeSelected} width={312} />
+                        <div className="des">
+                            <p className="first-line">你好，{user.display_name}，祝开心每一天！</p>
+                            <p className="second-line time">{timeStr}</p>
                         </div>
-                        <Tabs defaultActiveKey="1" size="small" className="workspace-tabs">
-                            {todoTypes.map(typeItem => {
-                                return (
-                                    <Tabs.TabPane tab={categoryMap[typeItem].name} key={categoryMap[typeItem].type}>
-                                        <TodoPane type={categoryMap[typeItem].type} projs={selectedProjectIds} />
-                                    </Tabs.TabPane>
-                                );
-                            })}
-                        </Tabs>
                     </div>
                 </div>
+                <div className="workspace-content">
+                    <div className="title-area">
+                        <h2 className="title">待办事项</h2>
+                        <TreeProjectSelect onTreeSelected={handleTreeSelected} width={312} />
+                    </div>
+                    <Tabs defaultActiveKey="1" size="small" className="workspace-tabs">
+                        {todoTypes.map(typeItem => {
+                            return (
+                                <Tabs.TabPane tab={categoryMap[typeItem].name} key={categoryMap[typeItem].type}>
+                                    <TodoPane type={categoryMap[typeItem].type} projs={selectedProjectIds} />
+                                </Tabs.TabPane>
+                            );
+                        })}
+                    </Tabs>
+                </div>
             </div>
-        </Spin>
+        </div>
+        // </Spin>
     );
 };
 

@@ -22,6 +22,14 @@ export const TodoPane = (props: TodoProps) => {
         page_size: 20,
         type: '',
     }); // 列表搜索参数
+    const categoryTableMap = useMemo(() => {
+        const map = {};
+        categoryMap[type].categories.forEach(item => {
+            map[item.id] = item;
+        });
+        console.log(map);
+        return map;
+    }, [categoryMap[type].categories]);
 
     // 获取左侧场景列表数据
     const fetchCategoryListData = async () => {
@@ -32,9 +40,19 @@ export const TodoPane = (props: TodoProps) => {
         const { data, result } = await getCategoryList({
             type,
         });
-        setCategories(categoryMap[type].categories);
+        // setCategories(categoryMap[type].categories);
         if (result && data) {
-            setCategories(data.items || []);
+            const categories = data.map(
+                (item: { code: string; title: string }, index: number): category => {
+                    return {
+                        ...categoryTableMap[item.code],
+                        id: item.code,
+                        name: item.title,
+                        active: index === 0,
+                    };
+                }
+            );
+            setCategories(categories || []);
         }
         setIsCategoriesLoading(false);
     };
