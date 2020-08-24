@@ -57,6 +57,7 @@ export default {
     },
     reducers: {
         initBaseInfo(state: initState, payload: initDataPayloadType) {
+            console.log(payload);
             return {
                 ...state,
                 ...payload.data,

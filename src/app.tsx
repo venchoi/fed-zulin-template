@@ -162,7 +162,7 @@ const routes = [
     },
 ];
 
-class App extends React.PureComponent<RouteComponentProps> {
+class App extends React.PureComponent<Props> {
     public render() {
         return (
             <BrowserRouter basename="/middleground">
