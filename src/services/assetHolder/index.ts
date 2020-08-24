@@ -72,3 +72,7 @@ export const getAssetHolderBankList = (data: IAssetHolderBankList) => {
 export const deleteAssetHolder = (data: { id: string }) => {
     return ajax('/asset/holder/delete', { ...data, _csrf: '' }, 'POST');
 };
+
+export const batchDeleteAssetHolder = (data: { id: string[] }) => {
+    return ajax('/asset/holder/delete', { ...data, _csrf: '' }, 'POST');
+};

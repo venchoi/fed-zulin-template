@@ -15,10 +15,8 @@ const Add = ({ history, match }: RouteComponentProps) => {
     const [showAddBankAccount, setShowAddBankAccount] = useState(false);
     const [bankList, setBankList] = useState<IAddAssetHolderBank[]>([]);
     let id = '';
-    if (match && match.params) {
-        if (match.params.id) {
-            id = match.params.id;
-        }
+    if (match && match.params && match.params['id']) {
+        id = match.params['id'];
     }
     // 获取 基本信息
     const fetchDetail = async () => {
@@ -152,11 +150,16 @@ const Add = ({ history, match }: RouteComponentProps) => {
             />
             <Form onFinish={finishHandle} form={form} style={{ height: '88%', display: 'flex' }}>
                 <div className="layout-detail asset-holder-add-wrap">
-                    <Card className="report-card" title="基本信息" bordered={false} style={{ minHeight: '300px' }}>
+                    <Card
+                        className="report-card no-bottom-border"
+                        title="基本信息"
+                        bordered={false}
+                        style={{ minHeight: '300px' }}
+                    >
                         <AddBaseForm id="" />
                     </Card>
                     <Card
-                        className="report-card"
+                        className="report-card bottom-border-padding-24"
                         title="收款账户"
                         bordered={false}
                         extra={extra}
