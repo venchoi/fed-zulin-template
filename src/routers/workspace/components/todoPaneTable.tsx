@@ -32,6 +32,7 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
     // 跳转到具体页面操作
     const handleToOp = (record: any) => {
         const url = getRidrectUrl(activeCategory.id, record);
+        // url && window.open('https://rental-ykj-test.myfuwu.com.cn'+url);
         url && window.open(url);
     };
 
