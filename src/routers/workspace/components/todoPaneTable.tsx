@@ -42,44 +42,48 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
         const { data, result } = await getTodoListByCategory(searchParams);
         if (result && data) {
             let { column = [], list = [], total = 0 } = data;
-            list = [
-                {
-                    id: '243434',
-                    code: 'AR20200429105730526',
-                    contract_code: 'test',
-                    name: '342423432',
-                    age: 234234,
-                },
-            ];
-            column = [
-                {
-                    index: 'contract_code',
-                    name: '合同编号',
-                    type: 'text',
-                },
-                {
-                    index: 'name',
-                    name: '名字',
-                    type: 'text',
-                },
-                {
-                    index: 'age',
-                    name: '年龄',
-                    type: 'amount',
-                },
-            ];
-            total = 20;
+            // list = [
+            //     {
+            //         id: '243434',
+            //         code: 'AR20200429105730526',
+            //         contract_code: 'test',
+            //         name: '342423432',
+            //         age: 234234,
+            //     },
+            // ];
+            // column = [
+            //     {
+            //         index: 'contract_code',
+            //         name: '合同编号',
+            //         type: 'text',
+            //     },
+            //     {
+            //         index: 'name',
+            //         name: '名字',
+            //         type: 'text',
+            //     },
+            //     {
+            //         index: 'age',
+            //         name: '年龄',
+            //         type: 'amount',
+            //     },
+            // ];
+            // total = 20;
             setDataList(list);
             setTotalNums(total);
-            const tableColumns = column.map((column: any) => {
+            const tableColumns = (column || []).map((column: any) => {
                 const { index, name, type } = column;
                 let col: ColumnProps<any> = {
                     dataIndex: index,
                     title: name,
+                    ellipsis: {
+                        showTitle: true,
+                    },
                 };
+                const key = index;
                 if (type === 'amount') {
                     col.render = (text: string, record: any, index: number) => {
-                        return comma(formatNum(record[index]));
+                        return comma(formatNum(record[key]));
                     };
                 }
                 return col;
@@ -144,25 +148,25 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
                     dataSource={dataList}
                     scroll={{
                         x: 800,
-                        y: 'calc( 100vh - 340px )',
+                        y: 'calc( 100vh - 525px )',
                     }}
                 />
             </Spin>
-            {dataList.length > 0 ? (
-                <FedPagination
-                    wrapperClassName="derate-list-pagination"
-                    onShowSizeChange={(current, page_size) => {
-                        setsearchParams({ ...searchParams, page: 1, page_size });
-                    }}
-                    onChange={(page_index, page_size) => {
-                        setsearchParams({ ...searchParams, page: page_index, page_size: page_size || 10 });
-                    }}
-                    current={searchParams.page}
-                    pageSize={searchParams.page_size}
-                    showTotal={total => `共${Math.ceil(+total / +(searchParams.page_size || 1))}页， ${total}条记录`}
-                    total={+totalNums}
-                />
-            ) : null}
+            {/* {dataList.length > 0 ? ( */}
+            <FedPagination
+                wrapperClassName="derate-list-pagination"
+                onShowSizeChange={(current, page_size) => {
+                    setsearchParams({ ...searchParams, page: 1, page_size });
+                }}
+                onChange={(page_index, page_size) => {
+                    setsearchParams({ ...searchParams, page: page_index, page_size: page_size || 10 });
+                }}
+                current={searchParams.page}
+                pageSize={searchParams.page_size}
+                showTotal={total => `共${Math.ceil(+total / +(searchParams.page_size || 1))}页， ${total}条记录`}
+                total={+totalNums}
+            />
+            {/* ) : null} */}
         </>
     );
 };
