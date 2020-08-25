@@ -2,6 +2,7 @@ export const getRidrectUrl = (code: string, record: any) => {
     if (!code) {
         return;
     }
+    console.log(record);
     switch (code) {
         // 账单待审核
         case 'bill_reviewed':
@@ -25,7 +26,9 @@ export const getRidrectUrl = (code: string, record: any) => {
         case 'bill_collected':
             return `/static/billing/list?selectStatusParents=${window.encodeURIComponent(
                 '待收款'
-            )}&selectedStatus=${window.encodeURIComponent('已审核')}&keyword=${record.code}`;
+            )}&selectedStatus=${window.encodeURIComponent('已审核')}&payEndDateType=${window.encodeURIComponent(
+                '自定义筛选'
+            )}&today=1&keyword=${record.code}`;
             break;
         // 账单已逾期未处理
         case 'bill_overdue':
@@ -36,12 +39,12 @@ export const getRidrectUrl = (code: string, record: any) => {
         // 营业额抽成待审核
         case 'turnover_reviewed':
             return `/static/commission/list?commissionSelectedStatus=${window.encodeURIComponent('待审核')}&keyword=${
-                record.code
-            }&_smp=Rental.Commission`;
+                record.contract_code
+            }&proj_id=${record.proj_id}&proj_name=${record.proj_name}&_smp=Rental.Commission`;
             break;
         // 资源待生成抽成
         case 'resources_generated':
-            return `/static/commission/list?_smp=Rental.Commission`;
+            return `/static/commission/list?proj_id=${record.proj_id}&proj_name=${record.proj_name}&_smp=Rental.Commission`;
             break;
         // 押金账单待完成收款
         case 'deposit_bill_collection':
@@ -59,7 +62,7 @@ export const getRidrectUrl = (code: string, record: any) => {
             break;
         // 本月未开具缴费通知单账单
         case 'bill_not_note':
-            return `/fed/bill-reminder/pay-note-open`;
+            return `/fed/bill-reminder/pay-note-open?proj_id=${record.proj_id}&proj_name=${record.proj_name}&currentMonth=1`;
             break;
     }
 };

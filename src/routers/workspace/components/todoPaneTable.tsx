@@ -39,7 +39,6 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
     // 获取表格数据
     const getTableInfo = async (isGetColumns?: boolean) => {
         setIsUpdating(true);
-        console.log(searchParams);
         const { data, result } = await getTodoListByCategory(searchParams);
         if (result && data) {
             let { column = [], list = [], total = 0 } = data;
@@ -50,6 +49,8 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
             //         contract_code: 'test',
             //         name: '342423432',
             //         age: 234234,
+            //         proj_id: '39f3ea9d-0836-98c5-519e-f302d67ad9af',
+            //         proj_name: '自动测试'
             //     },
             // ];
             // column = [
@@ -103,7 +104,6 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
                     );
                 },
             });
-            console.log(tableColumns);
             setTableColumns(tableColumns);
         }
         setIsUpdating(false);
