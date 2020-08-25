@@ -11,6 +11,7 @@ export interface category {
     nums?: number;
     active?: boolean;
     columns: ColumnType[];
+    isLoading?: boolean;
 }
 
 export interface categoryMapType {

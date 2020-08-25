@@ -57,3 +57,12 @@ export const categoryMap: categoryMapType = {
         ],
     },
 };
+
+export const requestCodeGroup = {
+    finance: [
+        ['bill_reviewed', 'bill_collection', 'bill_collected'],
+        ['bill_overdue', 'bill_not_note', 'bill_refunded'],
+        ['deposit_bill_refunded', 'deposit_bill_collection'],
+        ['turnover_reviewed', 'resources_generated'],
+    ],
+};

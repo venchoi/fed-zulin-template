@@ -1,21 +1,23 @@
-import React, { useEffect, useState, useMemo, MouseEvent } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { Badge, Spin, Button } from 'antd';
 import { LoadingOutlined, SyncOutlined } from '@ant-design/icons';
 import { FedTable, FedPagination } from '@c/index';
-import { getCategoryList } from '@s/workspace';
-import { categoryMap } from '../todoCategoryMaps';
-import { TodoProps, categoryTableMapType, category, searchParamsType } from '../list.d';
+import { getCategoryList, getCategoryStat } from '@s/workspace';
+import { categoryMap, requestCodeGroup } from '../todoCategoryMaps';
+import { TodoProps, category, searchParamsType } from '../list.d';
 import './todoPane.less';
+import { string } from 'yargs';
 
 export const TodoPane = (props: TodoProps) => {
     const { type, projs } = props;
     const [categories, setCategories] = useState<category[]>([]); // 分类列表
-    // const [activeCategory, setActiveCategory] = useState({});
+    const [categoryStatMap, setCategoryStatMap] = useState({}); // 分类数据
     const [isLoadingNums, setIsLoadingNums] = useState(true); // 是否正在加载分类统计数量
     const [isUpdating, setIsUpdating] = useState(false); // 是否正在加载待办列表数据
     const [isCategoriesLoading, setIsCategoriesLoading] = useState(false); // 是否正在加载左侧分类数据
     const [dataList, setDataList] = useState([]); // 表格数据
     const [totalNums, setTotalNums] = useState(0); // 表格数据总条数
+    const [toggleUpdateCategories, setToggleUpdateCategories] = useState(false);
     const [searchParams, setsearchParams] = useState<searchParamsType>({
         proj_id: '',
         page: 1,
@@ -30,19 +32,72 @@ export const TodoPane = (props: TodoProps) => {
         return map;
     }, [categoryMap[type].categories]);
 
-    // 获取左侧场景列表数据
-    const fetchCategoryListData = async () => {
-        console.log(projs);
-        if (!projs || projs.length <= 0) {
+    // 设置所有左侧 loading
+    const toggleCategoryLoading = (isLoading: boolean, cateId?: string) => {
+        categories.forEach(cate => {
+            if (cateId) {
+                if (cateId === cate.id) {
+                    cate.isLoading = isLoading;
+                }
+            } else {
+                cate.isLoading = isLoading;
+            }
+        });
+    };
+
+    const toggleCategoryNum = (num: number, cateId: string) => {
+        categories.forEach(cate => {
+            if (cateId && cateId === cate.id) {
+                cate.nums = num;
+            }
+        });
+    };
+
+    // 获取统计数据
+    const fetchCategoryNums = () => {
+        if (!projs || projs.length === 0 || categories.length === 0) {
             return;
         }
+        // 分组请求接口，提高响应速度（一次性请求所有的code对应的数据，后端性能存在问题）
+        const codesGroup = requestCodeGroup[type];
+        if (codesGroup && codesGroup.length > 0) {
+            toggleCategoryLoading(true);
+            codesGroup.map((codes: string[]) => {
+                getCategoryStat({
+                    code: codes,
+                    proj_id: projs.join(','),
+                })
+                    .then(res => {
+                        if (res.result) {
+                            // 每次数据返回，将每个的 loading 设置为 false
+                            let map = {};
+                            Object.assign(map, res.data || {});
+                            Object.keys(map).forEach(key => {
+                                toggleCategoryNum(map[key], key);
+                                toggleCategoryLoading(false, key);
+                            });
+                            setCategories(categories.slice());
+                        } else {
+                            throw new Error('获取统计数据失败');
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        console.warn(codes, '获取统计数据失败');
+                        toggleCategoryLoading(false);
+                    });
+            });
+        }
+    };
+
+    // 获取左侧场景列表数据
+    const fetchCategoryListData = async () => {
         setIsCategoriesLoading(true);
         const { data, result } = await getCategoryList({
             type,
         });
-        // setCategories(categoryMap[type].categories);
         if (result && data) {
-            const categories = data.map(
+            const innerCategories = data.map(
                 (item: { code: string; title: string }, index: number): category => {
                     return {
                         ...categoryTableMap[item.code],
@@ -52,7 +107,8 @@ export const TodoPane = (props: TodoProps) => {
                     };
                 }
             );
-            setCategories(categories || []);
+            setCategories(innerCategories || []);
+            setToggleUpdateCategories(!toggleUpdateCategories);
         }
         setIsCategoriesLoading(false);
     };
@@ -64,11 +120,11 @@ export const TodoPane = (props: TodoProps) => {
 
     useEffect(() => {
         fetchCategoryListData();
-    }, []);
+    }, [type]);
 
     useEffect(() => {
-        fetchCategoryListData();
-    }, [projs, type]);
+        fetchCategoryNums();
+    }, [projs, toggleUpdateCategories]);
 
     // 设置该类型为 active
     const handleToggleCategory = (category: category) => {
@@ -88,7 +144,6 @@ export const TodoPane = (props: TodoProps) => {
             setIsUpdating(false);
         }, 1000);
     };
-
     return (
         <div className="workspace-todo-pane">
             <div className="todo-category-list">
@@ -99,8 +154,14 @@ export const TodoPane = (props: TodoProps) => {
                             key={category.id}
                             onClick={handleToggleCategory(category)}
                         >
-                            <span>{category.name}</span>
-                            {isLoadingNums ? <Badge /> : <Spin></Spin>}
+                            <span style={{ marginRight: 4 }}>{category.name}</span>
+                            {category ? (
+                                category.isLoading ? (
+                                    <LoadingOutlined style={{ fontSize: 12 }} />
+                                ) : +(category.nums || 0) > 0 ? (
+                                    category.nums
+                                ) : null
+                            ) : null}
                         </div>
                     );
                 })}
