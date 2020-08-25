@@ -29,11 +29,18 @@ export interface categoryTableMapType {
 export interface TodoProps {
     type: string;
     projs: string[];
+    onChange(hasData: boolean): void;
 }
 
 export interface searchParamsType {
     proj_id: string;
     page: number;
     page_size: number;
-    type: string;
+    code: string;
+}
+
+export interface todoPaneTableProps {
+    activeCategory: category;
+    projs: string[];
+    code?: string;
 }

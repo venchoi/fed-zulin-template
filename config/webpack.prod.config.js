@@ -42,6 +42,20 @@ const prod_config = {
                     },
                 ],
             },
+            {
+                test: /\.(png|jpg|jpeg|gif|svg)$/,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: 1024 * 1,
+                            outputPath: '/',
+                            name: '[name].[hash:5].[ext]',
+                            esModule: false,
+                        },
+                    },
+                ],
+            },
         ],
     },
     plugins: [

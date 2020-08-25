@@ -20,6 +20,7 @@
         flex-flow: column nowrap;
         justify-content: flex-start;
         .workspace-content {
+            position: relative;
             flex: 1;
             overflow: hidden;
             margin-top: 16px;
@@ -27,6 +28,23 @@
             box-sizing: border-box;
             border-radius: 4px;
             border: 1px solid #EBEFF2;
+            .no-data-default {
+                position: absolute;
+                width: 360px;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                .top {
+                    width: 100%;
+                };
+                .bottom {
+                    position: relative;
+                    width: 234px;
+                    margin-top: 24px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+            }
         }
     }
     .top-area {

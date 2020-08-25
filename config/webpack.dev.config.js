@@ -7,7 +7,6 @@ const { argv } = require('yargs');
 // 本地开发环境配置，默认 rental 环境
 const env = argv.env || 'rental';
 const config = proxyConfig[env];
-console.log(config)
 const dev_config = {
     mode: 'development',
     devServer: {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Spin, Tabs } from 'antd';
 import { connect } from 'dva';
 import TreeProjectSelect from '@c/TreeProjectSelect';
-import { WorkspaceIndexPageProps } from './list.d';
+import { WorkspaceIndexPageProps, category } from './list.d';
 import FedIcon from '@c/FedIcon';
 import moment from 'moment';
 import TodoPane from './components/todoPane';
@@ -17,11 +17,15 @@ export const WorkspaceIndexPage = (props: WorkspaceIndexPageProps) => {
     const [isLoading, setIsloading] = useState(false);
     const [selectedProjectIds, setselectedProjectIds] = useState<string[]>([]); // 当前选中的项目
     const [selectedProjectNames, setselectedProjectNames] = useState<string[]>([]); // 当前选中的项目
+    const [hasData, setHasData] = useState(true); // 是否有数据
     const handleTreeSelected = (selecctedProject: projsValue) => {
         setselectedProjectIds(selecctedProject.projIds);
         setselectedProjectNames(selecctedProject.projNames);
     };
 
+    const handleHasData = (hasData: boolean) => {
+        setHasData(hasData);
+    };
     const timeStr = moment().format('YYYY年MM月DD日') + ' ' + weekDayMap[moment().isoWeekday() - 1];
     return (
         // <Spin spinning={isLoading} wrapperClassName="content-container-spin">
@@ -40,19 +44,40 @@ export const WorkspaceIndexPage = (props: WorkspaceIndexPageProps) => {
                     </div>
                 </div>
                 <div className="workspace-content">
-                    <div className="title-area">
-                        <h2 className="title">待办事项</h2>
-                        <TreeProjectSelect onTreeSelected={handleTreeSelected} width={312} />
-                    </div>
-                    <Tabs defaultActiveKey="1" size="small" className="workspace-tabs">
-                        {todoTypes.map(typeItem => {
-                            return (
-                                <Tabs.TabPane tab={categoryMap[typeItem].name} key={categoryMap[typeItem].type}>
-                                    <TodoPane type={categoryMap[typeItem].type} projs={selectedProjectIds} />
-                                </Tabs.TabPane>
-                            );
-                        })}
-                    </Tabs>
+                    {hasData ? (
+                        <>
+                            <div className="title-area">
+                                <h2 className="title">待办事项</h2>
+                                <TreeProjectSelect onTreeSelected={handleTreeSelected} width={312} />
+                            </div>
+                            <Tabs defaultActiveKey="1" size="small" className="workspace-tabs">
+                                {todoTypes.map(typeItem => {
+                                    return (
+                                        <Tabs.TabPane tab={categoryMap[typeItem].name} key={categoryMap[typeItem].type}>
+                                            <TodoPane
+                                                type={categoryMap[typeItem].type}
+                                                projs={selectedProjectIds}
+                                                onChange={handleHasData}
+                                            />
+                                        </Tabs.TabPane>
+                                    );
+                                })}
+                            </Tabs>
+                        </>
+                    ) : (
+                        <div className="no-data-default">
+                            <img
+                                className="top"
+                                src={require('../../assets/img/workspace/default.png')}
+                                alt="默认图片"
+                            />
+                            <img
+                                className="bottom"
+                                src={require('../../assets/img/workspace/workspace-no-data.png')}
+                                alt="默认图片"
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
