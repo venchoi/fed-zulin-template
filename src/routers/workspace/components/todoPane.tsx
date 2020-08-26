@@ -144,7 +144,7 @@ export const TodoPane = (props: TodoProps) => {
                                 category.isLoading ? (
                                     <LoadingOutlined style={{ fontSize: 12 }} />
                                 ) : category.nums && +category.nums > 0 ? (
-                                    <Badge count={+category.nums} overflowCount={99} />
+                                    <Badge count={+category.nums} overflowCount={99} style={{marginTop: -3}} />
                                 ) : null
                             ) : null}
                         </div>

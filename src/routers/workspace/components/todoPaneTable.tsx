@@ -39,6 +39,9 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
 
     // 获取表格数据
     const getTableInfo = async (isGetColumns?: boolean) => {
+        if(!searchParams.proj_id) {
+            return;
+        }
         setIsUpdating(true);
         const { data, result } = await getTodoListByCategory(searchParams);
         if (result && data) {
@@ -97,7 +100,7 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
                 <span className="active-name">{activeCategory.name}</span>
                 {isUpdating ? (
                     <Button type="link" style={{ color: '#313233' }} disabled>
-                        <LoadingOutlined spin={true} />
+                        <LoadingOutlined spin={true} style={{color: '#248BF2'}} />
                         <span>刷新中…</span>
                     </Button>
                 ) : (
