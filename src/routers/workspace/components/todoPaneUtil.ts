@@ -18,7 +18,7 @@ export const getRidrectUrl = (code: string, record: any) => {
             break;
         // 押金账单待审核
         case 'deposit_bill_refunded':
-            return `/static/billing/list?type=foregift&foregiftStatus=${window.encodeURIComponent('待退款')}&keyword=${
+            return `/static/billing/list?type=foregift&foregiftStatus=${window.encodeURIComponent('待审核')}&keyword=${
                 record.code
             }`;
             break;

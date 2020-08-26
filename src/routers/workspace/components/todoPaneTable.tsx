@@ -26,6 +26,7 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
         let params = {
             proj_id: (projs || []).join(','),
             code: activeCategory.id || '',
+            page: 1
         };
         setsearchParams(Object.assign({}, searchParams, params));
     }, [projs, activeCategory]);
@@ -74,7 +75,7 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
                 render(text: string, record: any, index: number) {
                     return (
                         <Button type="link" className="link-btn" onClick={handleToOp.bind(this, record)}>
-                            去操作
+                            去处理
                         </Button>
                     );
                 },
@@ -128,7 +129,7 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
                     }}
                 />
             </Spin>
-            {/* {dataList.length > 0 ? ( */}
+            {dataList.length > 0 ? (
             <FedPagination
                 wrapperClassName="derate-list-pagination"
                 onShowSizeChange={(current, page_size) => {
@@ -142,7 +143,7 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
                 showTotal={total => `共${Math.ceil(+total / +(searchParams.page_size || 1))}页， ${total}条记录`}
                 total={+totalNums}
             />
-            {/* ) : null} */}
+             ) : null}
         </>
     );
 };
