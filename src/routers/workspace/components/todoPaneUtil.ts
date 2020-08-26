@@ -18,7 +18,7 @@ export const getRidrectUrl = (code: string, record: any) => {
             break;
         // 押金账单待审核
         case 'deposit_bill_refunded':
-            return `/static/billing/list?type=foregift&foregiftStatus=${window.encodeURIComponent('待审核')}&keyword=${
+            return `/static/billing/list?type=foregift&foregiftStatusOption=${window.encodeURIComponent('待审核')}&foregiftStatus=${window.encodeURIComponent('待收款')}&keyword=${
                 record.code
             }`;
             break;
@@ -58,7 +58,7 @@ export const getRidrectUrl = (code: string, record: any) => {
                 '待收款'
             )}&selectedStatus=${window.encodeURIComponent('已审核')}&payEndDateType=${window.encodeURIComponent(
                 '本月'
-            )}&keyword=${record.code}`;
+            )}`;
             break;
         // 本月未开具缴费通知单账单
         case 'bill_not_note':
