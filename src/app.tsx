@@ -172,7 +172,7 @@ class App extends React.PureComponent<Props> {
                         {routes.map(item => {
                             return <Route path={item.path} component={item.component} key={item.path} />;
                         })}
-                        <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
+                        <Redirect exact from="/*" to="/workspace/index?_smp=Rental.Workbench" />
                     </Switch>
                     {/* </Suspense> */}
                 </Layout>

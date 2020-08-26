@@ -37,10 +37,12 @@ export interface searchParamsType {
     page: number;
     page_size: number;
     code: string;
+    type: string;
 }
 
 export interface todoPaneTableProps {
     activeCategory: category;
     projs: string[];
     code?: string;
+    type: string;
 }

@@ -9,9 +9,9 @@ import { ColumnProps } from 'antd/es/table';
 import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
 
 export const TodoPaneTable = (props: todoPaneTableProps) => {
-    const { activeCategory, projs } = props;
+    const { activeCategory, projs, type } = props;
     const [isUpdating, setIsUpdating] = useState(false); // 是否正在加载待办列表数据
-    const [tableColumns, setTableColumns] = useState([]);
+    const [tableColumns, setTableColumns] = useState([]); // antd Table 的 column
     const [dataList, setDataList] = useState([]); // 表格数据
     const [totalNums, setTotalNums] = useState(0); // 表格数据总条数
     const [searchParams, setsearchParams] = useState<searchParamsType>({
@@ -19,6 +19,7 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
         page: 1,
         page_size: 20,
         code: activeCategory.id || '',
+        type
     }); // 列表搜索参数
 
     useEffect(() => {
@@ -42,35 +43,6 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
         const { data, result } = await getTodoListByCategory(searchParams);
         if (result && data) {
             let { column = [], list = [], total = 0 } = data;
-            // list = [
-            //     {
-            //         id: '243434',
-            //         code: 'AR20200429105730526',
-            //         contract_code: 'test',
-            //         name: '342423432',
-            //         age: 234234,
-            //         proj_id: '39f3ea9d-0836-98c5-519e-f302d67ad9af',
-            //         proj_name: '自动测试'
-            //     },
-            // ];
-            // column = [
-            //     {
-            //         index: 'contract_code',
-            //         name: '合同编号',
-            //         type: 'text',
-            //     },
-            //     {
-            //         index: 'name',
-            //         name: '名字',
-            //         type: 'text',
-            //     },
-            //     {
-            //         index: 'age',
-            //         name: '年龄',
-            //         type: 'amount',
-            //     },
-            // ];
-            // total = 20;
             setDataList(list);
             setTotalNums(total);
             const tableColumns = (column || []).map((column: any) => {

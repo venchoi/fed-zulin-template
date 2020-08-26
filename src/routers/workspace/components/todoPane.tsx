@@ -56,6 +56,7 @@ export const TodoPane = (props: TodoProps) => {
                 getCategoryStat({
                     code: codes,
                     proj_id: projs.join(','),
+                    type
                 })
                     .then(res => {
                         if (res.result) {
@@ -151,7 +152,7 @@ export const TodoPane = (props: TodoProps) => {
                 })}
             </div>
             <div className="todo-table-container">
-                {activeCategory ? <TodoPaneTable activeCategory={activeCategory} projs={projs} /> : null}
+                {activeCategory ? <TodoPaneTable activeCategory={activeCategory} projs={projs} type={type} /> : null}
             </div>
         </div>
     );

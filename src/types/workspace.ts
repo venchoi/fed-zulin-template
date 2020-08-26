@@ -6,4 +6,5 @@ export interface getCategoryParamsType {
 export interface getCategoryStatParamsType {
     proj_id: string;
     code: string[];
+    type: string;
 }
