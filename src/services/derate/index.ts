@@ -77,7 +77,7 @@ export const getBillItemFee = (data: billItemFeeParams) => {
 };
 
 export const fetchOaDetailData = (data: oaDetailParams) => {
-    return ajax('/third/scene/get-third-url', { ...data, _csrf: '' }, 'POST');
+    return ajax('/third/scene/get-third-url', { ...data, _csrf: '' }, 'GET');
 };
 
 // 获取是否设置了审批流
