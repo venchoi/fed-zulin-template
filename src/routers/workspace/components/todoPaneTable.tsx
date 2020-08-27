@@ -10,7 +10,7 @@ import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
 import { WorkspaceTracker } from '@/track';
 
 export const TodoPaneTable = (props: todoPaneTableProps) => {
-    const { activeCategory, projs, type } = props;
+    const { activeCategory, projs, type, onRefresh } = props;
     const [isUpdating, setIsUpdating] = useState(false); // 是否正在加载待办列表数据
     const [tableColumns, setTableColumns] = useState([]); // antd Table 的 column
     const [dataList, setDataList] = useState([]); // 表格数据
@@ -99,6 +99,7 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
     const handleUpdateTableList = () => {
         searchParams.page = 1;
         setsearchParams(Object.assign({}, searchParams));
+        onRefresh && onRefresh();
     };
 
     return (

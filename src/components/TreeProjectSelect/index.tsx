@@ -43,6 +43,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
                 projIds: [],
                 projNames: [],
             },
+            isDropdownVisible: false // 下拉框是否显示
         };
     }
 
@@ -116,6 +117,7 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
             searchValue,
             showArrow: true,
             onDropdownVisibleChange: this.handleDropdownVisibleChange,
+            autoClearSearchValue: true
             // dropdownRender: this.dropdownRender,
         };
         return <TreeSelect className="fed-tree-select" {...treeProps}></TreeSelect>;
@@ -142,6 +144,9 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
 
     handleDropdownVisibleChange = (visible: boolean) => {
         const { projIds, allProjs } = this.state;
+        this.setState({
+            isDropdownVisible: visible
+        });
         if (!visible && projIds.length === 0) {
             this.setProjIds(allProjs);
             const { onTreeSelected, onChange } = this.props;
@@ -220,6 +225,15 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
 
     // 树形组件选中
     onTreeSelect = (value: string[]): void => {
+        const { projIds } = this.state;
+        // 不允许删除最后一个项目
+        if(!this.state.isDropdownVisible && value.length === 0 && projIds.length === 1) {
+            return;
+        }
+        // 清除输入框搜索值
+        this.setState({
+            searchValue: ''
+        });
         const projs = this.getSelectedProjIds(value);
         this.setProjIds(projs);
         const { onTreeSelected, onChange } = this.props;

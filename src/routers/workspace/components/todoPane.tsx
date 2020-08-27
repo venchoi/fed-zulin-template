@@ -129,6 +129,10 @@ export const TodoPane = (props: TodoProps) => {
         };
     };
 
+    const handleRefresh = () => {
+        fetchCategoryNums()
+    }
+
     return (
         <div className="workspace-todo-pane">
             <div className="todo-category-list">
@@ -152,7 +156,7 @@ export const TodoPane = (props: TodoProps) => {
                 })}
             </div>
             <div className="todo-table-container">
-                {activeCategory ? <TodoPaneTable activeCategory={activeCategory} projs={projs} type={type} /> : null}
+                {activeCategory ? <TodoPaneTable activeCategory={activeCategory} projs={projs} type={type} onRefresh={handleRefresh}/> : null}
             </div>
         </div>
     );

@@ -45,4 +45,5 @@ export interface todoPaneTableProps {
     projs: string[];
     code?: string;
     type: string;
+    onRefresh(): void;
 }

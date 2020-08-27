@@ -63,7 +63,7 @@ export const getRidrectUrl = (code: string, record: any) => {
             break;
         // 本月未开具缴费通知单账单
         case 'bill_not_note':
-            return `/fed/bill-reminder/pay-note-open?proj_id=${record.proj_id}&proj_name=${record.proj_name}&currentMonth=1`;
+            return `/fed/bill-reminder/pay-note-open?proj_id=${record.proj_id}&proj_name=${record.proj_name}&reminder_type=${record.reminder_type}&currentMonth=1`;
             break;
     }
 };

@@ -29,9 +29,9 @@ export const WorkspaceIndexPage = (props: WorkspaceIndexPageProps) => {
     };
     const timeStr = moment().format('YYYY年MM月DD日') + ' ' + weekDayMap[moment().isoWeekday() - 1];
     return (
-        <div className="content-container workspace">
+        <div className="workspace">
             <div className="content page-container">
-                <div className="top-area">
+                <div className="top-area welcome-section">
                     <h1>工作台</h1>
                     <div className="user-info">
                         <div className="avatar">
