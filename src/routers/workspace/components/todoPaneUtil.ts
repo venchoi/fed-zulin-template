@@ -2,7 +2,6 @@ export const getRidrectUrl = (code: string, record: any) => {
     if (!code) {
         return;
     }
-    console.log(record);
     switch (code) {
         // 账单待审核
         case 'bill_reviewed':

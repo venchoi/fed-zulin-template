@@ -7,6 +7,7 @@ import { todoPaneTableProps, searchParamsType } from '../list.d';
 import { getRidrectUrl } from './todoPaneUtil';
 import { ColumnProps } from 'antd/es/table';
 import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
+import { WorkspaceTracker } from '@/track';
 
 export const TodoPaneTable = (props: todoPaneTableProps) => {
     const { activeCategory, projs, type } = props;
@@ -74,7 +75,12 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
                 // 返回的表格字段是不确定的，所以暂时用any
                 render(text: string, record: any, index: number) {
                     return (
-                        <Button type="link" className="link-btn" onClick={handleToOp.bind(this, record)}>
+                        <Button 
+                            type="link" 
+                            className="link-btn" 
+                            onClick={handleToOp.bind(this, record)} 
+                            data-event={WorkspaceTracker[`workspace-${activeCategory?.id?.replace(/_/g, '-')}`]}
+                        >
                             去处理
                         </Button>
                     );
