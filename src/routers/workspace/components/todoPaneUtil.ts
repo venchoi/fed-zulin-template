@@ -58,7 +58,9 @@ export const getRidrectUrl = (code: string, record: any) => {
                 '待收款'
             )}&selectedStatus=${window.encodeURIComponent('已审核')}&payEndDateType=${window.encodeURIComponent(
                 '本月'
-            )}`;
+            )}&keyword=${
+                record.code
+            }`;
             break;
         // 本月未开具缴费通知单账单
         case 'bill_not_note':
