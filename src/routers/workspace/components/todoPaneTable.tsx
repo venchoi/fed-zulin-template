@@ -20,14 +20,14 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
         page: 1,
         page_size: 20,
         code: activeCategory.id || '',
-        type
+        type,
     }); // 列表搜索参数
 
     useEffect(() => {
         let params = {
             proj_id: (projs || []).join(','),
             code: activeCategory.id || '',
-            page: 1
+            page: 1,
         };
         setsearchParams(Object.assign({}, searchParams, params));
     }, [projs, activeCategory]);
@@ -41,7 +41,7 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
 
     // 获取表格数据
     const getTableInfo = async (isGetColumns?: boolean) => {
-        if(!searchParams.proj_id) {
+        if (!searchParams.proj_id) {
             return;
         }
         setIsUpdating(true);
@@ -58,6 +58,7 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
                     ellipsis: {
                         showTitle: true,
                     },
+                    align: type === 'amount' ? 'right' : 'left',
                 };
                 const key = index;
                 if (type === 'amount') {
@@ -75,10 +76,10 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
                 // 返回的表格字段是不确定的，所以暂时用any
                 render(text: string, record: any, index: number) {
                     return (
-                        <Button 
-                            type="link" 
-                            className="link-btn" 
-                            onClick={handleToOp.bind(this, record)} 
+                        <Button
+                            type="link"
+                            className="link-btn"
+                            onClick={handleToOp.bind(this, record)}
                             data-event={WorkspaceTracker[`workspace-${activeCategory?.id?.replace(/_/g, '-')}`]}
                         >
                             去处理
@@ -108,7 +109,7 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
                 <span className="active-name">{activeCategory.name}</span>
                 {isUpdating ? (
                     <Button type="link" style={{ color: '#313233' }} disabled>
-                        <LoadingOutlined spin={true} style={{color: '#248BF2'}} />
+                        <LoadingOutlined spin={true} style={{ color: '#248BF2' }} />
                         <span>刷新中…</span>
                     </Button>
                 ) : (
@@ -137,20 +138,20 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
                 />
             </Spin>
             {dataList.length > 0 ? (
-            <FedPagination
-                wrapperClassName="derate-list-pagination"
-                onShowSizeChange={(current, page_size) => {
-                    setsearchParams({ ...searchParams, page: 1, page_size });
-                }}
-                onChange={(page_index, page_size) => {
-                    setsearchParams({ ...searchParams, page: page_index, page_size: page_size || 10 });
-                }}
-                current={searchParams.page}
-                pageSize={searchParams.page_size}
-                showTotal={total => `共${Math.ceil(+total / +(searchParams.page_size || 1))}页， ${total}条记录`}
-                total={+totalNums}
-            />
-             ) : null}
+                <FedPagination
+                    wrapperClassName="derate-list-pagination"
+                    onShowSizeChange={(current, page_size) => {
+                        setsearchParams({ ...searchParams, page: 1, page_size });
+                    }}
+                    onChange={(page_index, page_size) => {
+                        setsearchParams({ ...searchParams, page: page_index, page_size: page_size || 10 });
+                    }}
+                    current={searchParams.page}
+                    pageSize={searchParams.page_size}
+                    showTotal={total => `共${Math.ceil(+total / +(searchParams.page_size || 1))}页， ${total}条记录`}
+                    total={+totalNums}
+                />
+            ) : null}
         </>
     );
 };
