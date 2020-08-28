@@ -53,7 +53,7 @@ export default class Menus extends React.Component<Props, State> {
                                 <Badge dot={menuItem.func_code === 'Approval' && workflow.total_todo}>
                                     <FedIcon type={menuItem.icon} />
                                 </Badge>
-                                <span>{menuItem.func_name}</span>
+                                {!collapsed ? <span>{menuItem.func_name}</span> : null}
                             </span>
                         }
                     >
