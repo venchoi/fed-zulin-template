@@ -57,6 +57,18 @@ class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProj
                       })
                     : [];
                 this.onTreeSelect && this.onTreeSelect(projIdsArr);
+            } else {
+                const firstProj = allProjs?.projIds.length > 0 ? allProjs?.projIds[0] : null;
+                const firstProjName = allProjs?.projNames.length > 0 ? allProjs?.projNames[0] : null;
+                if(firstProj && firstProjName) {
+                    this.setState({
+                        projIds: [firstProj],
+                        projNames: [firstProjName]
+                    })
+                    this.onTreeSelect && this.onTreeSelect([firstProj]);
+                } else {
+
+                }
             }
         });
     }
