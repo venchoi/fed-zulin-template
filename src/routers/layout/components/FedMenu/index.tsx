@@ -3,6 +3,7 @@ import { Badge, Menu } from 'antd';
 import { Link } from 'dva/router';
 import FedIcon from '@c/FedIcon';
 import { getKey } from './menuRoutes';
+import './index.less';
 
 interface Props {
     collapsed: boolean;
@@ -38,6 +39,7 @@ export default class Menus extends React.Component<Props, State> {
         const { selectedKey, inlineOpenKeys, verticalOpenKeys } = this.state;
         return (
             <Menu
+                className="rental-menu"
                 mode={collapsed ? 'vertical' : 'inline'}
                 theme="dark"
                 onClick={this.changeMenuItem}
@@ -51,9 +53,9 @@ export default class Menus extends React.Component<Props, State> {
                         title={
                             <span>
                                 <Badge dot={menuItem.func_code === 'Approval' && workflow.total_todo}>
-                                    <FedIcon type={menuItem.icon} />
+                                    <FedIcon style={{ marginRight: 0 }} type={menuItem.icon} />
                                 </Badge>
-                                {!collapsed ? <span>{menuItem.func_name}</span> : null}
+                                {!collapsed ? <span className="menu-name">{menuItem.func_name}</span> : null}
                             </span>
                         }
                     >
