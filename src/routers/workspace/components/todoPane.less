@@ -1,0 +1,77 @@
+.workspace-todo-pane {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+    .todo-category-list {
+        width: 250px;
+        min-width: 230px;
+        height: 100%;
+        padding-top: 8px;
+        overflow-y: auto;
+        border-right: 1px solid #EBEFF2;
+        .category-item {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0px 16px;
+            height: 40px;
+            color: #868B8F;
+            &.active {
+                position: relative;
+                color: #0D86FF;
+                background-color: #EBF9FF;
+                &::after {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    content: '';
+                    display: block;
+                    height: 100%;
+                    width: 2px;
+                    background-color: #0D86FF;
+                }
+            }
+            &:hover {
+                cursor: pointer;
+            }
+        }
+    }
+    .todo-table-container {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        flex: 1;
+        height: 100%;
+        overflow: hidden;
+        .table-bar {
+            display: flex;
+            padding: 16px;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            line-height: 24px;
+            .active-name {
+                font-size: 16px;
+                color: #313233;
+            }
+            button {
+                height: 24px;
+            }
+        }
+        .table-spin-container {
+            flex: 1;
+            .fed-table {
+                height: 100%;
+            }
+        }
+        button.ant-btn.link-btn.ant-btn-link{
+            height: 18px;
+            line-height: 18px;
+            margin-left: -2px;
+        }
+    }
+}

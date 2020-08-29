@@ -1,0 +1,125 @@
+.content-container-spin  {
+    height: 100%;
+    .ant-spin-container {
+        height: 100%;
+    }
+}
+.workspace {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    padding-bottom: 0px;
+    .content {
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+    }
+    .page-container {
+        border-radius: 4px;
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        .workspace-content {
+            position: relative;
+            flex: 1;
+            overflow: hidden;
+            margin-top: 16px;
+            background-color: white;
+            box-sizing: border-box;
+            border-radius: 4px;
+            border: 1px solid #EBEFF2;
+            .no-data-default {
+                position: absolute;
+                width: 400px;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                .top {
+                    width: 100%;
+                };
+            }
+        }
+    }
+    .top-area.welcome-section {
+        overflow: auto;
+        padding: 16px;
+        min-height: 146px;
+        border: 1px solid #EBEFF2;
+        background: white;
+        border-radius: 4px;
+        h1 {
+            margin: 0;
+            margin-bottom: 16px;    
+            font-size: 18px;
+            line-height: 28px;
+            color: #121314;
+        }
+        .user-info {
+            display: flex;
+            flex-flow: row nowrap;
+            justify-content: flex-start;
+            .avatar {
+                width: 70px;
+                height: 70px;
+                margin-right: 16px;
+                border-radius: 50%;
+                font-size: 70px;
+                line-height: 70px;
+            }
+            .des {
+                flex: 1;
+                height: 70px;
+                line-height: 1.5;
+                .first-line {
+                    font-size: 16px;
+                    color: #121314;
+                    margin-top: 12px;
+                    margin-bottom: 4px;
+                }
+                .second-line {
+                    color: #868B8F;
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+    .workspace-content {
+        display: flex;
+        flex-flow: column nowrap;
+        justify-content: flex-start;
+        .title-area {
+            display: flex;
+            padding: 16px;
+            padding-bottom: 0;
+            flex-flow: row nowrap;
+            justify-content: space-between;
+            .title {
+                font-size: 16px;
+                line-height: 32px;
+                margin-bottom: 0;
+            }
+        }
+        .workspace-tabs {
+            display: flex;
+            flex-flow: column nowrap;
+            justify-content: flex-start;
+            flex: 1;
+            .ant-tabs-nav {
+                height: 38px;
+                // 重置下 tab 组件的样式
+                margin-bottom: 0;
+                .ant-tabs-nav-wrap {
+                    padding: 0 16px;
+                }
+            }
+            .ant-tabs-content-holder {
+                flex: 1;
+                width: 100%;
+                .ant-tabs-content {
+                    height: 100%;
+                    width: 100%;
+                }
+            }
+        }
+    }
+}

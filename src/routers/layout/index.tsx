@@ -149,6 +149,11 @@ class Layout extends React.Component<Props, State> {
         const { data } = await getHomeBaseInfo(query);
         const props: any = handleBaseInfo(data);
         this.setState({ ...props, inited: true });
+        // 将全局基本信息放入到store中, 其它地方可能用到
+        this.props.dispatch({
+            type: 'main/initBaseInfo',
+            data: props,
+        });
         this.initTracker(props.user);
         const { data: workflowData } = await getWorkflowTodo();
         this.setState({ ...workflowData });
