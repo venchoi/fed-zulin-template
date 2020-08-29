@@ -17,9 +17,9 @@ export const getRidrectUrl = (code: string, record: any) => {
             break;
         // 押金账单待审核
         case 'deposit_bill_refunded':
-            return `/static/billing/list?type=foregift&foregiftStatusOption=${window.encodeURIComponent('待审核')}&foregiftStatus=${window.encodeURIComponent('待收款')}&keyword=${
-                record.code
-            }`;
+            return `/static/billing/list?type=foregift&foregiftStatusOption=${window.encodeURIComponent(
+                '待审核'
+            )}&foregiftStatus=${window.encodeURIComponent('待收款')}&keyword=${record.code}`;
             break;
         // 账单待完成收款
         case 'bill_collected':
@@ -57,13 +57,14 @@ export const getRidrectUrl = (code: string, record: any) => {
                 '待收款'
             )}&selectedStatus=${window.encodeURIComponent('已审核')}&payEndDateType=${window.encodeURIComponent(
                 '本月'
-            )}&keyword=${
-                record.code
-            }`;
+            )}&keyword=${record.code}`;
             break;
         // 本月未开具缴费通知单账单
         case 'bill_not_note':
-            return `/fed/bill-reminder/pay-note-open?proj_id=${record.proj_id}&proj_name=${record.proj_name}&reminder_type=${record.reminder_type}&currentMonth=1?_smp=Rental.BillReminder`;
+            return `/fed/bill-reminder/pay-note-open?proj_id=${record.proj_id}&proj_name=${record.proj_name}&reminder_type=${record.reminder_type}&currentMonth=1&_smp=Rental.BillReminder`;
+            break;
+        default:
+            return '';
             break;
     }
 };

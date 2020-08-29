@@ -8,6 +8,7 @@ import { getRidrectUrl } from './todoPaneUtil';
 import { ColumnProps } from 'antd/es/table';
 import { formatNum, comma, checkPermission } from '@/helper/commonUtils';
 import { WorkspaceTracker } from '@/track';
+import { Local } from '@/MemoryShare';
 
 export const TodoPaneTable = (props: todoPaneTableProps) => {
     const { activeCategory, projs, type, onRefresh } = props;
@@ -36,7 +37,10 @@ export const TodoPaneTable = (props: todoPaneTableProps) => {
     const handleToOp = (record: any) => {
         const url = getRidrectUrl(activeCategory.id, record);
         // url && window.open('https://rental-ykj-test.myfuwu.com.cn'+url);
-        url && window.open(url);
+        Local && Local.set('stageType', '多项目');
+        setTimeout(() => {
+            url && window.open(url);
+        }, 100);
     };
 
     // 获取表格数据
