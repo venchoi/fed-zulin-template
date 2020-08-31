@@ -3,7 +3,7 @@ import FedTable from '@/components/FedTable';
 import FedPagination from '@/components/FedPagination';
 import { OutLayTableProps, OutLayListItem, FeeItem, ExtPayment } from '@/types/outlay';
 import { ColumnProps } from 'antd/lib/table';
-import { Popover, Row, Col, Divider, Dropdown, Button } from 'antd';
+import { Popover, Row, Col, Divider, Dropdown, Button, Checkbox, Tooltip } from 'antd';
 import FedIcon from '@/components/FedIcon';
 import { ExclamationCircleOutlined, SettingOutlined } from '@ant-design/icons';
 import { Link } from 'dva/router';
@@ -14,10 +14,17 @@ import { isPlainObject, debounce, throttle } from 'lodash';
 import cloneDeep from 'lodash/cloneDeep';
 import { ResizeTable, DragSelect } from 'ykj-ui';
 import { IField } from '@/types/common';
+import { comma } from '@/helper/commonUtils';
 
 const OutLayTable = (props: OutLayTableProps) => {
-
-    const { outlayList, onTableSelect, extData: {canApplyInvoice, statisticData}, selectedRowKeys, selectedRows, isTableLoading } = props;
+    const {
+        outlayList,
+        onTableSelect,
+        extData: { canApplyInvoice, statisticData },
+        selectedRowKeys,
+        selectedRows,
+        isTableLoading,
+    } = props;
     const total = (parseFloat(statisticData.income || '0') + parseFloat(statisticData.refund || '0')).toFixed(2);
     const income = parseFloat(statisticData.income || '0').toFixed(2);
     const refund = parseFloat(statisticData.refund || '0').toFixed(2);
@@ -26,21 +33,25 @@ const OutLayTable = (props: OutLayTableProps) => {
     const [fields, setFields] = useState<any>([]);
 
     useEffect(() => {
-        setColumns(initColumns.map((col, index) => ({
-            ...col,
-        })))
-        setFields(initColumns.map((col, index) => ({
-            field: col.dataIndex,
-            is_default: true,
-            key: `${index}`,
-            name: col.title,
-            selected: true,
-        })))
-    }, [])
+        setColumns(
+            initColumns.map((col, index) => ({
+                ...col,
+            }))
+        );
+        setFields(
+            initColumns.map((col, index) => ({
+                field: col.dataIndex,
+                is_default: true,
+                key: `${index}`,
+                name: col.title,
+                selected: true,
+            }))
+        );
+    }, []);
 
     const onHandleResize = throttle((index: number, size: { width: number; height: number }) => {
         const nextColumns = cloneDeep(initColumns);
-        nextColumns[index].width =  size.width;
+        nextColumns[index].width = size.width;
         setColumns(nextColumns);
     }, 100);
 
@@ -48,11 +59,15 @@ const OutLayTable = (props: OutLayTableProps) => {
     const renderExtraNode = () => {
         // 确定点击事件
         const onFinish = (resultArr: any) => {
-            console.log("resultArr", resultArr);
+            console.log('resultArr', resultArr);
             setVisible(false);
-            setColumns(initColumns.filter((item: ColumnProps<OutLayListItem>) => resultArr.some((fieldItem: IField) => fieldItem.field === item.dataIndex && fieldItem.selected)))
-        }
-         
+            setColumns(
+                initColumns.filter((item: ColumnProps<OutLayListItem>) =>
+                    resultArr.some((fieldItem: IField) => fieldItem.field === item.dataIndex && fieldItem.selected)
+                )
+            );
+        };
+
         // 取消点击事件
         const onCancel = () => {
             setVisible(false);
@@ -67,102 +82,49 @@ const OutLayTable = (props: OutLayTableProps) => {
 
     /**
      * 开发票/申请开发票
-     * @param record 
+     * @param record
      * @param isApply 是否是申请开票
      */
     const handleOpenInvoice = (record: OutLayListItem, isApply?: boolean) => {
         const { fee_items, proj_id } = record;
         let billItems: any = [];
-        billItems = billItems.concat(fee_items.map(innerItem => {
-            return {
-                bill_item_id: innerItem.bill_item_id,
-                amount: innerItem.available_invoicing_amount
-            }
-        }))
-        const hrefName = isApply ? 'apply-invoice' : 'invoice'
+        billItems = billItems.concat(
+            fee_items.map(innerItem => {
+                return {
+                    bill_item_id: innerItem.bill_item_id,
+                    amount: innerItem.available_invoicing_amount,
+                };
+            })
+        );
+        const hrefName = isApply ? 'apply-invoice' : 'invoice';
         location.href = `/fed/invoice/${hrefName}?bill_items=${JSON.stringify(billItems)}&stage_id=${proj_id}`;
-    }
+    };
 
-    const renderExchangedToNamePopover = (record: OutLayListItem) => {
-        const {
-            type,
-            bill_code,
-            ext_bill,
-            payment_remark,
-            contract_code,
-            stage_name,
-            ext_contract,
-            ext_renter,
-        } = record;
-        const rentalTypeName = type === '企业' ? '法定代表人' : '经营者';
-        const rentalName = ext_renter.type === '个人' ? ext_renter.name : ext_renter.organization_name;
-        const rentalNameDisplay = `${rentalName}${ext_renter.type === '个人' ? '/' + ext_renter.mobile : ''}(${
-            ext_renter.type
-        })`;
+    const handleClickCheckbox = (checked: boolean, key: string) => {
+        console.log('handleClickCheckbox checked', checked);
+        let tempSelectedRowsKey = cloneDeep(selectedRowKeys);
+        let tempSelectedRows = cloneDeep(selectedRows);
+        if (checked) {
+            tempSelectedRowsKey.push(key);
+            tempSelectedRows.push(outlayList.find(item => item.id === key));
+        } else {
+            tempSelectedRowsKey.splice(
+                tempSelectedRowsKey.findIndex(value => value === key),
+                1
+            );
+            tempSelectedRows.splice(tempSelectedRows.findIndex(item => item.id === key));
+        }
+        console.log(tempSelectedRowsKey, tempSelectedRows);
+        onTableSelect && onTableSelect(tempSelectedRowsKey, tempSelectedRows);
+    };
+
+    const renderRentalResourcePopover = (record: OutLayListItem) => {
+        const roomNames = record.fee_items[0]?.full_room_name?.split(',') || [];
         return (
-            <div>
-                {bill_code && (
-                    <Row gutter={[16, 8]}>
-                        <Col span={7}>账单</Col>
-                        <Col span={17}>{bill_code}</Col>
-                    </Row>
-                )}
-                {bill_code && ext_bill && (
-                    <Row gutter={[16, 8]}>
-                        <Col span={7}>账单月份</Col>
-                        <Col span={17}>{ext_bill.type === '周期' ? ext_bill.belong_date : ext_bill.type}</Col>
-                    </Row>
-                )}
-                <Row gutter={[16, 8]}>
-                    <Col span={7}>交易说明</Col>
-                    <Col span={17}>{payment_remark}</Col>
-                </Row>
-                <Row gutter={[16, 8]}>
-                    <Divider />
-                </Row>
-                <Row gutter={[16, 8]}>
-                    <Col span={7}>合同</Col>
-                    <Col span={17}>{contract_code}</Col>
-                </Row>
-                <Row gutter={[16, 8]}>
-                    <Col span={7}>所在项目</Col>
-                    <Col span={17}>{stage_name}</Col>
-                </Row>
-                <Row gutter={[16, 8]}>
-                    <Col span={7}>签署时间</Col>
-                    <Col span={17}>{isPlainObject(ext_contract) ? ext_contract.sign_date || '' : ''}</Col>
-                </Row>
-                <Row gutter={[16, 8]}>
-                    <Col span={7}>租期</Col>
-                    <Col span={17}>
-                        {isPlainObject(ext_contract) ? ext_contract.start_date || '' : ''}至
-                        {isPlainObject(ext_contract) ? ext_contract.end_date || '' : ''}
-                    </Col>
-                </Row>
-                <Row gutter={[16, 8]}>
-                    <Col span={7}>租客</Col>
-                    <Col span={17}>{rentalNameDisplay}</Col>
-                </Row>
-                {ext_renter.type !== '个人' && (
-                    <Row gutter={[16, 8]}>
-                        <Col span={7}>{rentalTypeName}</Col>
-                        <Col span={17}>
-                            {ext_renter.name}/{ext_renter.mobile}
-                        </Col>
-                    </Row>
-                )}
-                <Row gutter={[16, 8]}>
-                    <Col span={7}>联系人</Col>
-                    <Col span={17}>
-                        {ext_renter.attentions &&
-                            ext_renter.attentions.map((at, index) => (
-                                <span>
-                                    {at.name}/{at.mobile}
-                                    <br />
-                                </span>
-                            ))}
-                    </Col>
-                </Row>
+            <div className="content">
+                {roomNames.map(roomName => (
+                    <p title={roomName}>{roomName}</p>
+                ))}
             </div>
         );
     };
@@ -194,14 +156,16 @@ const OutLayTable = (props: OutLayTableProps) => {
             dataIndex: 'proj_name',
             title: '项目名称',
             width: 160,
+            ellipsis: true,
             render: (text: string) => {
-                return <span>{text || '--'}</span>;
+                return <span title={text}>{text || '--'}</span>;
             },
         },
         {
             dataIndex: 'exchanged_to_name',
             title: '交易对方',
             width: 140,
+            ellipsis: true,
             render: (exchanged_to_name: string, record: OutLayListItem, index: number) => {
                 const {
                     ext_renter: { name, type, organization_name },
@@ -211,72 +175,72 @@ const OutLayTable = (props: OutLayTableProps) => {
                 } = record;
                 const rentalName = type === '个人' ? name : organization_name;
                 const isShowPopover = ext_contract && rentalName && payment_mode !== '预存结转';
+                return <span title={exchanged_to_name}>{exchanged_to_name || '--'}</span>;
+            },
+        },
+        {
+            title: '租赁资源',
+            width: 200,
+            ellipsis: true,
+            render: (title, record: OutLayListItem, index: number) => {
+                const roomPackageName = record.fee_items[0]?.package_name;
+                const roomName = record.fee_items[0]?.full_room_name;
                 return (
-                    <div>
-                        <p>
-                            <span>{exchanged_to_name || '--'}</span>
-                            {/* TODO 加content */}
+                    <span title={roomPackageName || roomName}>
+                        <span>{roomPackageName || roomName}</span>
+                        {roomPackageName && (
                             <Popover
                                 trigger="click"
                                 placement="bottom"
                                 className="popover"
-                                overlayClassName="exchanged-to-name-popover"
-                                content={renderExchangedToNamePopover(record)}
+                                overlayClassName="rental-resource-popover"
+                                title={roomPackageName}
+                                content={renderRentalResourcePopover(record)}
                             >
                                 <ExclamationCircleOutlined style={{ color: '#BEC3C7' }} />
                             </Popover>
-                        </p>
-                    </div>
+                        )}
+                    </span>
                 );
             },
-        },
-        {
-            // dataIndex: '',
-            title: '租赁资源',
-            width: 200
         },
         {
             dataIndex: 'fee_items',
             title: '费项',
             width: 120,
+            ellipsis: true,
             render: (fee_items: FeeItem[], record: OutLayListItem, index: number) => {
-                const feeItemName = Array.isArray(fee_items) && fee_items.map(fee => fee.fee_name).join();
-                const { payment_mode, system_remark } = record;
-                const remark = system_remark ? system_remark : '';
-                return (
-                    <div>
-                        <p>{feeItemName}</p>
-                        {/* <p>
-                            {payment_mode}
-                            {remark}
-                        </p> */}
-                    </div>
-                );
+                let feeItemName = '';
+                if (Array.isArray(fee_items)) {
+                    feeItemName = fee_items.map(fee => fee.fee_name).join();
+                }
+                return <span title={feeItemName}>{feeItemName}</span>;
             },
         },
         {
             dataIndex: 'lessor_name',
             title: '甲方名称',
             width: 140,
+            ellipsis: true,
             render: (text: string) => {
-                return <span>{text || '--'}</span>;
+                return <span title={text}>{text || '--'}</span>;
             },
         },
         {
             dataIndex: 'lessor_account_name',
             title: '收款账号',
             width: 200,
+            ellipsis: true,
             render: (text: string) => {
-                return <span>{text || '--'}</span>;
+                return <span title={text}>{text || '--'}</span>;
             },
         },
         {
-            dataIndex: '',
+            dataIndex: 'exchanged_amount',
             title: '交易总额(元)',
             width: 140,
             align: 'right',
             render: (exchanged_amount: string) => {
-                // TODO 加千分分隔符
                 const amount = Math.abs(+exchanged_amount || 0).toFixed(2);
                 let operator = '';
                 if (+exchanged_amount > 0) {
@@ -285,10 +249,10 @@ const OutLayTable = (props: OutLayTableProps) => {
                     operator = '-';
                 }
                 return (
-                    <div>
-                        <span>{operator}</span>
-                        <span>{amount}</span>
-                    </div>
+                    <span>
+                        {operator}
+                        {comma(amount)}
+                    </span>
                 );
             },
         },
@@ -307,15 +271,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                     });
                 }
 
-                return (
-                    <p>
-                        {inPay}
-                        {/* TODO 加content */}
-                        <Popover trigger="click" placement="bottom" className="popover">
-                            <ExclamationCircleOutlined style={{ color: '#BEC3C7' }} />
-                        </Popover>
-                    </p>
-                );
+                return <span>{comma(inPay)}</span>;
             },
         },
         {
@@ -333,15 +289,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                     });
                 }
 
-                return (
-                    <p>
-                        {outPay}
-                        {/* TODO 加content */}
-                        <Popover trigger="click" placement="bottom" className="popover">
-                            <ExclamationCircleOutlined style={{ color: '#BEC3C7' }} />
-                        </Popover>
-                    </p>
-                );
+                return <span>{comma(outPay)}</span>;
             },
         },
         {
@@ -380,7 +328,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                     fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
                 const hasInvoice = fee_items && fee_items.some(feeItem => feeItem.can_invoicing === 1);
                 return (
-                    <div>
+                    <span>
                         {!(hasReceipt || hasInvoice) && (
                             <a
                                 className="operate-btn"
@@ -389,9 +337,17 @@ const OutLayTable = (props: OutLayTableProps) => {
                                 开收据
                             </a>
                         )}
-                        {!canApplyInvoice && hasInvoice && <a className="operate-btn" onClick={() => handleOpenInvoice(record)}>开发票</a>}
-                        {canApplyInvoice && hasInvoice && <a className="operate-btn" onClick={() => handleOpenInvoice(record, true)}>申请开票</a>}
-                    </div>
+                        {!canApplyInvoice && hasInvoice && (
+                            <a className="operate-btn" onClick={() => handleOpenInvoice(record)}>
+                                开发票
+                            </a>
+                        )}
+                        {canApplyInvoice && hasInvoice && (
+                            <a className="operate-btn" onClick={() => handleOpenInvoice(record, true)}>
+                                申请开票
+                            </a>
+                        )}
+                    </span>
                 );
             },
         },
@@ -403,21 +359,48 @@ const OutLayTable = (props: OutLayTableProps) => {
             onTableSelect && onTableSelect(selectedRowKeys, selectedRows);
         },
         getCheckboxProps: (record: OutLayListItem) => {
-            const { exchanged_amount, proj_id, fee_items} = record;
+            const { exchanged_amount, proj_id, fee_items } = record;
             let selectedStageId, hasReceiptSelected;
-            if(selectedRows.length > 0) {
+            if (selectedRows.length > 0) {
                 const { fee_items } = selectedRows[0];
                 selectedStageId = selectedRows[0].proj_id;
-                hasReceiptSelected = fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
+                hasReceiptSelected =
+                    fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
             }
             const isRefund = exchanged_amount < 0;
-            const hasReceipt = fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
+            const hasReceipt =
+                fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
             const disabled = selectedStageId && (proj_id !== selectedStageId || hasReceipt !== hasReceiptSelected);
             // 退款或者跟已选择的不属于同一个项目或者跟已选择的是否有收据不一致，不能做勾选做批量操作
-            return {disabled: !!(isRefund || disabled)}
-          },
+            return { disabled: !!(isRefund || disabled) };
+        },
         columnWidth: '48px',
-    }
+        renderCell: (checked: boolean, record: OutLayListItem, index: number, originNode: any) => {
+            const { id, exchanged_amount, proj_id, fee_items } = record;
+            let selectedStageId, hasReceiptSelected;
+            if (selectedRows.length > 0) {
+                const { fee_items } = selectedRows[0];
+                selectedStageId = selectedRows[0].proj_id;
+                hasReceiptSelected =
+                    fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
+            }
+            const isRefund = exchanged_amount < 0;
+            const hasReceipt =
+                fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
+            const disabled = selectedStageId && (proj_id !== selectedStageId || hasReceipt !== hasReceiptSelected);
+
+            // 退款或者跟已选择的不属于同一个项目或者跟已选择的是否有收据不一致，不能做勾选做批量操作
+            if (isRefund || disabled) {
+                return (
+                    <Tooltip title="无相关操作，不可选中" align={{ offset: [0, 4] }}>
+                        <Checkbox disabled={true} onChange={e => handleClickCheckbox(e.target.checked, id)}></Checkbox>
+                    </Tooltip>
+                );
+            } else {
+                return <Checkbox onChange={e => handleClickCheckbox(e.target.checked, id)}></Checkbox>;
+            }
+        },
+    };
 
     return (
         <div data-component="outlay-table">
@@ -439,14 +422,16 @@ const OutLayTable = (props: OutLayTableProps) => {
                 bordered
                 columns={columns}
                 dataSource={outlayList}
-                scroll={{ y: 'calc( 100vh - 410px )', }}
+                scroll={{ y: 'calc( 100vh - 410px )' }}
                 loading={isTableLoading}
                 onHandleResize={onHandleResize}
                 pagination={false}
                 rowSelection={rowSelection}
             />
 
-            <div className="total">收入(元)：{income}&emsp;支出(元)：{refund}&emsp;总计(元)：{total}&emsp;</div>
+            <div className="total">
+                收入(元)：{income}&emsp;支出(元)：{refund}&emsp;总计(元)：{total}&emsp;
+            </div>
             <FedPagination
                 onShowSizeChange={(current, page_size) => {
                     props.onPageSizeChange(page_size);

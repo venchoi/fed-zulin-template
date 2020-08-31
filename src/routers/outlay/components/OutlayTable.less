@@ -17,7 +17,6 @@
         right: 16px;
         margin-top: -48px;
     }
-    
 }
 
 .exchanged-to-name-popover {
@@ -30,6 +29,34 @@
 
         .ant-col:first-child {
             color: #868B8F;
+        }
+    }
+}
+
+.rental-resource-popover {
+    width: 160px;
+
+    .ant-popover-inner-content {
+        padding: 0;
+    }
+
+    .content {
+        max-height: 218px;
+        overflow: auto;
+
+        p {
+            margin-bottom: 8px;
+            padding: 0 16px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+
+            &:first-child {
+                margin-top: 16px;
+            }
+            &:last-child {
+                margin-bottom: 16px;
+            }
         }
     }
 }

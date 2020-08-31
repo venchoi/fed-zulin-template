@@ -33,19 +33,19 @@ const OutlayList = (props: any) => {
         exchange_end_date: '',
         exchange_start_date: '',
         page: 1,
-        page_size: 10,
+        page_size: 20,
     }); // 搜索参数
     const [outlayList, setOutlayList] = useState<OutLayListItem[]>([]);
     const [outlayListTotal, setOutlayListTotal] = useState(0);
     const [stageData, setStageData] = useState<StageDataItem[]>([]); // 所有项目的打印模板
-    const [statisticData, setStatisticData] = useState<StatisticData>({income: '0', refund: '0'});
+    const [statisticData, setStatisticData] = useState<StatisticData>({ income: '0', refund: '0' });
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
     const [selectedRows, setSelectedRows] = useState<OutLayListItem[]>([]);
     const [loading, setLoading] = useState(false);
     const [canApplyInvoice, setCanApplyInvoice] = useState(false); // 是否开启了申请开票功能
 
     useEffect(() => {
-        console.log("outlay index", user, history);
+        console.log('outlay index', user, history);
         getCanApplyInvoice().then(json => {
             try {
                 const {
@@ -75,7 +75,7 @@ const OutlayList = (props: any) => {
             } catch (error) {
                 message.error(error || '接口数据有误');
             }
-        }
+        };
         getData();
     }, [filterOptions]);
 
@@ -116,8 +116,6 @@ const OutlayList = (props: any) => {
         setSelectedRowKeys(selectedRowKeys);
     };
 
-
-
     return (
         <ContentLayout
             className="outlay-page"
@@ -128,7 +126,7 @@ const OutlayList = (props: any) => {
                         onChange={handleTopRightFunc}
                         projIds={selectedProjectIds}
                         projNames={selectedProjectNames}
-                        extData={{canApplyInvoice, stageData, user}}
+                        extData={{ canApplyInvoice, stageData, user }}
                         selectedRows={selectedRows}
                         selectedRowKeys={selectedRowKeys}
                     ></TopRightFunc>
@@ -167,7 +165,7 @@ const OutlayList = (props: any) => {
 };
 
 const mapStateToProps = (state: any) => ({
-    user: state.main.user
+    user: state.main.user,
 });
 
 export default connect(mapStateToProps)(OutlayList);
