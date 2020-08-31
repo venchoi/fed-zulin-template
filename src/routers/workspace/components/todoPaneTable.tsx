@@ -11,8 +11,7 @@ import { WorkspaceTracker } from '@/track';
 import { Local } from '@/MemoryShare';
 
 export const TodoPaneTable = (props: todoPaneTableProps) => {
-    const { activeCategory, projs, type, onRefresh } = props;
-    const [isUpdating, setIsUpdating] = useState(false); // 是否正在加载待办列表数据
+    const { activeCategory, projs, type, onRefresh, isUpdating, setIsUpdating } = props;
     const [tableColumns, setTableColumns] = useState([]); // antd Table 的 column
     const [dataList, setDataList] = useState([]); // 表格数据
     const [totalNums, setTotalNums] = useState(0); // 表格数据总条数

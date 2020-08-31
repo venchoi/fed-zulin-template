@@ -21,6 +21,7 @@
             padding: 0px 16px;
             height: 40px;
             color: #868B8F;
+            user-select: none;
             &.active {
                 position: relative;
                 color: #0D86FF;
@@ -34,6 +35,11 @@
                     height: 100%;
                     width: 2px;
                     background-color: #0D86FF;
+                }
+            }
+            &.updating {
+                &:hover {
+                    cursor: not-allowed;                    ;
                 }
             }
             &:hover {

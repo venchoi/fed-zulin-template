@@ -11,7 +11,7 @@ export const TodoPane = (props: TodoProps) => {
     const { type, projs, onChange } = props;
     const [categories, setCategories] = useState<category[]>([]); // 分类列表
     const [isCategoriesLoading, setIsCategoriesLoading] = useState(false); // 是否正在加载左侧分类数据
-
+    const [isUpdating, setIsUpdating] = useState(false); // 是否正在加载待办列表数据
     const [toggleUpdateCategories, setToggleUpdateCategories] = useState(false);
 
     const categoryTableMap = useMemo(() => {
@@ -121,6 +121,9 @@ export const TodoPane = (props: TodoProps) => {
     // 设置该类型为 active
     const handleToggleCategory = (category: category) => {
         return (e: React.MouseEvent) => {
+            if(isUpdating) {
+                return;
+            }
             categories.forEach(cate => {
                 cate.active = false;
             });
@@ -139,7 +142,7 @@ export const TodoPane = (props: TodoProps) => {
                 {categories.map(category => {
                     return (
                         <div
-                            className={`category-item ${category.active ? 'active' : ''}`}
+                            className={`category-item ${category.active ? 'active' : `${isUpdating ? 'updating' : ''}`}`}
                             key={category.id}
                             onClick={handleToggleCategory(category)}
                         >
@@ -156,14 +159,7 @@ export const TodoPane = (props: TodoProps) => {
                 })}
             </div>
             <div className="todo-table-container">
-                {activeCategory ? (
-                    <TodoPaneTable
-                        activeCategory={activeCategory}
-                        projs={projs}
-                        type={type}
-                        onRefresh={handleRefresh}
-                    />
-                ) : null}
+                {activeCategory ? <TodoPaneTable activeCategory={activeCategory} projs={projs} type={type} onRefresh={handleRefresh} isUpdating={isUpdating} setIsUpdating={setIsUpdating} /> : null}
             </div>
         </div>
     );
