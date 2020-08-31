@@ -108,7 +108,7 @@ class Layout extends React.Component<Props, State> {
                     onCollapse={this.onCollapse}
                 >
                     <Logo collapsed={collapsed} logoInfo={logoInfo} />
-                    <div style={{ maxHeight: 'calc(100vh - 56px)', overflowY: 'scroll' }} className="hide-scrollbar">
+                    <div style={{ maxHeight: 'calc(100vh - 100px)', overflowY: 'scroll' }} className="hide-scrollbar">
                         <FedMenu collapsed={collapsed} menuList={(nav && nav.children) || []} workflow={workflow} />
                     </div>
                 </Sider>

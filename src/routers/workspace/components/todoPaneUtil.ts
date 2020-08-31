@@ -7,11 +7,11 @@ export const getRidrectUrl = (code: string, record: any) => {
         case 'bill_reviewed':
             return `/static/billing/list?selectStatusParents=${window.encodeURIComponent(
                 '待收款'
-            )}&selectedStatus=${window.encodeURIComponent('待审核')}&keyword=${record.code}`;
+            )}&payEndDateType=&selectedStatus=${window.encodeURIComponent('待审核')}&keyword=${record.code}`;
             break;
         // 账单待退款
         case 'bill_refunded':
-            return `/static/billing/list?selectStatusParents=${window.encodeURIComponent('待退款')}&keyword=${
+            return `/static/billing/list?selectStatusParents=${window.encodeURIComponent('待退款')}&payEndDateType=&keyword=${
                 record.code
             }`;
             break;
@@ -33,7 +33,7 @@ export const getRidrectUrl = (code: string, record: any) => {
         case 'bill_overdue':
             return `/static/billing/list?selectStatusParents=${window.encodeURIComponent(
                 '待收款'
-            )}&selectedStatus=${window.encodeURIComponent('已逾期')}&keyword=${record.code}`;
+            )}&payEndDateType=&selectedStatus=${window.encodeURIComponent('已逾期')}&keyword=${record.code}`;
             break;
         // 营业额抽成待审核
         case 'turnover_reviewed':
