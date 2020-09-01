@@ -117,7 +117,7 @@ export interface FeeItem {
     full_room_name: string;
     id: string;
     intent_id: string | null;
-    invoice: any[] | null;
+    invoice: any[];
     late_fee_amount: string;
     late_fee_derated_amount: string;
     lessor_name: string;

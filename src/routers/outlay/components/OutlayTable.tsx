@@ -20,7 +20,7 @@ const OutLayTable = (props: OutLayTableProps) => {
     const {
         outlayList,
         onTableSelect,
-        extData: { canApplyInvoice, statisticData },
+        extData: { statisticData, canApplyInvoice },
         selectedRowKeys,
         selectedRows,
         isTableLoading,
@@ -31,15 +31,14 @@ const OutLayTable = (props: OutLayTableProps) => {
     const [columns, setColumns] = useState<any>([]);
     const [visible, setVisible] = useState(false); // 列配置的弹窗显示/隐藏
     const [fields, setFields] = useState<any>([]);
+    const [rowSelection, setRowSelection] = useState({});
 
     useEffect(() => {
-        setColumns(
-            initColumns.map((col, index) => ({
-                ...col,
-            }))
-        );
+        const tempColumn = getColumns();
+        const tempRowSelection = getRowSelection();
+        setColumns(tempColumn);
         setFields(
-            initColumns.map((col, index) => ({
+            tempColumn.map((col, index) => ({
                 field: col.dataIndex,
                 is_default: true,
                 key: `${index}`,
@@ -47,10 +46,11 @@ const OutLayTable = (props: OutLayTableProps) => {
                 selected: true,
             }))
         );
-    }, []);
+        setRowSelection(tempRowSelection);
+    }, [props]);
 
     const onHandleResize = throttle((index: number, size: { width: number; height: number }) => {
-        const nextColumns = cloneDeep(initColumns);
+        const nextColumns = getColumns();
         nextColumns[index].width = size.width;
         setColumns(nextColumns);
     }, 100);
@@ -62,7 +62,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             console.log('resultArr', resultArr);
             setVisible(false);
             setColumns(
-                initColumns.filter((item: ColumnProps<OutLayListItem>) =>
+                getColumns().filter((item: ColumnProps<OutLayListItem>) =>
                     resultArr.some((fieldItem: IField) => fieldItem.field === item.dataIndex && fieldItem.selected)
                 )
             );
@@ -101,7 +101,6 @@ const OutLayTable = (props: OutLayTableProps) => {
     };
 
     const handleClickCheckbox = (checked: boolean, key: string) => {
-        console.log('handleClickCheckbox checked', checked);
         let tempSelectedRowsKey = cloneDeep(selectedRowKeys);
         let tempSelectedRows = cloneDeep(selectedRows);
         if (checked) {
@@ -114,7 +113,6 @@ const OutLayTable = (props: OutLayTableProps) => {
             );
             tempSelectedRows.splice(tempSelectedRows.findIndex(item => item.id === key));
         }
-        console.log(tempSelectedRowsKey, tempSelectedRows);
         onTableSelect && onTableSelect(tempSelectedRowsKey, tempSelectedRows);
     };
 
@@ -122,22 +120,24 @@ const OutLayTable = (props: OutLayTableProps) => {
         const roomNames = record.fee_items[0]?.full_room_name?.split(',') || [];
         return (
             <div className="content">
-                {roomNames.map(roomName => (
-                    <p title={roomName}>{roomName}</p>
+                {roomNames.map((roomName, index) => (
+                    <p title={roomName} key={`${index}`}>{roomName}</p>
                 ))}
             </div>
         );
     };
 
-    const initColumns: ColumnProps<OutLayListItem>[] = [
+    const getColumns = (): ColumnProps<OutLayListItem>[] => ([
         {
             dataIndex: 'code',
             title: '交易号',
-            width: 224,
+            width: 249,
             fixed: 'left',
             render: (code: string, record: OutLayListItem, index: number) => {
-                const { payment_time, exchanged_on, id } = record;
+                const { exchanged_on, id, fee_items = [] } = record;
                 let exChangeDate = '--';
+                let isReceipted = fee_items[0]?.receipt?.length > 0; // 是否已经开了票据
+                let isInvoiced = fee_items[0]?.invoice?.length > 0; // 是否已经开了发票
                 if (exchanged_on) {
                     const arr = exchanged_on.split(' ');
                     if (arr && arr.length >= 0) {
@@ -147,7 +147,8 @@ const OutLayTable = (props: OutLayTableProps) => {
                 return (
                     <div>
                         <a href={`${config.baseAlias}/outlay/detail/${id}`}>{code}</a>
-                        {/* TODO 打包合同名称/楼栋 */}
+                        {isReceipted && <span className="char-tag receipt-tag">据</span>}
+                        {isInvoiced && <span className="char-tag invoice-tag">票</span>}
                     </div>
                 );
             },
@@ -320,13 +321,9 @@ const OutLayTable = (props: OutLayTableProps) => {
             width: 132,
             fixed: 'right',
             render: (text: string, record: OutLayListItem, index: number) => {
-                const { id, fee_items, proj_id } = record;
-                const {
-                    extData: { canApplyInvoice },
-                } = props;
-                const hasReceipt =
-                    fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
-                const hasInvoice = fee_items && fee_items.some(feeItem => feeItem.can_invoicing === 1);
+                const { id, fee_items = [], proj_id } = record;
+                const hasReceipt = fee_items[0]?.receipt?.length > 0;
+                const hasInvoice = fee_items.some(feeItem => feeItem.can_invoicing === 1);
                 return (
                     <span>
                         {!(hasReceipt || hasInvoice) && (
@@ -351,32 +348,14 @@ const OutLayTable = (props: OutLayTableProps) => {
                 );
             },
         },
-    ];
+    ]);
 
-    const rowSelection = {
+    const getRowSelection = () => ({
         hideSelectAll: true,
-        onChange: (selectedRowKeys: any, selectedRows: OutLayListItem[]) => {
-            onTableSelect && onTableSelect(selectedRowKeys, selectedRows);
-        },
-        getCheckboxProps: (record: OutLayListItem) => {
-            const { exchanged_amount, proj_id, fee_items } = record;
-            let selectedStageId, hasReceiptSelected;
-            if (selectedRows.length > 0) {
-                const { fee_items } = selectedRows[0];
-                selectedStageId = selectedRows[0].proj_id;
-                hasReceiptSelected =
-                    fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
-            }
-            const isRefund = exchanged_amount < 0;
-            const hasReceipt =
-                fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
-            const disabled = selectedStageId && (proj_id !== selectedStageId || hasReceipt !== hasReceiptSelected);
-            // 退款或者跟已选择的不属于同一个项目或者跟已选择的是否有收据不一致，不能做勾选做批量操作
-            return { disabled: !!(isRefund || disabled) };
-        },
         columnWidth: '48px',
         renderCell: (checked: boolean, record: OutLayListItem, index: number, originNode: any) => {
             const { id, exchanged_amount, proj_id, fee_items } = record;
+            const isChecked = selectedRowKeys.includes(id); // 数据双向绑定，用于清空
             let selectedStageId, hasReceiptSelected;
             if (selectedRows.length > 0) {
                 const { fee_items } = selectedRows[0];
@@ -397,23 +376,26 @@ const OutLayTable = (props: OutLayTableProps) => {
                     </Tooltip>
                 );
             } else {
-                return <Checkbox onChange={e => handleClickCheckbox(e.target.checked, id)}></Checkbox>;
+                return <Checkbox onChange={e => handleClickCheckbox(e.target.checked, id)} checked={isChecked}></Checkbox>;
             }
         },
-    };
+    });
 
     return (
         <div data-component="outlay-table">
             <div className="field-setting-btn">
-                <Dropdown
-                    placement="bottomRight"
-                    visible={visible}
-                    onVisibleChange={handleVisibleChange}
-                    overlay={renderExtraNode}
-                    trigger={['click']}
-                >
-                    <Button className="btn-setting" icon={<SettingOutlined />} />
-                </Dropdown>
+                <Tooltip title="列设置">
+                    <Dropdown
+                        placement="bottomRight"
+                        visible={visible}
+                        onVisibleChange={handleVisibleChange}
+                        overlay={renderExtraNode}
+                        trigger={['click']}
+                    >
+                        <Button className="btn-setting" icon={<SettingOutlined />} />
+                    </Dropdown>
+                </Tooltip>
+                
             </div>
             <ResizeTable
                 rowKey="id"
@@ -422,7 +404,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                 bordered
                 columns={columns}
                 dataSource={outlayList}
-                scroll={{ y: 'calc( 100vh - 410px )' }}
+                scroll={{ y: selectedRowKeys.length > 0 ? 'calc( 100vh - 458px )' : 'calc( 100vh - 410px )' }}
                 loading={isTableLoading}
                 onHandleResize={onHandleResize}
                 pagination={false}

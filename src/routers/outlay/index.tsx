@@ -6,12 +6,15 @@ import * as queryString from 'query-string';
 import ContentLayout from '@c/FedListPageLayout';
 import Filter from './components/Filter';
 import OutlayTable from './components/OutlayTable';
-import TopRightFunc from './components/TopRightFunc';
 import { GetOutlayListParams } from './index.d';
 import { projsValue } from '@t/project';
 import { getOutlayList, getCanApplyInvoice, getStatistics } from '@/services/outlay';
 import { OutLayListItem, StatisticData, StageDataItem } from '@/types/outlay';
 import { connect } from 'dva';
+import OperateBar from './components/OperateBar';
+import TreeProjectSelect from '@/components/TreeProjectSelect';
+
+import './index.less';
 
 const OutlayList = (props: any) => {
     const { user, history } = props;
@@ -59,6 +62,11 @@ const OutlayList = (props: any) => {
     }, []);
 
     useEffect(() => {
+        const { stage_id } = filterOptions;
+        console.log("===filterOptions change", filterOptions);
+        if(!stage_id) {
+            return;
+        }
         const getData = async () => {
             setLoading(true);
             const allData = await Promise.all([getOutlayList(filterOptions), getStatistics(filterOptions)]);
@@ -79,24 +87,15 @@ const OutlayList = (props: any) => {
         getData();
     }, [filterOptions]);
 
-    /**
-     * 处理右上角功能区的功能
-     * @param type 类型[project|]
-     * @param value
-     */
-    const handleTopRightFunc = (type: string, value: projsValue | string) => {
-        switch (type) {
-            case 'project':
-                const selectedProject = value as projsValue;
-                setSelectedProjectIds(selectedProject.projIds);
-                setSelectedProjectNames(selectedProject.projNames);
-                setFilterOptions({
-                    ...filterOptions,
-                    page: 1,
-                    stage_id: selectedProject.projIds.join(','),
-                });
-                break;
-        }
+    const handleTreeSelected = (value: projsValue | string) => {
+        const selectedProject = value as projsValue;
+        setSelectedProjectIds(selectedProject.projIds);
+        setSelectedProjectNames(selectedProject.projNames);
+        setFilterOptions({
+            ...filterOptions,
+            page: 1,
+            stage_id: selectedProject.projIds.join(','),
+        });
     };
 
     /**
@@ -122,26 +121,24 @@ const OutlayList = (props: any) => {
             title="收支管理"
             topRightSlot={
                 <div className="project-select-area">
-                    <TopRightFunc
-                        onChange={handleTopRightFunc}
-                        projIds={selectedProjectIds}
-                        projNames={selectedProjectNames}
-                        extData={{ canApplyInvoice, stageData, user }}
-                        selectedRows={selectedRows}
-                        selectedRowKeys={selectedRowKeys}
-                    ></TopRightFunc>
+                    <TreeProjectSelect onTreeSelected={handleTreeSelected} width={328}></TreeProjectSelect>
                 </div>
             }
         >
             <div>
-                {selectedProjectIds.length > 0 && (
-                    <Filter
-                        onChange={handleFilterChange}
-                        projIds={selectedProjectIds}
-                        projNames={selectedProjectNames}
-                        filterOptions={filterOptions}
-                    ></Filter>
-                )}
+                <Filter
+                    onChange={handleFilterChange}
+                    projIds={selectedProjectIds}
+                    projNames={selectedProjectNames}
+                    filterOptions={filterOptions}
+                ></Filter>
+                {selectedRowKeys.length > 0 && <OperateBar 
+                    selectedRows={selectedRows}
+                    selectedRowKeys={selectedRowKeys} 
+                    stageData={stageData} 
+                    user={user}
+                    canApplyInvoice={canApplyInvoice}
+                    onClear={() => handleTableSelect([], [])}/>}
                 <OutlayTable
                     outlayList={outlayList}
                     outlayListTotal={outlayListTotal}
