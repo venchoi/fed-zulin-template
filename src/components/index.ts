@@ -1,2 +1,4 @@
 import FedButton from './FedButton';
-export { FedButton };
+import FedTable from './FedTable';
+import FedPagination from './FedPagination';
+export { FedButton, FedTable, FedPagination };
