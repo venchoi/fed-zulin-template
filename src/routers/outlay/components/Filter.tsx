@@ -30,7 +30,10 @@ const Filter = (props: FilterProps) => {
     const [payParamsList, setPayParamsList] = useState<PaymentMode[]>([]); // 付款方式列表
 
     useEffect(() => {
-        console.log('===componentDidMount', props.projIds);
+        console.log('===projIds change', props.projIds);
+        if(props.projIds.length === 0) {
+            return;
+        }
         getFeeList({ proj_id: props.projIds.join(',') }).then(json => {
             console.log('getFeeList', json.data);
             setFeeList(json.data);
@@ -38,17 +41,32 @@ const Filter = (props: FilterProps) => {
         getPayParams(1).then(json => {
             setPayParamsList(json.data.PaymentMode);
         });
-    }, []);
+    }, [props.projIds]);
 
+    // 所选项目有变化，清空所选房间
     useEffect(() => {
-        console.log('===filterOptions change');
+        const { selectedProjId } = selectedRoomConfig;
+        console.log('stage_id change', selectedProjId);
         setSelectedRoomConfig({
-            ...selectedRoomConfig,
-            ...props.filterOptions,
+            selectedProjId: '',
+            subdistrictId: '',
+            buildingId: '',
+            floorId: '',
+            floorName: '',
+            roomId: '',
         });
-    }, [props.filterOptions]);
+        props.onChange({
+            ...props.filterOptions,
+            page: 1,
+            room_id: '',
+            subdistrict_id: '',
+            building_id: '',
+            floor_name: ''
+        });
+    }, [props.filterOptions.stage_id]);
 
     const handleRoomCascaderChange = debounce((selectedConfig: SelectedRoomConfig) => {
+        console.log("===selectedConfig", selectedConfig);
         const {
             stageId,
             subdistrictId = '',
@@ -69,7 +87,6 @@ const Filter = (props: FilterProps) => {
             ...props.filterOptions,
             page: 1,
             room_id: roomId,
-            stage_id: stageId,
             subdistrict_id: subdistrictId,
             building_id: buildingId,
             floor_name: floorName,
@@ -163,8 +180,8 @@ const Filter = (props: FilterProps) => {
             <br />
             <Space size={16}>
                 <div>
-                    <span className="deal-date">支付时间：</span>
                     <RangePicker
+                        placeholder={["支付开始时间", "支付结束时间"]}
                         format={dateFormat}
                         // value={[moment(props.filterOptions.start_date), moment(props.filterOptions.end_date)]}
                         onChange={(dates, dateStrings) =>
@@ -173,8 +190,8 @@ const Filter = (props: FilterProps) => {
                     />
                 </div>
                 <div>
-                    <span className="deal-date">交易时间：</span>
                     <RangePicker
+                        placeholder={["交易开始时间", "交易结束时间"]}
                         format={dateFormat}
                         // value={[moment(props.filterOptions.exchange_start_date), moment(props.filterOptions.exchange_end_date)]}
                         onChange={(dates, dateStrings) =>
