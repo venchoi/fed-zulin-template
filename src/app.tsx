@@ -116,6 +116,13 @@ const routes = [
         }),
     },
     {
+        path: '/outlay/detail/:id',
+        component: Loadable({
+            loader: () => import('./routers/outlay/detail'),
+            loading: loading,
+        }),
+    },
+    {
         path: '/derate',
         component: Loadable({
             loader: () => import('./routers/derate'),
