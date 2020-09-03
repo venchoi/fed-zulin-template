@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Breadcrumb, Card, Button, Col, Row, Divider, Table, PageHeader, Popover } from 'antd';
+import { Breadcrumb, Card, Button, Col, Row, Divider, Table, PageHeader, Popover, message } from 'antd';
 
 import './index.less';
 import { ColumnProps } from 'antd/lib/table';
@@ -7,12 +7,13 @@ import FedUpload from '@c/FedUpload';
 import { getOutLayDetail, getBillInfo } from '../service';
 import { IOutlayDetail, IBillInfo, IBillInfoItem, IOutLayDetailItem } from '../type';
 import { calcOutlayAmount } from '../provider';
-import { comma } from '@/helper/commonUtils';
+import { comma, getReportHref } from '@/helper/commonUtils';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { match } from 'react-router';
 import config from '@/config';
 import { Route } from 'antd/lib/breadcrumb/Breadcrumb';
 import { Link } from 'dva/router';
+import { has } from 'lodash';
 
 interface IProps {
     match: match<{ id: string }>;
@@ -178,17 +179,55 @@ const OutLayDetail = (props: IProps) => {
 
     console.log('renter', renter);
 
+    const getPageHeaderExtra = () => {
+        const nodes = [];
+        let hasReceipt = false;
+        if (Array.isArray(items) && items[0]?.receipt?.length > 0) {
+            hasReceipt = true;
+        }
+        if (hasReceipt) {
+            nodes.push(
+                <Button type="primary" key="1" onClick={handlePrintData}>
+                    打印收据
+                </Button>
+            );
+        }
+        if (!hasReceipt) {
+            nodes.push(
+                <Button type="primary" key="2" onClick={handleWriteOutReceipt}>
+                    开收据
+                </Button>
+            );
+        }
+        return nodes;
+    };
+
+    // 打印数据
+    const handlePrintData = () => {
+        if (stage?.print_template_id) {
+            const params = {
+                id: stage.print_template_id,
+                exchange_ids: `'${id}'`, // ''不能去掉
+            };
+            const url = getReportHref(params);
+            window.open(url, '_blank');
+        } else {
+            message.error('未设置打印模板');
+        }
+    };
+
+    // 开票据
+    const handleWriteOutReceipt = () => {
+        window.location.href = `/fed/receipt/invoice?exchange_ids=${exchange?.id}&stage_id=${stage?.id}`;
+    };
+
     return (
         <div className="outlay-detail">
             <PageHeader
                 className="page-header"
                 title="交易详情"
                 breadcrumb={{ routes, itemRender, separator: '>' }}
-                extra={[
-                    <Button type="primary" key="1">
-                        开收据
-                    </Button>,
-                ]}
+                extra={getPageHeaderExtra()}
             ></PageHeader>
             <div className="content-box">
                 <Card bordered={false} className="content" loading={loading}>
@@ -254,13 +293,10 @@ const OutLayDetail = (props: IProps) => {
                         <Col span={21}>
                             {(renter?.attentions &&
                                 renter.attentions[0] &&
-                                renter.attentions.map(item => (
-                                    <>
-                                        <span>
-                                            {item.name}/{item.mobile}
-                                        </span>
-                                        <br />
-                                    </>
+                                renter.attentions.map((item, index) => (
+                                    <div key={`${index}`}>
+                                        {item.name}/{item.mobile}
+                                    </div>
                                 ))) ||
                                 '-'}
                         </Col>
@@ -334,6 +370,7 @@ const OutLayDetail = (props: IProps) => {
                     <h4>交易明细</h4>
                     {Array.isArray(items) && (
                         <Table
+                            rowKey="id"
                             columns={columns}
                             dataSource={items || []}
                             pagination={false}
