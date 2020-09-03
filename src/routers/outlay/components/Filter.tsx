@@ -115,12 +115,11 @@ const Filter = (props: FilterProps) => {
         });
     };
 
-    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
-        console.log('handleSearchChange', e);
+    const handleSearch = (value: string) => {
         props.onChange({
             ...props.filterOptions,
             page: 1,
-            keyword: e.target.value,
+            keyword: value,
         });
     };
 
@@ -186,7 +185,7 @@ const Filter = (props: FilterProps) => {
                     style={{ width: 360 }}
                     placeholder="交易号、交易对方、合同编号、退款/收款编号…"
                     // value={props.filterOptions.keyword}
-                    onChange={handleSearchChange}
+                    onSearch={handleSearch}
                     title="交易号、交易对方、合同编号、房间、退款/收款编号、收款账号"
                 />
             </Space>
