@@ -335,15 +335,16 @@ const OutLayTable = (props: OutLayTableProps) => {
         },
         {
             title: '操作',
-            width: 132,
+            width: 140,
             fixed: 'right',
             render: (text: string, record: OutLayListItem, index: number) => {
-                const { id, fee_items = [], proj_id } = record;
+                const { id, fee_items = [], proj_id, exchanged_amount } = record;
                 const hasReceipt = fee_items[0]?.receipt?.length > 0;
                 const hasInvoice = fee_items.some(feeItem => feeItem.can_invoicing === 1);
+                const isRefund = exchanged_amount < 0;
                 return (
                     <span>
-                        {!(hasReceipt || hasInvoice) && (
+                        {!(hasReceipt || isRefund) && (
                             <a
                                 className="operate-btn"
                                 href={`/fed/receipt/invoice?exchange_ids=${id}&stage_id=${proj_id}`}
