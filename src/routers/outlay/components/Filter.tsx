@@ -4,18 +4,31 @@ import moment from 'moment';
 import RoomCascader from '@c/RoomCascader';
 import './Filter.less';
 import { SelectedRoomConfig } from '@/components/RoomCascader/index.d';
-import { FilterProps } from '../index.d';
-import { getFeeList } from '@/services/outlay';
+
+import { getFeeList } from '../service';
 import { getPayParams } from '@/services/common';
-import { FeeItem, RangePickerType } from '@/types/outlay';
+
 import { PaymentMode } from '@/types/common';
 import { debounce } from 'lodash';
 import { SelectValue } from 'antd/lib/select';
+import { GetOutlayListParams, FeeItem } from '../type';
 
 const { Search } = Input;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 const dateFormat = 'YYYY-MM-DD';
+
+interface FilterProps {
+    projIds: string[];
+    projNames: string[];
+    filterOptions: GetOutlayListParams; // 筛选条件
+    onChange(filterOptions: GetOutlayListParams): void;
+}
+
+enum RangePickerType {
+    pay,
+    order,
+}
 
 const Filter = (props: FilterProps) => {
     const [selectedRoomConfig, setSelectedRoomConfig] = useState({
@@ -31,7 +44,7 @@ const Filter = (props: FilterProps) => {
 
     useEffect(() => {
         console.log('===projIds change', props.projIds);
-        if(props.projIds.length === 0) {
+        if (props.projIds.length === 0) {
             return;
         }
         getFeeList({ proj_id: props.projIds.join(',') }).then(json => {
@@ -61,12 +74,12 @@ const Filter = (props: FilterProps) => {
             room_id: '',
             subdistrict_id: '',
             building_id: '',
-            floor_name: ''
+            floor_name: '',
         });
     }, [props.filterOptions.stage_id]);
 
     const handleRoomCascaderChange = debounce((selectedConfig: SelectedRoomConfig) => {
-        console.log("===selectedConfig", selectedConfig);
+        console.log('===selectedConfig', selectedConfig);
         const {
             stageId,
             subdistrictId = '',
@@ -181,7 +194,7 @@ const Filter = (props: FilterProps) => {
             <Space size={16}>
                 <div>
                     <RangePicker
-                        placeholder={["支付开始时间", "支付结束时间"]}
+                        placeholder={['支付开始时间', '支付结束时间']}
                         format={dateFormat}
                         // value={[moment(props.filterOptions.start_date), moment(props.filterOptions.end_date)]}
                         onChange={(dates, dateStrings) =>
@@ -191,7 +204,7 @@ const Filter = (props: FilterProps) => {
                 </div>
                 <div>
                     <RangePicker
-                        placeholder={["交易开始时间", "交易结束时间"]}
+                        placeholder={['交易开始时间', '交易结束时间']}
                         format={dateFormat}
                         // value={[moment(props.filterOptions.exchange_start_date), moment(props.filterOptions.exchange_end_date)]}
                         onChange={(dates, dateStrings) =>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import FedTable from '@/components/FedTable';
 import FedPagination from '@/components/FedPagination';
-import { OutLayTableProps, OutLayListItem, FeeItem, ExtPayment } from '@/types/outlay';
+
 import { ColumnProps } from 'antd/lib/table';
 import { Popover, Row, Col, Divider, Dropdown, Button, Checkbox, Tooltip } from 'antd';
 import FedIcon from '@/components/FedIcon';
@@ -15,6 +15,21 @@ import cloneDeep from 'lodash/cloneDeep';
 import { ResizeTable, DragSelect } from 'ykj-ui';
 import { IField } from '@/types/common';
 import { comma } from '@/helper/commonUtils';
+import { StatisticData, OutLayListItem, FeeItem, ExtPayment } from '../type';
+
+interface OutLayTableProps {
+    outlayList: any[];
+    outlayListTotal: number;
+    page: number;
+    pageSize: number;
+    onPageSizeChange: Function;
+    onPageChange: Function;
+    extData: { canApplyInvoice: boolean; statisticData: StatisticData };
+    onTableSelect: Function;
+    selectedRowKeys: string[];
+    selectedRows: OutLayListItem[];
+    isTableLoading: boolean;
+}
 
 const OutLayTable = (props: OutLayTableProps) => {
     const {
@@ -121,13 +136,15 @@ const OutLayTable = (props: OutLayTableProps) => {
         return (
             <div className="content">
                 {roomNames.map((roomName, index) => (
-                    <p title={roomName} key={`${index}`}>{roomName}</p>
+                    <p title={roomName} key={`${index}`}>
+                        {roomName}
+                    </p>
                 ))}
             </div>
         );
     };
 
-    const getColumns = (): ColumnProps<OutLayListItem>[] => ([
+    const getColumns = (): ColumnProps<OutLayListItem>[] => [
         {
             dataIndex: 'code',
             title: '交易号',
@@ -348,7 +365,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                 );
             },
         },
-    ]);
+    ];
 
     const getRowSelection = () => ({
         hideSelectAll: true,
@@ -376,7 +393,9 @@ const OutLayTable = (props: OutLayTableProps) => {
                     </Tooltip>
                 );
             } else {
-                return <Checkbox onChange={e => handleClickCheckbox(e.target.checked, id)} checked={isChecked}></Checkbox>;
+                return (
+                    <Checkbox onChange={e => handleClickCheckbox(e.target.checked, id)} checked={isChecked}></Checkbox>
+                );
             }
         },
     });
@@ -395,7 +414,6 @@ const OutLayTable = (props: OutLayTableProps) => {
                         <Button className="btn-setting" icon={<SettingOutlined />} />
                     </Dropdown>
                 </Tooltip>
-                
             </div>
             <ResizeTable
                 rowKey="id"

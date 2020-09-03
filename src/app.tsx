@@ -109,16 +109,9 @@ const routes = [
         }),
     },
     {
-        path: '/outlay/list',
+        path: '/outlay',
         component: Loadable({
             loader: () => import('./routers/outlay'),
-            loading: loading,
-        }),
-    },
-    {
-        path: '/outlay/detail/:id',
-        component: Loadable({
-            loader: () => import('./routers/outlay/detail'),
             loading: loading,
         }),
     },

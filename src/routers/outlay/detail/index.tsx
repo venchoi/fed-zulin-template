@@ -9,7 +9,6 @@ import { IOutlayDetail, IBillInfo, IBillInfoItem, IOutLayDetailItem } from '../t
 import { calcOutlayAmount } from '../provider';
 import { comma } from '@/helper/commonUtils';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { OutLayListItem } from '@/types/outlay';
 import { match } from 'react-router';
 import config from '@/config';
 import { Route } from 'antd/lib/breadcrumb/Breadcrumb';
