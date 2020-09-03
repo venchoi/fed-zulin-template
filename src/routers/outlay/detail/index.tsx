@@ -338,6 +338,7 @@ const OutLayDetail = (props: IProps) => {
                             dataSource={items || []}
                             pagination={false}
                             summary={getTableSummary}
+                            size="small"
                             className="exchange-detail-table"
                         ></Table>
                     )}

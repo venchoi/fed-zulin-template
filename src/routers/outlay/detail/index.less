@@ -1,35 +1,39 @@
 .outlay-detail {
-  .page-header {
-      background-color: #ffffff;
-  }
-  .content-box {
-    padding: 24px 24px 0 24px;
-
-    .content {
-        padding: 24px;
-        height: calc(100vh - 56px - 98px - 24px - 34px);
-        overflow: auto;
+    .page-header {
+        background-color: #ffffff;
     }
+    .content-box {
+        padding: 24px 24px 0 24px;
 
-    h4 {
-        margin: 16px 0;
+        .content {
+            padding: 24px;
+            height: calc(100vh - 56px - 98px - 24px - 34px);
+            overflow: auto;
+        }
 
-        &:first-child {
-            margin-top: 0;
+        h4 {
+            margin: 16px 0;
+
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+
+        .ant-divider-horizontal {
+            margin-bottom: 16px;
         }
     }
 
-    .ant-divider-horizontal {
-        margin-bottom: 16px;
+    .exchange-detail-table {
+        .summary-title {
+            font-weight: bold;
+        }
+        .summary-money {
+            text-align: right;
+        }
     }
-  }
 
-  .exchange-detail-table {
-      .summary-title {
-        font-weight: bold;
-      }
-      .summary-money {
-        text-align: right;
-      }
-  }
+    .popover {
+        margin-left: 4px;
+    }
 }
