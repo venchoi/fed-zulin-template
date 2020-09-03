@@ -108,7 +108,7 @@ class Layout extends React.Component<Props, State> {
                     onCollapse={this.onCollapse}
                 >
                     <Logo collapsed={collapsed} logoInfo={logoInfo} />
-                    <div style={{ maxHeight: 'calc(100vh - 56px)', overflowY: 'scroll' }} className="hide-scrollbar">
+                    <div style={{ maxHeight: 'calc(100vh - 100px)', overflowY: 'scroll' }} className="hide-scrollbar">
                         <FedMenu collapsed={collapsed} menuList={(nav && nav.children) || []} workflow={workflow} />
                     </div>
                 </Sider>
@@ -149,6 +149,11 @@ class Layout extends React.Component<Props, State> {
         const { data } = await getHomeBaseInfo(query);
         const props: any = handleBaseInfo(data);
         this.setState({ ...props, inited: true });
+        // 将全局基本信息放入到store中, 其它地方可能用到
+        this.props.dispatch({
+            type: 'main/initBaseInfo',
+            data: props,
+        });
         this.initTracker(props.user);
         const { data: workflowData } = await getWorkflowTodo();
         this.setState({ ...workflowData });

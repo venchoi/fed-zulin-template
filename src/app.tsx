@@ -87,6 +87,13 @@ const routes = [
             loading,
         }),
     },
+    {
+        path: '/workspace',
+        component: Loadable({
+            loader: () => import('./routers/workspace'),
+            loading,
+        }),
+    },
     // TODO children route
     {
         path: '/metermg/detail-adjust/:id',
@@ -155,7 +162,7 @@ const routes = [
     },
 ];
 
-class App extends React.PureComponent<RouteComponentProps> {
+class App extends React.PureComponent<Props> {
     public render() {
         return (
             <BrowserRouter basename="/middleground">
@@ -165,7 +172,7 @@ class App extends React.PureComponent<RouteComponentProps> {
                         {routes.map(item => {
                             return <Route path={item.path} component={item.component} key={item.path} />;
                         })}
-                        <Redirect exact from="/*" to="/report?_smp=Rental.Report" />
+                        <Redirect exact from="/*" to="/workspace/index?_smp=Rental.Workbench" />
                     </Switch>
                     {/* </Suspense> */}
                 </Layout>

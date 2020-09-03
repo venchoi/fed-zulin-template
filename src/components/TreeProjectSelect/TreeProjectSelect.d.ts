@@ -41,6 +41,7 @@ export interface treeProjectSelectState {
     projIds: string[];
     projNames: string[];
     allProjs: projsType;
+    isDropdownVisible: boolean;
 }
 
 declare class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProjectSelectState> {
