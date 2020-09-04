@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import FedTable from '@/components/FedTable';
 import FedPagination from '@/components/FedPagination';
 
 import { ColumnProps } from 'antd/lib/table';
-import { Popover, Row, Col, Divider, Dropdown, Button, Checkbox, Tooltip } from 'antd';
-import FedIcon from '@/components/FedIcon';
+import { Popover, Dropdown, Button, Checkbox, Tooltip } from 'antd';
 import { ExclamationCircleOutlined, SettingOutlined } from '@ant-design/icons';
-import { Link } from 'dva/router';
 import config from '@/config';
 
 import './OutlayTable.less';
-import { isPlainObject, debounce, throttle } from 'lodash';
+import { throttle } from 'lodash';
 import cloneDeep from 'lodash/cloneDeep';
 import { ResizeTable, DragSelect } from 'ykj-ui';
 import { IField } from '@/types/common';
 import { comma } from '@/helper/commonUtils';
 import { StatisticData, OutLayListItem, FeeItem, ExtPayment } from '../type';
+import ReceiptTag from '@/components/ReceiptTag';
+import InvoiceTag from '@/components/InvoiceTag';
 
 interface OutLayTableProps {
     outlayList: any[];
@@ -164,8 +163,8 @@ const OutLayTable = (props: OutLayTableProps) => {
                 return (
                     <div>
                         <a href={`${config.baseAlias}/outlay/detail/${id}`}>{code}</a>
-                        {isReceipted && <span className="char-tag receipt-tag">据</span>}
-                        {isInvoiced && <span className="char-tag invoice-tag">票</span>}
+                        {isReceipted && <ReceiptTag data={record.fee_items[0]?.receipt} />}
+                        {isInvoiced && <InvoiceTag data={record.fee_items[0]?.invoice}></InvoiceTag>}
                     </div>
                 );
             },

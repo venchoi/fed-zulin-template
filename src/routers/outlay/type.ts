@@ -1,4 +1,5 @@
 import { projsValue } from '@t/project';
+import { IInvoice, IReceipt } from '@/types/common';
 
 export interface FeeItem {
     fee_name: string;
@@ -100,13 +101,13 @@ export interface FeeItem {
     full_room_name: string;
     id: string;
     intent_id: string | null;
-    invoice: any[];
+    invoice: IInvoice[];
     late_fee_amount: string;
     late_fee_derated_amount: string;
     lessor_name: string;
     meter_reading_id: string | null;
     package_name: string | null;
-    receipt: any[];
+    receipt: IReceipt[];
     room_name: string;
     room_no: string;
     start_date: string | null;
