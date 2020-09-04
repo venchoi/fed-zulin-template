@@ -1,0 +1,31 @@
+.receipt-tag {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 12px;
+    color: white;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 9px;
+    transform: translateY(-1px);
+    background-color: #81A19B;
+    cursor: pointer;
+}
+
+.receipt-tag-popover {
+    width: 360px;
+
+    .content {
+        max-height: 352px;
+        overflow: auto;
+
+        .item {
+            border-bottom: 1px solid #EBEFF2;
+
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+    }
+}

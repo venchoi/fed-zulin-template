@@ -62,3 +62,19 @@ export interface IField {
     width?: number | string;
 }
 
+export interface IInvoice {
+    id: string;
+    number: string;
+    type_name: string;
+    amount: string;
+    receipt_date: string;
+    receipt_by_name: string;
+}
+
+export interface IReceipt {
+    id: string;
+    number: string;
+    payee_name: string;
+    amount: string;
+    receipt_time: string;
+}

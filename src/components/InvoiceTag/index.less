@@ -1,0 +1,33 @@
+.invoice-tag {
+    display: inline-block;
+    margin-left: 4px;
+    font-size: 12px;
+    color: white;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    border-radius: 9px;
+    transform: translateY(-1px);
+    background-color: #B3868A;
+    cursor: pointer;
+}
+
+.invoice-tag-popover {
+    width: 360px;
+
+    .ant-popover-inner-content {
+        max-height: 360px;
+        overflow: auto;
+
+        .item {
+            border-bottom: 1px solid #EBEFF2;
+            margin-bottom: 8px;
+
+            &:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+            }
+        }
+    }
+}
