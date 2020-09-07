@@ -111,7 +111,7 @@ export interface FeeItem {
     room_name: string;
     room_no: string;
     start_date: string | null;
-    transference: any[];
+    transference: ITransference;
 }
 
 export interface OutLayListItem {
@@ -197,7 +197,7 @@ export interface TopRightFuncProps {
     onChange(type: string, value: projsValue | string): void;
 }
 
-interface IRenter {
+export interface IRenter {
     attentions: {
         description: string;
         mobile: string;
@@ -211,10 +211,25 @@ interface IRenter {
     type: string;
 }
 
-interface IStage {
+export interface IStage {
     id: string;
     name: string;
     print_template_id: string;
+}
+
+interface ITransference {
+    amount: string;
+    contract_code: string;
+    end_date: string;
+    fee_name: string;
+    from: string;
+    from_exchange_id: string;
+    pay_deadline_date: string;
+    renter_name: string;
+    room_name: string;
+    start_date: string;
+    transference_type: string;
+    type: string;
 }
 
 export interface IOutLayDetailItem {
@@ -243,7 +258,8 @@ export interface IOutLayDetailItem {
     room_name: string;
     room_no: string;
     start_date: string;
-    transference: any[];
+    transference: ITransference;
+    from_exchange_id?: string;
 }
 
 export interface IOutLayDetailItemObj {
@@ -258,14 +274,8 @@ export interface IGetOutlayDetailParams {
     id: string;
 }
 
-export interface IOutlayDetail {
-    info: {
-        contract: {
-            lessor_id: string;
-            lessor_name: string;
-        };
-        exchange: {
-            attachment: any[];
+export interface IExchange {
+    attachment: any[];
             bill_code: string;
             bill_id: string;
             code: string;
@@ -302,7 +312,15 @@ export interface IOutlayDetail {
             transaction_code: string;
             transference_info: any;
             type: string;
+}
+
+export interface IOutlayDetail {
+    info: {
+        contract: {
+            lessor_id: string;
+            lessor_name: string;
         };
+        exchange: IExchange;
         renter: IRenter;
         stage: IStage;
     };

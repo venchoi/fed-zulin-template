@@ -9,6 +9,7 @@ const outlayRoutes = ({ match }: RouteChildrenProps) => {
         <Switch>
             <Route exact path={`${match?.path}/list`} component={OutlayList} />
             <Route exact path={`${match?.path}/detail/:id`} component={OutLayDetail} />
+            <Route exact path={`${match?.path}/deduction-detail/:id`} component={OutLayDetail} />
             <Redirect to={`${match?.path}/list`} />
         </Switch>
     );
