@@ -169,7 +169,7 @@ const Filter = (props: FilterProps) => {
                         ))}
                 </Select>
                 <Select
-                    placeholder="付款方式"
+                    placeholder="支付方式"
                     style={{ width: 144 }}
                     allowClear
                     onChange={value => handleSelectChange('payment_mode_id', value)}

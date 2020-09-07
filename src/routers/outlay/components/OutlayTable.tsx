@@ -333,6 +333,16 @@ const OutLayTable = (props: OutLayTableProps) => {
             },
         },
         {
+            dataIndex: 'payment_mode',
+            title: '支付方式',
+            width: 140,
+            ellipsis: true,
+            render: (text: string, record: OutLayListItem) => {
+                let result = `${text}${record.system_remark ? `(${record.system_remark})` : ''}`;
+                return <span title={result}>{result || '--'}</span>;
+            },
+        },
+        {
             title: '操作',
             width: 140,
             fixed: 'right',
