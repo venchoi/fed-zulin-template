@@ -193,7 +193,7 @@ const Filter = (props: FilterProps) => {
             <Space size={16}>
                 <div>
                     <RangePicker
-                        placeholder={['支付开始时间', '支付结束时间']}
+                        placeholder={['支付开始日期', '支付结束日期']}
                         format={dateFormat}
                         style={{ width: '328px' }}
                         // value={[moment(props.filterOptions.start_date), moment(props.filterOptions.end_date)]}
@@ -204,7 +204,7 @@ const Filter = (props: FilterProps) => {
                 </div>
                 <div>
                     <RangePicker
-                        placeholder={['交易开始时间', '交易结束时间']}
+                        placeholder={['交易开始日期', '交易结束日期']}
                         format={dateFormat}
                         style={{ width: '328px' }}
                         // value={[moment(props.filterOptions.exchange_start_date), moment(props.filterOptions.exchange_end_date)]}
