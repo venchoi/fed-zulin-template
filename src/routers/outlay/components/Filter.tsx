@@ -146,7 +146,7 @@ const Filter = (props: FilterProps) => {
         <div data-component="outlay-filter">
             <Space size={16}>
                 <RoomCascader
-                    style={{ width: 224 }}
+                    style={{ width: 216 }}
                     projIds={props.projIds.join(',')}
                     projNames={props.projNames.join(',')}
                     selectedConfig={selectedRoomConfig}
@@ -155,7 +155,7 @@ const Filter = (props: FilterProps) => {
                 <Select
                     placeholder="全部费项"
                     mode="multiple"
-                    style={{ width: 144 }}
+                    style={{ width: 216 }}
                     maxTagCount={1}
                     maxTagPlaceholder="..."
                     allowClear
@@ -170,7 +170,7 @@ const Filter = (props: FilterProps) => {
                 </Select>
                 <Select
                     placeholder="支付方式"
-                    style={{ width: 144 }}
+                    style={{ width: 216 }}
                     allowClear
                     onChange={value => handleSelectChange('payment_mode_id', value)}
                 >
@@ -182,7 +182,7 @@ const Filter = (props: FilterProps) => {
                         ))}
                 </Select>
                 <Search
-                    style={{ width: 360 }}
+                    style={{ width: 328 }}
                     placeholder="交易号、交易对方、合同编号、退款/收款编号…"
                     // value={props.filterOptions.keyword}
                     onSearch={handleSearch}
@@ -195,6 +195,7 @@ const Filter = (props: FilterProps) => {
                     <RangePicker
                         placeholder={['支付开始时间', '支付结束时间']}
                         format={dateFormat}
+                        style={{ width: '328px' }}
                         // value={[moment(props.filterOptions.start_date), moment(props.filterOptions.end_date)]}
                         onChange={(dates, dateStrings) =>
                             handleRangePickerChange(RangePickerType.pay, dates, dateStrings)
@@ -205,6 +206,7 @@ const Filter = (props: FilterProps) => {
                     <RangePicker
                         placeholder={['交易开始时间', '交易结束时间']}
                         format={dateFormat}
+                        style={{ width: '328px' }}
                         // value={[moment(props.filterOptions.exchange_start_date), moment(props.filterOptions.exchange_end_date)]}
                         onChange={(dates, dateStrings) =>
                             handleRangePickerChange(RangePickerType.order, dates, dateStrings)
