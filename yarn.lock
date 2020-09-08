@@ -4627,10 +4627,10 @@ fecha@~3.0.3:
   version "3.0.3"
   resolved "https://registry-npm.mypaas.com.cn/fecha/-/fecha-3.0.3.tgz#fabbd416497649a42c24d34bfa726b579203a1e2"
 
-fed-finance-component@^3.1.2:
-  version "3.1.2"
-  resolved "https://registry.yarnpkg.com/fed-finance-component/-/fed-finance-component-3.1.2.tgz#e18f4ca7d675357b9ba7136e3696151872a5106e"
-  integrity sha512-CjaFoBcKQng93cOW4vj/hu/Avz3AW8bpfo6ggXI6qNcTMT6VBcba1eHJvxWKlcg3orAhwBz5sBrCuAG+sMCVYg==
+fed-finance-component@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/fed-finance-component/-/fed-finance-component-3.1.5.tgz#47b44efd58396b36989aeb87d2f0ef580e0614f5"
+  integrity sha512-btAx4k4yB2B4RXoEuGCWD+Ok8j+gnDL66stJiujh/zWXsvSg5ZRb12Tv5wv6fpM875kNzHnSioGr6T51mGCnVw==
   dependencies:
     "@ant-design/icons" "^4.0.0"
     antd "^4.3.2"
