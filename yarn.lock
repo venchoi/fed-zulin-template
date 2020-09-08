@@ -4638,9 +4638,10 @@ fed-finance-component@^3.1.2:
     babel-plugin-import "^1.13.0"
     js-cookie "^2.2.1"
 
-fedtoolgroup@^1.1.15:
-  version "1.1.15"
-  resolved "https://registry.in.myspacex.cn/fedtoolgroup/download/fedtoolgroup-1.1.15.tgz#4b6e54412aa891a986dac73daa5cf8a80973afb3"
+fedtoolgroup@1.1.16:
+  version "1.1.16"
+  resolved "https://registry.in.myspacex.cn/fedtoolgroup/download/fedtoolgroup-1.1.16.tgz#905e7bede60665b9d3d717ffcccb5c2480ab0819"
+  integrity sha1-kF577eYGZbnT1xf/zMtcJICrCBk=
   dependencies:
     ali-oss "^6.5.1"
     axios "^0.19.2"
