@@ -55,6 +55,7 @@
         "@types/react-dom": "^16.9.5",
         "@types/react-loadable": "^5.5.3",
         "@types/react-test-renderer": "^16.9.1",
+        "@types/webpack-env": "^1.15.2",
         "autoprefixer": "^9.7.6",
         "babel-jest": "^24.9.0",
         "babel-loader": "^8.0.6",

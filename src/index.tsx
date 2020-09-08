@@ -29,11 +29,18 @@ setConfig({
     disableHotRenderer: true,
     reloadHooks: false,
 });
+const globalModelContext = require.context('./model/', false, /\.ts$/); // 全局Model文件
+const featureModelContext = require.context('.', true, /model\.ts$/); // 业务Model文件（页面级）
+const globalModelFiles = globalModelContext.keys().map(key => globalModelContext(key));
+const featureModelFiles = featureModelContext.keys().map(key => featureModelContext(key));
+
 const app = dva({
     history: createHistory(),
 });
 app.use(createLoading());
-app.model(mainModel);
+/* app.model(mainModel);*/
+globalModelFiles.forEach(model => app.model(model.default));
+featureModelFiles.forEach(model => app.model(model.default));
 
 function renderWithHotReload(C: any) {
     app.router((obj: any) => (
