@@ -41,6 +41,7 @@ const Filter = (props: FilterProps) => {
     });
     const [feeList, setFeeList] = useState<FeeItem[]>([]); // 费项列表
     const [payParamsList, setPayParamsList] = useState<PaymentMode[]>([]); // 付款方式列表
+    const [keywords, setKeyWords] = useState('');
 
     useEffect(() => {
         console.log('===projIds change', props.projIds);
@@ -60,6 +61,9 @@ const Filter = (props: FilterProps) => {
     useEffect(() => {
         const { selectedProjId } = selectedRoomConfig;
         console.log('stage_id change', selectedProjId);
+        if(!props.filterOptions.stage_id)  {
+            return;
+        }
         setSelectedRoomConfig({
             selectedProjId: '',
             subdistrictId: '',
@@ -68,15 +72,11 @@ const Filter = (props: FilterProps) => {
             floorName: '',
             roomId: '',
         });
-        props.onChange({
-            ...props.filterOptions,
-            page: 1,
-            room_id: '',
-            subdistrict_id: '',
-            building_id: '',
-            floor_name: '',
-        });
     }, [props.filterOptions.stage_id]);
+
+    useEffect(() => {
+        setKeyWords(props.filterOptions.keyword || '');
+    }, [props.filterOptions.keyword])
 
     const handleRoomCascaderChange = debounce((selectedConfig: SelectedRoomConfig) => {
         console.log('===selectedConfig', selectedConfig);
@@ -123,6 +123,10 @@ const Filter = (props: FilterProps) => {
         });
     };
 
+    const handleChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
+        setKeyWords(event.target.value)
+    }
+
     const handleRangePickerChange = (type: RangePickerType, dates: any, dateStrings: [string, string]) => {
         console.log(handleRangePickerChange, type, dates, dateStrings);
         if (type === RangePickerType.pay) {
@@ -160,6 +164,7 @@ const Filter = (props: FilterProps) => {
                     maxTagPlaceholder="..."
                     allowClear
                     onChange={value => handleSelectChange('fee_name', value)}
+                    value={props.filterOptions.fee_name || undefined }
                 >
                     {feeList &&
                         feeList.map((item, index) => (
@@ -173,6 +178,7 @@ const Filter = (props: FilterProps) => {
                     style={{ width: 216 }}
                     allowClear
                     onChange={value => handleSelectChange('payment_mode_id', value)}
+                    value={props.filterOptions.payment_mode_id || undefined}
                 >
                     {payParamsList &&
                         payParamsList.map(item => (
@@ -184,8 +190,9 @@ const Filter = (props: FilterProps) => {
                 <Search
                     style={{ width: 328 }}
                     placeholder="交易号、交易对方、合同编号、退款/收款编号…"
-                    // value={props.filterOptions.keyword}
+                    value={keywords || undefined}
                     onSearch={handleSearch}
+                    onChange={handleChangeSearch}
                     title="交易号、交易对方、合同编号、房间、退款/收款编号、收款账号"
                 />
             </Space>
@@ -196,7 +203,7 @@ const Filter = (props: FilterProps) => {
                         placeholder={['支付开始日期', '支付结束日期']}
                         format={dateFormat}
                         style={{ width: '328px' }}
-                        // value={[moment(props.filterOptions.start_date), moment(props.filterOptions.end_date)]}
+                        value={!props.filterOptions.start_date || !props.filterOptions.start_date ? null : [moment(props.filterOptions.start_date), moment(props.filterOptions.end_date)]}
                         onChange={(dates, dateStrings) =>
                             handleRangePickerChange(RangePickerType.pay, dates, dateStrings)
                         }
@@ -207,7 +214,7 @@ const Filter = (props: FilterProps) => {
                         placeholder={['交易开始日期', '交易结束日期']}
                         format={dateFormat}
                         style={{ width: '328px' }}
-                        // value={[moment(props.filterOptions.exchange_start_date), moment(props.filterOptions.exchange_end_date)]}
+                        value={!props.filterOptions.exchange_start_date || !props.filterOptions.exchange_end_date ? null : [moment(props.filterOptions.exchange_start_date), moment(props.filterOptions.exchange_end_date)]}
                         onChange={(dates, dateStrings) =>
                             handleRangePickerChange(RangePickerType.order, dates, dateStrings)
                         }

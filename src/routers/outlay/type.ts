@@ -369,3 +369,37 @@ export interface IBillInfoItem {
 export interface IBillInfo {
     items: IBillInfoItem[];
 }
+
+export class FilterOptions {
+    stage_id: string;
+    subdistrict_id: string;
+    building_id: string;
+    floor_name: string;
+    room_id: string;
+    fee_name: string;
+    payment_mode_id: string;
+    keyword: string;
+    start_date: string; // 支付开始时间
+    end_date: string; // 支付结束时间
+    exchange_end_date: string;
+    exchange_start_date: string;
+    page: number;
+    page_size: number;
+
+    constructor() {
+        this.stage_id = '';
+        this.subdistrict_id = '';
+        this.building_id = '';
+        this.floor_name = '';
+        this.room_id = '';
+        this.fee_name = '';
+        this.payment_mode_id = '';
+        this.keyword = '';
+        this.start_date = '';
+        this.end_date = '';
+        this.exchange_end_date = '';
+        this.exchange_start_date = '';
+        this.page = 1;
+        this.page_size = 20;
+    }
+}

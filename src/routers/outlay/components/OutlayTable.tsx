@@ -15,6 +15,7 @@ import { comma } from '@/helper/commonUtils';
 import { StatisticData, OutLayListItem, FeeItem, ExtPayment } from '../type';
 import ReceiptTag from '@/components/ReceiptTag';
 import InvoiceTag from '@/components/InvoiceTag';
+import { Link } from 'dva/router';
 
 interface OutLayTableProps {
     outlayList: any[];
@@ -162,7 +163,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                 }
                 return (
                     <div>
-                        <a href={`${config.baseAlias}/outlay/detail/${id}`}>{code}</a>
+                        <Link to={`/outlay/detail/${id}`}>{code}</Link>
                         {isReceipted && <ReceiptTag data={record.fee_items[0]?.receipt} />}
                         {isInvoiced && <InvoiceTag data={record.fee_items[0]?.invoice}></InvoiceTag>}
                     </div>
