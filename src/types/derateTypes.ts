@@ -50,6 +50,16 @@ export interface batchAuditParams {
     ids: string[];
 }
 
+export interface auditAllParams {
+    proj_ids: string;
+    type: string;
+}
+
+export interface getAuditStatusParams {
+    proj_ids: string;
+    type: string;
+}
+
 export interface voidParams {
     id: string;
 }

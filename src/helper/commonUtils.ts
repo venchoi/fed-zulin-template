@@ -60,7 +60,7 @@ export function formatNum(num: number | string, decimal: number = 2) {
 }
 
 export function comma(num: string): string {
-    if(!num || (typeof num !== 'string' && typeof num !== 'number')) {
+    if (!num || (typeof num !== 'string' && typeof num !== 'number')) {
         return num;
     }
     const reg = /^[-+]?[0-9]+(\.?[0-9])?[0-9]*$/;
@@ -173,4 +173,22 @@ export function sort(arr: any[]): any[] {
         return x.name > y.name ? 1 : -1;
     });
     return arr;
+}
+
+export function formatPhone(phone: string): string {
+    if (!phone) {
+        return phone;
+    }
+    let result = '';
+    var mLength = phone.length;
+    if (mLength <= 3) {
+        result = phone;
+    } else {
+        if (mLength <= 7) {
+            result = phone.substring(0, 3) + ' ' + phone.substring(3, mLength);
+        } else {
+            result = phone.substring(0, 3) + ' ' + phone.substring(3, 7) + ' ' + phone.substring(7, mLength);
+        }
+    }
+    return result;
 }

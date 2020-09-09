@@ -2,6 +2,7 @@
     "compilerOptions": {
         "jsx": "react",
         "experimentalDecorators": true,
+        "suppressImplicitAnyIndexErrors": true,   /* https://blog.csdn.net/lihefei_coder/article/details/103694047 */
         "skipLibCheck": true,
         /* Basic Options */
         // "incremental": true,                   /* Enable incremental compilation */

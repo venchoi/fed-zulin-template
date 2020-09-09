@@ -14,6 +14,8 @@ import {
     workflowTempIsEnableParams,
     createWHInstanceParams,
     commitInfoStatusParams,
+    auditAllParams,
+    getAuditStatusParams,
 } from '@/types/derateTypes';
 
 export const getProjectTreeData = (data: getTreeDataParams) => {
@@ -44,8 +46,19 @@ export const auditDerate = (data: auditParams) => {
     return ajax('/bill/derated/audit', { ...data, _csrf: '' }, 'POST');
 };
 
+// 批量审核
 export const batchAuditDerate = (data: batchAuditParams) => {
     return ajax('/bill/derated/batch-audit', { ...data, _csrf: '' }, 'POST');
+};
+
+// 全部审核
+export const auditAll = (data: auditAllParams) => {
+    return ajax('/queue/queue/add', { ...data, _csrf: '' }, 'POST');
+};
+
+// 获取审核结果
+export const getAuditStatus = (data: getAuditStatusParams) => {
+    return ajax('/queue/queue/get-status', { ...data, _csrf: '' }, 'POST');
 };
 
 // 作废
@@ -64,7 +77,7 @@ export const getBillItemFee = (data: billItemFeeParams) => {
 };
 
 export const fetchOaDetailData = (data: oaDetailParams) => {
-    return ajax('/third/scene/get-third-url', { ...data, _csrf: '' }, 'POST');
+    return ajax('/third/scene/get-third-url', { ...data, _csrf: '' }, 'GET');
 };
 
 // 获取是否设置了审批流
@@ -78,5 +91,5 @@ export const createInstanceForWH = (data: createWHInstanceParams) => {
 };
 
 export const getCommitInfoStatusForWH = (data: commitInfoStatusParams) => {
-    return ajax('/workflow/workflow/get-commit-info', { ...data, _csrf: '' }, 'POST');
+    return ajax('/workflow/workflow/get-commit-info', { ...data, _csrf: '' }, 'GET');
 };

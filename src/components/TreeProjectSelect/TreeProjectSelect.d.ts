@@ -24,7 +24,7 @@ export interface treeOriginNode extends treeNode {
 }
 
 export interface treeProjectSelectProps {
-    width?: number;
+    width?: number | string;
     height?: string;
     dropdownStyle?: any;
     maxTagCount?: number;
@@ -33,12 +33,15 @@ export interface treeProjectSelectProps {
     notInitSelect?: boolean; // 不初始展示选中值
     onTreeSelected?: (value: projsValue) => void;
     value?: string[];
+    onChange?: (value: string) => void;
 }
 export interface treeProjectSelectState {
     treeData: treeOriginNode[];
     searchValue: string;
     projIds: string[];
     projNames: string[];
+    allProjs: projsType;
+    isDropdownVisible: boolean;
 }
 
 declare class TreeProjectSelect extends React.Component<treeProjectSelectProps, treeProjectSelectState> {

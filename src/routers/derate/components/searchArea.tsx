@@ -9,13 +9,14 @@ type SearchEvent =
     | undefined;
 interface searchAreaProps {
     onKeywordSearch(keyword: string, e?: SearchEvent): void;
-    onAudit(e: React.MouseEvent): void;
+    onAudit(isAll: boolean | undefined): (e: React.MouseEvent) => void;
     selectedRowKeys: string[];
     keywordValue: string;
+    total: number;
 }
 
 export const SearchArea = function(props: searchAreaProps) {
-    const { selectedRowKeys, onAudit, keywordValue } = props;
+    const { selectedRowKeys, onAudit, keywordValue, total } = props;
     const [keyword, setKeyword] = useState('');
 
     useEffect(() => {
@@ -23,8 +24,8 @@ export const SearchArea = function(props: searchAreaProps) {
     }, [keywordValue]);
 
     const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        const value = e.target.value;
-        setKeyword(value);
+        const value = e.target.value || '';
+        setKeyword(value.trim());
     };
 
     const handleKeywordSearch = (value: string, e?: SearchEvent): void => {
@@ -45,8 +46,20 @@ export const SearchArea = function(props: searchAreaProps) {
                 <Button
                     type="primary"
                     className="f-hidden rental-derate-audit"
+                    disabled={total === 0}
+                    onClick={onAudit(true)}
+                    style={{
+                        marginRight: '16px',
+                    }}
+                >
+                    全部审核
+                </Button>
+
+                <Button
+                    type="primary"
+                    className="f-hidden rental-derate-audit"
                     disabled={selectedRowKeys.length === 0}
-                    onClick={onAudit}
+                    onClick={onAudit(false)}
                 >
                     审核
                 </Button>

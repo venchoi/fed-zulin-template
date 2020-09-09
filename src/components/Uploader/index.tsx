@@ -17,12 +17,6 @@ import './index.less';
 //@ts-ignore
 import { ObjectUpload } from 'fedtoolgroup';
 const { DEV } = config;
-message.config({
-    top: 100,
-    duration: 2,
-    maxCount: 3,
-    rtl: true,
-});
 
 interface Props {
     files: any;
@@ -61,7 +55,7 @@ class Uploader extends React.Component<Props> {
             multiple = false,
             maxSize = 10,
         } = this.props;
-        const accept = ['docx', 'xlsx', 'pptx', 'pdf', 'rar', 'zip'];
+        const accept = ['doc', 'docx', 'xls', 'xlsx', 'pptx', 'pdf', 'rar', 'zip', 'ppt'];
 
         const _this = this;
         const config = {
@@ -80,7 +74,7 @@ class Uploader extends React.Component<Props> {
                 fileEl.id = randomStr();
                 const {
                     // accept = 'picture',
-                    accept = 'image/png,image/jpeg,image/jpg,image/gif,application/pdf,application/zip,.rar,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel',
+                    accept = 'image/png,image/jpeg,image/jpg,image/gif,application/pdf,application/zip,.rar,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,ppt,pptx',
                     fileLength = 30,
                     maxSize = 10,
                     files,

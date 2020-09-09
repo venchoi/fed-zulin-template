@@ -8,7 +8,7 @@ interface Config {
 }
 
 const config: Config = {
-    iconSymbolUrl: '//at.alicdn.com/t/font_1786298_sl67g94rj9g.js',
+    iconSymbolUrl: '//at.alicdn.com/t/font_196154_bsilxx3d8mh.js',
     DEV: process.env.NODE_ENV !== 'production', // 开发环境
     TEST: window.location.hostname.indexOf('test') !== -1, //测试环境
     apiDomain: '/api', //代理请求前缀

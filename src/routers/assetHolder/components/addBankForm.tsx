@@ -9,12 +9,13 @@ interface IProps {
     isSubmit?: boolean; // 是否直接提交银行账号信息
     bankId?: string; // 账户Id
     assetHolderId?: string; // 资产持有人Id
+    data?: object;
 }
 const { TextArea } = Input;
-const AddBankForm = ({ onCancel, onOk, isSubmit = false, bankId = '', assetHolderId = '' }: IProps) => {
+const AddBankForm = ({ onCancel, onOk, isSubmit = false, bankId = '', assetHolderId = '', data }: IProps) => {
     const [form] = Form.useForm();
     const num = 5;
-    const title = bankId ? '编辑账户' : '添加账户';
+    const title = data ? '编辑账户' : '添加账户';
     const initDetail = {
         id: '',
         holder_id: assetHolderId,
@@ -45,6 +46,15 @@ const AddBankForm = ({ onCancel, onOk, isSubmit = false, bankId = '', assetHolde
                 }
             } else {
                 const obj = Object.assign({}, values, { id: `${Math.random()}` });
+                if (data) {
+                    obj.id = data.id;
+                    if (data.holder_id) {
+                        obj.holder_id = data.holder_id;
+                    }
+                }
+                if (bankId) {
+                    obj.id = bankId;
+                }
                 if (onOk) {
                     onOk(obj as IAddAssetHolderBank);
                 }
@@ -59,14 +69,22 @@ const AddBankForm = ({ onCancel, onOk, isSubmit = false, bankId = '', assetHolde
     };
 
     useEffect(() => {
-        if (bankId) {
+        if (bankId && !data) {
             fetchDetail();
+        }
+        if (!bankId && data) {
+            const keys = Object.keys(data);
+            if (keys) {
+                keys.forEach(name => {
+                    form.setFieldsValue({ [name]: data[name] });
+                });
+            }
         }
     }, []);
 
     return (
         <Modal visible={true} width={473} title={title} centered onCancel={() => onCancel()} onOk={handleSubmit}>
-            <div className="add-base-form-wrap">
+            <div>
                 <Form form={form}>
                     <Form.Item
                         name="bank"

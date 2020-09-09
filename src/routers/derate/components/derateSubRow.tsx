@@ -84,6 +84,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
 
     const handleCancelEdit = () => {
         setDetail(originDetail);
+        fetchDerateDetail();
         setIsEditMode(false);
     };
 
@@ -220,6 +221,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
         if (result) {
             message.success('保存成功');
             setIsEditMode(false);
+            props?.getDerateListData();
             fetchDerateDetail();
         }
         setLoading(false);
@@ -238,6 +240,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             dataIndex: 'room_name',
             title: '资源',
             width: 192,
+            className: 'room-name-col',
             render: (text: string, record: feeItemType, index: number) => {
                 const rooms = record.full_room_name ? record.full_room_name.split(',') : [];
                 const popoverContent = (
@@ -287,7 +290,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             title: '账期',
             width: 224,
             render: (text: string, record: feeItemType, index: number) => {
-                return (record.start_date && record.end_date ? `${record.start_date} 至 ${record.end_date}` : '-');
+                return record.start_date && record.end_date ? `${record.start_date} 至 ${record.end_date}` : '-';
             },
         },
         {
@@ -319,6 +322,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             dataIndex: 'derate',
             title: '减免金额',
             width: 120,
+            className: 'derate-col',
             align: 'right',
             render: (text: string, record: feeItemType, index: number) => {
                 const { status } = detail;
@@ -333,7 +337,11 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                 const isSelectedDelay = selectedRowKeys.find(key => key === record.id + '1');
                 const deratedFormItem = record.isDemurrage ? (
                     <Form.Item validateStatus={record.validateStatus}>
-                        <Input disabled value={isSelectedDelay ? record.stayDemurrageAmount : ''} />
+                        <Input
+                            disabled
+                            value={isSelectedDelay ? record.stayDemurrageAmount : ''}
+                            style={{ textAlign: 'right' }}
+                        />
                     </Form.Item>
                 ) : (
                     <Form.Item validateStatus={record.validateStatus}>
@@ -341,6 +349,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                             disabled={!isSelectedFee}
                             onChange={handleDerateAmountChange(record)}
                             value={!isSelectedFee ? '' : record.derated_amount}
+                            style={{ textAlign: 'right' }}
                         />
                     </Form.Item>
                 );
@@ -348,6 +357,9 @@ export const DerateSubRow = (props: derateSubRowProps) => {
             },
         },
     ];
+    if (['已减免', '已作废'].includes(detail.status)) {
+        columns.splice(4, 1);
+    }
     const selectedRowKeysMap: { [index: string]: boolean } = {};
     selectedRowKeys.forEach((item: string) => {
         selectedRowKeysMap[item] = true;
@@ -356,7 +368,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
     const totalDeratedAmount = detail.items.reduce((total: number, item) => {
         const key = item.id + (item.isDemurrage ? '1' : '0');
         const { status } = detail;
-        const deratedDemurrageAmount = ['已减免', '已作废'].includes(status) ? item.demurrage_derated_amount : item.stayDemurrageAmount;
+        const deratedDemurrageAmount = item.demurrage_derated_amount || item.stayDemurrageAmount;
         if (selectedRowKeysMap[key]) {
             total = total + (!item.isDemurrage ? (+item.derated_amount || 0) * 1 : (deratedDemurrageAmount || 0) * 1);
         }
@@ -427,7 +439,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                         </Col>
                                     );
                                 })}
-                                <Col className="derate-detail-form-item" span={24} key={5}>
+                                <Col className="derate-detail-form-item remark" span={24} key={5}>
                                     <Form.Item
                                         name="remark"
                                         label="减免原因"
@@ -436,6 +448,9 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                                 required: false,
                                             },
                                         ]}
+                                        wrapperCol={{
+                                            span: 24,
+                                        }}
                                     >
                                         {isEditMode ? (
                                             <InputWithCount
@@ -461,6 +476,11 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                 dataSource={detail.items}
                                 rowKey={(record: feeItemType) => {
                                     return record.id + (record.isDemurrage ? '1' : '0');
+                                }}
+                                style={{
+                                    borderLeft: '1px solid #EDEFF0',
+                                    borderRight: '1px solid #EDEFF0',
+                                    borderTop: '1px solid #EDEFF0',
                                 }}
                             />
                             <div className="total-bar">

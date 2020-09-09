@@ -1,16 +1,16 @@
 .derate-detail {
     padding: 0px 8px;
-    padding-bottom: 8px;
     .head-area {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 8px;
+        margin-bottom: 16px;
         .title {
             font-size: 16px;
             color: @heading-color;
             line-height: 24px;
+            font-weight: bold;
         }
         .op-btns {
             display: flex;
@@ -53,6 +53,9 @@
         border-top: none;
     }
     .derate-detail-form-item {
+        &.remark {
+            margin-bottom: 0; 
+        }
         .ant-form-item-label > label {
             line-height: 24px;
             height: 24px;
@@ -66,6 +69,23 @@
 
     .component-uploader {
         margin-bottom: 24px;
+    }
+
+    .room-name-col {
+        border-right: 1px solid #EDEFF0;
+    }
+    td {
+        &.derate-col {
+            background-color: white;
+        }
+    }
+    th {
+        &.derate-col {
+            background-color: #FAFBFC;
+        }
+    }
+    .derate-col {
+        z-index: 10000;
     }
     
 }

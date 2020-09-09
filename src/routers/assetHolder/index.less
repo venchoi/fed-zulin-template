@@ -2,8 +2,46 @@
   .filter-left{
     .filter-item{
       width: 120px;
-      margin-left: 8px;
+      margin-left: 16px;
       margin-right: 0;
     }
+    .text-desc{
+      color: #868B8F;
+      .num{ color: #0D86FF; font-weight: bold; margin: 0 6px;}
+    }
+    .divider-style{ margin: 0 16px;}
+    .ant-btn{ margin-left: 24px;}
+  }
+  .ant-card-body {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    .table-list-wrap {
+      flex: 1;
+      overflow: hidden;
+
+      .record-opt-btn{
+        margin-right: 16px;
+      }
+    }
+  }
+}
+.drag-select-content__checkbox{
+  padding: 6px 12px !important;
+  display: flex !important;
+}
+.asset-holder-list-batch-delete-confirm{
+  .ant-modal-confirm-title{
+    color: #313233;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .ant-modal-confirm-content{
+    font-size: 14px;
+    color: #3B3D40;
+  }
+  .ant-btn-primary{
+    border-color: #EB3B3B;
+    background: #EB3B3B;
   }
 }

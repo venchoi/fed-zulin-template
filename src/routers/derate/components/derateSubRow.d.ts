@@ -3,6 +3,7 @@ import { fileType } from '@/types/common';
 
 export interface derateSubRowProps {
     record: derateType;
+    getDerateListData(): void;
 }
 
 export type status = '' | 'success' | 'warning' | 'error' | 'validating';

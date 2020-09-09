@@ -5,9 +5,9 @@ import {
     IAddAssetHolderBank,
     IAssetHolderBankList,
     IAssetHolderList,
-    ISaveCustomLayout,
-    IManageList,
+    IField,
 } from '@/types/assetHolder';
+import { IHeader } from '@/constants/layoutConfig';
 
 // 资产持有人管理
 export const getCustomLayout = (data: { key: string }) => {
@@ -20,7 +20,7 @@ export const getFiles = (data: { type: string }) => {
 };
 
 // 资产持有人管理
-export const postCustomLayout = (data: ISaveCustomLayout) => {
+export const postCustomLayout = (data: { value: IHeader[]; key: string }) => {
     return ajax('/parameter/tables/save-custom-layout', { ...data, _csrf: '' }, 'POST');
 };
 
@@ -54,6 +54,11 @@ export const postAddAssetHolderBank = (data: IAddAssetHolderBank) => {
     return ajax('/asset/holder/account-add', { ...data, _csrf: '' }, 'POST');
 };
 
+// 新增资产银行账户列表
+export const postDeleteAssetHolderBank = (data: { id: string }) => {
+    return ajax('/asset/holder/account-delete', { ...data, _csrf: '' }, 'POST');
+};
+
 // 详情 资产银行账户
 export const getAssetHolderBankDetail = (data: { id: string }) => {
     return ajax('/asset/holder/account-detail', { ...data, _csrf: '' }, 'GET');
@@ -62,4 +67,12 @@ export const getAssetHolderBankDetail = (data: { id: string }) => {
 // 资产银行账户列表
 export const getAssetHolderBankList = (data: IAssetHolderBankList) => {
     return ajax('/asset/holder/account-list', { ...data, _csrf: '' }, 'GET');
+};
+
+export const deleteAssetHolder = (data: { id: string }) => {
+    return ajax('/asset/holder/delete', { ...data, _csrf: '' }, 'POST');
+};
+
+export const batchDeleteAssetHolder = (data: { id: string[] }) => {
+    return ajax('/asset/holder/delete', { ...data, _csrf: '' }, 'POST');
 };

@@ -46,18 +46,6 @@ export const rsRender = (text: string, record: derateType, index: number) => {
 
 export const baseColumns = [
     {
-        dataIndex: 'code',
-        title: '减免流水号',
-        width: 200,
-        render: (text: string, record: derateType, index: number) => {
-            return (
-                <span className="derate-table-td" title={text || '-'}>
-                    {text}
-                </span>
-            );
-        },
-    },
-    {
         dataIndex: 'proj_name',
         title: '项目名称',
         width: 200,

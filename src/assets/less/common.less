@@ -14,9 +14,9 @@
             min-height: 100%;
         }
         .fed-pagination-container {
-            position: absolute;
-            bottom: 0;
-            right: 0;
+            //position: absolute;
+            //bottom: 0;
+            //right: 0;
             width: 100%;
         }
         .tabpane-container {
@@ -48,7 +48,11 @@
         }
     }
     &-detail {
+        width: 100%;
         padding: 16px 16px 0 16px;
+        .ant-tabs-top > .ant-tabs-nav {
+            margin-bottom: 0;
+        }
         & &-tab-content {
             padding: 20px 16px;
             height: calc(100vh - 236px);
@@ -67,6 +71,13 @@
             background: #fff;
             &-content {
                 padding: 8px 24px;
+
+                &-text-center{
+                    text-align: center;
+                }
+                &-text-right{
+                    text-align: right;
+                }
             }
         }
         .ant-tabs .ant-tabs-bottom-content, .ant-tabs .ant-tabs-top-content {

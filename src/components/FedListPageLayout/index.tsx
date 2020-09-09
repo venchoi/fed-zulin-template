@@ -15,18 +15,28 @@ interface contentLayoutProps {
     topRightSlot?: JSX.Element;
     className?: string;
     isLoading?: boolean;
+    isShowDivider?: boolean;
+    contentWrapperClassName?: string;
 }
 const contentLayout = (props: contentLayoutProps) => {
-    const { title, children, topRightSlot, className, isLoading = false } = props;
+    const {
+        title,
+        children,
+        topRightSlot,
+        className,
+        isLoading = false,
+        isShowDivider = true,
+        contentWrapperClassName = '',
+    } = props;
     return (
         <Spin spinning={isLoading} wrapperClassName="content-container-spin">
-            <div className="content-container">
+            <div className={`content-container ${isShowDivider ? 'enable-divider' : ''}`}>
                 <div className={`content page-container ${className}`}>
                     <div className="top-area">
                         <span className="title">{title}</span>
                         <div className="right-slot-area">{topRightSlot}</div>
                     </div>
-                    <div className="content-area">{children}</div>
+                    <div className={`content-area ${contentWrapperClassName}`}>{children}</div>
                 </div>
             </div>
         </Spin>

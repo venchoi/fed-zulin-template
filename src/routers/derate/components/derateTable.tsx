@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ReactText } from 'react';
 import { Button, Table, message, Modal, DatePicker } from 'antd';
 import RoomCascader from '@c/RoomCascader';
-import { PaginationConfig } from 'antd/es/pagination';
+import { TablePaginationConfig } from 'antd/es/table';
 import DerateSubRow from './derateSubRow';
 import moment from 'moment';
 import { ColumnProps } from 'antd/es/table';
@@ -93,6 +93,23 @@ export const DerateTable = (props: derateTableProps) => {
             }
         }
     };
+
+    const handleCloseRow = (id: string) => {
+        if (!expandedRows.length) {
+            return;
+        }
+        for (let i = 0; i < expandedRows.length; i++) {
+            if (expandedRows[i] === id) {
+                console.log(id, i);
+                const rows = expandedRows.slice();
+                rows.splice(i, 1);
+                setExpandedRows(rows);
+                console.log(rows);
+                return;
+            }
+        }
+    };
+
     const handleAudit = (id: string, e: React.MouseEvent) => {
         e.stopPropagation();
         confirm({
@@ -104,6 +121,7 @@ export const DerateTable = (props: derateTableProps) => {
                 const { result, msg = '操作失败', data } = await auditDerate({ id });
                 setLoading(false);
                 if (result) {
+                    handleCloseRow(id);
                     getDerateListData();
                     message.success('操作成功');
                 }
@@ -138,6 +156,7 @@ export const DerateTable = (props: derateTableProps) => {
                 const { result, msg = '操作失败', data } = await cancelDerate({ ids: id });
                 setLoading(false);
                 if (result) {
+                    handleCloseRow(id);
                     getDerateListData();
                     message.success('操作成功');
                 }
@@ -160,17 +179,17 @@ export const DerateTable = (props: derateTableProps) => {
             };
         },
         columnWidth: '48px',
-        fixed: true
+        fixed: true,
     };
     const expandable = {
-        expandIconColumnIndex: 0,
+        expandIconColumnIndex: -1,
         expandRowByClick: true,
-        expandedRowRender: (record: derateType) => {
-            return (
+        expandedRowRender: (record: derateType, index: number, indent: number, expanded: boolean) => {
+            return expanded ? (
                 <div className="derate-sub-row-container link-btn f-hidden rental-derate-view">
-                    <DerateSubRow record={record} />
+                    <DerateSubRow record={record} getDerateListData={getDerateListData} />
                 </div>
-            );
+            ) : null;
         },
         rowExpandable: (record: derateType) => {
             return true;
@@ -186,6 +205,7 @@ export const DerateTable = (props: derateTableProps) => {
                 </div>
             );
         },
+        expandedRowKeys: expandedRows || [],
         onExpandedRowsChange: (expandedRows: ReactText[]) => {
             setExpandedRows(expandedRows);
         },
@@ -194,7 +214,7 @@ export const DerateTable = (props: derateTableProps) => {
         const projStr = props.projIds ? props.projIds.join(',') : '';
         getWorkflowStatus(projStr);
     }, [props.projIds.join(',')]);
-    const handleTableChange = (pagination: PaginationConfig, filters: any, sorter: any) => {
+    const handleTableChange = (pagination: TablePaginationConfig, filters: any, sorter: any) => {
         const fee_name = filters.fee_item && filters.fee_item.length > 0 ? filters.fee_item.join(',') : '';
         const status = filters.status && filters.status.length > 0 ? filters.status : [];
         props.setSearchParams({
@@ -213,6 +233,34 @@ export const DerateTable = (props: derateTableProps) => {
         !!props.searchParams.floor_name ||
         !!props.searchParams.subdistrict_id;
     const columns: ColumnProps<derateType>[] = [
+        {
+            dataIndex: 'code',
+            title: '减免流水号',
+            width: 200,
+            render: (text: string, record: derateType, index: number) => {
+                const isExpanded = expandedRows && expandedRows.includes(record.id);
+                return (
+                    <span className="derate-table-td" title={text || '-'}>
+                        {isExpanded ? (
+                            <DownOutlined
+                                style={{
+                                    color: '#BEC3C7',
+                                    marginRight: '4px',
+                                }}
+                            />
+                        ) : (
+                            <RightOutlined
+                                style={{
+                                    color: '#BEC3C7',
+                                    marginRight: '4px',
+                                }}
+                            />
+                        )}
+                        {text}
+                    </span>
+                );
+            },
+        },
         ...baseColumns,
         {
             dataIndex: 'items',
@@ -228,7 +276,14 @@ export const DerateTable = (props: derateTableProps) => {
                         projNames={projNames}
                         selectedConfig={selectedRoomConfig}
                         onChange={(selectedConfig: selectedConfigType) => {
-                            const { stageId, subdistrictId='', buildingId='', floorId='', floorName='', roomId='' } = selectedConfig;
+                            const {
+                                stageId,
+                                subdistrictId = '',
+                                buildingId = '',
+                                floorId = '',
+                                floorName = '',
+                                roomId = '',
+                            } = selectedConfig;
                             confirm();
                             setSelectedRoomConfig({
                                 selectedProjId: stageId,
@@ -375,10 +430,13 @@ export const DerateTable = (props: derateTableProps) => {
             },
         },
         {
+            dataIndex: 'gap',
+        },
+        {
             title: '操作',
             key: 'action',
             fixed: expandedRows.length > 0 ? undefined : 'right',
-            width: 130,
+            width: 180,
             render(text: string, record: derateType, index: number) {
                 const { user } = props;
                 const stageId = record.proj_id;
@@ -425,12 +483,21 @@ export const DerateTable = (props: derateTableProps) => {
                             <a
                                 className="link-btn f-hidden rental-derate-view"
                                 href={`/${baseAlias}/workflowApproval/detail/${record.workflow_instance_id}`}
+                                style={{
+                                    wordBreak: 'keep-all',
+                                }}
                             >
                                 审批详情
                             </a>
                         ) : null}
                         {record.status === '审核中' && +record.show_third_detail === 1 ? (
-                            <a className="operate-btn" onClick={fetchOaDetail.bind(this, record)}>
+                            <a
+                                className="operate-btn"
+                                onClick={fetchOaDetail.bind(this, record)}
+                                style={{
+                                    wordBreak: 'keep-all',
+                                }}
+                            >
                                 审批详情
                             </a>
                         ) : null}
@@ -465,6 +532,9 @@ export const DerateTable = (props: derateTableProps) => {
                             <a
                                 className="operate-btn"
                                 target="_blank"
+                                style={{
+                                    wordBreak: 'keep-all',
+                                }}
                                 href={record.wh_approval_info && record.wh_approval_info.detail_url}
                             >
                                 审批详情
@@ -488,6 +558,7 @@ export const DerateTable = (props: derateTableProps) => {
             }}
             expandable={expandable}
             scroll={{
+                x: 1000,
                 y: 'calc( 100vh - 340px )',
             }}
             onChange={handleTableChange}

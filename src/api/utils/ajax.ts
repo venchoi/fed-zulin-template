@@ -35,7 +35,7 @@ export default function ajax(path: string, data: object, method: 'GET' | 'POST',
     }
     return promise
         .then(res => {
-            if (!res?.data?.result) message.error(res?.data?.msg || '网络请求失败');
+            if (!res?.data?.result) message.error(res?.data?.msg || res?.data?.message || '网络请求失败');
             return res.data;
         })
         .catch(err => {
