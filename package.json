@@ -28,7 +28,7 @@
         "dva-loading": "^3.0.20",
         "fast-tracker": "^2.2.9",
         "fed-finance-component": "^3.1.5",
-        "fedtoolgroup": "^1.1.16",
+        "fedtoolgroup": "1.1.16",
         "js-cookie": "^2.2.1",
         "lodash": "^4.17.15",
         "query-string": "5",
