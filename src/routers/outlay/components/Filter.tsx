@@ -61,7 +61,7 @@ const Filter = (props: FilterProps) => {
     useEffect(() => {
         const { selectedProjId } = selectedRoomConfig;
         console.log('stage_id change', selectedProjId);
-        if(!props.filterOptions.stage_id)  {
+        if (!props.filterOptions.stage_id) {
             return;
         }
         setSelectedRoomConfig({
@@ -76,7 +76,7 @@ const Filter = (props: FilterProps) => {
 
     useEffect(() => {
         setKeyWords(props.filterOptions.keyword || '');
-    }, [props.filterOptions.keyword])
+    }, [props.filterOptions.keyword]);
 
     const handleRoomCascaderChange = debounce((selectedConfig: SelectedRoomConfig) => {
         console.log('===selectedConfig', selectedConfig);
@@ -124,8 +124,8 @@ const Filter = (props: FilterProps) => {
     };
 
     const handleChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
-        setKeyWords(event.target.value)
-    }
+        setKeyWords(event.target.value);
+    };
 
     const handleRangePickerChange = (type: RangePickerType, dates: any, dateStrings: [string, string]) => {
         console.log(handleRangePickerChange, type, dates, dateStrings);
@@ -164,7 +164,7 @@ const Filter = (props: FilterProps) => {
                     maxTagPlaceholder="..."
                     allowClear
                     onChange={value => handleSelectChange('fee_name', value)}
-                    value={props.filterOptions.fee_name || undefined }
+                    value={props.filterOptions.fee_name || undefined}
                 >
                     {feeList &&
                         feeList.map((item, index) => (
@@ -203,8 +203,15 @@ const Filter = (props: FilterProps) => {
                         placeholder={['支付开始日期', '支付结束日期']}
                         format={dateFormat}
                         style={{ width: '328px' }}
-                        value={!props.filterOptions.start_date || !props.filterOptions.start_date ? null : [moment(props.filterOptions.start_date), moment(props.filterOptions.end_date)]}
-                        onChange={(dates, dateStrings) =>
+                        value={
+                            !props.filterOptions.start_date || !props.filterOptions.start_date
+                                ? null
+                                : ([
+                                      moment(props.filterOptions.start_date),
+                                      moment(props.filterOptions.end_date),
+                                  ] as any)
+                        }
+                        onChange={(dates: any, dateStrings: [string, string]) =>
                             handleRangePickerChange(RangePickerType.pay, dates, dateStrings)
                         }
                     />
@@ -214,8 +221,15 @@ const Filter = (props: FilterProps) => {
                         placeholder={['交易开始日期', '交易结束日期']}
                         format={dateFormat}
                         style={{ width: '328px' }}
-                        value={!props.filterOptions.exchange_start_date || !props.filterOptions.exchange_end_date ? null : [moment(props.filterOptions.exchange_start_date), moment(props.filterOptions.exchange_end_date)]}
-                        onChange={(dates, dateStrings) =>
+                        value={
+                            !props.filterOptions.exchange_start_date || !props.filterOptions.exchange_end_date
+                                ? null
+                                : ([
+                                      moment(props.filterOptions.exchange_start_date),
+                                      moment(props.filterOptions.exchange_end_date),
+                                  ] as any)
+                        }
+                        onChange={(dates: any, dateStrings: [string, string]) =>
                             handleRangePickerChange(RangePickerType.order, dates, dateStrings)
                         }
                     />

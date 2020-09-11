@@ -17,13 +17,18 @@ import './index.less';
 
 interface IProps {
     user: any;
-    history: History,
-    dispatch: Dispatch<{type: string, data: any}>,
-    outlay: {filterOptions: FilterOptions};
+    history: History;
+    dispatch: Dispatch<{ type: string; data: any }>;
+    outlay: { filterOptions: FilterOptions };
 }
 
 const OutlayList = (props: IProps) => {
-    const { user, history, dispatch, outlay: { filterOptions } } = props;
+    const {
+        user,
+        history,
+        dispatch,
+        outlay: { filterOptions },
+    } = props;
     const queryStr = (location.search || '').replace(/^\?(.*)/, '$1');
     const query = queryString.parse(queryStr);
     const [selectedProjectIds, setSelectedProjectIds] = useState<string[]>([]); // 当前选中的项目
@@ -37,7 +42,7 @@ const OutlayList = (props: IProps) => {
     const [loading, setLoading] = useState(false);
     const [canApplyInvoice, setCanApplyInvoice] = useState(false); // 是否开启了申请开票功能
 
-    console.log("OutlayList construct filterOptions", filterOptions);
+    console.log('OutlayList construct filterOptions', filterOptions);
 
     useEffect(() => {
         console.log('outlay index', user, history);
@@ -85,7 +90,7 @@ const OutlayList = (props: IProps) => {
         setSelectedProjectIds(selectedProject.projIds);
         setSelectedProjectNames(selectedProject.projNames);
 
-        if(stageId && stageId !== filterOptions.stage_id) {
+        if (stageId && stageId !== filterOptions.stage_id) {
             dispatch({
                 type: 'outlay/setFilterOptions',
                 data: {
@@ -95,8 +100,8 @@ const OutlayList = (props: IProps) => {
                     room_id: '',
                     subdistrict_id: '',
                     building_id: '',
-                    floor_name: ''
-                }
+                    floor_name: '',
+                },
             });
         }
     };
@@ -111,8 +116,8 @@ const OutlayList = (props: IProps) => {
             data: {
                 ...filterOptions,
                 ...filterParams,
-            }
-        })
+            },
+        });
     };
 
     const handleTableSelect = (selectedRowKeys: string[], selectedRows: OutLayListItem[]) => {
@@ -154,17 +159,20 @@ const OutlayList = (props: IProps) => {
                         dispatch({
                             type: 'outlay/setFilterOptions',
                             data: {
-                                ...filterOptions, page: 1, page_size
-                            }
-                        })
+                                ...filterOptions,
+                                page: 1,
+                                page_size,
+                            },
+                        });
                     }}
                     onPageChange={(page_index: number) => {
                         dispatch({
                             type: 'outlay/setFilterOptions',
                             data: {
-                                ...filterOptions, page: page_index
-                            }
-                        })
+                                ...filterOptions,
+                                page: page_index,
+                            },
+                        });
                     }}
                     page={filterOptions.page}
                     pageSize={filterOptions.page_size}
@@ -181,7 +189,7 @@ const OutlayList = (props: IProps) => {
 
 const mapStateToProps = (state: any) => ({
     user: state.main.user,
-    outlay: state.outlay
+    outlay: state.outlay,
 });
 
 export default connect(mapStateToProps)(OutlayList);
