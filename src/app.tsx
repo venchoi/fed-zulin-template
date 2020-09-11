@@ -94,6 +94,13 @@ const routes = [
             loading,
         }),
     },
+    {
+        path: '/basicdata',
+        component: Loadable({
+            loader: () => import('./routers/basicdata'),
+            loading,
+        }),
+    },
     // TODO children route
     {
         path: '/metermg/detail-adjust/:id',
@@ -137,15 +144,7 @@ const routes = [
             loading: loading,
         }),
     },
-    // {
-    //     path: '/derate',
-    //     component: Loadable({
-    //         loader: () => import('./routers/derate'),
-    //         loading: loading,
-    //     }),
-    //     // @ts-ignore
-    //     // component: lazy(() => import('./routers/report')),
-    // },
+
     {
         path: '/noright',
         component: Loadable({
