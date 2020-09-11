@@ -152,7 +152,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             fixed: 'left',
             render: (code: string, record: OutLayListItem, index: number) => {
                 const { exchanged_on, id, fee_items = [] } = record;
-                let exChangeDate = '--';
+                let exChangeDate = '-';
                 let isReceipted = fee_items[0]?.receipt?.length > 0; // 是否已经开了票据
                 let isInvoiced = fee_items[0]?.invoice?.length > 0; // 是否已经开了发票
                 if (exchanged_on) {
@@ -176,7 +176,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             width: 160,
             ellipsis: true,
             render: (text: string) => {
-                return <span title={text}>{text || '--'}</span>;
+                return <span title={text}>{text || '-'}</span>;
             },
         },
         {
@@ -193,7 +193,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                 } = record;
                 const rentalName = type === '个人' ? name : organization_name;
                 const isShowPopover = ext_contract && rentalName && payment_mode !== '预存结转';
-                return <span title={exchanged_to_name}>{exchanged_to_name || '--'}</span>;
+                return <span title={exchanged_to_name}>{exchanged_to_name || '-'}</span>;
             },
         },
         {
@@ -208,7 +208,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                         <span>{roomPackageName || roomName}</span>
                         {roomPackageName && (
                             <Popover
-                                trigger="click"
+                                trigger="hover"
                                 placement="bottom"
                                 className="popover"
                                 overlayClassName="rental-resource-popover"
@@ -241,7 +241,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             width: 140,
             ellipsis: true,
             render: (text: string) => {
-                return <span title={text}>{text || '--'}</span>;
+                return <span title={text}>{text || '-'}</span>;
             },
         },
         {
@@ -250,7 +250,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             width: 200,
             ellipsis: true,
             render: (text: string) => {
-                return <span title={text}>{text || '--'}</span>;
+                return <span title={text}>{text || '-'}</span>;
             },
         },
         {
@@ -280,7 +280,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             width: 140,
             align: 'right',
             render: (ext_payment: ExtPayment[], record: OutLayListItem, index: number) => {
-                let inPay = '--';
+                let inPay = '-';
                 if (Array.isArray(ext_payment)) {
                     ext_payment.forEach(item => {
                         if (+item.amount >= 0) {
@@ -298,7 +298,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             width: 140,
             align: 'right',
             render: (ext_payment: ExtPayment[], record: OutLayListItem, index: number) => {
-                let outPay = '--';
+                let outPay = '-';
                 if (Array.isArray(ext_payment)) {
                     ext_payment.forEach(item => {
                         if (+item.amount <= 0) {
@@ -312,25 +312,25 @@ const OutLayTable = (props: OutLayTableProps) => {
         },
         {
             dataIndex: 'exchanged_on',
-            title: '交易时间',
+            title: '交易日期',
             width: 160,
             render: (exchanged_on: string) => {
-                let exChangeDate = '--';
+                let exChangeDate = '-';
                 if (exchanged_on) {
                     const arr = exchanged_on.split(' ');
                     if (arr && arr.length >= 0) {
                         exChangeDate = arr[0];
                     }
                 }
-                return <span>{exChangeDate || '--'}</span>;
+                return <span>{exChangeDate || '-'}</span>;
             },
         },
         {
             dataIndex: 'payment_time',
-            title: '支付时间',
+            title: '支付日期',
             width: 160,
             render: (text: string) => {
-                return <span>{text || '--'}</span>;
+                return <span>{text || '-'}</span>;
             },
         },
         {
@@ -340,7 +340,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             ellipsis: true,
             render: (text: string, record: OutLayListItem) => {
                 let result = `${text}${record.system_remark ? `(${record.system_remark})` : ''}`;
-                return <span title={result}>{result || '--'}</span>;
+                return <span title={result}>{result || '-'}</span>;
             },
         },
         {

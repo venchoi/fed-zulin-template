@@ -255,6 +255,7 @@ const DetailExchangeTable = (props: IProps) => {
                     pagination={false}
                     summary={exchange?.type !== '结转' ? renderTableSummary : renderTableSummary2}
                     size="small"
+                    bordered
                     className="exchange-detail-table"
                     scroll={{ x: 1300 }}
                 ></Table>
