@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Spin, PageHeader, Input, Table, Switch, Modal, Button, Row, Col, Checkbox, Select } from 'antd';
+import { Spin, PageHeader, Input, Table, Switch, Modal, Button, Row, Col, Checkbox, Select, TreeSelect } from 'antd';
 import { UpOutlined, DownOutlined } from '@ant-design/icons';
 const { Option } = Select;
 const { Search } = Input;
+const { SHOW_PARENT } = TreeSelect;
 
 const routes = [
     {
@@ -17,13 +18,28 @@ const routes = [
 
 const plainOptions = ['合同创办人', '合同经办人', '合同运营人', '指定人员'];
 
+const treeData = [
+    {
+        title: '范冰冰',
+        value: 'fbb',
+    },
+    {
+        title: '成龙',
+        value: 'cl',
+    },
+    {
+        title: '肖伟华',
+        value: 'xwh',
+    },
+];
+
 function App() {
     const [visible, setVisible] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [currentItem, setCurrentItem] = useState({});
     const [showSelect, setShowSelect] = useState(false);
     const [chooseNames, setChooseNames] = useState([]);
-
+    const [data, setTreeData] = useState([]);
     const itemRender = (route: any) => {
         if (route.path) {
             return (
@@ -130,6 +146,11 @@ function App() {
         }
         console.log('checked = ', checkedValues);
     };
+
+    const treeChange = value => {
+        console.log('treeChange ', value);
+        setTreeData(value);
+    };
     return (
         <Spin spinning={false}>
             <PageHeader
@@ -167,48 +188,60 @@ function App() {
                     </Col>
                 </Row>
                 {showSelect ? (
-                    <Select
-                        mode="multiple"
-                        style={{ width: '100%' }}
+                    <TreeSelect
                         placeholder="选择指定人员"
-                        onChange={handleChange}
-                        optionLabelProp="value"
-                        defaultValue={chooseNames}
-                    >
-                        <Option value="china" label="China">
-                            <div className="demo-option-label-item">
-                                <span role="img" aria-label="China">
-                                    🇨🇳
-                                </span>
-                                China (中国)
-                            </div>
-                        </Option>
-                        <Option value="usa" label="USA">
-                            <div className="demo-option-label-item">
-                                <span role="img" aria-label="USA">
-                                    🇺🇸
-                                </span>
-                                USA (美国)
-                            </div>
-                        </Option>
-                        <Option value="japan" label="Japan">
-                            <div className="demo-option-label-item">
-                                <span role="img" aria-label="Japan">
-                                    🇯🇵
-                                </span>
-                                Japan (日本)
-                            </div>
-                        </Option>
-                        <Option value="korea" label="Korea">
-                            <div className="demo-option-label-item">
-                                <span role="img" aria-label="Korea">
-                                    🇰🇷
-                                </span>
-                                Korea (韩国)
-                            </div>
-                        </Option>
-                    </Select>
-                ) : null}
+                        treeCheckable={true}
+                        showCheckedStrategy={SHOW_PARENT}
+                        value={data}
+                        onChange={treeChange}
+                        treeData={treeData}
+                        style={{ width: '100%' }}
+                    />
+                ) : // <Select
+                //     mode="multiple"
+                //     style={{ width: '100%' }}
+                //     placeholder="选择指定人员"
+                //     onChange={handleChange}
+                //     optionLabelProp="value"
+                //     defaultValue={chooseNames}
+                //     dropdownRender={node => {
+                //         return node;
+                //     }}
+                // >
+                //     <Option value="china" label="China">
+                //         <div className="demo-option-label-item">
+                //             <span role="img" aria-label="China">
+                //                 🇨🇳
+                //             </span>
+                //             China (中国)
+                //         </div>
+                //     </Option>
+                //     <Option value="usa" label="USA">
+                //         <div className="demo-option-label-item">
+                //             <span role="img" aria-label="USA">
+                //                 🇺🇸
+                //             </span>
+                //             USA (美国)
+                //         </div>
+                //     </Option>
+                //     <Option value="japan" label="Japan">
+                //         <div className="demo-option-label-item">
+                //             <span role="img" aria-label="Japan">
+                //                 🇯🇵
+                //             </span>
+                //             Japan (日本)
+                //         </div>
+                //     </Option>
+                //     <Option value="korea" label="Korea">
+                //         <div className="demo-option-label-item">
+                //             <span role="img" aria-label="Korea">
+                //                 🇰🇷
+                //             </span>
+                //             Korea (韩国)
+                //         </div>
+                //     </Option>
+                // </Select>
+                null}
             </Modal>
             <Button
                 onClick={() => {
