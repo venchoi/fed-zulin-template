@@ -164,7 +164,7 @@ const Filter = (props: FilterProps) => {
                     maxTagPlaceholder="..."
                     allowClear
                     onChange={value => handleSelectChange('fee_name', value)}
-                    value={props.filterOptions.fee_name || undefined}
+                    value={(props.filterOptions.fee_name && props.filterOptions.fee_name.split(',')) || undefined}
                 >
                     {feeList &&
                         feeList.map((item, index) => (
