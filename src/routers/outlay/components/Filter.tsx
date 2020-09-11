@@ -160,7 +160,7 @@ const Filter = (props: FilterProps) => {
                     placeholder="全部费项"
                     mode="multiple"
                     style={{ width: 216 }}
-                    maxTagCount={1}
+                    maxTagCount={2}
                     maxTagPlaceholder="..."
                     allowClear
                     onChange={value => handleSelectChange('fee_name', value)}
