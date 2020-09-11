@@ -124,7 +124,7 @@ const Filter = (props: FilterProps) => {
     };
 
     const handleChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
-        setKeyWords(event.target.value);
+        setKeyWords(event.target.value.trim());
     };
 
     const handleRangePickerChange = (type: RangePickerType, dates: any, dateStrings: [string, string]) => {
