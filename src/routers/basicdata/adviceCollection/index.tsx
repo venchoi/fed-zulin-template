@@ -271,7 +271,7 @@ function App() {
                         {userList.map((item: any) => {
                             return (
                                 <Option value={item.id} key={item.id}>
-                                    {item.name}
+                                    {`${item.name} (${item.organization_name})`}
                                 </Option>
                             );
                         })}
