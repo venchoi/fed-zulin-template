@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { Spin, PageHeader, Input, Table, Switch, Modal, Row, Col, Checkbox, Select, message } from 'antd';
 import { UpOutlined, DownOutlined } from '@ant-design/icons';
 import { getUserList, getAdviceCollectionList, saveCollectionRemind, switchEnable } from '@s/basicdata';
-import { isEmpty } from 'lodash';
+import { isEmpty, cloneDeep } from 'lodash';
 const { Option } = Select;
 const { Search } = Input;
 
@@ -40,16 +40,21 @@ function App() {
     const [list, setList] = useState([]);
     const [userList, setUserList] = useState([]);
     const [chooseType, setChooseType] = useState([]);
-    const getList = async () => {
+    const [initList, setInitList] = useState([]);
+    const getList = async (isFirst?: string) => {
+        console.log(isFirst, 'isFirst');
         setLoading(true);
         const res = await getAdviceCollectionList();
         if (res?.result) {
+            if (isFirst) {
+                setInitList(res?.data?.company);
+            }
             setList(res?.data?.company);
         }
         setLoading(false);
     };
     useEffect(() => {
-        getList();
+        getList('isFirst');
     }, []);
 
     useEffect(() => {
@@ -106,7 +111,6 @@ function App() {
 
     //处理切换
     const handleSwitchStatus = async record => {
-        // const enabled = record.is_enable === '1' ? '0' : '1';
         setLoading(true);
         const res = await switchEnable({ stage_id: record.id });
         if (res?.result) {
@@ -114,22 +118,6 @@ function App() {
         } else {
             setLoading(false);
         }
-        // actions.enableAutoAudit(
-        //     {
-        //         project_id: record.id,
-        //         status: enabled,
-        //     },
-        //     json => {
-        //         if (json && json.result) {
-        //             record.is_enable = enabled;
-        //             actions.initState({ autoAuditListData });
-        //             message.success(record.is_enable === '1' ? '启用成功!' : '关闭成功!');
-        //         } else {
-        //             const msg = json.msg || (record.is_enable === '1' ? '关闭失败!' : '启用失败!');
-        //             message.error(msg);
-        //         }
-        //     }
-        // );
     };
 
     const columns = [
@@ -208,6 +196,29 @@ function App() {
         setChooseType(checkedValues);
     };
 
+    const DFS = (initList: Array<any>, keyword) => {
+        const arr = initList.filter((item: any) => {
+            if (item?.children?.length > 0) {
+                DFS(item.children, keyword);
+            }
+            if (item.name === keyword) {
+                console.log(item, keyword, 'keywordkeywordkeyword');
+                return true;
+            }
+            return item.name === keyword;
+        });
+        return arr;
+    };
+
+    const onSearch = value => {
+        if (!value) {
+            return setList(initList);
+        }
+        const arr = DFS(initList, value);
+        console.log(arr, 'arr');
+        setList(arr);
+    };
+
     return (
         <Spin spinning={loading}>
             <PageHeader
@@ -217,7 +228,13 @@ function App() {
             />
             <div style={{ padding: '16px', backgroundColor: '#F5F6F7' }}>
                 <div style={{ backgroundColor: '#fff', padding: 16 }}>
-                    <Search placeholder="请输入项目" onSearch={value => console.log(value)} style={{ width: 200 }} />
+                    <Search
+                        placeholder="请输入项目"
+                        onSearch={value => {
+                            onSearch(value);
+                        }}
+                        style={{ width: 200, marginBottom: 16 }}
+                    />
                     <Table
                         expandRowByClick
                         expandIcon={props => customExpandIcon(props)}
