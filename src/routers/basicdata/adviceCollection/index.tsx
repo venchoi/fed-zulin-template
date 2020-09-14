@@ -8,7 +8,7 @@ const { Search } = Input;
 
 const routes = [
     {
-        path: '/static//basicdata',
+        path: '/static//basicdata/',
         breadcrumbName: '基础数据',
     },
     {

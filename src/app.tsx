@@ -95,9 +95,9 @@ const routes = [
         }),
     },
     {
-        path: '/basicdata',
+        path: '/basicdata/adviceCollection',
         component: Loadable({
-            loader: () => import('./routers/basicdata'),
+            loader: () => import('./routers/basicdata/adviceCollection'),
             loading,
         }),
     },
