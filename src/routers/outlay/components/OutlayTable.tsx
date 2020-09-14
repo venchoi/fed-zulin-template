@@ -205,7 +205,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                 const roomName = record.fee_items[0]?.full_room_name;
                 return (
                     <span title={roomPackageName || roomName}>
-                        <span>{roomPackageName || roomName}</span>
+                        <span>{roomPackageName || roomName || '-'}</span>
                         {roomPackageName && (
                             <Popover
                                 trigger="hover"
@@ -232,7 +232,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                 if (Array.isArray(fee_items)) {
                     feeItemName = fee_items.map(fee => fee.fee_name).join();
                 }
-                return <span title={feeItemName}>{feeItemName}</span>;
+                return <span title={feeItemName}>{feeItemName || '-'}</span>;
             },
         },
         {

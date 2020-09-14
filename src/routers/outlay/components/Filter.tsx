@@ -160,6 +160,7 @@ const Filter = (props: FilterProps) => {
                     placeholder="全部费项"
                     mode="multiple"
                     style={{ width: 216 }}
+                    showArrow={true}
                     maxTagCount={2}
                     maxTagPlaceholder="..."
                     allowClear

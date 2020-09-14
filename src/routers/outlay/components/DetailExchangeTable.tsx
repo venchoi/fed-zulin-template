@@ -7,14 +7,16 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import config from '@/config';
 import { getExchangeList } from '../provider';
 
+import './DetailExchangeTable.less';
+
 interface IProps {
     exchange: IExchange | undefined;
-    items: IOutLayDetailItem[] | IOutLayDetailItemObj
+    items: IOutLayDetailItem[] | IOutLayDetailItemObj;
 }
 
 const DetailExchangeTable = (props: IProps) => {
     const { exchange, items } = props;
-    
+
     const columns: ColumnProps<IOutLayDetailItem>[] = [
         {
             title: '房间',
@@ -27,9 +29,9 @@ const DetailExchangeTable = (props: IProps) => {
             dataIndex: 'fee_name',
             title: '费项',
             ellipsis: true,
-            render: (text) => {
-                return <span title={text}>{text || '-'}</span>
-            }
+            render: text => {
+                return <span title={text}>{text || '-'}</span>;
+            },
         },
         {
             title: '费项周期',
@@ -93,16 +95,21 @@ const DetailExchangeTable = (props: IProps) => {
             render: (text: string, record: IOutLayDetailItem) => {
                 let feeName = '';
                 let remark = '';
-                if(record.transference?.type) {
-                    if(record.transference.type === '账单') {
+                if (record.transference?.type) {
+                    if (record.transference.type === '账单') {
                         feeName = `应收${record.transference.type}`;
                     } else {
                         feeName = record.transference.type;
                         remark = text ? `(${text})` : '';
                     }
                 }
-                return <span title={(feeName ? feeName : text) + remark}>{feeName ? feeName : text}<span className='c-text-gray'>{remark}</span></span>
-            }
+                return (
+                    <span title={(feeName ? feeName : text) + remark}>
+                        {feeName ? feeName : text}
+                        <span className="c-text-gray">{remark}</span>
+                    </span>
+                );
+            },
         },
         {
             dataIndex: 'transference_type',
@@ -110,8 +117,8 @@ const DetailExchangeTable = (props: IProps) => {
             ellipsis: true,
             width: 220,
             render: (text: string) => {
-                return <span title={text}>{text || '-'}</span>
-            }
+                return <span title={text}>{text || '-'}</span>;
+            },
         },
         {
             dataIndex: 'amount',
@@ -143,7 +150,17 @@ const DetailExchangeTable = (props: IProps) => {
             width: 140,
             fixed: 'right',
             render: (text: string, record: IOutLayDetailItem, index: number) => {
-                return <span>{record.from_exchange_id ? <a href={`${config.baseAlias}/outlay/deduction-detail/${record.from_exchange_id}`}>抵扣详情</a> : '-'}</span>;
+                return (
+                    <span>
+                        {record.from_exchange_id ? (
+                            <a href={`${config.baseAlias}/outlay/deduction-detail/${record.from_exchange_id}`}>
+                                抵扣详情
+                            </a>
+                        ) : (
+                            '-'
+                        )}
+                    </span>
+                );
             },
         },
     ];
@@ -169,7 +186,7 @@ const DetailExchangeTable = (props: IProps) => {
                 <span>{roomPackageName || roomName}</span>
                 {roomPackageName && (
                     <Popover
-                        trigger="click"
+                        trigger="hover"
                         placement="bottom"
                         className="popover"
                         overlayClassName="rental-resource-popover"
@@ -215,17 +232,17 @@ const DetailExchangeTable = (props: IProps) => {
     const renderTableSummary2 = (pageData: IOutLayDetailItem[] = []) => {
         let incomeTotal = 0;
         let expendTotal = 0; // 支出合计
-        if(pageData.length === 1) {
-            if(+pageData[0].amount > 0) {
-                incomeTotal = +pageData[0].amount
+        if (pageData.length === 1) {
+            if (+pageData[0].amount > 0) {
+                incomeTotal = +pageData[0].amount;
             } else {
-                expendTotal = +pageData[0].amount
+                expendTotal = +pageData[0].amount;
             }
-        } else if(pageData.length === 2) {
+        } else if (pageData.length === 2) {
             incomeTotal = +pageData[1].amount;
             expendTotal = +pageData[0].amount;
         }
-      
+
         return (
             <>
                 <Table.Summary.Row>
@@ -245,7 +262,7 @@ const DetailExchangeTable = (props: IProps) => {
     };
 
     return (
-        <div>
+        <div className="detail-exchange-table">
             <h4>交易明细</h4>
             {Array.isArray(items) && (
                 <Table
