@@ -40,10 +40,12 @@ const OutLayDetail = (props: IProps) => {
         setLoading(true);
         const { data } = await getOutLayDetail(param);
         setDetail(data);
-        const {
-            data: { items = [] },
-        } = await getBillInfo({ billId: data?.info?.exchange?.bill_id });
-        setBillDetail(items[0]);
+        if (data?.info?.exchange?.bill_id) {
+            const {
+                data: { items = [] },
+            } = await getBillInfo({ billId: data?.info?.exchange?.bill_id });
+            setBillDetail(items[0]);
+        }
         setLoading(false);
     };
 
@@ -201,7 +203,7 @@ const OutLayDetail = (props: IProps) => {
                         </Row>
                         <Row gutter={[0, 16]}>
                             <Col span={3}>租客：</Col>
-                            <Col span={21}>{getShowRentalName(rentalName, renter)}</Col>
+                            <Col span={21}>{getShowRentalName(rentalName, renter as IRenter)}</Col>
                         </Row>
                         {renter?.type !== '个人' && (
                             <Row gutter={[0, 16]}>
