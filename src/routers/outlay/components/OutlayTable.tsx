@@ -197,6 +197,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             },
         },
         {
+            dataIndex: 'rental_resource',
             title: '租赁资源',
             width: 200,
             ellipsis: true,
@@ -293,11 +294,12 @@ const OutLayTable = (props: OutLayTableProps) => {
             },
         },
         {
-            dataIndex: 'ext_payment',
+            dataIndex: 'ext_payment_out',
             title: '支出(元)',
             width: 140,
             align: 'right',
-            render: (ext_payment: ExtPayment[], record: OutLayListItem, index: number) => {
+            render: (value: ExtPayment[], record: OutLayListItem, index: number) => {
+                const ext_payment = record.ext_payment;
                 let outPay = '-';
                 if (Array.isArray(ext_payment)) {
                     ext_payment.forEach(item => {
@@ -344,6 +346,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             },
         },
         {
+            dataIndex: 'operate',
             title: '操作',
             width: 148,
             fixed: 'right',
