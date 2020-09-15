@@ -180,16 +180,28 @@ function OperateBar(props: Props) {
             <Button className="clear-btn" type="link" onClick={handleClear}>
                 清空
             </Button>
-            <Button disabled={!isBatchReceiptEnabled} onClick={() => handleClick(OperateType.combinedReceipt)}>
+            <Button
+                className="f-hidden rental-receipt-add-receipt"
+                disabled={!isBatchReceiptEnabled}
+                onClick={() => handleClick(OperateType.combinedReceipt)}
+            >
                 合并开收据
             </Button>
             {!canApplyInvoice && (
-                <Button disabled={!isInvoiceEnabled} onClick={() => handleClick(OperateType.combinedInvoice)}>
+                <Button
+                    className="f-hidden rental-receipt-add"
+                    disabled={!isInvoiceEnabled}
+                    onClick={() => handleClick(OperateType.combinedInvoice)}
+                >
                     合并开发票
                 </Button>
             )}
             {canApplyInvoice && (
-                <Button disabled={!isInvoiceEnabled} onClick={() => handleClick(OperateType.combinedApplyInvoice)}>
+                <Button
+                    className="rental-receipt-add-apply"
+                    disabled={!isInvoiceEnabled}
+                    onClick={() => handleClick(OperateType.combinedApplyInvoice)}
+                >
                     合并申请开票
                 </Button>
             )}

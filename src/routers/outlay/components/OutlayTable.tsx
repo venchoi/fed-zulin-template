@@ -359,19 +359,25 @@ const OutLayTable = (props: OutLayTableProps) => {
                     <span>
                         {!(hasReceipt || isRefund) && (
                             <a
-                                className="operate-btn"
+                                className="operate-btn f-hidden rental-receipt-add-receipt"
                                 href={`/fed/receipt/invoice?exchange_ids=${id}&stage_id=${proj_id}`}
                             >
                                 开收据
                             </a>
                         )}
                         {!canApplyInvoice && hasInvoice && (
-                            <a className="operate-btn" onClick={() => handleOpenInvoice(record)}>
+                            <a
+                                className="operate-btn f-hidden rental-receipt-add"
+                                onClick={() => handleOpenInvoice(record)}
+                            >
                                 开发票
                             </a>
                         )}
                         {canApplyInvoice && hasInvoice && (
-                            <a className="operate-btn" onClick={() => handleOpenInvoice(record, true)}>
+                            <a
+                                className="operate-btn f-hidden rental-receipt-add-apply"
+                                onClick={() => handleOpenInvoice(record, true)}
+                            >
                                 申请开票
                             </a>
                         )}
