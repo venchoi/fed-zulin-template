@@ -466,7 +466,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                     props.onPageSizeChange(page_size);
                 }}
                 onChange={(page_index, page_size) => {
-                    props.onPageChange(page_index);
+                    props.onPageChange(page_index, page_size);
                 }}
                 current={props.page}
                 pageSize={props.pageSize}

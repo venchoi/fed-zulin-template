@@ -156,22 +156,13 @@ const OutlayList = (props: IProps) => {
                     outlayList={outlayList}
                     outlayListTotal={outlayListTotal}
                     onPageSizeChange={(page_size: number) => {
-                        dispatch({
-                            type: 'outlay/setFilterOptions',
-                            data: {
-                                ...filterOptions,
-                                page: 1,
-                                page_size,
-                            },
-                        });
+                        console.log('page_size', page_size);
                     }}
-                    onPageChange={(page_index: number) => {
-                        dispatch({
-                            type: 'outlay/setFilterOptions',
-                            data: {
-                                ...filterOptions,
-                                page: page_index,
-                            },
+                    onPageChange={(page_index: number, page_size: number) => {
+                        handleFilterChange({
+                            ...filterOptions,
+                            page: page_size === filterOptions.page_size ? page_index : 1, // 页大小变化时，页数重置为1
+                            page_size,
                         });
                     }}
                     page={filterOptions.page}
