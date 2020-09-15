@@ -119,7 +119,7 @@ const OutLayDetail = (props: IProps) => {
                 </Button>
             );
         }
-        if (!hasReceipt) {
+        if (!hasReceipt && stage?.id && exchange?.id && +outlayAmount.amountAll > 0) {
             nodes.push(
                 <Button type="primary" key="2" onClick={handleWriteOutReceipt}>
                     开收据
