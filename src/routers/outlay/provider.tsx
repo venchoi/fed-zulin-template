@@ -3,11 +3,11 @@ import { IOutLayDetailItem, IOutLayDetailItemObj } from './type';
 // 计算收支记录收入，支出，总额
 export function calcOutlayAmount(list: IOutLayDetailItem[] | IOutLayDetailItemObj = []) {
     const exchange = {
-        inAll: '0',
-        outAll: '0',
-        demuurageAll: '0',
-        amountAll: '0',
-        derated_amount: '0',
+        inAll: 0,
+        outAll: 0,
+        demuurageAll: 0,
+        amountAll: 0,
+        derated_amount: 0,
     };
 
     let amount;
@@ -15,9 +15,9 @@ export function calcOutlayAmount(list: IOutLayDetailItem[] | IOutLayDetailItemOb
         list.forEach(item => {
             amount = parseFloat(item.amount || '0');
             if (amount > 0) {
-                exchange.inAll = `${+exchange.inAll + amount}`;
+                exchange.inAll = +exchange.inAll + amount;
             } else {
-                exchange.outAll = `${+exchange.outAll + amount}`;
+                exchange.outAll = +exchange.outAll + amount;
             }
             exchange.demuurageAll += parseFloat(item.late_fee_amount || '0');
             exchange.demuurageAll += parseFloat(item.fee || '0'); // 加上手续费
@@ -43,11 +43,14 @@ export function calcOutlayAmount(list: IOutLayDetailItem[] | IOutLayDetailItemOb
         });
     }
     exchange.inAll += exchange.demuurageAll;
-    exchange.amountAll = (+exchange.inAll + +exchange.outAll).toFixed(2);
-    exchange.inAll = (+exchange.inAll).toFixed(2);
-    exchange.outAll = (+exchange.outAll).toFixed(2);
-    exchange.derated_amount = parseFloat(exchange.derated_amount).toFixed(2);
-    return exchange;
+    exchange.amountAll = exchange.inAll + exchange.outAll;
+    return {
+        inAll: exchange.inAll.toFixed(2),
+        outAll: exchange.outAll.toFixed(2),
+        demuurageAll: exchange.demuurageAll.toFixed(2),
+        amountAll: exchange.amountAll.toFixed(2),
+        derated_amount: exchange.derated_amount.toFixed(2),
+    };
 }
 
 // 处理数据，由于返回的数据结构跟显示的不一致
