@@ -4,7 +4,7 @@ import { Card, Button, Col, Row, Divider, Table, PageHeader, Popover, message } 
 import './index.less';
 import FedUpload from '@c/FedUpload';
 import { getOutLayDetail, getBillInfo } from '../service';
-import { IOutlayDetail, IBillInfoItem } from '../type';
+import { IOutlayDetail, IBillInfoItem, IRenter } from '../type';
 import { calcOutlayAmount } from '../provider';
 import { comma, getReportHref } from '@/helper/commonUtils';
 import { match } from 'react-router';
@@ -81,6 +81,26 @@ const OutLayDetail = (props: IProps) => {
 
     const { info: { exchange, renter, stage } = { info: {} }, items = [] } = detail;
     const rentalName = renter?.type === '个人' ? renter?.name : renter?.organization_name;
+
+    const getShowRentalName = (rentalName: string | undefined, renter: IRenter) => {
+        let result = '-';
+        if (renter?.type !== '个人') {
+            if (rentalName) {
+                result = rentalName;
+            }
+        } else {
+            if (renter?.name) {
+                result = renter.name;
+            }
+            if (renter?.mobile) {
+                result += `/${renter.mobile}`;
+            }
+        }
+        if (renter?.type) {
+            result += `(${renter.type})`;
+        }
+        return result;
+    };
 
     console.log('outlayAmount', outlayAmount);
 
@@ -181,11 +201,7 @@ const OutLayDetail = (props: IProps) => {
                         </Row>
                         <Row gutter={[0, 16]}>
                             <Col span={3}>租客：</Col>
-                            <Col span={21}>
-                                {renter?.type !== '个人'
-                                    ? `${rentalName}(${renter?.type})`
-                                    : `${renter?.name}/${renter?.mobile}(${renter})`}
-                            </Col>
+                            <Col span={21}>{getShowRentalName(rentalName, renter)}</Col>
                         </Row>
                         {renter?.type !== '个人' && (
                             <Row gutter={[0, 16]}>
