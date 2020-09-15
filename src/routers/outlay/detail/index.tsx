@@ -4,7 +4,7 @@ import { Card, Button, Col, Row, Divider, Table, PageHeader, Popover, message } 
 import './index.less';
 import FedUpload from '@c/FedUpload';
 import { getOutLayDetail, getBillInfo } from '../service';
-import { IOutlayDetail, IBillInfoItem} from '../type';
+import { IOutlayDetail, IBillInfoItem } from '../type';
 import { calcOutlayAmount } from '../provider';
 import { comma, getReportHref } from '@/helper/commonUtils';
 import { match } from 'react-router';
@@ -59,7 +59,7 @@ const OutLayDetail = (props: IProps) => {
     ];
 
     if (location.pathname.includes('deduction-detail')) {
-        routes.push({ path: '', breadcrumbName: '折扣详情' });
+        routes.push({ path: '', breadcrumbName: '抵扣详情' });
     }
 
     const itemRender = (route: Route, params: any, routes: Array<Route>, paths: Array<String>) => {
