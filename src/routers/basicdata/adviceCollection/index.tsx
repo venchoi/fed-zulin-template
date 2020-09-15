@@ -41,15 +41,16 @@ function App() {
     const [userList, setUserList] = useState([]);
     const [chooseType, setChooseType] = useState([]);
     const [initList, setInitList] = useState([]);
+    const [keyword, setKeyword] = useState('');
     const getList = async (isFirst?: string) => {
-        console.log(isFirst, 'isFirst');
         setLoading(true);
         const res = await getAdviceCollectionList();
         if (res?.result) {
-            if (isFirst) {
-                setInitList(res?.data?.company);
+            if (keyword) {
+                setList(getFilterAutoAuditListData(res?.data?.company));
+            } else {
+                setList(res?.data?.company);
             }
-            setList(res?.data?.company);
         }
         setLoading(false);
     };
@@ -75,7 +76,6 @@ function App() {
     const getUser = async () => {
         const res = await getUserList(currentItem.id);
         if (res?.result) {
-            console.log(res, 'res');
             setUserList(res.data.items);
         }
     };
@@ -196,27 +196,27 @@ function App() {
         setChooseType(checkedValues);
     };
 
-    const DFS = (initList: Array<any>, keyword) => {
-        const arr = initList.filter((item: any) => {
-            if (item?.children?.length > 0) {
-                DFS(item.children, keyword);
-            }
-            if (item.name === keyword) {
-                console.log(item, keyword, 'keywordkeywordkeyword');
-                return true;
-            }
-            return item.name === keyword;
-        });
-        return arr;
+    //过滤搜索数据
+    const getFilterAutoAuditListData = data => {
+        if (data && data.length) {
+            const result = data.filter(item => {
+                if (item.is_end == '1') {
+                    return (item.name || item.stage_name) && (item.name || item.stage_name).indexOf(keyword) >= 0;
+                } else {
+                    const temp = getFilterAutoAuditListData(item.children);
+                    item.children = temp;
+                    return temp && temp.length > 0;
+                }
+            });
+            data = result;
+            return data;
+        } else {
+            return [];
+        }
     };
 
-    const onSearch = value => {
-        if (!value) {
-            return setList(initList);
-        }
-        const arr = DFS(initList, value);
-        console.log(arr, 'arr');
-        setList(arr);
+    const onSearch = () => {
+        getList();
     };
 
     return (
@@ -230,10 +230,9 @@ function App() {
                 <div style={{ backgroundColor: '#fff', padding: 16 }}>
                     <Search
                         placeholder="请输入项目"
-                        onSearch={value => {
-                            onSearch(value);
-                        }}
+                        onSearch={onSearch}
                         style={{ width: 200, marginBottom: 16 }}
+                        onChange={e => setKeyword(e.target.value)}
                     />
                     <Table
                         expandRowByClick
