@@ -51,23 +51,27 @@ export function calcOutlayAmount(list: IOutLayDetailItem[] | IOutLayDetailItemOb
 }
 
 // 处理数据，由于返回的数据结构跟显示的不一致
-export function getExchangeList(list: IOutLayDetailItem[] = []) {
+export function getExchangeList(exchangeList: IOutLayDetailItem[] = []) {
     const arr = [];
-    const exchangeList = list;
+    let amount = '0';
 
     // 【20180702】目前只会有一行数据
     if (exchangeList && exchangeList.length === 1) {
         arr.push(exchangeList[0]);
+        amount = exchangeList[0].amount.replace('-', '');
     }
-    exchangeList && exchangeList.map(item => {
-        if (item && item.transference && item.transference.transference_type) {
-            const obj = JSON.parse(JSON.stringify(item.transference));
-            if (obj.room_name) {
-                obj.full_room_name = obj.room_name;
+    exchangeList &&
+        exchangeList.map(item => {
+            if (item && item.transference && item.transference.transference_type) {
+                const obj = JSON.parse(JSON.stringify(item.transference));
+                if (obj.room_name) {
+                    obj.full_room_name = obj.room_name;
+                }
+                // 这里偷了一个懒 后端数据没有正确返回 只是在前端人为的让两个金额强制一致
+                obj.amount = amount;
+                arr.push(obj);
             }
-            arr.push(obj)
-        }
-        return item;
-    });
+            return item;
+        });
     return arr;
 }

@@ -100,8 +100,8 @@ const DetailExchangeTable = (props: IProps) => {
                         feeName = `应收${record.transference.type}`;
                     } else {
                         feeName = record.transference.type;
-                        remark = text ? `(${text})` : '';
                     }
+                    remark = text ? `(${text})` : '';
                 }
                 return (
                     <span title={(feeName ? feeName : text) + remark}>
