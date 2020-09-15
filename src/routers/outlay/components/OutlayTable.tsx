@@ -7,8 +7,7 @@ import { ExclamationCircleOutlined, SettingOutlined } from '@ant-design/icons';
 import config from '@/config';
 
 import './OutlayTable.less';
-import { throttle } from 'lodash';
-import cloneDeep from 'lodash/cloneDeep';
+import { throttle, cloneDeep } from 'lodash';
 import { ResizeTable, DragSelect } from 'ykj-ui';
 import { IField } from '@/types/common';
 import { comma } from '@/helper/commonUtils';
@@ -51,7 +50,11 @@ const OutLayTable = (props: OutLayTableProps) => {
     useEffect(() => {
         const tempColumn = getColumns();
         const tempRowSelection = getRowSelection();
-        setColumns(tempColumn);
+        setColumns(cloneDeep(tempColumn));
+
+        // 去掉左右固定的列
+        tempColumn.shift();
+        tempColumn.pop();
         setFields(
             tempColumn.map((col, index) => ({
                 field: col.dataIndex,
@@ -76,17 +79,23 @@ const OutLayTable = (props: OutLayTableProps) => {
         const onFinish = (resultArr: any) => {
             console.log('resultArr', resultArr);
             setVisible(false);
-            setColumns(
-                getColumns().filter((item: ColumnProps<OutLayListItem>) =>
-                    resultArr.some((fieldItem: IField) => fieldItem.field === item.dataIndex && fieldItem.selected)
-                )
+            const tempColumns = getColumns();
+            const sortColumns = resultArr.map((fieldItem: IField) => tempColumns[+fieldItem.key + 1]); // 由于左边去掉一列补上
+            const selectedColumns = sortColumns.filter((item: ColumnProps<OutLayListItem>) =>
+                resultArr.some((fieldItem: IField) => fieldItem.field === item.dataIndex && fieldItem.selected)
             );
+
+            // 加上左右固定的列
+            selectedColumns.unshift(tempColumns[0]);
+            selectedColumns.push(tempColumns[tempColumns.length - 1]);
+            setColumns(selectedColumns);
         };
 
         // 取消点击事件
         const onCancel = () => {
             setVisible(false);
         };
+
         // 配置列数据 如果layoutData返回值为空时，默认使用fieldData数据
         return <DragSelect options={fields} onFinish={onFinish} onCancel={onCancel} />;
     };
