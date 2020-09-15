@@ -345,7 +345,7 @@ const OutLayTable = (props: OutLayTableProps) => {
         },
         {
             title: '操作',
-            width: 140,
+            width: 148,
             fixed: 'right',
             render: (text: string, record: OutLayListItem, index: number) => {
                 const { id, fee_items = [], proj_id, exchanged_amount } = record;
