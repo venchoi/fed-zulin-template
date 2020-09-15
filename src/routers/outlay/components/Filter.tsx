@@ -42,6 +42,7 @@ const Filter = (props: FilterProps) => {
     const [feeList, setFeeList] = useState<FeeItem[]>([]); // 费项列表
     const [payParamsList, setPayParamsList] = useState<PaymentMode[]>([]); // 付款方式列表
     const [keywords, setKeyWords] = useState('');
+    const [RoomCascaderReRender, setRoomCascaderReRender] = useState(false); // 重新房间选择框，因为取消全选项目是渲染异常
 
     useEffect(() => {
         console.log('===projIds change', props.projIds);
@@ -55,15 +56,8 @@ const Filter = (props: FilterProps) => {
         getPayParams(1).then(json => {
             setPayParamsList(json.data.PaymentMode);
         });
-    }, [props.projIds]);
 
-    // 所选项目有变化，清空所选房间
-    useEffect(() => {
-        const { selectedProjId } = selectedRoomConfig;
-        console.log('stage_id change', selectedProjId);
-        if (!props.filterOptions.stage_id) {
-            return;
-        }
+        // 所选项目有变化，清空所选房间
         setSelectedRoomConfig({
             selectedProjId: '',
             subdistrictId: '',
@@ -72,7 +66,12 @@ const Filter = (props: FilterProps) => {
             floorName: '',
             roomId: '',
         });
-    }, [props.filterOptions.stage_id]);
+
+        setRoomCascaderReRender(false);
+        setTimeout(() => {
+            setRoomCascaderReRender(true);
+        }, 300);
+    }, [props.projIds]);
 
     useEffect(() => {
         setKeyWords(props.filterOptions.keyword || '');
@@ -99,6 +98,7 @@ const Filter = (props: FilterProps) => {
         props.onChange({
             ...props.filterOptions,
             page: 1,
+            stage_id: stageId || props.projIds.join(','), // 为空时全选
             room_id: roomId,
             subdistrict_id: subdistrictId,
             building_id: buildingId,
@@ -149,13 +149,15 @@ const Filter = (props: FilterProps) => {
     return (
         <div data-component="outlay-filter">
             <Space size={16}>
-                <RoomCascader
-                    style={{ width: 216 }}
-                    projIds={props.projIds.join(',')}
-                    projNames={props.projNames.join(',')}
-                    selectedConfig={selectedRoomConfig}
-                    onChange={handleRoomCascaderChange}
-                />
+                {RoomCascaderReRender && (
+                    <RoomCascader
+                        style={{ width: 216 }}
+                        projIds={props.projIds.join(',')}
+                        projNames={props.projNames.join(',')}
+                        selectedConfig={selectedRoomConfig}
+                        onChange={handleRoomCascaderChange}
+                    />
+                )}
                 <Select
                     placeholder="全部费项"
                     mode="multiple"
