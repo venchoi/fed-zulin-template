@@ -7,7 +7,7 @@ import { ExclamationCircleOutlined, SettingOutlined } from '@ant-design/icons';
 import config from '@/config';
 
 import './OutlayTable.less';
-import { throttle, cloneDeep } from 'lodash';
+import { throttle, cloneDeep, hasIn } from 'lodash';
 import { ResizeTable, DragSelect } from 'ykj-ui';
 import { IField } from '@/types/common';
 import { comma } from '@/helper/commonUtils';
@@ -402,19 +402,30 @@ const OutLayTable = (props: OutLayTableProps) => {
         renderCell: (checked: boolean, record: OutLayListItem, index: number, originNode: any) => {
             const { id, exchanged_amount, proj_id, fee_items } = record;
             const isChecked = selectedRowKeys.includes(id); // 数据双向绑定，用于清空
-            let selectedStageId, hasReceiptSelected;
+            let selectedStageId, hasReceiptSelected, hasInvoiceSelected;
             if (selectedRows.length > 0) {
-                const { fee_items } = selectedRows[0];
                 selectedStageId = selectedRows[0].proj_id;
-                hasReceiptSelected =
-                    fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
+                hasReceiptSelected = selectedRows.some(item => {
+                    const { fee_items } = item;
+                    return fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
+                });
+                hasInvoiceSelected = selectedRows.some(item => {
+                    const { fee_items } = item;
+                    return fee_items && fee_items.length > 0 && fee_items[0].invoice && fee_items[0].invoice.length > 0;
+                });
             }
             const isRefund = exchanged_amount < 0;
             const hasReceipt =
                 fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
-            const disabled = selectedStageId && (proj_id !== selectedStageId || hasReceipt !== hasReceiptSelected);
+            const hasInvoice =
+                fee_items && fee_items.length > 0 && fee_items[0].invoice && fee_items[0].invoice.length > 0;
+            const disabled =
+                selectedStageId &&
+                (proj_id !== selectedStageId ||
+                    (hasReceipt && hasInvoiceSelected) ||
+                    (hasInvoice && hasReceiptSelected));
 
-            // 退款或者跟已选择的不属于同一个项目或者跟已选择的是否有收据不一致，不能做勾选做批量操作
+            // 1)退款或者，2)跟已选择的不属于同一个项目或者，3)勾选了有已开收据的，不能勾选已开发票；勾选了有已开发票的，不能勾选已开收据
             if (isRefund || disabled) {
                 return (
                     <Tooltip title="无相关操作，不可选中" align={{ offset: [0, 4] }}>
