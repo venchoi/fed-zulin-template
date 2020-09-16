@@ -273,30 +273,35 @@ function App() {
                         <Checkbox.Group options={plainOptions} onChange={onChange} value={chooseType} />
                     </Col>
                 </Row>
-
-                {showSelect ? (
-                    userList.length > 0 ? (
-                        <Select
-                            mode="multiple"
-                            style={{ width: '100%' }}
-                            placeholder="选择指定人员"
-                            onChange={handleChange}
-                            defaultValue={chooseIds}
-                            menuItemSelectedIcon={<Checkbox checked />}
-                            suffixIcon={<Checkbox />}
-                        >
-                            {userList.map((item: any) => {
-                                return (
-                                    <Option value={item.id} key={item.id}>
-                                        {`${item.name} (${item.organization_name})`}
-                                    </Option>
-                                );
-                            })}
-                        </Select>
-                    ) : (
-                        <Select   placeholder="没有可以指定人员"/>
-                    )
-                ) : null}
+                <Row>
+                    <Col span={4}></Col>
+                    <Col span={18}>
+                        {showSelect ? (
+                            userList.length > 0 ? (
+                                <Select
+                                    mode="multiple"
+                                    style={{ width: '100%' }}
+                                    placeholder="选择指定人员"
+                                    onChange={handleChange}
+                                    defaultValue={chooseIds}
+                                    menuItemSelectedIcon={<Checkbox checked />}
+                                    suffixIcon={<Checkbox />}
+                                    maxTagCount={5}
+                                >
+                                    {userList.map((item: any) => {
+                                        return (
+                                            <Option value={item.id} key={item.id}>
+                                                {`${item.name} (${item.organization_name})`}
+                                            </Option>
+                                        );
+                                    })}
+                                </Select>
+                            ) : (
+                                <Select placeholder="没有可以指定人员" />
+                            )
+                        ) : null}
+                    </Col>
+                </Row>
             </Modal>
         </Spin>
     );
