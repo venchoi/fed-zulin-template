@@ -273,17 +273,21 @@ const OutLayTable = (props: OutLayTableProps) => {
             },
         },
         {
-            dataIndex: 'exchanged_amount',
+            dataIndex: 'total_amount',
             title: '交易总额(元)',
             width: 140,
             align: 'right',
-            render: (exchanged_amount: string) => {
-                const amount = Math.abs(+exchanged_amount || 0).toFixed(2);
+            render: (text: string, record: OutLayListItem) => {
+                const { ext_payment } = record;
+                let amount = '-';
                 let operator = '';
-                if (+exchanged_amount > 0) {
+                if (Array.isArray(ext_payment)) {
+                    ext_payment.forEach(item => {
+                        amount = item.amount;
+                    });
+                }
+                if (+amount > 0) {
                     operator = '+';
-                } else if (+exchanged_amount < 0) {
-                    operator = '-';
                 }
                 return (
                     <span>
