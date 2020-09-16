@@ -277,7 +277,6 @@ function App() {
                     <Col span={4}></Col>
                     <Col span={18}>
                         {showSelect ? (
-                            userList.length > 0 ? (
                                 <Select
                                     mode="multiple"
                                     style={{ width: '100%' }}
@@ -296,8 +295,6 @@ function App() {
                                         );
                                     })}
                                 </Select>
-                            ) : (
-                                <Select placeholder="没有可以指定人员" />
                             )
                         ) : null}
                     </Col>
