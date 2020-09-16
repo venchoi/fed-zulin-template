@@ -65,10 +65,10 @@ const OutLayTable = (props: OutLayTableProps) => {
             }))
         );
         setRowSelection(tempRowSelection);
-    }, [props]);
+    }, []);
 
     const onHandleResize = throttle((index: number, size: { width: number; height: number }) => {
-        const nextColumns = getColumns();
+        const nextColumns = cloneDeep(columns);
         nextColumns[index].width = size.width;
         setColumns(nextColumns);
     }, 100);
@@ -79,7 +79,16 @@ const OutLayTable = (props: OutLayTableProps) => {
         const onFinish = (resultArr: any) => {
             console.log('resultArr', resultArr);
             setVisible(false);
-            const tempColumns = getColumns();
+
+            // 为了保留已设置的值和使用原始全数据，跟原数据diff
+            const tempColumns = getColumns().map(item => {
+                const index = columns.findIndex((col: ColumnProps<OutLayListItem>) => col.dataIndex === item.dataIndex);
+                if (index === -1) {
+                    return item;
+                } else {
+                    return columns[index];
+                }
+            });
             const sortColumns = resultArr.map((fieldItem: IField) => tempColumns[+fieldItem.key + 1]); // 由于左边去掉一列补上
             const selectedColumns = sortColumns.filter((item: ColumnProps<OutLayListItem>) =>
                 resultArr.some((fieldItem: IField) => fieldItem.field === item.dataIndex && fieldItem.selected)
