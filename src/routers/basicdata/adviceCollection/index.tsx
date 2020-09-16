@@ -286,10 +286,12 @@ function App() {
                                 menuItemSelectedIcon={<Checkbox checked />}
                                 suffixIcon={<Checkbox />}
                                 maxTagCount={5}
+                                optionFilterProp="lable"
+                                optionLabelProp="lable"
                             >
                                 {userList.map((item: any) => {
                                     return (
-                                        <Option value={item.id} key={item.id}>
+                                        <Option value={item.id} key={item.id} lable={item.name}>
                                             {`${item.name} (${item.organization_name})`}
                                         </Option>
                                     );
