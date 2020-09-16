@@ -64,6 +64,9 @@ const OutlayList = (props: IProps) => {
         if (!stage_id) {
             return;
         }
+        if (filterOptions.subdistrict_id === '未分区') {
+            filterOptions.subdistrict_id = '';
+        }
         const getData = async () => {
             setLoading(true);
             const allData = await Promise.all([getOutlayList(filterOptions), getStatistics(filterOptions)]);
