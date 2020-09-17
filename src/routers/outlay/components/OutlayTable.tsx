@@ -47,9 +47,8 @@ const OutLayTable = (props: OutLayTableProps) => {
     const [fields, setFields] = useState<any>([]);
     const [rowSelection, setRowSelection] = useState({});
 
-    useEffect(() => {
+    useEffect(()=> {
         const tempColumn = getColumns();
-        const tempRowSelection = getRowSelection();
         setColumns(cloneDeep(tempColumn));
 
         // 去掉左右固定的列
@@ -64,8 +63,13 @@ const OutLayTable = (props: OutLayTableProps) => {
                 selected: true,
             }))
         );
+    }, [])
+
+    // 点击了复选框需要做数据双向绑定
+    useEffect(() => {
+        const tempRowSelection = getRowSelection();
         setRowSelection(tempRowSelection);
-    }, []);
+    }, [props]);
 
     const onHandleResize = throttle((index: number, size: { width: number; height: number }) => {
         const nextColumns = cloneDeep(columns);
