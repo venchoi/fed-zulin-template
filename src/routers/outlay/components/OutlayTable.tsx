@@ -16,6 +16,7 @@ import ReceiptTag from '@/components/ReceiptTag';
 import InvoiceTag from '@/components/InvoiceTag';
 import { Link } from 'dva/router';
 import { isOutlayListRecordCanChecked } from '../provider';
+import RenderRentalResourcePopover from './RenderRentalResourcePopover';
 
 interface OutLayTableProps {
     outlayList: any[];
@@ -52,7 +53,6 @@ const OutLayTable = (props: OutLayTableProps) => {
     useEffect(() => {
         const tempColumn = getColumns();
         setColumns(cloneDeep(tempColumn));
-
         // 去掉左右固定的列
         tempColumn.shift();
         tempColumn.pop();
@@ -83,9 +83,7 @@ const OutLayTable = (props: OutLayTableProps) => {
     const renderExtraNode = () => {
         // 确定点击事件
         const onFinish = (resultArr: any) => {
-            console.log('resultArr', resultArr);
             setVisible(false);
-
             // 为了保留已设置的值和使用原始全数据，跟原数据diff
             const tempColumns = getColumns().map(item => {
                 const index = columns.findIndex((col: ColumnProps<OutLayListItem>) => col.dataIndex === item.dataIndex);
@@ -99,18 +97,15 @@ const OutLayTable = (props: OutLayTableProps) => {
             const selectedColumns = sortColumns.filter((item: ColumnProps<OutLayListItem>) =>
                 resultArr.some((fieldItem: IField) => fieldItem.field === item.dataIndex && fieldItem.selected)
             );
-
             // 加上左右固定的列
             selectedColumns.unshift(tempColumns[0]);
             selectedColumns.push(tempColumns[tempColumns.length - 1]);
             setColumns(selectedColumns);
         };
-
         // 取消点击事件
         const onCancel = () => {
             setVisible(false);
         };
-
         // 配置列数据 如果layoutData返回值为空时，默认使用fieldData数据
         return <DragSelect options={fields} onFinish={onFinish} onCancel={onCancel} />;
     };
@@ -153,19 +148,6 @@ const OutLayTable = (props: OutLayTableProps) => {
             tempSelectedRows.splice(tempSelectedRows.findIndex(item => item.id === key));
         }
         onTableSelect && onTableSelect(tempSelectedRowsKey, tempSelectedRows);
-    };
-
-    const renderRentalResourcePopover = (record: OutLayListItem) => {
-        const roomNames = record.fee_items[0]?.full_room_name?.split(',') || [];
-        return (
-            <div className="content">
-                {roomNames.map((roomName, index) => (
-                    <p title={roomName} key={`${index}`}>
-                        {roomName}
-                    </p>
-                ))}
-            </div>
-        );
     };
 
     const getColumns = (): ColumnProps<OutLayListItem>[] => [
@@ -238,7 +220,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                                 className="popover"
                                 overlayClassName="rental-resource-popover"
                                 title={roomPackageName}
-                                content={renderRentalResourcePopover(record)}
+                                content={<RenderRentalResourcePopover record={record} />}
                             >
                                 <ExclamationCircleOutlined style={{ color: '#BEC3C7' }} />
                             </Popover>
@@ -401,7 +383,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                 const isRefund = exchanged_amount < 0;
                 return (
                     <span>
-                        {(!isRefund && canReceipt) && (
+                        {!isRefund && canReceipt && (
                             <a
                                 className="operate-btn f-hidden rental-receipt-add-receipt"
                                 href={`/fed/receipt/invoice?exchange_ids=${id}&stage_id=${proj_id}`}
@@ -443,10 +425,7 @@ const OutLayTable = (props: OutLayTableProps) => {
             }
             const isRefund = exchanged_amount < 0;
             const canChecked = isOutlayListRecordCanChecked(record, selectedRows);
-            console.log("===render checked", record.code, isRefund, canChecked)
-            const disabled =
-                (selectedStageId &&
-                proj_id !== selectedStageId) || !canChecked;
+            const disabled = (selectedStageId && proj_id !== selectedStageId) || !canChecked;
 
             // 1)退款或者，2)跟已选择的不属于同一个项目或者，3)根据已选的开发票、开收据状态
             if (isRefund || disabled) {
