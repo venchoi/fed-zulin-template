@@ -339,6 +339,22 @@ const OutLayTable = (props: OutLayTableProps) => {
             },
         },
         {
+            dataIndex: 'fee_items_fee',
+            title: '手续费(元)',
+            width: 140,
+            align: 'right',
+            render: (value: ExtPayment[], record: OutLayListItem, index: number) => {
+                const { fee_items } = record;
+                let fee = '-';
+                if (Array.isArray(fee_items)) {
+                    fee_items.forEach(item => {
+                        fee = item.fee;
+                    });
+                }
+                return <span>{comma(fee)}</span>;
+            },
+        },
+        {
             dataIndex: 'exchanged_on',
             title: '交易日期',
             width: 160,
