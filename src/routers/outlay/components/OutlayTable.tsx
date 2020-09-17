@@ -47,7 +47,8 @@ const OutLayTable = (props: OutLayTableProps) => {
     const [fields, setFields] = useState<any>([]);
     const [rowSelection, setRowSelection] = useState({});
 
-    useEffect(()=> {
+    // canApplyInvoice会影响columns的展示
+    useEffect(() => {
         const tempColumn = getColumns();
         setColumns(cloneDeep(tempColumn));
 
@@ -63,7 +64,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                 selected: true,
             }))
         );
-    }, [])
+    }, [canApplyInvoice]);
 
     // 点击了复选框需要做数据双向绑定
     useEffect(() => {
