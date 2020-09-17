@@ -15,6 +15,7 @@ import { StatisticData, OutLayListItem, FeeItem, ExtPayment } from '../type';
 import ReceiptTag from '@/components/ReceiptTag';
 import InvoiceTag from '@/components/InvoiceTag';
 import { Link } from 'dva/router';
+import { isOutlayListRecordCanChecked } from '../provider';
 
 interface OutLayTableProps {
     outlayList: any[];
@@ -395,12 +396,12 @@ const OutLayTable = (props: OutLayTableProps) => {
             fixed: 'right',
             render: (text: string, record: OutLayListItem, index: number) => {
                 const { id, fee_items = [], proj_id, exchanged_amount } = record;
-                const hasReceipt = fee_items[0]?.receipt?.length > 0;
-                const hasInvoice = fee_items.some(feeItem => feeItem.can_invoicing === 1);
+                const canReceipt = fee_items[0]?.can_receipt === 1; // 是否可以开收据
+                const canInvoice = fee_items[0]?.can_invoicing === 1; // 是否可以开发票
                 const isRefund = exchanged_amount < 0;
                 return (
                     <span>
-                        {!(hasReceipt || isRefund) && (
+                        {(!isRefund && canReceipt) && (
                             <a
                                 className="operate-btn f-hidden rental-receipt-add-receipt"
                                 href={`/fed/receipt/invoice?exchange_ids=${id}&stage_id=${proj_id}`}
@@ -408,7 +409,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                                 开收据
                             </a>
                         )}
-                        {!canApplyInvoice && hasInvoice && (
+                        {!canApplyInvoice && canInvoice && (
                             <a
                                 className="operate-btn f-hidden rental-receipt-add"
                                 onClick={() => handleOpenInvoice(record)}
@@ -416,7 +417,7 @@ const OutLayTable = (props: OutLayTableProps) => {
                                 开发票
                             </a>
                         )}
-                        {canApplyInvoice && hasInvoice && (
+                        {canApplyInvoice && canInvoice && (
                             <a
                                 className="operate-btn f-hidden rental-receipt-add-apply"
                                 onClick={() => handleOpenInvoice(record, true)}
@@ -436,30 +437,18 @@ const OutLayTable = (props: OutLayTableProps) => {
         renderCell: (checked: boolean, record: OutLayListItem, index: number, originNode: any) => {
             const { id, exchanged_amount, proj_id, fee_items } = record;
             const isChecked = selectedRowKeys.includes(id); // 数据双向绑定，用于清空
-            let selectedStageId, hasReceiptSelected, hasInvoiceSelected;
+            let selectedStageId;
             if (selectedRows.length > 0) {
                 selectedStageId = selectedRows[0].proj_id;
-                hasReceiptSelected = selectedRows.some(item => {
-                    const { fee_items } = item;
-                    return fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
-                });
-                hasInvoiceSelected = selectedRows.some(item => {
-                    const { fee_items } = item;
-                    return fee_items && fee_items.length > 0 && fee_items[0].invoice && fee_items[0].invoice.length > 0;
-                });
             }
             const isRefund = exchanged_amount < 0;
-            const hasReceipt =
-                fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
-            const hasInvoice =
-                fee_items && fee_items.length > 0 && fee_items[0].invoice && fee_items[0].invoice.length > 0;
+            const canChecked = isOutlayListRecordCanChecked(record, selectedRows);
+            console.log("===render checked", record.code, isRefund, canChecked)
             const disabled =
-                selectedStageId &&
-                (proj_id !== selectedStageId ||
-                    (hasReceipt && hasInvoiceSelected) ||
-                    (hasInvoice && hasReceiptSelected));
+                (selectedStageId &&
+                proj_id !== selectedStageId) || !canChecked;
 
-            // 1)退款或者，2)跟已选择的不属于同一个项目或者，3)勾选了有已开收据的，不能勾选已开发票；勾选了有已开发票的，不能勾选已开收据
+            // 1)退款或者，2)跟已选择的不属于同一个项目或者，3)根据已选的开发票、开收据状态
             if (isRefund || disabled) {
                 return (
                     <Tooltip title="无相关操作，不可选中" align={{ offset: [0, 4] }}>

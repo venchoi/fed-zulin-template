@@ -30,6 +30,8 @@ interface Props {
 function OperateBar(props: Props) {
     const { selectedRows, selectedRowKeys, stageData, user, canApplyInvoice, onClear } = props;
 
+    console.log('====OperateBar canApplyInvoice', canApplyInvoice);
+
     // 是否能开发票
     const isInvoiceEnabled =
         selectedRows.length > 0 &&
@@ -37,21 +39,22 @@ function OperateBar(props: Props) {
             return (
                 item.fee_items &&
                 item.fee_items.some(feeItem => {
-                    return feeItem.can_invoicing == 1;
+                    return feeItem.can_invoicing === 1;
                 })
             );
         });
 
     // 是否能开收据
-    const isBatchReceiptEnabled = !(
-        selectedRows.length === 0 ||
-        selectedRows.some(item => {
-            const { fee_items, exchanged_amount } = item;
-            const hasReceipt =
-                fee_items && fee_items.length > 0 && fee_items[0].receipt && fee_items[0].receipt.length > 0;
-            return hasReceipt;
-        })
-    );
+    const isBatchReceiptEnabled =
+        selectedRows.length > 0 &&
+        selectedRows.every(item => {
+            return (
+                item.fee_items &&
+                item.fee_items.some(feeItem => {
+                    return feeItem.can_receipt === 1;
+                })
+            );
+        });
 
     // 是否能打印。所勾选的项是否收据都开具了
     const isPrintEnabled =

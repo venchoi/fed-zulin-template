@@ -92,6 +92,7 @@ export interface FeeItem {
     building_name: string;
     building_unit: string | null;
     can_invoicing: number;
+    can_receipt: number;
     contract_room_id: string;
     derated_amount: number;
     end_date: string | null;
@@ -108,6 +109,7 @@ export interface FeeItem {
     meter_reading_id: string | null;
     package_name: string | null;
     receipt: IReceipt[];
+    receipt_status: string; // '未开票','开票中','已开票'
     room_name: string;
     room_no: string;
     start_date: string | null;
