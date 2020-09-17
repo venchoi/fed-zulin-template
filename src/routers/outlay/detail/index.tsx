@@ -121,7 +121,12 @@ const OutLayDetail = (props: IProps) => {
         }
         if (!hasReceipt && stage?.id && exchange?.id && +outlayAmount.amountAll > 0) {
             nodes.push(
-                <Button type="primary" key="2" onClick={handleWriteOutReceipt}>
+                <Button
+                    className="f-hidden rental-receipt-add-receipt"
+                    type="primary"
+                    key="2"
+                    onClick={handleWriteOutReceipt}
+                >
                     开收据
                 </Button>
             );
