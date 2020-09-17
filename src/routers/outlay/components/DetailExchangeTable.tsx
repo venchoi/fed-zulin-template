@@ -113,7 +113,7 @@ const DetailExchangeTable = (props: IProps) => {
         },
         {
             dataIndex: 'transference_type',
-            title: '折扣方式',
+            title: '抵扣方式',
             ellipsis: true,
             width: 220,
             render: (text: string) => {
