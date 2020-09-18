@@ -109,6 +109,7 @@ const OutLayDetail = (props: IProps) => {
     const getPageHeaderExtra = () => {
         const nodes = [];
         let hasReceipt = false;
+        let canReceipt = items[0]?.can_receipt === 1;
         if (Array.isArray(items) && items[0]?.receipt?.length > 0) {
             hasReceipt = true;
         }
@@ -119,7 +120,7 @@ const OutLayDetail = (props: IProps) => {
                 </Button>
             );
         }
-        if (!hasReceipt && stage?.id && exchange?.id && +outlayAmount.amountAll > 0) {
+        if (canReceipt && stage?.id && exchange?.id && +outlayAmount.amountAll > 0) {
             nodes.push(
                 <Button
                     className="f-hidden rental-receipt-add-receipt"
