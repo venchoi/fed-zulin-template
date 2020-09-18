@@ -148,6 +148,7 @@ export const DerateList = (props: Props) => {
                     setAllAuditErrorModalVisible(true);
                     setAllAuditErrorMsg(JSON.parse(data[0].msg || ''));
                     clearInterval(tk);
+                    getDerateListData();
                 }
                 if (data[0] && data[0].status === '成功') {
                     setloading(false);
