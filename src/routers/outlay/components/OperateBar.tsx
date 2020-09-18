@@ -201,7 +201,7 @@ function OperateBar(props: Props) {
             )}
             {canApplyInvoice && (
                 <Button
-                    className="rental-receipt-add-apply"
+                    className="f-hidden rental-receipt-add-apply"
                     disabled={!isInvoiceEnabled}
                     onClick={() => handleClick(OperateType.combinedApplyInvoice)}
                 >
