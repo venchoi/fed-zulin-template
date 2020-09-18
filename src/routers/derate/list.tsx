@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 // @ts-ignore
 import * as queryString from 'query-string';
-import { message, Button, Modal } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { message, Button, Modal, Table } from 'antd';
+import { ExclamationCircleFilled, ExclamationCircleOutlined } from '@ant-design/icons';
 import { connect } from 'dva';
 import ContentLayout from '@c/FedListPageLayout';
 import SearchArea from './components/searchArea';
@@ -13,7 +13,7 @@ import WorkflowApprovalPopover from './components/workflowPopover';
 
 import { getDerateList, batchAuditDerate, getBillItemFee, auditAll, getAuditStatus } from '@s/derate';
 import { getDerateListParams } from '@/types/derateTypes';
-import { Props, derateType, billFeeItemType, callbackFn } from './list.d';
+import { Props, derateType, billFeeItemType, callbackFn, IAllAuditErrorMsg } from './list.d';
 import { projsValue } from '@t/project';
 import './list.less';
 const baseAlias = 'static';
@@ -41,6 +41,7 @@ export const DerateList = (props: Props) => {
         stage_id: '',
     }); // 减免列表搜索参数
     const [derateTotal, setderateTotal] = useState(0);
+    const [waitAuditedTotal, setWaitAuditedTotal] = useState(0);
     const [derateList, setderateList] = useState([]); // 减免列表
     const [loading, setloading] = useState(false);
     const [selectedRowKeys, setselectedRowKeys] = useState<string[]>([]);
@@ -51,6 +52,8 @@ export const DerateList = (props: Props) => {
         params: null, //所需参数
         callBack: undefined, // 弹框操作回调函数
     });
+    const [allAuditErrorMsg, setAllAuditErrorMsg] = useState<IAllAuditErrorMsg>({} as IAllAuditErrorMsg);
+    const [allAuditErrorModalVisible, setAllAuditErrorModalVisible] = useState(false);
     const tableSetLoading = useCallback(setloading, [setloading]);
     const configWorkflow = useCallback(setWorkflow, [setWorkflow]);
     useEffect(() => {
@@ -87,6 +90,7 @@ export const DerateList = (props: Props) => {
         if (result && data) {
             setderateList(data.items || []);
             setderateTotal(data.total);
+            setWaitAuditedTotal(data.waitAuditedTotal);
         }
         // 搜索后清空选中
         setselectedRowKeys([]);
@@ -141,7 +145,8 @@ export const DerateList = (props: Props) => {
                 }
                 if (data[0] && data[0].status === '失败') {
                     setloading(false);
-                    message.error(data[0].msg);
+                    setAllAuditErrorModalVisible(true);
+                    setAllAuditErrorMsg(JSON.parse(data[0].msg || ''));
                     clearInterval(tk);
                 }
                 if (data[0] && data[0].status === '成功') {
@@ -163,6 +168,7 @@ export const DerateList = (props: Props) => {
         confirm({
             icon: <ExclamationCircleOutlined />,
             title,
+            centered: true,
             onOk: async () => {
                 if (isAll) {
                     handleAuditAll();
@@ -205,7 +211,7 @@ export const DerateList = (props: Props) => {
                 <SearchArea
                     keywordValue={searchParams.keyword || ''}
                     selectedRowKeys={selectedRowKeys}
-                    total={+derateTotal}
+                    total={+waitAuditedTotal}
                     onAudit={handleBatchAudit}
                     onKeywordSearch={handleKeywordSearch}
                 />
@@ -251,6 +257,35 @@ export const DerateList = (props: Props) => {
                 {workflow.showModal ? (
                     <WorkflowApprovalPopover params={workflow.params} callBack={workflow.callBack} />
                 ) : null}
+
+                <Modal
+                    visible={allAuditErrorModalVisible}
+                    title="审核结果"
+                    width={690}
+                    wrapClassName="all-audit-error-modal"
+                    centered={true}
+                    onCancel={() => setAllAuditErrorModalVisible(false)}
+                    footer={[
+                        <Button type="primary" onClick={() => setAllAuditErrorModalVisible(false)}>
+                            我知道了
+                        </Button>,
+                    ]}
+                >
+                    <p>
+                        审核成功{allAuditErrorMsg.title?.success_count}条，失败{allAuditErrorMsg.title?.fail_count}条
+                    </p>
+                    <Table
+                        size="small"
+                        columns={[
+                            { dataIndex: 'code', width: 240, title: '减免流水号' },
+                            { dataIndex: 'error_msg', title: '失败原因', ellipsis: true },
+                        ]}
+                        dataSource={allAuditErrorMsg.list}
+                        pagination={false}
+                        bordered={true}
+                        scroll={{ y: 228 }}
+                    />
+                </Modal>
             </div>
         </ContentLayout>
     );

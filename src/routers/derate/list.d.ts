@@ -69,3 +69,8 @@ export interface billFeeItemType {
 export interface callbackFn {
     (keyword: string): void;
 }
+
+export interface IAllAuditErrorMsg {
+    list: { code: string; error_msg: string }[];
+    title: { success_count: string; fail_count: string };
+}
