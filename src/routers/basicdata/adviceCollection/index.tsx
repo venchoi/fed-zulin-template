@@ -85,6 +85,7 @@ function App() {
     };
 
     const handleOk = async () => {
+        setConfirmLoading(true);
         const haveAppoint = chooseType.find(item => item === '指定人员');
         const data = {
             stage_id: currentItem.id,
@@ -98,10 +99,8 @@ function App() {
         } else {
             message.success(res.msg || '配置失败');
         }
-        setConfirmLoading(true);
         setVisible(false);
         setConfirmLoading(false);
-        return;
     };
 
     const handleCancel = () => {
@@ -125,6 +124,7 @@ function App() {
             title: '项目名称',
             dataIndex: 'name',
             key: 'name',
+            maxWidth: 491,
             render(text) {
                 return <span style={{ marginLeft: 8 }}>{text}</span>;
             },
@@ -293,8 +293,8 @@ function App() {
                     </Col>
                 </Row>
                 <Row>
-                    <Col span={4}></Col>
-                    <Col span={18} style={{ marginLeft: 14 }}>
+                    <Col span={4} style={{ marginRight: 14 }}></Col>
+                    <Col span={18}>
                         {showSelect ? (
                             <Select
                                 mode="multiple"
