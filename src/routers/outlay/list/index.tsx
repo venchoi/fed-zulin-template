@@ -80,6 +80,8 @@ const OutlayList = (props: IProps) => {
 
                 const { data: data2 } = json2;
                 setStatisticData(data2);
+                setSelectedRows([]);
+                setSelectedRowKeys([]);
             } catch (error) {
                 message.error(error || '接口数据有误');
             }
