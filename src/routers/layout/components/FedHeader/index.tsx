@@ -25,7 +25,7 @@ export default class FedHeader extends React.Component<Props, State> {
     };
 
     onOpenModal = (appLength: number) => {
-        if (appLength === 1) {
+        if (appLength === 0) {
             return false;
         }
         this.setState({ showModule: true });
@@ -62,8 +62,10 @@ export default class FedHeader extends React.Component<Props, State> {
         const { showModule } = this.state;
         const { appList, appCode, user, personalCenterUrl, className, logoutUrl, is_enabled_wh_workflow } = this.props;
 
+        console.log('===appList', appList);
+
         const outAppList = (appList || []).filter(
-            item => item.key !== 'ManagementCenter' && item.key !== 'OperationCenter'
+            item => item.key !== 'ManagementCenter' && item.key !== 'OperationCenter' && item.key !== 'Rental'
         );
         const panelList = (appList || []).filter(
             item => item.key === 'ManagementCenter' || item.key === 'OperationCenter'
@@ -75,7 +77,7 @@ export default class FedHeader extends React.Component<Props, State> {
                 <div className="fed-header-content">
                     <div className="fed-header-content-left" onClick={() => this.onOpenModal(outAppList.length)}>
                         <span className="title">{title}</span>
-                        {outAppList.length > 1 ? <FedIcon type="icon-icn_switch" className="icon-switch" /> : null}
+                        {outAppList.length > 0 ? <FedIcon type="icon-icn_switch" className="icon-switch" /> : null}
                     </div>
                     <div className="fed-header-content-right">
                         {is_enabled_wh_workflow ? (
