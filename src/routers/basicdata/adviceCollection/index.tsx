@@ -125,6 +125,9 @@ function App() {
             title: '项目名称',
             dataIndex: 'name',
             key: 'name',
+            render(text) {
+                return <span style={{ marginLeft: 8 }}>{text}</span>;
+            },
         },
         {
             title: '通知人员',
@@ -148,6 +151,7 @@ function App() {
                     </div>
                 );
             },
+            width: 80,
         },
         {
             title: '操作',
@@ -156,6 +160,7 @@ function App() {
             render(text: any, record: any) {
                 return record.is_end !== '1' ? '' : <a onClick={() => handle(record)}>配置</a>;
             },
+            width: 80,
         },
     ];
 
@@ -227,26 +232,32 @@ function App() {
                 title="收款通知"
             />
             <div style={{ padding: '16px', backgroundColor: '#F5F6F7' }}>
-                <div style={{ backgroundColor: '#fff', padding: 16 }}>
+                <div style={{ backgroundColor: '#fff', padding: '24px 24px 8px 24px' }}>
                     <Search
                         placeholder="请输入项目"
                         onSearch={onSearch}
-                        style={{ width: 200, marginBottom: 16 }}
+                        style={{ width: 216, marginBottom: 16 }}
                         onChange={e => setKeyword(e.target.value)}
                     />
-                    <Table
-                        expandRowByClick
-                        expandIcon={props => customExpandIcon(props)}
-                        columns={columns}
-                        dataSource={list}
-                        pagination={false}
-                        scroll={{
-                            y: 500,
-                        }}
-                        rowKey={rowData => rowData.id}
-                        bordered
-                        size="middle"
-                    />
+                    {list.length > 0 ? (
+                        <Table
+                            expandRowByClick
+                            expandIcon={props => customExpandIcon(props)}
+                            columns={columns}
+                            dataSource={list}
+                            pagination={false}
+                            defaultExpandAllRows={true}
+                            scroll={{
+                                y: 'calc(100vh - 380px)',
+                            }}
+                            rowKey={rowData => rowData.id}
+                            bordered
+                            size="small"
+                            expandable={{
+                                defaultExpandAllRows: true,
+                            }}
+                        />
+                    ) : null}
                 </div>
             </div>
             <Modal
@@ -257,29 +268,37 @@ function App() {
                 onCancel={handleCancel}
                 keyboard={false}
                 maskClosable={false}
-                style={{ width: 800 }}
+                width={600}
+                bodyStyle={{ width: 700 }}
+                centered
             >
                 <Row>
-                    <Col span={4}>所属项目:</Col>
+                    <Col span={4} style={{ textAlign: 'right', color: '#868B8F', marginRight: 14 }}>
+                        所属项目:
+                    </Col>
                     <Col span={8}>{currentItem.name}</Col>
                 </Row>
                 <Row>
-                    <Col span={4}>通知方式:</Col>
+                    <Col span={4} style={{ textAlign: 'right', color: '#868B8F', marginRight: 14 }}>
+                        通知方式:
+                    </Col>
                     <Col span={8}>App内通知</Col>
                 </Row>
                 <Row>
-                    <Col span={4}>选择提醒人:</Col>
+                    <Col span={4} style={{ textAlign: 'right', color: '#868B8F', marginRight: 14 }}>
+                        选择提醒人:
+                    </Col>
                     <Col span={18}>
                         <Checkbox.Group options={plainOptions} onChange={onChange} value={chooseType} />
                     </Col>
                 </Row>
                 <Row>
                     <Col span={4}></Col>
-                    <Col span={18}>
+                    <Col span={18} style={{ marginLeft: 14 }}>
                         {showSelect ? (
                             <Select
                                 mode="multiple"
-                                style={{ width: '100%' }}
+                                style={{ width: 400, marginTop: 8 }}
                                 placeholder="选择指定人员"
                                 onChange={handleChange}
                                 defaultValue={chooseIds}
