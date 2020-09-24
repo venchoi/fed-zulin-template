@@ -81,6 +81,7 @@ class RoomCascader extends Component<propsType, stateType> {
         return (
             <Cascader
                 {...otherProps}
+                placeholder={this.getPlaceholder()}
                 options={treeData}
                 loadData={this.loadData}
                 onChange={this.handleChange}

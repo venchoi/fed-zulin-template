@@ -83,3 +83,16 @@ export interface CascaderOptionChildType extends CascaderOptionType {
     label: string;
     loading: boolean;
 }
+
+export interface SelectedRoomConfig {
+    stageId: stirng;
+    stageName: string;
+    subdistrictId: string;
+    subdistrictName: string;
+    buildingId: string;
+    buildingName: string;
+    floorId: string;
+    floorName: string;
+    roomId: string;
+    roomName: string;
+}

@@ -496,6 +496,7 @@ export const DerateSubRow = (props: derateSubRowProps) => {
                                 onChange={handleAttachmentChange}
                                 readonly={!isEditMode}
                                 maxSize={50}
+                                ossProtected={true}
                             />
                         ) : (
                             <span>-</span>

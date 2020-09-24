@@ -56,7 +56,7 @@ class Uploader extends React.Component<Props> {
             maxSize = 10,
         } = this.props;
         const accept = ['doc', 'docx', 'xls', 'xlsx', 'pptx', 'pdf', 'rar', 'zip', 'ppt'];
-
+        
         const _this = this;
         const config = {
             multiple: true,
@@ -111,7 +111,7 @@ class Uploader extends React.Component<Props> {
                 //初始化上传sdk
                 ObjectUpload.init();
                 let isPrivate = ossProtected == true;
-
+                console.log(isPrivate,'isPrivate',ossProtected,'ossProtected')
                 //todo
                 //制造一个假的进度条
 
