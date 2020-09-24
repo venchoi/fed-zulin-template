@@ -11,9 +11,9 @@ export const getRidrectUrl = (code: string, record: any) => {
             break;
         // 账单待退款
         case 'bill_refunded':
-            return `/static/billing/list?selectStatusParents=${window.encodeURIComponent('待退款')}&payEndDateType=&keyword=${
-                record.code
-            }`;
+            return `/static/billing/list?selectStatusParents=${window.encodeURIComponent(
+                '待退款'
+            )}&payEndDateType=&keyword=${record.code}`;
             break;
         // 押金账单待审核
         case 'deposit_bill_refunded':

@@ -60,6 +60,9 @@ export function formatNum(num: number | string, decimal: number = 2) {
 }
 
 export function comma(num: string): string {
+    if (!num || (typeof num !== 'string' && typeof num !== 'number')) {
+        return num;
+    }
     const reg = /^[-+]?[0-9]+(\.?[0-9])?[0-9]*$/;
     const str = num.toString();
     if (reg.test(str)) {

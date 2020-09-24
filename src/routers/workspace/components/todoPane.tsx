@@ -121,7 +121,7 @@ export const TodoPane = (props: TodoProps) => {
     // 设置该类型为 active
     const handleToggleCategory = (category: category) => {
         return (e: React.MouseEvent) => {
-            if(isUpdating) {
+            if (isUpdating) {
                 return;
             }
             categories.forEach(cate => {
@@ -142,7 +142,9 @@ export const TodoPane = (props: TodoProps) => {
                 {categories.map(category => {
                     return (
                         <div
-                            className={`category-item ${category.active ? 'active' : `${isUpdating ? 'updating' : ''}`}`}
+                            className={`category-item ${
+                                category.active ? 'active' : `${isUpdating ? 'updating' : ''}`
+                            }`}
                             key={category.id}
                             onClick={handleToggleCategory(category)}
                         >
@@ -159,7 +161,16 @@ export const TodoPane = (props: TodoProps) => {
                 })}
             </div>
             <div className="todo-table-container">
-                {activeCategory ? <TodoPaneTable activeCategory={activeCategory} projs={projs} type={type} onRefresh={handleRefresh} isUpdating={isUpdating} setIsUpdating={setIsUpdating} /> : null}
+                {activeCategory ? (
+                    <TodoPaneTable
+                        activeCategory={activeCategory}
+                        projs={projs}
+                        type={type}
+                        onRefresh={handleRefresh}
+                        isUpdating={isUpdating}
+                        setIsUpdating={setIsUpdating}
+                    />
+                ) : null}
             </div>
         </div>
     );
