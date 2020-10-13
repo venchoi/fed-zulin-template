@@ -30,6 +30,7 @@ const Edit = (props: IProps) => {
                     formData.append(key, values[key]);
                 });
                 report_file && formData.append('report_file', report_file);
+                formData.append('rds_type', detail.rds_type);
                 detail.id && formData.append('id', detail.id);
                 detail.report_url && formData.append('report_url', detail.report_url);
                 const reportMode =
