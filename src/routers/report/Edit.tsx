@@ -68,12 +68,12 @@ const Edit = (props: IProps) => {
                     <FormItem label="报表说明" name="desc">
                         <TextArea placeholder="(选填) 请输入" onChange={() => {}} />
                     </FormItem>
-                    <FormItem label="数据源" name="rds_type">
+                    {/* <FormItem label="数据源" name="rds_type">
                         <Select>
                             <Option value="rds_tenant">租户数据源</Option>
                             <Option value="rds_dm">DM数据源</Option>
                         </Select>
-                    </FormItem>
+                    </FormItem> */}
                     <FormItem label="上传文件" name="report_file">
                         <Upload accept=".cpt" action="/" customRequest={({ file }) => handleUpload(file)}>
                             <Button>
