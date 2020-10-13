@@ -31,7 +31,9 @@ const Edit = (props: IProps) => {
                 });
                 report_file && formData.append('report_file', report_file);
                 detail.id && formData.append('id', detail.id);
-                formData.append('report_mode', 'FineReport');
+                detail.report_url && formData.append('report_url', detail.report_url);
+                const reportMode = detail.rds_type === 'DMP' ? 'DmpReport' : 'FineReport';
+                formData.append('report_mode', reportMode);
                 props.onOk && props.onOk(formData);
             })
             .catch(error => {
